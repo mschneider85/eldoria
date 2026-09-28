@@ -679,13 +679,16 @@
 
   function terrainHTML(t = s.terrain, live = true, thumb = false) {
     const counts = t.stat === 'choice'
-      ? (live && s.stat ? `Zählt: ${statLabel(s.stat)}` : 'Anführer 👑 wählt…')
-      : `Zählt: ${statLabel(t.stat)}${t.lowWins ? ' ↓' : ''}`;
+      ? (live && s.stat ? statLabel(s.stat) : 'Anführer 👑 wählt…')
+      : `${statLabel(t.stat)}${t.lowWins ? ' ↓' : ''}`;
     return `<div class="terrain${t.lowWins ? ' low' : ''}${t.stat === 'choice' ? ' choice' : ''}"><div class="frame">
-      <div class="art"><div class="kicker">Schlachtfeld</div>${artImg(`art/terrains/${t.id}${thumb ? '.thumb' : ''}.webp`, t.art)}</div>
-      <div class="tname">${t.name}</div>
-      <div class="counts">${counts}</div>
-      ${t.text ? `<div class="ttext">${t.text}</div>` : ''}
+      <div class="head"><span class="kicker">Schlachtfeld</span></div>
+      <div class="art">${artImg(`art/terrains/${t.id}${thumb ? '.thumb' : ''}.webp`, t.art)}</div>
+      <div class="tname${t.name.length > 16 ? ' xlong' : t.name.length > 13 ? ' long' : ''}">${t.name}</div>
+      <div class="body">
+        <div class="counts">${counts}</div>
+        ${t.text ? `<div class="ttext">${t.text}</div>` : ''}
+      </div>
     </div></div>`;
   }
 
