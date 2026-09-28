@@ -734,8 +734,10 @@ button:disabled { cursor: var(--cur-default); }
   .qcard .ability { font-size: calc(var(--qw) * .07); margin: 2px 3px 0; padding: 1px 3px; }
   .deck { display: none; }
   .player-bar .total-chip { display: flex; }
-  .opp-row { gap: 8px; }
-  .opp-hand { min-width: 0; }
+  /* Die Gegnerhand behält ihre Breite, schrumpfen darf nur die Leiste – sonst ragen die Rückseiten über den Rand */
+  .opp-row { gap: 8px; padding: 0 10px; }
+  .opp-row .player-bar { min-width: 0; }
+  .opp-hand { min-width: 0; flex: none; }
   .hand-area { grid-template-columns: 1fr; row-gap: 8px; }
   .hand-title, .hand, .hand-actions { grid-column: 1; justify-self: center; text-align: center; max-width: none; }
   .hand-title { grid-row: 1; } .hand { grid-row: 2; padding-top: 4px; } .hand-actions { grid-row: 3; flex-direction: row; min-width: 0; }
