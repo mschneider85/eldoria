@@ -121,7 +121,7 @@
     ui.token++;
     clearEffects();
     renderMenuShowcase();
-    Snd.setMood('neutral');
+    Snd.setMood('menu');
     s = null;
     closeAllOverlays();
     $('#game').classList.add('hidden');
@@ -1104,8 +1104,12 @@
       b.addEventListener('click', () => { Snd.setSfx(!Snd.settings.sfx); updateAudioButtons(); Snd.play('click'); });
     });
     document.querySelectorAll('.music-toggle').forEach((b) => b.addEventListener('click', () => { Snd.setMusic(!Snd.settings.music); updateAudioButtons(); }));
-    // Klick-Geräusch für die Hauptknöpfe
-    document.addEventListener('click', (e) => { if (e.target.closest('.btn-primary, .stat-choice button, .horn-toggle')) Snd.play('click'); });
+    // Klick-Geräusch: deutlich für die Hauptknöpfe, dezent für alle übrigen (der Effekte-Schalter klickt selbst)
+    document.addEventListener('click', (e) => {
+      const b = e.target.closest('button');
+      if (!b || b.classList.contains('sfx-toggle')) return;
+      Snd.play(b.matches('.btn-primary, .stat-choice button, .horn-toggle') ? 'click' : 'tap');
+    });
     updateAudioButtons();
   }
 
