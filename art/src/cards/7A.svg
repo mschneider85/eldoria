@@ -1,0 +1,465 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300">
+<defs>
+  <linearGradient id="c7a-sky" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#0e030a"/>
+    <stop offset="0.3" stop-color="#3d0812"/>
+    <stop offset="0.58" stop-color="#8a1c10"/>
+    <stop offset="0.8" stop-color="#d4501a"/>
+    <stop offset="1" stop-color="#ff9a3a"/>
+  </linearGradient>
+  <radialGradient id="c7a-skyglow" cx="0.5" cy="0.85" r="0.65">
+    <stop offset="0" stop-color="#ffb050" stop-opacity="0.75"/>
+    <stop offset="0.5" stop-color="#ff5a1a" stop-opacity="0.3"/>
+    <stop offset="1" stop-color="#ff3010" stop-opacity="0"/>
+  </radialGradient>
+  <linearGradient id="c7a-cloud" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#1a0610" stop-opacity="0.9"/>
+    <stop offset="1" stop-color="#6a1810" stop-opacity="0.5"/>
+  </linearGradient>
+  <linearGradient id="c7a-mtn" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#4a1420"/>
+    <stop offset="1" stop-color="#a0381c"/>
+  </linearGradient>
+  <linearGradient id="c7a-fort" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#12060e"/>
+    <stop offset="0.7" stop-color="#2a0c16"/>
+    <stop offset="1" stop-color="#6a2012"/>
+  </linearGradient>
+  <linearGradient id="c7a-lava" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#fff0a0"/>
+    <stop offset="0.25" stop-color="#ffb030"/>
+    <stop offset="0.6" stop-color="#f05a10"/>
+    <stop offset="1" stop-color="#8a1405"/>
+  </linearGradient>
+  <linearGradient id="c7a-crust" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#3a1410"/>
+    <stop offset="1" stop-color="#0c0406"/>
+  </linearGradient>
+  <linearGradient id="c7a-skin" gradientUnits="userSpaceOnUse" x1="0" y1="30" x2="0" y2="260">
+    <stop offset="0" stop-color="#1c0618"/>
+    <stop offset="0.35" stop-color="#43122e"/>
+    <stop offset="0.7" stop-color="#762236"/>
+    <stop offset="1" stop-color="#c85a34"/>
+  </linearGradient>
+  <linearGradient id="c7a-skinhi" x1="0" y1="1" x2="0" y2="0">
+    <stop offset="0" stop-color="#ff9a50" stop-opacity="0.75"/>
+    <stop offset="1" stop-color="#ff7040" stop-opacity="0"/>
+  </linearGradient>
+  <linearGradient id="c7a-iron" gradientUnits="userSpaceOnUse" x1="0" y1="40" x2="0" y2="260">
+    <stop offset="0" stop-color="#08070c"/>
+    <stop offset="0.45" stop-color="#1e1a24"/>
+    <stop offset="0.8" stop-color="#3c2a2c"/>
+    <stop offset="1" stop-color="#8a4424"/>
+  </linearGradient>
+  <linearGradient id="c7a-ironhi" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#6a6070" stop-opacity="0.8"/>
+    <stop offset="0.4" stop-color="#2a2430" stop-opacity="0"/>
+    <stop offset="1" stop-color="#ff7a30" stop-opacity="0.55"/>
+  </linearGradient>
+  <linearGradient id="c7a-horn" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#e8d8b8"/>
+    <stop offset="0.35" stop-color="#8a7258"/>
+    <stop offset="0.75" stop-color="#3a2a22"/>
+    <stop offset="1" stop-color="#140c0c"/>
+  </linearGradient>
+  <linearGradient id="c7a-tusk" x1="0" y1="1" x2="0" y2="0">
+    <stop offset="0" stop-color="#6a5040"/>
+    <stop offset="0.6" stop-color="#d8c8a8"/>
+    <stop offset="1" stop-color="#fff4dc"/>
+  </linearGradient>
+  <linearGradient id="c7a-fel" x1="0" y1="1" x2="0" y2="0">
+    <stop offset="0" stop-color="#f4ffd8"/>
+    <stop offset="0.3" stop-color="#a8ff4a"/>
+    <stop offset="0.7" stop-color="#2ed018"/>
+    <stop offset="1" stop-color="#0a6a10" stop-opacity="0.2"/>
+  </linearGradient>
+  <radialGradient id="c7a-felglow" cx="0.5" cy="0.5" r="0.5">
+    <stop offset="0" stop-color="#d8ff90" stop-opacity="0.95"/>
+    <stop offset="0.35" stop-color="#58f030" stop-opacity="0.55"/>
+    <stop offset="1" stop-color="#10a020" stop-opacity="0"/>
+  </radialGradient>
+  <radialGradient id="c7a-eye" cx="0.5" cy="0.5" r="0.5">
+    <stop offset="0" stop-color="#ffffff"/>
+    <stop offset="0.4" stop-color="#c8ff70"/>
+    <stop offset="1" stop-color="#30d020"/>
+  </radialGradient>
+  <radialGradient id="c7a-vig" cx="0.5" cy="0.45" r="0.72">
+    <stop offset="0.55" stop-color="#000" stop-opacity="0"/>
+    <stop offset="0.85" stop-color="#0a0006" stop-opacity="0.45"/>
+    <stop offset="1" stop-color="#000" stop-opacity="0.85"/>
+  </radialGradient>
+  <radialGradient id="c7a-torsoshade" gradientUnits="userSpaceOnUse" cx="200" cy="190" r="90">
+    <stop offset="0" stop-color="#ff8a50" stop-opacity="0.22"/>
+    <stop offset="0.5" stop-color="#ff6a40" stop-opacity="0.05"/>
+    <stop offset="1" stop-color="#080106" stop-opacity="0.55"/>
+  </radialGradient>
+  <filter id="c7a-glow" x="-50%" y="-50%" width="200%" height="200%">
+    <feGaussianBlur stdDeviation="5"/>
+  </filter>
+  <filter id="c7a-soft" x="-20%" y="-20%" width="140%" height="140%">
+    <feGaussianBlur stdDeviation="1.4"/>
+  </filter>
+  <filter id="c7a-haze" x="-30%" y="-30%" width="160%" height="160%">
+    <feGaussianBlur stdDeviation="12"/>
+  </filter>
+  <filter id="c7a-bloom" x="-50%" y="-50%" width="200%" height="200%">
+    <feGaussianBlur in="SourceGraphic" stdDeviation="2.2" result="b"/>
+    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+
+  <!-- ===== left half of the demon (mirrored for the right) ===== -->
+  <g id="c7a-side">
+    <!-- horn -->
+    <path d="M183 58 C176 50 162 47 150 42 C136 36 128 26 127 14 C134 22 142 27 152 30 C166 34 180 38 190 48 Z" fill="url(#c7a-horn)" stroke="#0a0506" stroke-width="0.8"/>
+    <path d="M183 58 C176 50 162 47 150 42 C140 38 132 30 129 20 C136 30 150 36 162 40 C172 44 180 50 184 56 Z" fill="#1a0e0c" opacity="0.55"/>
+    <path d="M131 21 C134 22 136 20 136 18 M137 27 C140 28 142 25 141 23 M143 32 C147 33 149 29 148 27 M150 36 C154 37 157 33 156 31 M158 39 C162 40 165 36 164 34 M166 42 C170 44 173 40 172 37 M174 46 C178 49 181 45 180 42" fill="none" stroke="#1a0e0a" stroke-width="1.1" stroke-linecap="round"/>
+    <path d="M132 20 C138 26 148 30 158 33 C168 36 178 40 186 48" fill="none" stroke="#fff0d0" stroke-width="0.7" opacity="0.5"/>
+
+    <!-- pauldron spikes -->
+    <path d="M101 96 L86 56 L112 90 Z" fill="url(#c7a-iron)"/>
+    <path d="M101 96 L86 56 L104 92 Z" fill="#5a4a58" opacity="0.6"/>
+    <path d="M120 88 L114 44 L134 86 Z" fill="url(#c7a-iron)"/>
+    <path d="M120 88 L114 44 L124 86 Z" fill="#5a4a58" opacity="0.6"/>
+    <path d="M141 92 L150 60 L154 98 Z" fill="url(#c7a-iron)"/>
+    <path d="M88 114 L58 100 L90 126 Z" fill="url(#c7a-iron)"/>
+    <path d="M88 114 L58 100 L88 120 Z" fill="#5a4a58" opacity="0.5"/>
+
+    <!-- upper arm -->
+    <path d="M96 124 C80 142 72 164 74 184 C75 196 78 206 82 214 L110 214 C111 200 114 186 119 172 C125 156 130 140 132 126 Z" fill="url(#c7a-skin)"/>
+    <path d="M84 150 C80 164 80 176 84 186 C90 178 94 166 96 152 Z" fill="#12040e" opacity="0.5"/>
+    <path d="M118 150 C112 162 108 176 108 190" fill="none" stroke="#ff8a50" stroke-width="1.4" opacity="0.5"/>
+    <path d="M78 186 C88 182 100 184 112 190" fill="none" stroke="#1a0510" stroke-width="1.5" opacity="0.8"/>
+    <path d="M90 160 C96 168 102 172 110 174" fill="none" stroke="#1a0510" stroke-width="1" opacity="0.6"/>
+    <path d="M98 136 C102 150 104 160 104 170" fill="none" stroke="#1a0510" stroke-width="1" opacity="0.5"/>
+
+    <path d="M132 126 C128 146 122 164 118 180 C114 196 112 206 111 214 C116 200 120 186 126 170 C130 156 134 140 136 128 Z" fill="#0a0208" opacity="0.8"/>
+    <path d="M76 176 C74 190 77 204 82 214" fill="none" stroke="#9aff60" stroke-width="1.6" opacity="0.75" filter="url(#c7a-soft)"/>
+    <path d="M100 140 C94 150 90 162 90 172 C96 164 100 154 104 144 Z" fill="#ff8a5a" opacity="0.25"/>
+    <!-- pauldron -->
+    <path d="M84 130 C78 106 94 84 122 82 C146 81 162 94 164 110 C150 110 140 118 136 132 C118 140 98 140 84 130 Z" fill="url(#c7a-iron)" stroke="#050306" stroke-width="1"/>
+    <path d="M84 130 C78 106 94 84 122 82 C146 81 162 94 164 110 C150 110 140 118 136 132 C118 140 98 140 84 130 Z" fill="url(#c7a-ironhi)"/>
+    <path d="M86 122 C92 108 106 98 124 96 C140 95 152 100 160 108" fill="none" stroke="#050306" stroke-width="2"/>
+    <path d="M86 121 C92 107 106 97 124 95 C140 94 152 99 160 107" fill="none" stroke="#7a6a7a" stroke-width="0.7" opacity="0.8"/>
+    <path d="M86 130 C90 120 100 112 114 110 C126 108 136 112 142 118" fill="none" stroke="#050306" stroke-width="2"/>
+    <path d="M86 129 C90 119 100 111 114 109 C126 107 136 111 142 117" fill="none" stroke="#7a6a7a" stroke-width="0.6" opacity="0.7"/>
+    <path d="M88 133 C104 140 122 138 136 132" fill="none" stroke="#ff9040" stroke-width="1.4" opacity="0.8"/>
+    <g fill="#8a7a80" stroke="#050306" stroke-width="0.5">
+      <circle cx="95" cy="104" r="1.6"/><circle cx="108" cy="92" r="1.6"/><circle cx="124" cy="87" r="1.6"/>
+      <circle cx="140" cy="89" r="1.6"/><circle cx="153" cy="97" r="1.6"/><circle cx="92" cy="124" r="1.4"/>
+      <circle cx="104" cy="114" r="1.4"/><circle cx="120" cy="110" r="1.4"/><circle cx="134" cy="113" r="1.4"/>
+    </g>
+    <!-- engraved fel rune on pauldron -->
+    <path d="M112 100 L118 104 L114 108 L120 112 M124 98 L122 106" fill="none" stroke="#6aff40" stroke-width="0.9" opacity="0.7"/>
+
+    <!-- bracer -->
+    <path d="M78 190 C88 186 104 187 114 192 L112 216 C100 220 88 220 80 216 Z" fill="url(#c7a-iron)" stroke="#050306" stroke-width="0.8"/>
+    <path d="M78 190 C88 186 104 187 114 192 L112 216 C100 220 88 220 80 216 Z" fill="url(#c7a-ironhi)" opacity="0.8"/>
+    <path d="M79 198 C90 195 102 196 113 200 M80 208 C90 206 102 207 112 210" fill="none" stroke="#050306" stroke-width="1.2"/>
+    <path d="M78 194 L60 186 L79 202 Z M78 206 L62 204 L80 212 Z" fill="url(#c7a-iron)" stroke="#050306" stroke-width="0.5"/>
+    <g fill="#9a8a8a"><circle cx="86" cy="193" r="1.2"/><circle cx="96" cy="192" r="1.2"/><circle cx="106" cy="194" r="1.2"/><circle cx="86" cy="213" r="1.2"/><circle cx="96" cy="214" r="1.2"/><circle cx="106" cy="213" r="1.2"/></g>
+
+    <!-- fel fire glow behind fist -->
+    <ellipse cx="94" cy="222" rx="38" ry="44" fill="url(#c7a-felglow)" filter="url(#c7a-glow)"/>
+
+    <!-- fel flames around fist -->
+    <g opacity="0.95">
+      <path d="M78 236 C66 222 70 206 64 190 C74 200 76 212 82 220 C80 204 86 194 84 176 C94 192 92 208 96 216 C98 202 106 196 104 180 C114 196 110 212 108 220 C114 212 120 206 122 194 C126 210 120 226 114 238 C104 248 88 248 78 236 Z" fill="url(#c7a-fel)" filter="url(#c7a-soft)"/>
+      <path d="M84 232 C80 222 82 212 80 202 C86 210 88 218 92 222 C92 212 96 204 96 194 C102 206 100 216 102 224 C106 216 110 212 112 204 C114 216 110 228 104 234 C98 240 88 240 84 232 Z" fill="#e8ffc0" opacity="0.75" filter="url(#c7a-soft)"/>
+      <path d="M68 214 C62 206 64 196 60 188 C66 194 70 200 70 208 Z M120 222 C126 214 126 204 130 196 C130 206 128 216 124 222 Z M90 186 C88 178 90 170 88 164 C94 170 94 178 92 186 Z" fill="#8aff50" opacity="0.8"/>
+    </g>
+    <!-- fist -->
+    <path d="M80 214 C72 222 72 238 82 245 C92 252 108 250 114 240 C118 232 116 220 110 214 Z" fill="url(#c7a-skin)" stroke="#12040c" stroke-width="0.8"/>
+    <path d="M80 214 C72 222 72 238 82 245 C92 252 108 250 114 240 C118 232 116 220 110 214 Z" fill="#40ff40" opacity="0.1"/>
+    <path d="M82 226 C88 224 96 225 104 228 M80 234 C88 233 96 234 106 237 M84 242 C90 242 98 243 106 245" fill="none" stroke="#12040c" stroke-width="1.1"/>
+    <path d="M78 226 C76 232 76 238 80 242" fill="none" stroke="#b8ff80" stroke-width="1.2" opacity="0.8"/>
+    <path d="M112 222 C116 228 116 236 112 242" fill="none" stroke="#b8ff80" stroke-width="1" opacity="0.7"/>
+    <path d="M84 222 C88 219 94 219 98 221 M98 222 C102 220 108 220 112 224" fill="none" stroke="#d8ff90" stroke-width="1.1" opacity="0.8"/>
+    <!-- claws -->
+    <path d="M86 244 C84 250 82 254 78 256 C82 252 83 248 83 244 Z M94 247 C93 253 91 257 87 259 C91 255 91 251 91 247 Z M102 247 C102 253 101 257 97 260 C100 255 100 251 99 247 Z M110 242 C112 248 111 252 108 255 C109 250 108 246 107 243 Z" fill="#e8dcc0" stroke="#1a0c08" stroke-width="0.5"/>
+    <!-- front wisps -->
+    <path d="M76 238 C70 230 72 222 70 214 C76 220 78 228 80 234 Z M114 236 C120 228 120 220 124 212 C124 222 120 230 116 238 Z M96 250 C92 244 94 238 92 232 C98 238 98 244 98 250 Z" fill="#c8ff80" opacity="0.7" filter="url(#c7a-soft)"/>
+
+  </g>
+
+  <!-- chain link symbol -->
+  <g id="c7a-link">
+    <ellipse cx="0" cy="0" rx="5" ry="3" fill="none" stroke="#050306" stroke-width="2.6"/>
+    <ellipse cx="0" cy="0" rx="5" ry="3" fill="none" stroke="url(#c7a-iron)" stroke-width="1.6"/>
+    <path d="M-4 -1.5 C-2 -3 2 -3 4 -1.5" fill="none" stroke="#9a8a90" stroke-width="0.6"/>
+  </g>
+  <g id="c7a-link2">
+    <ellipse cx="0" cy="0" rx="4.6" ry="1.6" fill="#050306"/>
+    <ellipse cx="0" cy="0" rx="4.2" ry="1" fill="#5a4040"/>
+  </g>
+</defs>
+
+<!-- ============ 1. SKY ============ -->
+<rect x="0" y="0" width="400" height="300" fill="url(#c7a-sky)"/>
+<rect x="0" y="0" width="400" height="300" fill="url(#c7a-skyglow)"/>
+<!-- storm clouds -->
+<g filter="url(#c7a-haze)">
+  <path d="M-20 40 C40 20 90 44 150 30 C200 18 250 40 300 26 C350 14 400 34 420 30 L420 -10 L-20 -10 Z" fill="#050104"/>
+  <path d="M-20 90 C30 72 80 92 130 80 C170 70 200 84 240 76 C290 66 340 90 420 78 L420 60 C350 64 300 50 250 58 C200 64 160 50 110 60 C60 68 20 56 -20 64 Z" fill="url(#c7a-cloud)" opacity="0.8"/>
+</g>
+<path d="M-10 58 C40 50 70 62 120 56 C160 52 180 60 210 56 C170 66 120 64 80 70 C40 74 10 70 -10 72 Z" fill="#ff7030" opacity="0.18"/>
+<path d="M230 50 C270 44 320 54 360 46 C380 44 400 48 410 48 C380 58 340 60 300 60 C270 60 250 56 230 50 Z" fill="#ff7030" opacity="0.15"/>
+
+<!-- ============ 2. DISTANT MOUNTAINS ============ -->
+<path d="M0 170 L18 138 L30 150 L46 118 L60 140 L74 126 L92 150 L110 132 L128 158 L150 142 L170 160 L200 150 L232 160 L252 140 L272 156 L290 128 L306 146 L322 120 L338 142 L356 130 L372 150 L388 134 L400 146 L400 200 L0 200 Z" fill="url(#c7a-mtn)" opacity="0.85"/>
+<path d="M46 118 L52 134 L44 150 M290 128 L296 144 M322 120 L318 140" fill="none" stroke="#ff8a4a" stroke-width="0.8" opacity="0.4"/>
+
+<!-- ============ 3. HELL FORTRESS ============ -->
+<g fill="url(#c7a-fort)">
+  <!-- left keep -->
+  <path d="M14 200 L14 120 L10 116 L22 96 L20 88 L26 60 L32 88 L30 96 L42 116 L38 120 L38 150 L52 150 L52 110 L48 106 L58 88 L62 70 L66 88 L76 106 L72 110 L72 200 Z"/>
+  <path d="M0 200 L0 160 L8 156 L8 140 L14 140 L14 200 Z"/>
+  <!-- right keep -->
+  <path d="M330 200 L330 112 L326 108 L336 88 L340 64 L344 88 L354 108 L350 112 L350 146 L364 146 L364 104 L358 100 L370 80 L374 44 L378 80 L390 100 L384 104 L384 200 Z"/>
+  <path d="M384 200 L384 150 L394 150 L394 136 L400 136 L400 200 Z"/>
+  <!-- curved spikes on towers -->
+  <path d="M22 96 C14 90 10 82 8 74 C14 80 18 86 24 90 Z M30 96 C38 90 42 82 44 74 C38 80 34 86 28 90 Z"/>
+  <path d="M336 88 C328 82 324 74 322 66 C328 72 332 78 338 82 Z M378 80 C386 72 390 62 390 54 C384 62 380 70 374 76 Z"/>
+  <!-- wall connecting -->
+  <path d="M72 200 L72 164 L78 164 L78 158 L84 158 L84 164 L92 164 L92 158 L98 158 L98 164 L106 164 L106 200 Z"/>
+  <path d="M296 200 L296 164 L302 164 L302 158 L308 158 L308 164 L316 164 L316 158 L322 158 L322 164 L330 164 L330 200 Z"/>
+</g>
+<!-- tower rim light -->
+<path d="M14 200 L14 120 M38 150 L38 120 M72 200 L72 110 M330 200 L330 112 M384 200 L384 104" fill="none" stroke="#ff6a2a" stroke-width="0.8" opacity="0.35"/>
+<!-- glowing windows -->
+<g fill="#7aff40" filter="url(#c7a-bloom)">
+  <path d="M24 108 L28 102 L32 108 L32 116 L24 116 Z"/>
+  <path d="M60 100 L62 96 L64 100 L64 106 L60 106 Z"/>
+  <path d="M24 130 L28 126 L32 130 L32 136 L24 136 Z" opacity="0.7"/>
+  <rect x="58" y="126" width="4" height="7" opacity="0.8"/>
+  <path d="M338 98 L340 94 L342 98 L342 104 L338 104 Z"/>
+  <path d="M372 92 L374 86 L376 92 L376 100 L372 100 Z"/>
+  <rect x="336" y="126" width="5" height="8" opacity="0.75"/>
+  <rect x="370" y="120" width="4" height="7" opacity="0.8"/>
+  <rect x="3" y="166" width="3" height="5" opacity="0.6"/>
+  <rect x="390" y="160" width="3" height="6" opacity="0.6"/>
+</g>
+<!-- fel beacon on spire tips -->
+<circle cx="26" cy="60" r="6" fill="url(#c7a-felglow)"/>
+<circle cx="374" cy="44" r="7" fill="url(#c7a-felglow)"/>
+
+<!-- haze/ground smoke over background -->
+<ellipse cx="200" cy="206" rx="240" ry="30" fill="#ff7a30" opacity="0.35" filter="url(#c7a-haze)"/>
+<path d="M0 200 C60 190 120 204 200 196 C280 190 340 204 400 196 L400 230 L0 230 Z" fill="#3a0c10"/>
+
+<!-- ============ 4. THE PIT LORD ============ -->
+<!-- body backlight halo -->
+<ellipse cx="200" cy="140" rx="110" ry="100" fill="#ff5a1a" opacity="0.25" filter="url(#c7a-haze)"/>
+
+<!-- torso -->
+<path d="M132 104 C152 88 178 90 200 96 C222 90 248 88 268 104 C282 124 280 162 268 192 C260 214 252 236 248 262 L152 262 C148 236 140 214 132 192 C120 162 118 124 132 104 Z" fill="url(#c7a-skin)"/>
+<!-- neck/trapezius -->
+<path d="M150 104 C162 86 176 80 184 76 L216 76 C224 80 238 86 250 104 C236 100 222 100 212 104 L188 104 C178 100 164 100 150 104 Z" fill="url(#c7a-skin)"/>
+<path d="M154 102 C164 92 176 86 186 84" fill="none" stroke="#ff8a50" stroke-width="0.8" opacity="0.4"/>
+<path d="M132 104 C152 88 178 90 200 96 C222 90 248 88 268 104 C282 124 280 162 268 192 C260 214 252 236 248 262 L152 262 C148 236 140 214 132 192 C120 162 118 124 132 104 Z" fill="url(#c7a-torsoshade)"/>
+<!-- pectorals -->
+<path d="M146 112 C160 104 184 104 198 112 C200 126 198 142 190 150 C176 156 156 152 146 144 C140 134 140 120 146 112 Z" fill="#5a1a30" opacity="0.6"/>
+<path d="M254 112 C240 104 216 104 202 112 C200 126 202 142 210 150 C224 156 244 152 254 144 C260 134 260 120 254 112 Z" fill="#5a1a30" opacity="0.6"/>
+<path d="M146 144 C156 154 178 158 192 150 M254 144 C244 154 222 158 208 150" fill="none" stroke="#12040c" stroke-width="2.2"/>
+<path d="M148 146 C158 156 178 160 192 153 M252 146 C242 156 222 160 208 153" fill="none" stroke="#ff8850" stroke-width="1" opacity="0.6"/>
+<path d="M200 106 L200 250" fill="none" stroke="#12040c" stroke-width="1.6" opacity="0.8"/>
+<path d="M152 138 C160 146 176 148 186 144 C178 150 162 150 152 138 Z M248 138 C240 146 224 148 214 144 C222 150 238 150 248 138 Z" fill="#ffa070" opacity="0.5"/>
+<path d="M160 116 C170 112 182 112 190 116" fill="none" stroke="#c06070" stroke-width="0.8" opacity="0.5"/>
+<path d="M240 116 C230 112 218 112 210 116" fill="none" stroke="#c06070" stroke-width="0.8" opacity="0.5"/>
+<!-- abs -->
+<g fill="#6a2034" stroke="#14040c" stroke-width="1.1">
+  <path d="M176 160 C184 157 194 158 198 162 L197 180 C190 182 182 181 176 178 C174 172 174 166 176 160 Z"/>
+  <path d="M224 160 C216 157 206 158 202 162 L203 180 C210 182 218 181 224 178 C226 172 226 166 224 160 Z"/>
+  <path d="M178 186 C186 184 194 185 198 188 L197 206 C190 208 183 207 178 204 C176 198 176 192 178 186 Z"/>
+  <path d="M222 186 C214 184 206 185 202 188 L203 206 C210 208 217 207 222 204 C224 198 224 192 222 186 Z"/>
+  <path d="M180 212 C187 210 194 211 198 214 L197 230 C191 232 185 231 181 228 C179 222 179 217 180 212 Z"/>
+  <path d="M220 212 C213 210 206 211 202 214 L203 230 C209 232 215 231 219 228 C221 222 221 217 220 212 Z"/>
+</g>
+<g fill="none" stroke="#ff9a5a" stroke-width="0.9" opacity="0.55">
+  <path d="M177 178 C184 181 191 182 197 180 M178 204 C184 207 191 208 197 206 M181 228 C186 231 192 232 197 230"/>
+  <path d="M223 178 C216 181 209 182 203 180 M222 204 C216 207 209 208 203 206 M219 228 C214 231 208 232 203 230"/>
+</g>
+<!-- obliques / side shading -->
+<path d="M134 150 C140 176 150 200 158 230 C150 226 142 200 136 180 Z" fill="#12040e" opacity="0.55"/>
+<path d="M266 150 C260 176 250 200 242 230 C250 226 258 200 264 180 Z" fill="#12040e" opacity="0.55"/>
+<path d="M136 170 C140 190 146 206 152 222" fill="none" stroke="#9aff60" stroke-width="1.6" opacity="0.55" filter="url(#c7a-soft)"/>
+<path d="M264 170 C260 190 254 206 248 222" fill="none" stroke="#9aff60" stroke-width="1.6" opacity="0.55" filter="url(#c7a-soft)"/>
+<path d="M150 112 C166 106 184 108 196 114 C184 112 166 112 152 118 Z M250 112 C234 106 216 108 204 114 C216 112 234 112 248 118 Z" fill="#0c0208" opacity="0.6"/>
+<path d="M156 146 C166 150 180 150 188 146 M244 146 C234 150 220 150 212 146" fill="none" stroke="#ffb070" stroke-width="1.8" opacity="0.35" filter="url(#c7a-soft)"/>
+<!-- glowing fel brand on chest -->
+<g filter="url(#c7a-bloom)" fill="none" stroke="#8aff50" stroke-width="1.3" stroke-linecap="round" opacity="0.9">
+  <path d="M200 116 L200 142 M192 122 C196 128 204 128 208 122 M188 134 L200 142 L212 134 M194 112 L200 106 L206 112"/>
+  <path d="M166 124 L172 132 L166 138 M234 124 L228 132 L234 138"/>
+</g>
+<!-- scars -->
+<path d="M226 168 L240 190 M230 166 L242 184" stroke="#2a0612" stroke-width="1.2" fill="none"/>
+<path d="M227 169 L241 191" stroke="#d07a5a" stroke-width="0.5" fill="none" opacity="0.6"/>
+
+<!-- iron gorget / collar -->
+<path d="M160 104 C170 96 186 96 200 100 C214 96 230 96 240 104 L236 116 C224 110 212 112 200 116 C188 112 176 110 164 116 Z" fill="url(#c7a-iron)" stroke="#050306" stroke-width="0.8"/>
+<path d="M162 106 C172 99 186 99 200 103 C214 99 228 99 238 106" fill="none" stroke="#7a6a78" stroke-width="0.7"/>
+<path d="M164 116 C176 110 188 112 200 116 C212 112 224 110 236 116" fill="none" stroke="#ff8a3a" stroke-width="0.9" opacity="0.8"/>
+<g fill="#8a7a80"><circle cx="172" cy="106" r="1.3"/><circle cx="186" cy="104" r="1.3"/><circle cx="214" cy="104" r="1.3"/><circle cx="228" cy="106" r="1.3"/></g>
+<!-- chain across chest -->
+<g>
+  <use href="#c7a-link" transform="translate(160 124) rotate(38)"/>
+  <use href="#c7a-link2" transform="translate(166 132) rotate(42)"/>
+  <use href="#c7a-link" transform="translate(172 140) rotate(40)"/>
+  <use href="#c7a-link2" transform="translate(179 147) rotate(36)"/>
+  <use href="#c7a-link" transform="translate(186 154) rotate(32)"/>
+  <use href="#c7a-link2" transform="translate(194 159) rotate(24)"/>
+  <use href="#c7a-link" transform="translate(203 163) rotate(14)"/>
+  <use href="#c7a-link2" transform="translate(212 165) rotate(6)"/>
+  <use href="#c7a-link" transform="translate(221 166) rotate(-4)"/>
+  <use href="#c7a-link2" transform="translate(230 164) rotate(-14)"/>
+  <use href="#c7a-link" transform="translate(238 160) rotate(-28)"/>
+  <use href="#c7a-link2" transform="translate(245 153) rotate(-44)"/>
+  <use href="#c7a-link" transform="translate(250 145) rotate(-58)"/>
+</g>
+
+<!-- iron belt -->
+<path d="M150 236 C170 230 230 230 250 236 L252 256 C230 250 170 250 148 256 Z" fill="url(#c7a-iron)" stroke="#050306" stroke-width="0.8"/>
+<path d="M150 238 C170 232 230 232 250 238" fill="none" stroke="#8a7a80" stroke-width="0.7"/>
+<path d="M149 254 C170 248 230 248 251 254" fill="none" stroke="#ff9a40" stroke-width="1.2"/>
+<!-- belt buckle: horned skull plate -->
+<path d="M186 232 C190 226 210 226 214 232 L216 246 C212 256 188 256 184 246 Z" fill="url(#c7a-iron)" stroke="#050306" stroke-width="1"/>
+<path d="M186 232 C180 226 176 222 174 216 C180 220 184 224 190 228 Z M214 232 C220 226 224 222 226 216 C220 220 216 224 210 228 Z" fill="#2a2430" stroke="#050306" stroke-width="0.6"/>
+<path d="M190 238 L196 240 L192 243 Z M210 238 L204 240 L208 243 Z" fill="#8aff50" filter="url(#c7a-bloom)"/>
+<path d="M192 248 L194 252 L197 248 L200 252 L203 248 L206 252 L208 248" fill="none" stroke="#050306" stroke-width="1"/>
+<path d="M187 233 C192 229 208 229 213 233" fill="none" stroke="#8a7a80" stroke-width="0.6"/>
+
+<!-- left and right arms/pauldrons/horns -->
+<use href="#c7a-side"/>
+<use href="#c7a-side" transform="matrix(-1 0 0 1 400 0)"/>
+
+<g transform="translate(200 80) scale(1.14) translate(-200 -80)">
+<g filter="url(#c7a-soft)" fill="url(#c7a-fel)" opacity="0.85">
+  <path d="M86 196 C80 180 86 168 80 150 C92 164 92 178 96 188 C98 176 104 170 102 156 C110 170 108 184 104 196 Z"/>
+  <path d="M308 196 C314 182 308 170 312 154 C302 166 302 180 300 188 C296 178 290 172 292 160 C284 172 288 186 294 196 Z"/>
+</g>
+<!-- ============ HEAD ============ -->
+<!-- back of head / skull -->
+<path d="M180 64 C178 48 190 40 200 40 C210 40 222 48 220 64 C226 68 230 76 230 86 C231 96 226 106 218 112 C210 118 190 118 182 112 C174 106 169 96 170 86 C170 76 174 68 180 64 Z" fill="url(#c7a-skin)" stroke="#0e0308" stroke-width="1"/>
+<!-- skull ridges/crest -->
+<path d="M192 44 C194 38 198 34 200 30 C202 34 206 38 208 44 C204 42 196 42 192 44 Z" fill="url(#c7a-horn)"/>
+<path d="M186 48 C186 42 188 38 190 34 C192 40 192 44 192 48 Z M214 48 C214 42 212 38 210 34 C208 40 208 44 208 48 Z" fill="url(#c7a-horn)" opacity="0.9"/>
+<path d="M200 44 L200 60" stroke="#0e0308" stroke-width="1" opacity="0.6"/>
+<!-- temples shading -->
+<path d="M180 64 C176 72 174 80 176 88 C180 82 182 74 184 66 Z M220 64 C224 72 226 80 224 88 C220 82 218 74 216 66 Z" fill="#0c0208" opacity="0.6"/>
+<!-- heavy brow ridge -->
+<path d="M176 66 C184 60 194 63 200 70 C206 63 216 60 224 66 C225 72 218 72 210 76 C206 78 202 80 200 80 C198 80 194 78 190 76 C182 72 175 72 176 66 Z" fill="#2a0a1e" stroke="#0a0206" stroke-width="0.8"/>
+<path d="M177 66 C185 61 194 64 200 70 C206 64 215 61 223 66" fill="none" stroke="#a04a4a" stroke-width="0.8" opacity="0.7"/>
+<!-- eye sockets -->
+<path d="M181 72 C186 71 192 73 196 77 C191 80 185 79 181 72 Z" fill="#050103"/>
+<path d="M219 72 C214 71 208 73 204 77 C209 80 215 79 219 72 Z" fill="#050103"/>
+<!-- eye glow -->
+<ellipse cx="189" cy="76" rx="10" ry="6" fill="url(#c7a-felglow)" filter="url(#c7a-soft)"/>
+<ellipse cx="211" cy="76" rx="10" ry="6" fill="url(#c7a-felglow)" filter="url(#c7a-soft)"/>
+<path d="M183 73 C187 72.5 192 74 195 76.5 C191 78 186 77.5 183 73 Z" fill="url(#c7a-eye)"/>
+<path d="M217 73 C213 72.5 208 74 205 76.5 C209 78 214 77.5 217 73 Z" fill="url(#c7a-eye)"/>
+<circle cx="190" cy="75.5" r="0.9" fill="#fff"/>
+<circle cx="210" cy="75.5" r="0.9" fill="#fff"/>
+<!-- nose/snout -->
+<path d="M194 80 C196 84 194 88 192 91 C196 93 204 93 208 91 C206 88 204 84 206 80 C204 82 196 82 194 80 Z" fill="#6a2034" stroke="#0e0308" stroke-width="0.7"/>
+<path d="M193 90 C195 89 197 90 197 91.5 C195 92 194 91.5 193 90 Z M207 90 C205 89 203 90 203 91.5 C205 92 206 91.5 207 90 Z" fill="#0a0206"/>
+<path d="M199 81 C200 84 200 87 199 90" stroke="#d07a60" stroke-width="0.7" fill="none" opacity="0.7"/>
+<!-- cheekbones and snarl lines -->
+<path d="M178 84 C182 88 186 90 190 92 M222 84 C218 88 214 90 210 92" fill="none" stroke="#0e0308" stroke-width="1.1"/>
+<path d="M176 92 C180 98 184 100 188 101 M224 92 C220 98 216 100 212 101" fill="none" stroke="#0e0308" stroke-width="0.9" opacity="0.7"/>
+<path d="M179 86 C182 90 186 91 189 93 M221 86 C218 90 214 91 211 93" fill="none" stroke="#e08060" stroke-width="0.6" opacity="0.6"/>
+<!-- mouth -->
+<path d="M184 97 C190 95 196 97 200 97 C204 97 210 95 216 97 C215 104 210 108 200 108 C190 108 185 104 184 97 Z" fill="#1a0206"/>
+<path d="M188 100 C194 104 206 104 212 100 C208 106 192 106 188 100 Z" fill="#7a0e10" opacity="0.8"/>
+<!-- upper teeth -->
+<path d="M186 97.5 L188 101 L190 97 L192 101.5 L194 97.2 L196 101.5 L198 97.3 L200 101 L202 97.3 L204 101.5 L206 97.2 L208 101.5 L210 97 L212 101 L214 97.5 Z" fill="#f0e4c8" stroke="#3a2418" stroke-width="0.3"/>
+<!-- lower teeth -->
+<path d="M188 106 L190 103 L192 106.5 L195 103 L198 107 L202 107 L205 103 L208 106.5 L210 103 L212 106 Z" fill="#e0d0b0" stroke="#3a2418" stroke-width="0.3"/>
+<!-- tusks -->
+<path d="M184 104 C180 98 178 90 180 82 C182 90 186 96 190 102 C189 106 186 106 184 104 Z" fill="url(#c7a-tusk)" stroke="#2a1810" stroke-width="0.6"/>
+<path d="M216 104 C220 98 222 90 220 82 C218 90 214 96 210 102 C211 106 214 106 216 104 Z" fill="url(#c7a-tusk)" stroke="#2a1810" stroke-width="0.6"/>
+<path d="M181 84 C181 92 184 98 188 102" fill="none" stroke="#fff" stroke-width="0.5" opacity="0.6"/>
+<!-- chin & jaw spikes -->
+<path d="M186 112 C188 118 190 124 192 128 C194 122 194 116 194 114 Z M200 116 C200 122 200 128 200 134 C203 128 204 122 204 116 Z M214 112 C212 118 210 124 208 128 C206 122 206 116 206 114 Z" fill="url(#c7a-horn)" stroke="#0e0606" stroke-width="0.5"/>
+<path d="M174 100 C170 106 166 110 162 112 C168 108 172 106 176 104 Z M226 100 C230 106 234 110 238 112 C232 108 228 106 224 104 Z" fill="url(#c7a-horn)"/>
+<!-- jaw underlight (lava bounce) -->
+<path d="M172 94 C174 104 180 112 190 116 C198 118 202 118 210 116 C220 112 226 104 228 94 C226 106 218 114 210 117 C204 119 196 119 190 117 C182 114 174 106 172 94 Z" fill="#ff9a50" opacity="0.7"/>
+<!-- ears -->
+<path d="M172 78 C164 74 158 70 154 64 C160 72 164 80 170 86 Z" fill="url(#c7a-skin)" stroke="#0e0308" stroke-width="0.6"/>
+<path d="M228 78 C236 74 242 70 246 64 C240 72 236 80 230 86 Z" fill="url(#c7a-skin)" stroke="#0e0308" stroke-width="0.6"/>
+<!-- iron nose ring / piercings -->
+<circle cx="182" cy="66" r="1.2" fill="#9a8a80"/><circle cx="218" cy="66" r="1.2" fill="#9a8a80"/>
+
+</g>
+<!-- hanging chains from the bracers -->
+<g>
+  <use href="#c7a-link" transform="translate(84 218) rotate(110)"/>
+  <use href="#c7a-link2" transform="translate(81 226) rotate(104)"/>
+  <use href="#c7a-link" transform="translate(79 235) rotate(98)"/>
+  <use href="#c7a-link2" transform="translate(78 244) rotate(92)"/>
+  <use href="#c7a-link" transform="translate(78 253) rotate(88)"/>
+  <use href="#c7a-link2" transform="translate(79 262) rotate(84)"/>
+  <use href="#c7a-link" transform="translate(81 271) rotate(80)"/>
+  <use href="#c7a-link" transform="translate(316 218) rotate(70)"/>
+  <use href="#c7a-link2" transform="translate(320 226) rotate(64)"/>
+  <use href="#c7a-link" transform="translate(325 234) rotate(58)"/>
+  <use href="#c7a-link2" transform="translate(331 241) rotate(50)"/>
+  <use href="#c7a-link" transform="translate(338 247) rotate(40)"/>
+  <use href="#c7a-link2" transform="translate(346 252) rotate(30)"/>
+  <use href="#c7a-link" transform="translate(355 255) rotate(16)"/>
+</g>
+
+<!-- ============ LAVA PIT (foreground) ============ -->
+<path d="M0 248 C40 240 90 250 140 256 C170 260 230 260 260 256 C310 250 360 240 400 246 L400 300 L0 300 Z" fill="url(#c7a-lava)"/>
+<ellipse cx="200" cy="258" rx="150" ry="10" fill="#fff4b0" opacity="0.6" filter="url(#c7a-glow)"/>
+<g fill="url(#c7a-crust)">
+  <path d="M0 256 C18 250 40 252 56 258 C62 262 60 268 50 272 C60 276 70 280 80 278 C94 274 110 272 126 276 C132 280 128 286 118 290 C140 292 160 288 176 290 C192 292 214 290 228 286 C220 282 218 276 232 274 C250 270 270 272 286 276 C296 280 300 272 314 268 C326 262 340 258 356 256 C372 254 388 252 400 254 L400 300 L0 300 Z"/>
+</g>
+<g fill="#ff7a20" opacity="0.9">
+  <path d="M20 270 C36 266 54 268 62 274 C54 278 34 280 20 276 Z"/>
+  <path d="M136 272 C150 268 166 270 172 276 C162 280 146 280 136 276 Z"/>
+  <path d="M244 280 C262 276 280 278 288 284 C276 288 256 288 244 284 Z"/>
+  <path d="M340 268 C356 264 374 266 382 272 C370 276 350 276 340 272 Z"/>
+</g>
+<g fill="none" stroke="#ffb040" stroke-linecap="round" filter="url(#c7a-bloom)">
+  <path d="M0 282 C14 280 22 284 36 282 C48 280 56 286 70 286 M70 286 C74 292 72 296 76 300 M36 282 C34 290 40 294 38 300" stroke-width="1.4"/>
+  <path d="M100 290 C112 286 124 292 140 294 C154 296 168 292 186 296 M140 294 C142 298 140 300 142 302" stroke-width="1.2"/>
+  <path d="M210 300 C214 294 222 296 232 294 C246 292 258 296 272 294 C288 292 300 296 316 292 C330 290 344 294 360 290 C374 288 388 292 400 290 M300 296 C304 300 302 302 306 304" stroke-width="1.3"/>
+  <path d="M86 280 C96 278 104 282 116 280 M320 278 C330 276 338 282 350 280" stroke-width="0.9"/>
+</g>
+<g fill="none" stroke="#fff0a0" stroke-width="0.5" stroke-linecap="round">
+  <path d="M0 282 C14 280 22 284 36 282 C48 280 56 286 70 286"/><path d="M210 300 C214 294 222 296 232 294 C246 292 258 296 272 294"/>
+</g>
+<path d="M0 256 C18 250 40 252 56 258 M232 274 C250 270 270 272 286 276 M314 268 C326 262 340 258 356 256 C372 254 388 252 400 254 M126 276 C132 280 128 286 118 290" fill="none" stroke="#ff9a40" stroke-width="1"/>
+<g fill="none" stroke="#fff0a0" stroke-width="0.8">
+  <ellipse cx="150" cy="264" rx="4" ry="1.6"/><ellipse cx="236" cy="266" rx="3" ry="1.2"/><ellipse cx="42" cy="273" rx="3" ry="1.1"/>
+</g>
+<circle cx="150" cy="260" r="2.4" fill="#ffe080"/><circle cx="236" cy="263" r="1.8" fill="#ffe080"/>
+
+<ellipse cx="94" cy="262" rx="44" ry="8" fill="#8aff50" opacity="0.45" filter="url(#c7a-glow)"/>
+<ellipse cx="306" cy="262" rx="44" ry="8" fill="#8aff50" opacity="0.45" filter="url(#c7a-glow)"/>
+<!-- lava underglow on the demon -->
+<path d="M140 200 C150 230 154 250 156 262 L244 262 C246 250 250 230 260 200 C250 236 246 250 244 256 L156 256 C154 250 150 236 140 200 Z" fill="#ffb050" opacity="0.5" filter="url(#c7a-soft)"/>
+
+<!-- ============ 5. FOREGROUND FX ============ -->
+<!-- smoke wisps -->
+<g filter="url(#c7a-haze)" opacity="0.55">
+  <path d="M20 250 C10 220 40 200 30 170 C50 190 50 220 40 250 Z" fill="#1a0808"/>
+  <path d="M380 250 C392 222 360 204 372 176 C352 196 350 224 362 250 Z" fill="#1a0808"/>
+</g>
+<!-- embers -->
+<g fill="#ffcc60" filter="url(#c7a-bloom)">
+  <circle cx="40" cy="190" r="1.2"/><circle cx="62" cy="160" r="0.9"/><circle cx="30" cy="132" r="1"/>
+  <circle cx="140" cy="60" r="0.8"/><circle cx="250" cy="44" r="1"/><circle cx="286" cy="80" r="0.8"/>
+  <circle cx="348" cy="178" r="1.2"/><circle cx="372" cy="150" r="0.9"/><circle cx="318" cy="120" r="0.8"/>
+  <circle cx="166" cy="226" r="0.9"/><circle cx="238" cy="222" r="1"/><circle cx="120" cy="248" r="1.3"/>
+  <circle cx="280" cy="246" r="1.2"/><circle cx="210" cy="30" r="0.7"/><circle cx="90" cy="70" r="0.8"/>
+  <path d="M52 214 L54 208 L55 214 Z M344 210 L346 203 L347 210 Z M262 208 L264 202 L265 208 Z"/>
+</g>
+<g fill="#aaff60" filter="url(#c7a-bloom)">
+  <circle cx="70" cy="176" r="1"/><circle cx="126" cy="186" r="0.9"/><circle cx="330" cy="172" r="1"/>
+  <circle cx="276" cy="190" r="0.9"/><circle cx="104" cy="160" r="0.7"/><circle cx="296" cy="158" r="0.8"/>
+  <circle cx="58" cy="232" r="0.8"/><circle cx="344" cy="230" r="0.8"/>
+</g>
+
+<!-- ============ 6. VIGNETTE ============ -->
+<rect x="0" y="0" width="400" height="300" fill="url(#c7a-vig)"/>
+</svg>

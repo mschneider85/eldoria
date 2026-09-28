@@ -1,0 +1,355 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300">
+<defs>
+  <linearGradient id="c7b-sky" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#0a020c"/>
+    <stop offset="0.35" stop-color="#360818"/>
+    <stop offset="0.65" stop-color="#7a1420"/>
+    <stop offset="1" stop-color="#b8321c"/>
+  </linearGradient>
+  <radialGradient id="c7b-moon" cx="0.45" cy="0.4" r="0.6">
+    <stop offset="0" stop-color="#ffd2b0"/>
+    <stop offset="0.6" stop-color="#e88060"/>
+    <stop offset="1" stop-color="#a03a30"/>
+  </radialGradient>
+  <radialGradient id="c7b-moonhalo" cx="0.5" cy="0.5" r="0.5">
+    <stop offset="0.3" stop-color="#ff9070" stop-opacity="0.5"/>
+    <stop offset="1" stop-color="#ff5040" stop-opacity="0"/>
+  </radialGradient>
+  <linearGradient id="c7b-stone" gradientUnits="userSpaceOnUse" x1="0" y1="20" x2="0" y2="260">
+    <stop offset="0" stop-color="#1a0c1c"/>
+    <stop offset="0.6" stop-color="#2e1428"/>
+    <stop offset="1" stop-color="#4a1c2c"/>
+  </linearGradient>
+  <linearGradient id="c7b-stonefar" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#4a1426"/>
+    <stop offset="1" stop-color="#8a2a2a"/>
+  </linearGradient>
+  <linearGradient id="c7b-floor" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#3a1428"/>
+    <stop offset="0.4" stop-color="#241020"/>
+    <stop offset="1" stop-color="#0a040a"/>
+  </linearGradient>
+  <radialGradient id="c7b-robe" gradientUnits="userSpaceOnUse" cx="200" cy="170" r="150">
+    <stop offset="0" stop-color="#9a58d8"/>
+    <stop offset="0.25" stop-color="#5a2688"/>
+    <stop offset="0.55" stop-color="#2c1048"/>
+    <stop offset="1" stop-color="#0c0414"/>
+  </radialGradient>
+  <radialGradient id="c7b-robein" gradientUnits="userSpaceOnUse" cx="200" cy="175" r="110">
+    <stop offset="0" stop-color="#6a2a70"/>
+    <stop offset="0.5" stop-color="#3a1240"/>
+    <stop offset="1" stop-color="#14041a"/>
+  </radialGradient>
+  <linearGradient id="c7b-trim" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0" stop-color="#5a3a20"/>
+    <stop offset="0.5" stop-color="#d0a060"/>
+    <stop offset="1" stop-color="#5a3a20"/>
+  </linearGradient>
+  <radialGradient id="c7b-skin" gradientUnits="userSpaceOnUse" cx="200" cy="150" r="80">
+    <stop offset="0" stop-color="#e8d0ff"/>
+    <stop offset="0.35" stop-color="#b090d0"/>
+    <stop offset="0.7" stop-color="#6a4a88"/>
+    <stop offset="1" stop-color="#2a1a3a"/>
+  </radialGradient>
+  <linearGradient id="c7b-hoodshade" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#05020a" stop-opacity="0.95"/>
+    <stop offset="0.45" stop-color="#0a0412" stop-opacity="0.55"/>
+    <stop offset="0.75" stop-color="#0a0412" stop-opacity="0"/>
+  </linearGradient>
+  <linearGradient id="c7b-horn" x1="0" y1="1" x2="1" y2="0">
+    <stop offset="0" stop-color="#1a1018"/>
+    <stop offset="0.5" stop-color="#5a4050"/>
+    <stop offset="1" stop-color="#d0b8c0"/>
+  </linearGradient>
+  <radialGradient id="c7b-orb" cx="0.5" cy="0.5" r="0.5">
+    <stop offset="0" stop-color="#ffffff"/>
+    <stop offset="0.2" stop-color="#f0d0ff"/>
+    <stop offset="0.5" stop-color="#b050ff"/>
+    <stop offset="0.8" stop-color="#5a10a0"/>
+    <stop offset="1" stop-color="#20002a"/>
+  </radialGradient>
+  <radialGradient id="c7b-violetglow" cx="0.5" cy="0.5" r="0.5">
+    <stop offset="0" stop-color="#e0a0ff" stop-opacity="0.9"/>
+    <stop offset="0.4" stop-color="#9a40ff" stop-opacity="0.45"/>
+    <stop offset="1" stop-color="#5010a0" stop-opacity="0"/>
+  </radialGradient>
+  <linearGradient id="c7b-flame" x1="0" y1="1" x2="0" y2="0">
+    <stop offset="0" stop-color="#ffffff"/>
+    <stop offset="0.25" stop-color="#e8b0ff"/>
+    <stop offset="0.6" stop-color="#a040f0"/>
+    <stop offset="1" stop-color="#4a0a90" stop-opacity="0"/>
+  </linearGradient>
+  <radialGradient id="c7b-eye" cx="0.5" cy="0.5" r="0.5">
+    <stop offset="0" stop-color="#ffffff"/>
+    <stop offset="0.5" stop-color="#e8b8ff"/>
+    <stop offset="1" stop-color="#9a30ff"/>
+  </radialGradient>
+  <radialGradient id="c7b-vig" cx="0.5" cy="0.45" r="0.72">
+    <stop offset="0.55" stop-color="#000" stop-opacity="0"/>
+    <stop offset="0.85" stop-color="#06000a" stop-opacity="0.5"/>
+    <stop offset="1" stop-color="#000" stop-opacity="0.88"/>
+  </radialGradient>
+  <filter id="c7b-glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="5"/></filter>
+  <filter id="c7b-soft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="1.3"/></filter>
+  <filter id="c7b-haze" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="11"/></filter>
+  <filter id="c7b-bloom" x="-50%" y="-50%" width="200%" height="200%">
+    <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="b"/>
+    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+</defs>
+
+<!-- ============ SKY ============ -->
+<rect width="400" height="300" fill="url(#c7b-sky)"/>
+<circle cx="200" cy="78" r="104" fill="url(#c7b-moonhalo)"/>
+<circle cx="200" cy="78" r="66" fill="url(#c7b-moon)"/>
+<g fill="#a0403a" opacity="0.5">
+  <ellipse cx="184" cy="60" rx="9" ry="6"/><ellipse cx="220" cy="84" rx="12" ry="7"/><ellipse cx="206" cy="52" rx="5" ry="4"/>
+  <ellipse cx="176" cy="92" rx="6" ry="4"/><ellipse cx="228" cy="62" rx="4" ry="3"/>
+</g>
+<g filter="url(#c7b-haze)">
+  <path d="M-20 100 C40 86 90 104 150 92 C200 84 240 100 300 88 C350 80 390 96 420 90 L420 120 L-20 130 Z" fill="#2a0612" opacity="0.8"/>
+  <path d="M-20 20 C60 34 120 10 200 24 C260 34 320 14 420 24 L420 -10 L-20 -10 Z" fill="#040008"/>
+</g>
+<path d="M130 104 C160 98 190 104 220 100 C250 96 270 102 290 100 C260 110 220 110 190 112 C160 112 140 110 130 104 Z" fill="#1a0410" opacity="0.6"/>
+
+<!-- ============ DISTANT RUINS ============ -->
+<g fill="url(#c7b-stonefar)" opacity="0.8">
+  <path d="M0 200 L0 150 L12 150 L12 120 L18 110 L24 120 L24 150 L40 150 L40 134 L50 134 L50 200 Z"/>
+  <path d="M350 200 L350 128 L356 118 L356 100 L362 92 L368 100 L368 118 L374 128 L374 146 L390 146 L390 132 L400 132 L400 200 Z"/>
+  <path d="M50 200 L50 170 C60 160 72 160 82 170 L82 200 Z"/>
+  <path d="M318 200 L318 168 C326 158 340 158 348 168 L348 200 Z"/>
+</g>
+<ellipse cx="200" cy="196" rx="230" ry="26" fill="#c04030" opacity="0.35" filter="url(#c7b-haze)"/>
+
+<!-- ============ TEMPLE ARCH & COLUMNS ============ -->
+<g>
+  <!-- left column -->
+  <path d="M70 236 L70 76 L66 70 L66 62 L110 62 L110 70 L106 76 L106 236 Z" fill="url(#c7b-stone)"/>
+  <path d="M74 76 L74 234 M82 76 L82 234 M90 76 L90 234 M98 76 L98 234" stroke="#0a040c" stroke-width="1.6"/>
+  <path d="M75 76 L75 234 M83 76 L83 234 M91 76 L91 234" stroke="#8a4a50" stroke-width="0.5" opacity="0.5"/>
+  <path d="M104 76 L104 234" stroke="#c04a3a" stroke-width="1" opacity="0.5"/>
+  <path d="M64 62 L112 62 L114 54 L62 54 Z" fill="#2a1226"/>
+  <path d="M62 54 L114 54" stroke="#c05a4a" stroke-width="0.8" opacity="0.5"/>
+  <!-- arch springing from left, broken -->
+  <path d="M62 54 C70 20 120 0 170 -2 L176 12 C150 16 132 22 118 34 L126 42 L112 50 C110 52 112 54 114 54 Z" fill="url(#c7b-stone)"/>
+  <path d="M170 -2 L176 12 L168 10 L172 18 L160 16 Z" fill="#1a0a18"/>
+  <path d="M66 50 C76 22 120 6 168 4" fill="none" stroke="#c05a4a" stroke-width="0.8" opacity="0.4"/>
+  <!-- right column (broken top) -->
+  <path d="M294 236 L294 110 L300 100 L306 106 L312 94 L318 104 L326 98 L330 110 L330 236 Z" fill="url(#c7b-stone)"/>
+  <path d="M298 110 L298 234 M306 108 L306 234 M314 104 L314 234 M322 104 L322 234" stroke="#0a040c" stroke-width="1.6"/>
+  <path d="M296 110 L296 234" stroke="#c04a3a" stroke-width="1" opacity="0.5"/>
+  <!-- cracks -->
+  <path d="M86 120 L92 132 L88 144 L94 156 M312 150 L306 162 L310 176" fill="none" stroke="#0a040c" stroke-width="1"/>
+  <!-- glowing runes on columns -->
+  <g fill="none" stroke="#c070ff" stroke-width="1" filter="url(#c7b-bloom)" opacity="0.85">
+    <path d="M84 96 L88 90 L92 96 L88 102 Z M88 108 L88 118 M84 124 L92 124 M86 130 L90 136 L86 142"/>
+    <path d="M308 128 L312 122 L316 128 M312 128 L312 140 M308 146 L316 150 L308 154"/>
+  </g>
+  <!-- rubble at column bases -->
+  <path d="M60 236 C62 226 74 224 82 230 C90 222 104 224 112 232 L116 240 L58 240 Z" fill="#1a0a16"/>
+  <path d="M288 238 C290 228 302 226 310 232 C318 226 330 228 336 236 L338 242 L286 242 Z" fill="#1a0a16"/>
+  <path d="M62 230 C66 226 74 226 80 230 M292 232 C296 228 304 228 308 232" stroke="#c04a3a" stroke-width="0.7" fill="none" opacity="0.6"/>
+</g>
+<!-- fallen column piece -->
+<path d="M18 250 L60 238 L66 256 L24 268 Z" fill="#2a1226"/>
+<ellipse cx="63" cy="247" rx="4" ry="9" transform="rotate(-18 63 247)" fill="#4a2030"/>
+<path d="M22 256 L62 244" stroke="#0a040c" stroke-width="1"/>
+
+<!-- ============ FLOOR ============ -->
+<path d="M0 232 C80 226 320 226 400 232 L400 300 L0 300 Z" fill="url(#c7b-floor)"/>
+<g fill="none" stroke="#0a040a" stroke-width="1.1">
+  <path d="M0 246 C100 240 300 240 400 246 M0 266 C100 258 300 258 400 266"/>
+  <path d="M200 232 L200 300 M160 232 L140 300 M240 232 L260 300 M120 232 L80 300 M280 232 L320 300 M80 232 L20 300 M320 232 L380 300"/>
+</g>
+<g fill="none" stroke="#b060ff" stroke-width="0.6" opacity="0.4">
+  <path d="M0 245 C100 239 300 239 400 245"/>
+  <path d="M160 232 L140 300 M240 232 L260 300"/>
+</g>
+<!-- violet light pool on floor -->
+<ellipse cx="200" cy="252" rx="130" ry="20" fill="#9a40ff" opacity="0.3" filter="url(#c7b-haze)"/>
+
+<!-- ============ SORCERESS ============ -->
+<!-- dark aura behind -->
+<ellipse cx="200" cy="150" rx="100" ry="120" fill="#10001a" opacity="0.6" filter="url(#c7b-haze)"/>
+
+<!-- shadow tendrils behind her -->
+<g fill="none" stroke="#1a0626" stroke-linecap="round" opacity="0.9" filter="url(#c7b-soft)">
+  <path d="M150 170 C120 150 100 170 80 150 C66 136 70 118 56 108" stroke-width="7"/>
+  <path d="M250 170 C280 150 300 170 320 150 C334 136 330 118 344 108" stroke-width="7"/>
+  <path d="M160 200 C130 210 110 196 92 206 C76 214 70 226 54 224" stroke-width="3.5"/>
+  <path d="M240 200 C270 210 290 196 308 206 C324 214 330 226 346 224" stroke-width="3.5"/>
+</g>
+
+<g fill="none" stroke="#9a50e0" stroke-linecap="round" stroke-width="0.9" opacity="0.6">
+  <path d="M150 168 C120 148 100 168 80 148 C66 134 70 116 56 106"/>
+  <path d="M250 168 C280 148 300 168 320 148 C334 134 330 116 344 106"/>
+  <path d="M160 198 C130 208 110 194 92 204 C76 212 70 224 54 222"/>
+  <path d="M240 198 C270 208 290 194 308 204 C324 212 330 224 346 222"/>
+</g>
+<g fill="#14041e" opacity="0.85">
+  <path d="M56 108 C50 100 52 92 46 86 C54 90 58 98 58 106 Z M344 108 C350 100 348 92 354 86 C346 90 342 98 342 106 Z"/>
+  <path d="M54 224 C46 226 40 222 34 224 C40 218 48 218 54 220 Z M346 224 C354 226 360 222 366 224 C360 218 352 218 346 220 Z"/>
+</g>
+<!-- cloak / robe body -->
+<path d="M150 126 C136 142 124 172 118 210 C114 240 110 262 104 300 L296 300 C290 262 286 240 282 210 C276 172 264 142 250 126 C234 118 166 118 150 126 Z" fill="url(#c7b-robe)"/>
+<!-- robe folds -->
+<g fill="none" stroke="#0a0212" stroke-width="1.6" opacity="0.8">
+  <path d="M134 180 C130 210 126 250 122 300"/><path d="M148 196 C146 230 144 264 142 300"/>
+  <path d="M266 180 C270 210 274 250 278 300"/><path d="M252 196 C254 230 256 264 258 300"/>
+</g>
+<g fill="none" stroke="#b070f0" stroke-width="0.8" opacity="0.45">
+  <path d="M137 184 C133 214 129 252 126 300"/><path d="M263 184 C267 214 271 252 274 300"/>
+</g>
+<!-- inner robe panel -->
+<path d="M178 132 C174 180 170 240 166 300 L234 300 C230 240 226 180 222 132 Z" fill="url(#c7b-robein)"/>
+<path d="M178 132 C174 180 170 240 166 300" fill="none" stroke="url(#c7b-trim)" stroke-width="3"/>
+<path d="M222 132 C226 180 230 240 234 300" fill="none" stroke="url(#c7b-trim)" stroke-width="3"/>
+<path d="M176 140 C174 180 170 240 167 300 M224 140 C226 180 230 240 233 300" fill="none" stroke="#1a0a06" stroke-width="0.6"/>
+<path d="M112 240 C150 232 250 232 288 240 L296 300 L104 300 Z" fill="#05010a" opacity="0.45" filter="url(#c7b-soft)"/>
+<!-- sash / belt with gem -->
+<path d="M160 214 C180 208 220 208 240 214 L242 224 C220 218 180 218 158 224 Z" fill="#2a0c30" stroke="#0a0210" stroke-width="0.6"/>
+<path d="M160 214 C180 208 220 208 240 214" fill="none" stroke="#d0a060" stroke-width="0.8"/>
+<path d="M200 210 L206 218 L200 228 L194 218 Z" fill="#c050ff" stroke="#3a1a0a" stroke-width="0.8" filter="url(#c7b-bloom)"/>
+<path d="M196 230 C194 244 192 258 190 272 M204 230 C206 244 208 258 210 272" fill="none" stroke="#2a0c30" stroke-width="3"/>
+<!-- rune embroidery -->
+<g fill="none" stroke="#c888ff" stroke-width="0.8" opacity="0.65">
+  <path d="M190 240 L200 234 L210 240 L200 246 Z M200 250 L200 262 M194 256 L206 256"/>
+</g>
+
+<!-- hood, draping over shoulders -->
+<path d="M200 30 C174 30 156 50 152 78 C149 100 146 114 136 132 C130 140 138 146 150 142 C166 136 180 132 200 132 C220 132 234 136 250 142 C262 146 270 140 264 132 C254 114 251 100 248 78 C244 50 226 30 200 30 Z" fill="url(#c7b-robe)"/>
+<path d="M200 30 C174 30 156 50 152 78 C149 100 146 114 136 132" fill="none" stroke="#e06a50" stroke-width="1.1" opacity="0.55"/>
+<path d="M200 30 C226 30 244 50 248 78 C251 100 254 114 264 132" fill="none" stroke="#e06a50" stroke-width="1.1" opacity="0.55"/>
+<path d="M160 60 C156 80 156 100 150 120 M240 60 C244 80 244 100 250 120" fill="none" stroke="#0a0212" stroke-width="1.4" opacity="0.8"/>
+<path d="M200 32 C196 40 194 46 194 52" fill="none" stroke="#0a0212" stroke-width="1.2" opacity="0.7"/>
+<!-- hood trim -->
+<path d="M200 46 C180 46 168 62 166 84 C165 104 172 122 186 132 L178 134 C160 122 156 104 157 84 C159 58 176 40 200 40 C224 40 241 58 243 84 C244 104 240 122 222 134 L214 132 C228 122 235 104 234 84 C232 62 220 46 200 46 Z" fill="url(#c7b-trim)" opacity="0.85"/>
+<!-- hood opening -->
+<path d="M200 48 C182 48 170 64 169 84 C168 104 178 122 200 130 C222 122 232 104 231 84 C230 64 218 48 200 48 Z" fill="#07020c"/>
+
+<!-- hair strands -->
+<path d="M184 62 C176 78 174 100 178 124 C182 110 182 90 188 70 Z" fill="#1a0a24"/>
+<path d="M216 62 C224 78 226 100 222 124 C218 110 218 90 212 70 Z" fill="#1a0a24"/>
+<path d="M180 80 C178 96 178 110 180 120 M220 80 C222 96 222 110 220 120" fill="none" stroke="#7a4aa0" stroke-width="0.6" opacity="0.6"/>
+
+<!-- face -->
+<path d="M200 60 C189 60 183 70 183 84 C183 98 190 110 200 116 C210 110 217 98 217 84 C217 70 211 60 200 60 Z" fill="url(#c7b-skin)"/>
+<path d="M186 96 C188 104 194 112 200 116 C206 112 212 104 214 96 C210 106 206 110 200 112 C194 110 190 106 186 96 Z" fill="#f0e0ff" opacity="0.5"/>
+<!-- hair fringe across forehead -->
+<path d="M184 74 C186 64 194 58 200 58 C208 58 214 64 216 74 C212 68 206 66 202 70 C198 64 192 66 184 74 Z" fill="#1a0a24"/>
+<!-- small curved horns -->
+<path d="M190 66 C186 58 182 50 174 44 C170 42 164 42 160 44 C166 44 172 46 176 50 C180 56 182 62 186 70 Z" fill="url(#c7b-horn)" stroke="#0a0408" stroke-width="0.5"/>
+<path d="M210 66 C214 58 218 50 226 44 C230 42 236 42 240 44 C234 44 228 46 224 50 C220 56 218 62 214 70 Z" fill="url(#c7b-horn)" stroke="#0a0408" stroke-width="0.5"/>
+<path d="M186 60 L183 62 M182 54 L179 56 M177 48 L175 51 M214 60 L217 62 M218 54 L221 56 M223 48 L225 51" stroke="#0a0408" stroke-width="0.7"/>
+<!-- hood shadow over upper face -->
+<path d="M200 48 C182 48 170 64 169 84 C168 104 178 122 200 130 C222 122 232 104 231 84 C230 64 218 48 200 48 Z" fill="url(#c7b-hoodshade)"/>
+<!-- brows -->
+<path d="M187 79 C190 77 194 77 197 79 M213 79 C210 77 206 77 203 79" fill="none" stroke="#1a0a24" stroke-width="1.2" stroke-linecap="round"/>
+<!-- glowing eyes -->
+<ellipse cx="192" cy="83" rx="7" ry="4" fill="url(#c7b-violetglow)" filter="url(#c7b-soft)"/>
+<ellipse cx="208" cy="83" rx="7" ry="4" fill="url(#c7b-violetglow)" filter="url(#c7b-soft)"/>
+<path d="M188 83 C190 81 194 81 196.5 83 C194 85 190 85 188 83 Z" fill="url(#c7b-eye)"/>
+<path d="M212 83 C210 81 206 81 203.5 83 C206 85 210 85 212 83 Z" fill="url(#c7b-eye)"/>
+<!-- nose, lips, cheeks -->
+<path d="M200 86 C199 92 198 96 199 98 C200 99 201 99 202 98" fill="none" stroke="#5a3a78" stroke-width="0.8"/>
+<path d="M199 98 C200 98.6 201 98.6 202 98" fill="none" stroke="#f8eaff" stroke-width="0.6"/>
+<path d="M194 104 C197 102.5 203 102.5 206 104 C203 106.5 197 106.5 194 104 Z" fill="#4a1a5a"/>
+<path d="M194 104 C197 104.8 203 104.8 206 104" fill="none" stroke="#1a0620" stroke-width="0.6"/>
+<path d="M196 105.6 C198 106.3 202 106.3 204 105.6" fill="none" stroke="#c898e8" stroke-width="0.5"/>
+<path d="M186 92 C188 98 190 100 192 102 M214 92 C212 98 210 100 208 102" fill="none" stroke="#4a2a68" stroke-width="0.6" opacity="0.6"/>
+<!-- facial markings -->
+<path d="M190 88 L188 96 M210 88 L212 96" stroke="#b040ff" stroke-width="0.8" opacity="0.8"/>
+
+<!-- ===== sleeves & hands ===== -->
+<!-- left sleeve -->
+<path d="M150 128 C138 146 130 170 132 194 C140 204 158 204 172 194 C170 178 170 164 174 150 C168 140 160 132 150 128 Z" fill="url(#c7b-robe)"/>
+<path d="M132 194 C140 204 158 204 172 194 C166 188 156 186 146 188 C140 190 135 192 132 194 Z" fill="#0a0212"/>
+<path d="M132 194 C140 204 158 204 172 194" fill="none" stroke="url(#c7b-trim)" stroke-width="2.4"/>
+<path d="M142 150 C138 166 138 180 140 192 M156 146 C154 162 156 176 160 190" fill="none" stroke="#0a0212" stroke-width="1.2" opacity="0.7"/>
+<path d="M170 152 C168 168 168 180 170 192" fill="none" stroke="#d09aff" stroke-width="1.2" opacity="0.6"/>
+<!-- right sleeve -->
+<path d="M250 128 C262 146 270 170 268 194 C260 204 242 204 228 194 C230 178 230 164 226 150 C232 140 240 132 250 128 Z" fill="url(#c7b-robe)"/>
+<path d="M268 194 C260 204 242 204 228 194 C234 188 244 186 254 188 C260 190 265 192 268 194 Z" fill="#0a0212"/>
+<path d="M268 194 C260 204 242 204 228 194" fill="none" stroke="url(#c7b-trim)" stroke-width="2.4"/>
+<path d="M258 150 C262 166 262 180 260 192 M244 146 C246 162 244 176 240 190" fill="none" stroke="#0a0212" stroke-width="1.2" opacity="0.7"/>
+<path d="M230 152 C232 168 232 180 230 192" fill="none" stroke="#d09aff" stroke-width="1.2" opacity="0.6"/>
+
+<path d="M150 128 C138 146 130 170 132 194" fill="none" stroke="#05010a" stroke-width="1.6"/>
+<path d="M250 128 C262 146 270 170 268 194" fill="none" stroke="#05010a" stroke-width="1.6"/>
+<path d="M172 194 C170 178 170 164 174 150 C168 140 160 132 150 128" fill="none" stroke="#05010a" stroke-width="1.2" opacity="0.8"/>
+<path d="M228 194 C230 178 230 164 226 150 C232 140 240 132 250 128" fill="none" stroke="#05010a" stroke-width="1.2" opacity="0.8"/>
+<path d="M134 150 C130 170 130 186 133 194 L138 194 C135 180 136 164 140 150 Z M266 150 C270 170 270 186 267 194 L262 194 C265 180 264 164 260 150 Z" fill="#e08070" opacity="0.35"/>
+<!-- left hand: palm turned towards orb, fingers curled like claws -->
+<path d="M152 196 C152 186 158 178 166 176 C170 172 174 168 176 162 C178 158 181 158 181 162 C180 166 178 170 177 174 C180 170 184 164 186 160 C188 156 191 157 190 161 C188 166 185 172 182 176 C185 174 188 172 190 170 C192 168 195 170 193 173 C190 177 186 180 184 184 C186 184 188 184 190 186 C191 188 189 190 186 190 C182 192 176 196 170 200 C164 204 156 204 152 196 Z" fill="url(#c7b-skin)" stroke="#2a1a3a" stroke-width="0.6"/>
+<path d="M176 162 C177 158 179 156 181 157 L182 154 Z M186 160 C187 156 189 154 191 156 L192 152 Z M190 170 C192 167 194 166 196 168 L198 166 Z" fill="#1a0a24"/>
+<path d="M170 180 C174 184 178 186 184 186" fill="none" stroke="#5a3a78" stroke-width="0.6"/>
+<path d="M181 162 C180 166 178 170 177 174 M190 161 C188 166 185 172 182 176" fill="none" stroke="#fff" stroke-width="0.5" opacity="0.6"/>
+<!-- right hand mirrored-ish -->
+<path d="M248 196 C248 186 242 178 234 176 C230 172 226 168 224 162 C222 158 219 158 219 162 C220 166 222 170 223 174 C220 170 216 164 214 160 C212 156 209 157 210 161 C212 166 215 172 218 176 C215 174 212 172 210 170 C208 168 205 170 207 173 C210 177 214 180 216 184 C214 184 212 184 210 186 C209 188 211 190 214 190 C218 192 224 196 230 200 C236 204 244 204 248 196 Z" fill="url(#c7b-skin)" stroke="#2a1a3a" stroke-width="0.6"/>
+<path d="M224 162 C223 158 221 156 219 157 L218 154 Z M214 160 C213 156 211 154 209 156 L208 152 Z M210 170 C208 167 206 166 204 168 L202 166 Z" fill="#1a0a24"/>
+<path d="M230 180 C226 184 222 186 216 186" fill="none" stroke="#5a3a78" stroke-width="0.6"/>
+<path d="M219 162 C220 166 222 170 223 174 M210 161 C212 166 215 172 218 176" fill="none" stroke="#fff" stroke-width="0.5" opacity="0.6"/>
+
+<path d="M152 196 C154 204 164 204 170 200 C176 196 182 192 186 190 C178 192 170 194 164 196 C160 197 156 197 152 196 Z" fill="#2a1a3a" opacity="0.7"/>
+<path d="M248 196 C246 204 236 204 230 200 C224 196 218 192 214 190 C222 192 230 194 236 196 C240 197 244 197 248 196 Z" fill="#2a1a3a" opacity="0.7"/>
+<!-- ============ SHADOW MAGIC ============ -->
+<circle cx="200" cy="170" r="50" fill="url(#c7b-violetglow)" filter="url(#c7b-glow)" opacity="0.75"/>
+<!-- swirling shadow ribbons -->
+<g fill="none" stroke-linecap="round">
+  <path d="M152 184 C150 160 172 140 200 140 C230 140 250 160 246 180 C242 202 214 210 196 200" stroke="#14041e" stroke-width="4.5" opacity="0.85" filter="url(#c7b-soft)"/>
+  <path d="M248 158 C252 180 232 200 204 202 C176 204 154 186 158 166 C162 146 190 138 208 150" stroke="#14041e" stroke-width="3.5" opacity="0.8" filter="url(#c7b-soft)"/>
+  <path d="M152 184 C150 160 172 140 200 140 C230 140 250 160 246 180" stroke="#c070ff" stroke-width="0.9" opacity="0.8"/>
+  <path d="M248 158 C252 180 232 200 204 202 C176 204 154 186 158 166" stroke="#e0b0ff" stroke-width="0.7" opacity="0.7"/>
+  <path d="M170 150 C180 136 200 132 216 138 C232 144 240 156 236 170" stroke="#3a0a5a" stroke-width="2.2" opacity="0.8"/>
+  <path d="M166 196 C176 212 204 216 226 204" stroke="#3a0a5a" stroke-width="2" opacity="0.8"/>
+  <path d="M140 172 C130 162 128 150 136 140 M260 172 C270 162 272 150 264 140" stroke="#2a0840" stroke-width="2.4" opacity="0.8"/>
+  <path d="M136 140 C132 136 132 132 136 130 M264 140 C268 136 268 132 264 130" stroke="#b060ff" stroke-width="0.8" opacity="0.7"/>
+</g>
+<!-- violet flames rising from the orb -->
+<g filter="url(#c7b-soft)">
+  <path d="M184 176 C176 164 182 152 178 138 C188 148 188 158 192 164 C190 150 196 140 194 124 C206 140 204 154 206 162 C210 150 216 146 216 132 C224 148 220 164 216 176 C208 188 192 188 184 176 Z" fill="url(#c7b-flame)"/>
+  <path d="M190 174 C186 166 190 158 188 150 C194 156 196 162 198 166 C198 158 202 150 202 142 C208 152 206 162 208 168 C212 162 214 158 214 152 C216 162 214 170 210 176 C204 182 194 182 190 174 Z" fill="#ffe8ff" opacity="0.7"/>
+</g>
+<g fill="url(#c7b-flame)" filter="url(#c7b-soft)" opacity="0.9">
+  <path d="M178 160 C174 152 178 146 176 138 C182 144 184 150 182 158 Z M188 158 C186 150 190 142 188 132 C194 140 194 150 191 157 Z"/>
+  <path d="M222 160 C226 152 222 146 224 138 C218 144 216 150 218 158 Z M212 158 C214 150 210 142 212 132 C206 140 206 150 209 157 Z"/>
+</g>
+<!-- the orb -->
+<circle cx="200" cy="172" r="13" fill="url(#c7b-orb)" filter="url(#c7b-bloom)"/>
+<path d="M192 166 C194 162 198 161 202 162" fill="none" stroke="#fff" stroke-width="1.2" opacity="0.9"/>
+<!-- orbiting motes -->
+<g fill="#f0d0ff" filter="url(#c7b-bloom)">
+  <circle cx="164" cy="152" r="1.4"/><circle cx="238" cy="150" r="1.2"/><circle cx="228" cy="200" r="1.4"/>
+  <circle cx="170" cy="204" r="1.1"/><circle cx="200" cy="130" r="1"/><circle cx="146" cy="176" r="0.9"/><circle cx="254" cy="178" r="0.9"/>
+</g>
+<!-- violet light on hands/face (rim) -->
+<path d="M176 176 C178 180 182 184 186 186" fill="none" stroke="#f4dcff" stroke-width="1" opacity="0.8"/>
+<path d="M224 176 C222 180 218 184 214 186" fill="none" stroke="#f4dcff" stroke-width="1" opacity="0.8"/>
+<path d="M150 142 C166 136 180 134 200 134 C220 134 234 136 250 142" fill="none" stroke="#c080ff" stroke-width="1" opacity="0.5"/>
+
+<!-- ============ FOREGROUND ============ -->
+<!-- floating rubble -->
+<g>
+  <path d="M40 176 L52 170 L58 178 L50 186 L40 184 Z" fill="#2a1226"/>
+  <path d="M40 184 L50 186 L58 178" fill="none" stroke="#b060ff" stroke-width="0.8" opacity="0.7"/>
+  <path d="M344 186 L356 180 L364 188 L356 196 L346 194 Z" fill="#2a1226"/>
+  <path d="M346 194 L356 196 L364 188" fill="none" stroke="#b060ff" stroke-width="0.8" opacity="0.7"/>
+  <path d="M120 88 L128 84 L132 90 L126 96 Z M280 80 L288 78 L290 86 L282 88 Z" fill="#2a1226"/>
+</g>
+<!-- low shadow mist -->
+<g filter="url(#c7b-haze)" opacity="0.7">
+  <path d="M-20 260 C40 244 90 262 150 252 C200 244 250 262 310 250 C360 242 400 256 420 252 L420 310 L-20 310 Z" fill="#1a0628"/>
+</g>
+<path d="M0 262 C40 252 80 264 130 258 C170 254 200 264 250 256 C300 250 350 262 400 256" fill="none" stroke="#8a40c0" stroke-width="1.2" opacity="0.35" filter="url(#c7b-soft)"/>
+<!-- embers / sparks -->
+<g fill="#ff9a60" filter="url(#c7b-bloom)">
+  <circle cx="30" cy="120" r="0.9"/><circle cx="60" cy="210" r="1"/><circle cx="130" cy="40" r="0.8"/>
+  <circle cx="276" cy="36" r="0.9"/><circle cx="352" cy="220" r="1"/><circle cx="370" cy="80" r="0.8"/><circle cx="116" cy="240" r="0.9"/>
+</g>
+<g fill="#d8a0ff" filter="url(#c7b-bloom)">
+  <circle cx="110" cy="150" r="1"/><circle cx="292" cy="140" r="1"/><circle cx="130" cy="210" r="0.8"/>
+  <circle cx="270" cy="216" r="0.8"/><circle cx="96" cy="120" r="0.7"/><circle cx="306" cy="110" r="0.7"/>
+</g>
+
+<rect width="400" height="300" fill="url(#c7b-vig)"/>
+</svg>

@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chroniken von Eldoria</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800;900&family=Inter:wght@400;600;800&family=Noto+Color+Emoji&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Hauptmenü -->
+  <section id="menu" class="screen">
+    <div class="menu-box">
+      <h1 class="title">Chroniken von Eldoria</h1>
+      <p class="subtitle">Ein Kartenspiel der Helden</p>
+
+      <div class="menu-row">
+        <div class="seg" id="mode-select">
+          <button data-mode="pvc" class="active">⚔️ Gegen Computer</button>
+          <button data-mode="pvp">👥 2 Spieler (ein Gerät)</button>
+        </div>
+      </div>
+
+      <div class="pick-grid">
+        <div class="pick">
+          <h3 id="p1-label">Dein Held</h3>
+          <div class="heroes" data-player="0"></div>
+        </div>
+        <div class="pick">
+          <h3 id="p2-label">Gegner</h3>
+          <div class="heroes" data-player="1"></div>
+        </div>
+      </div>
+
+      <div class="menu-row" id="difficulty-row">
+        <span class="label">Schwierigkeit:</span>
+        <div class="seg" id="difficulty-select">
+          <button data-diff="easy">Leicht</button>
+          <button data-diff="normal" class="active">Normal</button>
+        </div>
+      </div>
+
+      <div class="menu-row">
+        <button id="start-btn" class="btn-primary">Spiel starten</button>
+        <button id="rules-btn" class="btn-secondary">Spielregeln</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Spielfeld -->
+  <section id="game" class="screen hidden">
+    <div class="table">
+      <div class="hand opp-hand" id="opp-hand"></div>
+      <div class="hero-row top" id="opp-hero-row"></div>
+      <div class="board top" id="opp-board"></div>
+      <div class="board bottom" id="my-board"></div>
+      <div class="hero-row bottom" id="my-hero-row"></div>
+      <div class="hand my-hand" id="my-hand"></div>
+    </div>
+    <aside class="sidebar">
+      <button id="end-turn" class="end-turn">Zug beenden</button>
+      <div class="hint" id="hint"></div>
+      <div class="log" id="log"></div>
+      <div class="side-buttons">
+        <button id="menu-btn" class="btn-small">☰ Menü</button>
+        <button id="help-btn" class="btn-small">? Regeln</button>
+      </div>
+    </aside>
+  </section>
+
+  <div id="preview" class="preview hidden"></div>
+  <div id="fx"></div>
+  <svg id="arrow" class="hidden"><defs><marker id="arrowhead" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#ffcc4d"/></marker></defs><line x1="0" y1="0" x2="0" y2="0" marker-end="url(#arrowhead)"/></svg>
+  <div id="overlay" class="overlay hidden"></div>
+
+  <template id="rules-tpl">
+    <div class="modal rules">
+      <h2>Spielregeln</h2>
+      <ul>
+        <li><b>Ziel:</b> Bring den gegnerischen Helden von 30 Leben auf 0.</li>
+        <li><b>Mana:</b> Jeden Zug erhältst du einen weiteren Manakristall (max. 10). Karten kosten Mana (blaue Zahl).</li>
+        <li><b>Karten spielen:</b> Klicke eine Karte in deiner Hand. Braucht sie ein Ziel, klicke danach das Ziel.</li>
+        <li><b>Angreifen:</b> Klicke einen deiner Diener (grün leuchtend) und dann einen Feind. Beide fügen sich gegenseitig Schaden zu. Neu ausgespielte Diener müssen einen Zug warten 💤.</li>
+        <li><b>Heldenfähigkeit:</b> Einmal pro Zug für 2 Mana (runder Knopf neben deinem Helden).</li>
+        <li>Wer beginnt, wird ausgelost. Der zweite Spieler erhält eine Karte mehr und <b>Die Münze</b> (+1 Mana).</li>
+        <li>Rechtsklick oder <kbd>Esc</kbd> bricht eine Auswahl ab.</li>
+      </ul>
+      <h3>Schlüsselwörter</h3>
+      <ul>
+        <li><b>Spott</b> 🛡 – Gegner müssen zuerst diesen Diener angreifen.</li>
+        <li><b>Ansturm</b> ⚡ – Kann sofort angreifen.</li>
+        <li><b>Gottesschild</b> ✨ – Der erste Schaden wird ignoriert.</li>
+        <li><b>Windzorn</b> 🌀 – Kann zweimal pro Zug angreifen.</li>
+        <li><b>Kampfschrei</b> – Wirkt beim Ausspielen aus der Hand.</li>
+        <li><b>Todesröcheln</b> 💀 – Wirkt, wenn der Diener stirbt.</li>
+        <li><b>Einfrieren</b> ❄ – Das Ziel verpasst seinen nächsten Angriff.</li>
+      </ul>
+      <button class="btn-primary" data-close>Verstanden</button>
+    </div>
+  </template>
+
+  <script src="js/cards.js"></script>
+  <script src="js/engine.js"></script>
+  <script src="js/ai.js"></script>
+  <script src="js/ui.js"></script>
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Eldoria-Quartett</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='12' y='6' width='40' height='52' rx='6' fill='%238a2a1a' stroke='%23e2b85a' stroke-width='4'/><path d='M32 18l4 9 10 1-8 6 3 10-9-6-9 6 3-10-8-6 10-1z' fill='%23e2b85a'/></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800;900&family=Alegreya:wght@500;700;800&family=Noto+Color+Emoji&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css?v=129">
+</head>
+<body>
+  <!-- Hauptmenü -->
+  <section id="menu" class="screen">
+    <div class="menu-bg" id="menu-bg" aria-hidden="true"></div>
+    <div class="embers" id="fireflies" aria-hidden="true"></div>
+    <div class="menu-audio">
+      <button class="btn-small sfx-toggle" data-tip="Soundeffekte an/aus">🔊</button>
+      <button class="btn-small music-toggle" data-tip="Musik an/aus">🎵</button>
+    </div>
+
+    <div class="menu-layout">
+      <div class="menu-hero">
+        <div class="menu-cards" id="menu-cards" aria-hidden="true"></div>
+        <h1 class="title">Eldoria-Quartett</h1>
+        <p class="subtitle">Das Quartett der Völker</p>
+        <ol class="how">
+          <li><span class="how-icon">🗺️</span><span><b>Das Schlachtfeld</b> bestimmt, welche Eigenschaft zählt.</span></li>
+          <li><span class="how-icon">🂠</span><span><b>Verdeckt wählen</b> – der Sieger erobert beide Karten.</span></li>
+          <li><span class="how-icon">🏆</span><span><b>Zwei Quartette</b> eines Volkes gewinnen.</span></li>
+        </ol>
+      </div>
+
+      <div class="menu-box">
+        <h2 class="menu-heading">Neues Spiel</h2>
+        <div class="mode-tiles" id="mode-select">
+          <button data-mode="pvc" class="mode-tile active">
+            <span class="mode-icon">🤖</span><span class="mode-name">Gegen den Computer</span>
+            <span class="mode-desc">Miss dich mit einem listigen Gegner</span>
+          </button>
+          <button data-mode="pvp" class="mode-tile">
+            <span class="mode-icon">👥</span><span class="mode-name">Zwei Spieler</span>
+            <span class="mode-desc">Abwechselnd an einem Gerät</span>
+          </button>
+        </div>
+        <div class="menu-row" id="difficulty-row">
+          <span class="label">Stärke des Computers</span>
+          <div class="seg" id="difficulty-select">
+            <button data-diff="easy">Leicht</button>
+            <button data-diff="normal" class="active">Normal</button>
+          </div>
+        </div>
+        <div class="menu-row names" id="names-row">
+          <label>Spieler 1 <input id="name1" maxlength="14" value="Spieler 1"></label>
+          <label>Spieler 2 <input id="name2" maxlength="14" value="Spieler 2"></label>
+        </div>
+        <button id="start-btn" class="btn-primary start-big">Spiel starten</button>
+        <div class="menu-row menu-links">
+          <button id="rules-btn" class="btn-secondary">📜 Regeln</button>
+          <button id="gallery-btn" class="btn-secondary">🖼️ Kartengalerie</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Spiel -->
+  <section id="game" class="screen hidden">
+    <main class="table">
+      <header class="topbar">
+        <div id="round-info" class="round-info"></div>
+        <div class="top-buttons">
+          <button class="btn-small sfx-toggle" data-tip="Soundeffekte an/aus">🔊</button>
+          <button class="btn-small music-toggle" data-tip="Musik an/aus">🎵</button>
+          <button id="overview-btn" class="btn-small only-narrow">📋 Übersicht</button>
+          <button id="help-btn" class="btn-small">📜 Regeln</button>
+          <button id="menu-btn" class="btn-small">☰ Menü</button>
+        </div>
+      </header>
+      <div class="opp-row"><div class="player-bar opp" id="bar-1"></div><div class="opp-hand" id="opp-hand"></div></div>
+      <div class="battlefield" id="battlefield">
+        <div class="deck" id="deck-0"></div>
+        <div class="slot" id="slot-0"></div>
+        <div class="center" id="center"><div id="terrain-box"></div><div class="pot" id="pot"></div><div class="center-rest" id="center-rest"></div></div>
+        <div class="slot" id="slot-1"></div>
+        <div class="deck" id="deck-1"></div>
+      </div>
+      <div class="player-bar me" id="bar-0"></div>
+      <div class="hand-area" id="hand-area">
+        <div class="hand-title" id="hand-title"></div>
+        <div class="hand" id="hand"></div>
+        <div class="hand-actions" id="hand-actions"></div>
+      </div>
+    </main>
+    <aside class="sidebar" id="sidebar">
+      <h3>Quartett-Übersicht</h3>
+      <div class="legend" id="legend"></div>
+      <div class="overview" id="overview"></div>
+      <h3>Verlauf</h3>
+      <div class="log" id="log"></div>
+    </aside>
+  </section>
+
+  <div id="overlay" class="overlay hidden"></div>
+
+  <template id="rules-tpl">
+    <div class="modal rules">
+      <h2>Spielregeln</h2>
+      <ul>
+        <li><b>32 Karten</b>, 8 Völker mit je 4 Karten (1A–8D). Jede Karte hat vier Eigenschaften: ⚔️ Stärke, 🛡️ Rüstung, ✨ Magie, 💨 Tempo.</li>
+        <li>Jeder bekommt 16 Karten und hält immer <b>3 davon auf der Hand</b>.</li>
+        <li>Jede Runde wird ein <b>Schlachtfeld</b> aufgedeckt. Es bestimmt, welche Eigenschaft zählt – manche geben einem Volk einen Bonus.</li>
+        <li>Beide wählen <b>verdeckt</b> eine Handkarte. Dann wird aufgedeckt: Der höhere Wert gewinnt und <b>erobert beide Karten</b>.</li>
+        <li><b>Nachziehstapel:</b> Nach jeder Runde füllst du deine Hand vom eigenen Stapel wieder auf 3 Karten auf. Eroberte Karten kommen <b>unter</b> den Stapel des Siegers – gezogen wird immer von oben.</li>
+        <li><b>Gleichstand:</b> Beide Karten kommen in die Kriegsbeute. Wer die nächste Runde gewinnt, bekommt sie dazu.</li>
+        <li><b>Tipp:</b> Rechtsklick (am Handy: lange drücken) auf eine Karte zeigt sie groß.</li>
+        <li><b>Tastatur:</b> <kbd>1</kbd>–<kbd>3</kbd> Karte wählen, <kbd>H</kbd> Kriegshorn, <kbd>Enter</kbd> ausspielen / weiter, <kbd>Esc</kbd> Fenster schließen.</li>
+        <li><b>Quartett:</b> Besitzt du alle 4 Karten eines Volkes, legst du sie automatisch als Quartett ab – sie sind dann sicher.</li>
+      </ul>
+      <h3>Besonderheiten</h3>
+      <ul>
+        <li>☁️ <b>Nebelsumpf:</b> Hier gewinnt der niedrigste Wert.</li>
+        <li>🧭 <b>Kreuzung / Kriegsrat:</b> Der Anführer 👑 (Sieger der letzten Runde) wählt die Eigenschaft.</li>
+        <li>📯 <b>Kriegshorn:</b> +20 auf deine Karte. Danach lädt es sich wieder auf und ist nach 4 Runden erneut bereit (die Punkte am Horn zeigen den Ladestand).</li>
+      </ul>
+      <h3>Fähigkeiten</h3>
+      <p class="rules-intro">Jede Karte hat eine Fähigkeit, die beim Aufdecken wirkt. Die höchste Karte ist also nicht automatisch die beste Wahl!</p>
+      <ul class="ability-list"></ul>
+      <h3>Sieg</h3>
+      <ul>
+        <li>Wer zuerst <b>2 Quartette</b> hat, gewinnt – oder wenn der Gegner keine Karten mehr hat.</li>
+        <li>Nach 25 Runden gewinnt, wer mehr Quartette (danach mehr Karten) besitzt.</li>
+      </ul>
+      <button class="btn-primary" data-close>Verstanden</button>
+    </div>
+  </template>
+
+  <script src="js/cards.js?v=129"></script>
+  <script src="js/engine.js?v=129"></script>
+  <script src="js/ai.js?v=129"></script>
+  <script src="js/audio.js?v=129"></script>
+  <script src="js/ui.js?v=129"></script>
+</body>
+</html>

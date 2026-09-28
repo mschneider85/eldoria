@@ -1,0 +1,451 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300">
+  <defs>
+    <linearGradient id="c5b-sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#07060f"/>
+      <stop offset="0.45" stop-color="#1b1430"/>
+      <stop offset="0.8" stop-color="#23324a"/>
+      <stop offset="1" stop-color="#1a2a2e"/>
+    </linearGradient>
+    <radialGradient id="c5b-moonHalo" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#b8ff9a" stop-opacity="0.55"/>
+      <stop offset="0.35" stop-color="#5fd07a" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#1b1430" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="c5b-moon" cx="0.42" cy="0.4" r="0.6">
+      <stop offset="0" stop-color="#f0ffd8"/>
+      <stop offset="0.5" stop-color="#b8f08e"/>
+      <stop offset="1" stop-color="#5fae5a"/>
+    </radialGradient>
+    <linearGradient id="c5b-castle" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1a1d2e"/>
+      <stop offset="1" stop-color="#0c0e18"/>
+    </linearGradient>
+    <linearGradient id="c5b-hill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1d2a33"/>
+      <stop offset="1" stop-color="#0a0f14"/>
+    </linearGradient>
+    <linearGradient id="c5b-ground" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1b242a"/>
+      <stop offset="1" stop-color="#06080b"/>
+    </linearGradient>
+    <linearGradient id="c5b-steel" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#7a86a0"/>
+      <stop offset="0.35" stop-color="#303848"/>
+      <stop offset="1" stop-color="#0b0d14"/>
+    </linearGradient>
+    <linearGradient id="c5b-steelV" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#6c7890"/>
+      <stop offset="0.3" stop-color="#2b3242"/>
+      <stop offset="1" stop-color="#0a0c12"/>
+    </linearGradient>
+    <linearGradient id="c5b-steelRim" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#9fe8a0"/>
+      <stop offset="0.25" stop-color="#3a4a4a"/>
+      <stop offset="1" stop-color="#0c0e16"/>
+    </linearGradient>
+    <radialGradient id="c5b-bone" cx="0.4" cy="0.3" r="0.8">
+      <stop offset="0" stop-color="#e6ece4"/>
+      <stop offset="0.5" stop-color="#a3ada6"/>
+      <stop offset="1" stop-color="#3b4248"/>
+    </radialGradient>
+    <linearGradient id="c5b-boneV" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#d8e2da"/>
+      <stop offset="0.6" stop-color="#8a958f"/>
+      <stop offset="1" stop-color="#3a4145"/>
+    </linearGradient>
+    <linearGradient id="c5b-blade" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0" stop-color="#1a5aa8"/>
+      <stop offset="0.5" stop-color="#6fd8ff"/>
+      <stop offset="1" stop-color="#e6fbff"/>
+    </linearGradient>
+    <linearGradient id="c5b-cape" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2a1e3a"/>
+      <stop offset="0.5" stop-color="#160f22"/>
+      <stop offset="1" stop-color="#07050c"/>
+    </linearGradient>
+    <linearGradient id="c5b-cloth" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2c2140"/>
+      <stop offset="1" stop-color="#0c0814"/>
+    </linearGradient>
+    <radialGradient id="c5b-eye" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="0.3" stop-color="#9ff0ff"/>
+      <stop offset="0.7" stop-color="#2aa8ff" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#2aa8ff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="c5b-bladeHalo" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#6fd8ff" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#6fd8ff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="c5b-mist" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#7fd89a" stop-opacity="0"/>
+      <stop offset="1" stop-color="#7fd89a" stop-opacity="0.35"/>
+    </linearGradient>
+    <radialGradient id="c5b-vig" cx="0.5" cy="0.42" r="0.75">
+      <stop offset="0.55" stop-color="#000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#020106" stop-opacity="0.85"/>
+    </radialGradient>
+    <filter id="c5b-glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2.5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="c5b-soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="6"/>
+    </filter>
+    <filter id="c5b-blur" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="1.5"/>
+    </filter>
+  </defs>
+
+  <!-- 1 SKY -->
+  <rect id="c5b-bg" width="400" height="300" fill="url(#c5b-sky)"/>
+  <circle cx="172" cy="74" r="120" fill="url(#c5b-moonHalo)"/>
+  <circle cx="172" cy="74" r="44" fill="url(#c5b-moon)"/>
+  <g fill="#6e9e5a" opacity="0.45">
+    <ellipse cx="160" cy="62" rx="10" ry="7"/><ellipse cx="186" cy="88" rx="7" ry="5"/><ellipse cx="150" cy="92" rx="5" ry="4"/><ellipse cx="190" cy="56" rx="4" ry="3"/>
+  </g>
+  <!-- clouds across moon -->
+  <g opacity="0.8">
+    <path d="M40,100 C70,88 110,96 140,90 C170,84 196,96 230,92 C260,88 290,100 330,94 L330,104 C290,110 256,100 228,106 C196,112 170,100 140,106 C110,112 70,104 40,112 Z" fill="#141022"/>
+    <path d="M240,40 C270,32 310,40 360,30 L360,38 C312,50 272,44 244,48 Z" fill="#171228"/>
+    <path d="M40,100 C70,88 110,96 140,90 C170,84 196,96 230,92" stroke="#9fe0a0" stroke-width="0.8" fill="none" opacity="0.5"/>
+  </g>
+  <g fill="#d8e8ff">
+    <circle cx="30" cy="20" r="0.8"/><circle cx="80" cy="40" r="0.6"/><circle cx="300" cy="18" r="0.7"/><circle cx="360" cy="60" r="0.9"/><circle cx="376" cy="22" r="0.6"/><circle cx="22" cy="72" r="0.5"/>
+  </g>
+  <!-- bats -->
+  <g fill="#07060c">
+    <path d="M300,66 c3,-3 5,-2 6,0 c1,-2 3,-2 4,0 c1,-2 3,-3 6,0 c-3,0 -5,1 -6,3 c-1,-2 -3,-2 -4,0 c-1,-2 -3,-3 -6,-3 z"/>
+    <path d="M330,80 c2,-2 4,-1 4,0 c1,-1 2,-1 3,0 c1,-1 2,-2 4,0 c-2,0 -3,1 -4,2 c-1,-1 -2,-1 -3,0 c-1,-1 -2,-2 -4,-2 z"/>
+  </g>
+
+  <!-- 2 DISTANT CASTLE ON HILL -->
+  <path d="M0,200 C60,180 120,190 180,176 C240,164 300,170 400,150 L400,240 L0,240 Z" fill="url(#c5b-hill)"/>
+  <g id="c5b-castleG" fill="url(#c5b-castle)">
+    <path d="M296,168 L296,120 L302,120 L302,112 L306,112 L306,120 L312,120 L312,140 L322,140 L322,96 L318,96 L328,70 L338,96 L334,96 L334,140 L346,140 L346,110 L342,110 L350,88 L358,110 L354,110 L354,140 L364,140 L364,122 L370,122 L370,116 L374,116 L374,122 L380,122 L380,160 L392,160 L392,130 L388,130 L395,112 L402,130 L402,172 Z"/>
+    <path d="M20,196 L20,168 L26,168 L26,150 L22,150 L30,132 L38,150 L34,150 L34,170 L44,170 L44,186 Z"/>
+  </g>
+  <g fill="#9fffa8" filter="url(#c5b-glow)">
+    <rect x="327" y="104" width="2" height="5"/><rect x="349" y="118" width="2" height="4"/><rect x="304" y="128" width="2" height="4"/><rect x="394" y="138" width="2" height="4"/><rect x="29" y="156" width="2" height="4"/>
+  </g>
+  <rect x="0" y="150" width="400" height="90" fill="url(#c5b-mist)"/>
+
+  <!-- 3 MIDGROUND: dead trees, ground -->
+  <g fill="#0b0f14" stroke="#0b0f14" stroke-linecap="round">
+    <path d="M28,236 C30,210 26,190 34,170 L37,172 C31,190 36,210 34,236 Z"/>
+    <path d="M33,190 C24,182 18,178 10,178" stroke-width="2" fill="none"/>
+    <path d="M34,182 C42,172 50,168 58,166" stroke-width="1.6" fill="none"/>
+    <path d="M35,176 C34,166 38,158 44,152" stroke-width="1.2" fill="none"/>
+  </g>
+  <path d="M0,232 C80,222 150,236 220,228 C290,220 350,232 400,224 L400,300 L0,300 Z" fill="url(#c5b-ground)"/>
+  <!-- broken tombstones -->
+  <path d="M350,236 L352,214 C354,206 366,206 368,214 L370,236 Z" fill="#1c2228"/>
+  <path d="M352,214 C354,206 366,206 368,214" stroke="#8fd8a0" stroke-width="0.8" fill="none" opacity="0.5"/>
+  <path d="M40,242 L41,226 L50,222 L52,244 Z" fill="#1a2026"/>
+
+  <!-- ground glow under horse -->
+  <ellipse cx="220" cy="272" rx="140" ry="14" fill="#6fe08a" opacity="0.14" filter="url(#c5b-soft)"/>
+
+  <!-- 4 CHARACTER: HORSE -->
+  <g id="c5b-horse">
+    <!-- far legs (darker) -->
+    <path d="M178,200 C186,204 190,214 188,226 L186,240 L180,240 L178,222 Z" fill="#141820"/>
+    <path d="M284,196 C294,200 300,214 298,228 L296,238 L288,238 L284,220 Z" fill="#141820"/>
+    <g stroke-linecap="round" fill="none">
+      <path d="M183,240 L184,278" stroke="#4a5256" stroke-width="5.5"/>
+      <path d="M292,238 L290,278" stroke="#4a5256" stroke-width="6"/>
+    </g>
+    <g transform="translate(0,12)"><path d="M176,264 C180,260 190,260 192,264 L193,274 L175,274 Z" fill="#11141c"/></g>
+    <g transform="translate(0,12)"><path d="M282,264 C286,260 296,260 298,264 L299,274 L281,274 Z" fill="#11141c"/></g>
+    <circle cx="183" cy="240" r="4" fill="#4a5256"/><circle cx="184" cy="278" r="3" fill="#4a5256"/><circle cx="292" cy="238" r="4.2" fill="#4a5256"/>
+
+    <!-- tail: ghostly wisps -->
+    <g fill="none" stroke-linecap="round" filter="url(#c5b-blur)">
+      <path d="M312,150 C336,150 350,170 356,196 C360,214 352,228 362,244" stroke="#7fe8a0" stroke-width="5" opacity="0.45"/>
+      <path d="M312,154 C330,160 340,180 342,204 C344,222 336,232 344,246" stroke="#b8ffc8" stroke-width="2" opacity="0.55"/>
+      <path d="M310,152 C340,142 360,160 372,178" stroke="#7fe8a0" stroke-width="3" opacity="0.35"/>
+    </g>
+
+    <!-- neck vertebrae + body skeleton base -->
+    <path d="M124,98 C140,92 170,108 194,128 L300,136 C314,138 322,154 320,176 C318,196 306,208 296,212 L180,214 C166,212 156,202 152,188 C148,170 136,148 122,134 Z" fill="#0d1016"/>
+
+    <!-- exposed ribcage in the middle -->
+    <g stroke-linecap="round" fill="none">
+      <path d="M184,150 C182,176 186,198 194,210" stroke="url(#c5b-boneV)" stroke-width="3.2"/>
+      <path d="M196,140 C196,170 200,196 208,210" stroke="url(#c5b-boneV)" stroke-width="3.2"/>
+      <path d="M210,142 C210,172 214,198 222,212" stroke="url(#c5b-boneV)" stroke-width="3.2"/>
+      <path d="M224,142 C225,172 229,198 236,212" stroke="url(#c5b-boneV)" stroke-width="3"/>
+      <path d="M238,142 C240,172 243,198 250,212" stroke="url(#c5b-boneV)" stroke-width="3"/>
+      <path d="M252,142 C254,170 257,196 262,210" stroke="url(#c5b-boneV)" stroke-width="2.8"/>
+      <path d="M190,138 L270,140" stroke="#b9c4bc" stroke-width="4"/>
+      <path d="M186,210 C210,216 240,216 266,210" stroke="#9aa59e" stroke-width="3"/>
+      <path d="M266,144 C268,172 270,196 272,208" stroke="url(#c5b-boneV)" stroke-width="2.6"/>
+    </g>
+    <!-- ghost-green soul fire inside ribs -->
+    <ellipse cx="228" cy="192" rx="34" ry="16" fill="#6fe08a" opacity="0.55" filter="url(#c5b-soft)"/>
+    <ellipse cx="228" cy="194" rx="12" ry="6" fill="#c8ffd0" opacity="0.5" filter="url(#c5b-soft)"/>
+
+    <!-- chest barding (peytral) -->
+    <path d="M150,150 C160,146 178,150 192,160 C196,180 194,200 188,214 L170,216 C158,210 150,196 148,178 C147,166 147,156 150,150 Z" fill="url(#c5b-steel)" stroke="#05060a" stroke-width="1"/>
+    <path d="M152,158 C166,156 182,162 190,172" stroke="#8fdca0" stroke-width="1" fill="none" opacity="0.5"/>
+    <path d="M156,176 C168,174 180,178 188,186 M158,194 C168,192 178,196 184,202" stroke="#05060a" stroke-width="1.2" fill="none"/>
+    <!-- peytral spikes -->
+    <path d="M152,168 L130,166 L152,174 Z M154,186 L134,192 L156,192 Z" fill="url(#c5b-steelV)"/>
+    <circle cx="170" cy="168" r="1.3" fill="#8a96a8"/><circle cx="176" cy="186" r="1.3" fill="#8a96a8"/><circle cx="172" cy="202" r="1.3" fill="#8a96a8"/>
+
+    <!-- rump barding (crupper) -->
+    <path d="M262,136 C284,130 306,134 316,148 C324,164 322,186 312,202 C300,212 284,214 270,210 C266,188 262,160 262,136 Z" fill="url(#c5b-steel)" stroke="#05060a" stroke-width="1"/>
+    <path d="M268,140 C288,136 304,140 314,152" stroke="#9fe8a0" stroke-width="1.3" fill="none" opacity="0.6"/>
+    <path d="M272,160 C288,158 304,164 316,176 M272,184 C286,184 300,190 310,198" stroke="#05060a" stroke-width="1.3" fill="none"/>
+    <g fill="#8a96a8"><circle cx="280" cy="150" r="1.3"/><circle cx="296" cy="152" r="1.3"/><circle cx="288" cy="172" r="1.3"/><circle cx="302" cy="178" r="1.3"/></g>
+    <!-- rune on crupper -->
+    <path d="M288,188 l4,-8 l4,8 m-4,-8 v12 m-5,-5 h10" stroke="#6fd8ff" stroke-width="0.9" fill="none" filter="url(#c5b-glow)"/>
+
+    <!-- tattered saddle cloth -->
+    <path d="M198,134 L262,136 C264,150 264,164 264,178 L258,174 L254,186 L248,176 L242,190 L236,178 L230,188 L224,176 L218,186 L212,174 L206,182 L202,172 L198,178 C197,164 197,148 198,134 Z" fill="url(#c5b-cloth)"/>
+    <path d="M206,150 C206,160 207,168 208,176 M222,150 C222,162 223,172 224,180 M242,150 C242,162 243,174 244,184" stroke="#05030a" stroke-width="1.5" fill="none" opacity="0.7"/>
+    <path d="M198,140 L264,142 L264,150 L198,148 Z" fill="#3a2e52"/>
+    <path d="M204,144 l3,-3 l3,3 M222,145 l3,-3 l3,3 M240,145 l3,-3 l3,3 M256,145 l3,-3 l3,3" stroke="#6fd8ff" stroke-width="0.8" fill="none" opacity="0.8"/>
+    <!-- spine ridge along back -->
+    <g fill="url(#c5b-bone)">
+      <path d="M244,136 l4,-7 l3,7 z"/><path d="M252,136 l4,-6 l3,6 z"/><path d="M190,132 l3,-7 l4,8 z"/>
+    </g>
+    <path d="M194,130 C220,134 250,134 300,134" stroke="#b8ffb0" stroke-width="1" fill="none" opacity="0.6"/>
+
+    <!-- near hind leg -->
+    <path d="M280,180 C300,176 318,188 322,206 C324,218 322,230 320,240 L308,242 C306,230 300,216 292,208 C284,202 278,194 280,180 Z" fill="url(#c5b-steel)" stroke="#05060a" stroke-width="0.9"/>
+    <path d="M286,182 C302,180 316,190 320,206" stroke="#a8f0b0" stroke-width="1.2" fill="none" opacity="0.7"/>
+    <path d="M290,196 C300,196 310,202 316,212 M298,212 C306,214 312,220 316,228" stroke="#05060a" stroke-width="1.1" fill="none"/>
+    <path d="M318,214 L332,212 L320,222 Z" fill="#7c889c"/>
+    <path d="M314,240 L309,276" stroke="url(#c5b-boneV)" stroke-width="7" stroke-linecap="round"/>
+    <path d="M312,242 L308,274" stroke="#eef4ee" stroke-width="1.2" opacity="0.6"/>
+    <circle cx="314" cy="240" r="5.2" fill="url(#c5b-bone)"/>
+    <circle cx="309" cy="276" r="4" fill="url(#c5b-bone)"/>
+    <g transform="translate(0,12)"><path d="M300,264 C304,259 316,259 320,264 L322,276 L298,276 Z" fill="url(#c5b-steelV)" stroke="#05060a" stroke-width="0.7"/></g>
+    <g transform="translate(0,12)"><path d="M301,266 C306,263 314,263 319,266" stroke="#9fe8a0" stroke-width="0.8" fill="none" opacity="0.6"/></g>
+
+    <!-- near front leg (raised, prancing) -->
+    <path d="M154,190 C166,194 172,206 168,218 L156,232 L144,226 L150,212 C148,204 148,196 154,190 Z" fill="url(#c5b-steel)" stroke="#05060a" stroke-width="0.9"/>
+    <path d="M156,194 C164,198 168,206 166,214" stroke="#a8f0b0" stroke-width="1" fill="none" opacity="0.6"/>
+    <path d="M149,229 L153,260" stroke="url(#c5b-boneV)" stroke-width="6.5" stroke-linecap="round"/>
+    <circle cx="149" cy="229" r="5" fill="url(#c5b-bone)"/>
+    <circle cx="153" cy="260" r="3.8" fill="url(#c5b-bone)"/>
+    <g transform="translate(1,8)"><path d="M142,254 C150,250 160,252 161,259 L156,264 L141,262 Z" fill="url(#c5b-steelV)" stroke="#05060a" stroke-width="0.7"/></g>
+    <path d="M146,226 L128,216 L148,220 Z" fill="#8a96a8"/>
+    <!-- standing front leg (near-mid) -->
+    <path d="M166,200 C176,204 180,214 178,226 L174,240 L164,238 L164,220 Z" fill="url(#c5b-steelV)" stroke="#05060a" stroke-width="0.8"/>
+    <path d="M170,240 L170,276" stroke="url(#c5b-boneV)" stroke-width="6.5" stroke-linecap="round"/>
+    <circle cx="170" cy="240" r="4.6" fill="url(#c5b-bone)"/>
+    <circle cx="170" cy="276" r="3.6" fill="url(#c5b-bone)"/>
+    <g transform="translate(0,12)"><path d="M160,264 C164,259 176,259 180,264 L182,276 L158,276 Z" fill="url(#c5b-steelV)" stroke="#05060a" stroke-width="0.7"/></g>
+
+    <!-- NECK armour (crinet) -->
+    <path d="M122,100 C140,90 170,104 196,132 L186,142 C168,130 150,124 132,134 C126,122 122,110 122,100 Z" fill="#0f1219"/>
+    <path d="M126,100 C136,96 146,100 152,106 L146,124 C140,120 134,120 128,124 Z" fill="url(#c5b-steel)" stroke="#05060a" stroke-width="0.8"/>
+    <path d="M150,104 C160,104 170,112 176,120 L166,136 C160,130 152,128 146,128 Z" fill="url(#c5b-steel)" stroke="#05060a" stroke-width="0.8"/>
+    <path d="M174,116 C184,120 192,128 198,136 L186,146 C180,140 172,136 164,136 Z" fill="url(#c5b-steel)" stroke="#05060a" stroke-width="0.8"/>
+    <path d="M128,100 C136,96 146,100 152,106 M152,104 C162,104 170,112 176,120 M176,118 C184,122 192,128 198,136" stroke="#a8f0b0" stroke-width="1.1" fill="none" opacity="0.7"/>
+    <!-- exposed throat vertebrae -->
+    <g fill="url(#c5b-bone)">
+      <ellipse cx="132" cy="136" rx="4" ry="3" transform="rotate(40 132 136)"/>
+      <ellipse cx="138" cy="144" rx="4" ry="3" transform="rotate(45 138 144)"/>
+      <ellipse cx="144" cy="152" rx="4" ry="3" transform="rotate(50 144 152)"/>
+    </g>
+    <!-- ghostly mane -->
+    <g fill="none" stroke-linecap="round" filter="url(#c5b-blur)">
+      <path d="M130,96 C140,80 158,82 170,90 C178,96 186,98 194,96" stroke="#7fe8a0" stroke-width="4" opacity="0.5"/>
+      <path d="M150,100 C160,86 176,90 186,100 C194,108 204,108 212,104" stroke="#b8ffc8" stroke-width="2" opacity="0.55"/>
+    </g>
+    <!-- neck spikes -->
+    <path d="M140,98 L142,80 L148,100 Z M162,106 L168,88 L172,112 Z M182,120 L192,104 L192,126 Z" fill="url(#c5b-steelV)"/>
+
+    <!-- HORSE HEAD (skull with chamfron) -->
+    <path d="M128,96 C130,108 126,124 118,134 C110,142 102,150 94,154 L72,156 C66,154 64,148 68,144 L96,108 C104,98 116,92 128,96 Z" fill="url(#c5b-bone)"/>
+    <!-- lower jaw -->
+    <path d="M120,132 C114,142 104,152 94,158 L74,160 C70,160 68,157 70,155 L92,150 C102,146 110,138 114,128 Z" fill="#8a948e"/>
+    <path d="M76,154 L92,151 L92,155 L76,158 Z" fill="#050608"/>
+    <g stroke="#d8e0d8" stroke-width="1.2">
+      <path d="M78,153 v3 M81,152.5 v3.5 M84,152 v3.5 M87,151.5 v3.5 M90,151 v3.5"/>
+    </g>
+    <!-- nasal hollow -->
+    <path d="M70,146 C72,142 78,140 80,144 L76,150 Z" fill="#050608"/>
+    <!-- chamfron armour plate -->
+    <path d="M124,94 C112,96 100,104 92,116 L78,138 L84,142 L102,124 C110,116 120,112 128,112 Z" fill="url(#c5b-steel)" stroke="#05060a" stroke-width="0.9"/>
+    <path d="M122,98 C110,100 100,108 94,118 L82,136" stroke="#a8f0b0" stroke-width="1" fill="none" opacity="0.7"/>
+    <!-- chamfron horn -->
+    <path d="M110,104 C104,90 102,78 104,64 C108,78 114,90 118,102 Z" fill="url(#c5b-steelV)" stroke="#05060a" stroke-width="0.6"/>
+    <path d="M104,64 C108,78 114,90 118,102" stroke="#b8ffc8" stroke-width="0.7" fill="none" opacity="0.6"/>
+    <!-- ears -->
+    <path d="M124,96 L130,76 L134,98 Z" fill="#7a857f"/>
+    <path d="M118,96 L118,80 L126,96 Z" fill="#5a6460"/>
+    <!-- eye socket glow -->
+    <path d="M104,118 C108,112 118,112 120,118 C118,124 110,126 104,122 Z" fill="#030406"/>
+    <circle cx="112" cy="119" r="8" fill="url(#c5b-eye)"/>
+    <circle cx="112" cy="119" r="1.8" fill="#ffffff" filter="url(#c5b-glow)"/>
+    <!-- bridle -->
+    <path d="M86,146 C96,140 110,132 122,128" stroke="#2a2030" stroke-width="2" fill="none"/>
+    <circle cx="86" cy="146" r="2.4" fill="none" stroke="#9aa6b0" stroke-width="1"/>
+    <!-- frost breath -->
+    <path d="M66,150 C56,146 48,152 40,148 C34,145 30,150 24,148" stroke="#b8f0ff" stroke-width="3" fill="none" opacity="0.35" filter="url(#c5b-blur)"/>
+  </g>
+
+  <!-- spectral hoof flames -->
+  <g filter="url(#c5b-blur)" opacity="0.85">
+    <path d="M160,288 C160,280 166,278 164,270 C170,276 174,272 174,266 C178,274 184,280 180,288 Z" fill="#6fe08a" opacity="0.6"/>
+    <path d="M298,288 C298,280 304,278 302,270 C308,276 312,272 312,266 C316,274 322,280 318,288 Z" fill="#6fe08a" opacity="0.6"/>
+    <path d="M140,270 C140,264 146,262 146,256 C150,262 154,260 156,254 C160,262 162,266 158,272 Z" fill="#6fe08a" opacity="0.55"/>
+    <path d="M176,288 C178,282 184,280 186,274 C190,280 194,284 192,288 Z M282,288 C284,282 290,280 292,274 C296,280 300,284 298,288 Z" fill="#4fb070" opacity="0.5"/>
+  </g>
+  <!-- CAPE behind rider -->
+  <g id="c5b-capeG">
+    <path d="M236,86 C262,84 296,96 330,112 C350,120 366,132 372,146 L360,144 L366,160 L350,152 L352,172 L338,160 L334,180 L322,166 L314,184 L306,166 L296,178 L292,160 L280,168 C270,150 256,134 240,124 Z" fill="url(#c5b-cape)"/>
+    <path d="M240,90 C270,90 304,104 336,122 C352,130 364,138 372,146" stroke="#9fe8a0" stroke-width="1.2" fill="none" opacity="0.55"/>
+    <path d="M256,104 C280,114 300,128 316,150 M270,98 C300,110 326,126 344,146 M250,116 C264,128 276,144 286,160" stroke="#030206" stroke-width="2.5" fill="none" opacity="0.8"/>
+    <!-- holes in cape -->
+    <path d="M318,134 c3,-2 6,0 5,3 c-2,2 -5,1 -5,-3 z M296,128 c2,-1 4,0 3,2 c-1,1 -3,1 -3,-2 z" fill="#1b1430"/>
+  </g>
+
+  <!-- RIDER -->
+  <g id="c5b-rider">
+    <!-- rider leg (near) -->
+    <path d="M214,128 C204,134 194,144 188,156 L200,162 C206,152 214,144 224,138 Z" fill="url(#c5b-steel)" stroke="#05060a" stroke-width="0.8"/>
+    <path d="M188,154 C186,168 188,184 192,196 L204,196 C202,184 202,170 200,160 Z" fill="url(#c5b-steelV)" stroke="#05060a" stroke-width="0.8"/>
+    <path d="M186,154 L172,146 L190,160 Z" fill="#7c889c"/>
+    <path d="M188,158 C190,170 192,184 194,194" stroke="#a8f0b0" stroke-width="0.9" fill="none" opacity="0.6"/>
+    <path d="M188,196 L208,196 L210,202 L186,202 Z" fill="#1a1d26"/>
+    <path d="M192,202 L204,202 L202,208 L194,208 Z" fill="none" stroke="#6a7486" stroke-width="1.2"/>
+
+    <!-- torso / breastplate -->
+    <path d="M196,92 C204,88 232,88 240,92 C244,106 242,122 236,136 L200,136 C194,122 192,106 196,92 Z" fill="url(#c5b-steel)" stroke="#05060a" stroke-width="1"/>
+    <path d="M200,96 C212,94 226,94 236,96" stroke="#9fe8a0" stroke-width="1" fill="none" opacity="0.6"/>
+    <path d="M218,94 L218,134" stroke="#05060a" stroke-width="1"/>
+    <!-- skull emblem on breastplate -->
+    <path d="M218,104 C225,104 229,108 229,113 C229,117 226,119 224,120 L224,124 L212,124 L212,120 C210,119 207,117 207,113 C207,108 211,104 218,104 Z" fill="url(#c5b-bone)"/>
+    <path d="M211,112 C212,110 215,110 216,112 C216,115 213,116 211,114 Z M225,112 C224,110 221,110 220,112 C220,115 223,116 225,114 Z" fill="#06101c"/>
+    <circle cx="213.5" cy="112.5" r="1" fill="#6fd8ff"/><circle cx="222.5" cy="112.5" r="1" fill="#6fd8ff"/>
+    <path d="M214,121 v3 M216.5,121 v3 M219,121 v3 M221.5,121 v3" stroke="#3a4248" stroke-width="0.6"/>
+    <!-- faulds / belt -->
+    <path d="M198,130 L238,130 L240,140 L196,140 Z" fill="#1a1d26"/>
+    <path d="M198,134 L238,134" stroke="#6fd8ff" stroke-width="0.6" opacity="0.6"/>
+    <rect x="214" y="131" width="8" height="8" rx="1" fill="#7c889c"/>
+
+    <!-- left arm holding reins -->
+    <path d="M198,96 C188,104 180,114 176,124 L184,130 C188,122 196,114 204,106 Z" fill="url(#c5b-steel)" stroke="#05060a" stroke-width="0.8"/>
+    <path d="M176,122 L168,134 L178,138 L186,128 Z" fill="url(#c5b-steelV)"/>
+    <ellipse cx="172" cy="136" rx="6" ry="5" fill="#1a1d26" stroke="#6a7486" stroke-width="0.7"/>
+    <path d="M168,136 C150,140 130,140 112,134 C104,132 96,136 88,146" stroke="#2a2030" stroke-width="1.6" fill="none"/>
+
+    <!-- pauldrons -->
+    <g id="c5b-pauldronL">
+      <path d="M180,96 C180,82 192,74 206,76 C214,78 218,86 214,96 C204,102 190,102 180,96 Z" fill="url(#c5b-steel)" stroke="#05060a" stroke-width="1"/>
+      <path d="M184,90 C190,82 200,80 210,82" stroke="#a8f0b0" stroke-width="1" fill="none" opacity="0.7"/>
+      <path d="M186,84 L170,58 L194,80 Z" fill="url(#c5b-steelV)" stroke="#05060a" stroke-width="0.6"/>
+      <path d="M198,78 L196,52 L206,78 Z" fill="url(#c5b-steelV)" stroke="#05060a" stroke-width="0.6"/>
+      <path d="M170,58 L194,80 L190,82 Z" fill="#b8ffc8" opacity="0.4"/>
+      <circle cx="198" cy="92" r="1.3" fill="#8a96a8"/><circle cx="188" cy="92" r="1.3" fill="#8a96a8"/>
+    </g>
+    <g id="c5b-pauldronR">
+      <path d="M256,96 C258,82 246,72 232,74 C224,76 220,86 224,96 C234,102 248,102 256,96 Z" fill="url(#c5b-steel)" stroke="#05060a" stroke-width="1"/>
+      <path d="M252,90 C246,82 238,78 228,80" stroke="#6fd8ff" stroke-width="1.1" fill="none" opacity="0.8"/>
+      <path d="M248,84 L268,56 L240,80 Z" fill="url(#c5b-steelV)" stroke="#05060a" stroke-width="0.6"/>
+      <path d="M236,78 L240,50 L230,78 Z" fill="url(#c5b-steelV)" stroke="#05060a" stroke-width="0.6"/>
+      <path d="M268,56 L240,80 L244,82 Z" fill="#9fe8ff" opacity="0.5"/>
+      <circle cx="240" cy="92" r="1.3" fill="#8a96a8"/><circle cx="250" cy="90" r="1.3" fill="#8a96a8"/>
+    </g>
+
+    <!-- HELMET -->
+    <g id="c5b-helm">
+      <!-- gorget -->
+      <path d="M208,86 L230,86 L232,94 L206,94 Z" fill="#1a1d26"/>
+      <!-- horns sweeping back -->
+      <path d="M210,58 C200,50 194,38 196,24 C200,34 206,42 214,48 Z" fill="url(#c5b-steelV)" stroke="#05060a" stroke-width="0.6"/>
+      <path d="M228,58 C238,50 246,38 246,24 C240,34 234,40 226,46 Z" fill="url(#c5b-steelV)" stroke="#05060a" stroke-width="0.6"/>
+      <path d="M196,24 C200,34 206,42 214,48" stroke="#b8ffc8" stroke-width="0.8" fill="none" opacity="0.7"/>
+      <path d="M246,24 C240,34 234,40 226,46" stroke="#9fe8ff" stroke-width="0.8" fill="none" opacity="0.7"/>
+      <!-- helm dome -->
+      <path d="M219,40 C232,40 238,52 236,66 C235,76 230,84 224,88 L214,88 C208,84 203,76 202,66 C200,52 206,40 219,40 Z" fill="url(#c5b-steel)" stroke="#05060a" stroke-width="1"/>
+      <!-- central crest spike -->
+      <path d="M216,42 L219,20 L222,42 Z" fill="url(#c5b-steelV)"/>
+      <path d="M219,42 L219,88" stroke="#05060a" stroke-width="0.8"/>
+      <path d="M206,52 C210,44 214,42 219,42" stroke="#b8ffc8" stroke-width="1" fill="none" opacity="0.7"/>
+      <!-- visor with T-slit -->
+      <path d="M205,62 C210,60 228,60 233,62 L232,68 C228,70 210,70 206,68 Z" fill="#030407"/>
+      <path d="M217,68 L221,68 L221,82 L217,82 Z" fill="#030407"/>
+      <!-- glowing eyes in visor -->
+      <ellipse cx="211.5" cy="65" rx="7" ry="4" fill="url(#c5b-eye)"/>
+      <ellipse cx="226.5" cy="65" rx="7" ry="4" fill="url(#c5b-eye)"/>
+      <ellipse cx="211.5" cy="65" rx="2.2" ry="1.2" fill="#ffffff" filter="url(#c5b-glow)"/>
+      <ellipse cx="226.5" cy="65" rx="2.2" ry="1.2" fill="#ffffff" filter="url(#c5b-glow)"/>
+      <!-- cheek guard spikes -->
+      <path d="M204,72 L196,82 L206,78 Z M234,72 L242,82 L232,78 Z" fill="#6a7486"/>
+      <!-- engraved runes on helm -->
+      <path d="M210,50 l2,-3 l2,3 M224,50 l2,-3 l2,3" stroke="#6fd8ff" stroke-width="0.7" fill="none" opacity="0.8"/>
+      <!-- cold eye glow trail -->
+      <path d="M232,64 C244,60 252,64 262,60" stroke="#6fd8ff" stroke-width="1.6" fill="none" opacity="0.45" filter="url(#c5b-blur)"/>
+    </g>
+
+    <!-- sword arm raised -->
+    <path d="M242,90 C252,86 262,82 270,76 L276,86 C266,92 256,98 246,102 Z" fill="url(#c5b-steel)" stroke="#05060a" stroke-width="0.8"/>
+    <circle cx="272" cy="80" r="5.5" fill="url(#c5b-steelV)" stroke="#05060a" stroke-width="0.6"/>
+    <path d="M272,78 L284,74 L274,84 Z" fill="#8a96a8"/>
+    <path d="M270,76 C268,68 266,62 264,56 L274,54 C276,60 278,68 278,76 Z" fill="url(#c5b-steelV)" stroke="#05060a" stroke-width="0.8"/>
+    <path d="M264,56 C266,50 276,48 278,54 L276,60 L264,60 Z" fill="#1a1d26" stroke="#6a7486" stroke-width="0.7"/>
+  </g>
+
+  <!-- RUNEBLADE -->
+  <g id="c5b-sword">
+    <circle cx="316" cy="30" r="60" fill="url(#c5b-bladeHalo)"/>
+    <!-- grip & pommel -->
+    <path d="M262,66 L278,48" stroke="#1a1522" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="260" cy="68" r="4" fill="url(#c5b-bone)"/>
+    <!-- crossguard: skull with wings -->
+    <path d="M266,42 C258,40 252,34 250,28 C258,32 266,34 274,38 Z M284,56 C290,62 292,70 290,76 C286,70 282,64 278,58 Z" fill="url(#c5b-steelV)" stroke="#05060a" stroke-width="0.6"/>
+    <ellipse cx="277" cy="48" rx="6" ry="5.5" fill="url(#c5b-bone)"/>
+    <circle cx="275" cy="47" r="1.3" fill="#1a6cff"/><circle cx="279" cy="48" r="1.3" fill="#1a6cff"/>
+    <!-- blade -->
+    <path d="M280,40 L340,14 L346,10 L344,17 L288,50 Z" fill="url(#c5b-blade)" filter="url(#c5b-glow)"/>
+    <path d="M282,43 L343,13" stroke="#ffffff" stroke-width="0.8" opacity="0.8"/>
+    <!-- serrated back edge -->
+    <path d="M292,48 L296,51 L300,44 L304,47 L308,40 L312,43 L316,36 L320,39 L324,32 L328,35 L332,28" stroke="#9fe8ff" stroke-width="0.9" fill="none"/>
+    <!-- runes on blade -->
+    <g stroke="#062a4a" stroke-width="0.9" fill="none">
+      <path d="M292,42 l3,3 m1,-5 l-2,4 M302,37 l3,3 l2,-4 M312,32 l3,2 m-1,-4 v5 M322,27 l2,3 l3,-3 M332,22 l3,2 l1,-4"/>
+    </g>
+    <!-- sparks -->
+    <g fill="#dffaff" filter="url(#c5b-glow)">
+      <circle cx="350" cy="20" r="1.4"/><circle cx="330" cy="8" r="1"/><circle cx="352" cy="36" r="1"/><circle cx="306" cy="22" r="1.1"/><circle cx="340" cy="44" r="0.9"/>
+    </g>
+  </g>
+
+  <!-- blue sword-light rim on right edges, green moon rim on left -->
+  <g fill="none" stroke-linecap="round">
+    <path d="M214,128 C204,134 194,144 188,156" stroke="#c8ffd0" stroke-width="1.2" opacity="0.7"/>
+    <path d="M240,92 C244,106 242,122 236,136" stroke="#8fe0ff" stroke-width="1.4" opacity="0.8"/>
+    <path d="M236,66 C235,76 230,84 224,88" stroke="#8fe0ff" stroke-width="1.2" opacity="0.8"/>
+    <path d="M150,150 C147,160 147,172 148,180 C150,196 158,210 170,216" stroke="#b8ffb0" stroke-width="1.2" opacity="0.6"/>
+    <path d="M316,148 C324,164 322,186 312,202" stroke="#8fe0ff" stroke-width="1.3" opacity="0.7"/>
+    <path d="M128,96 C130,108 126,124 118,134" stroke="#f0fff0" stroke-width="1" opacity="0.6"/>
+  </g>
+  <!-- green rim light accents (moon behind) -->
+  <path d="M206,52 C204,58 202,64 202,70 C203,78 207,84 212,88" stroke="#c8ffb8" stroke-width="1.2" fill="none" opacity="0.8"/>
+  <path d="M196,92 C193,106 194,120 200,134" stroke="#b8ffb0" stroke-width="1" fill="none" opacity="0.6"/>
+  <g stroke="#b8ffb0" fill="none" stroke-linecap="round" opacity="0.75">
+    <path d="M204,54 C203,60 202,64 202,68" stroke-width="1"/>
+    <path d="M180,96 C180,90 182,86 184,84" stroke-width="1"/>
+    <path d="M130,96 C136,94 142,95 148,98" stroke-width="1"/>
+  </g>
+
+  <!-- 5 FOREGROUND MIST -->
+  <path d="M-20,262 C40,248 100,270 170,258 C240,246 300,272 420,254 L420,300 L-20,300 Z" fill="#6fcf8a" opacity="0.22" filter="url(#c5b-soft)"/>
+  <path d="M-20,284 C60,270 140,292 220,280 C300,268 360,290 420,278 L420,300 L-20,300 Z" fill="#9fe8b0" opacity="0.2" filter="url(#c5b-soft)"/>
+  <g fill="#b8ffc8" filter="url(#c5b-glow)" opacity="0.8">
+    <circle cx="60" cy="210" r="1.2"/><circle cx="90" cy="180" r="0.9"/><circle cx="130" cy="236" r="1.1"/>
+    <circle cx="336" cy="222" r="1.3"/><circle cx="370" cy="196" r="0.9"/><circle cx="250" cy="250" r="1"/><circle cx="110" cy="206" r="0.8"/>
+  </g>
+  <!-- foreground rocks -->
+  <path d="M0,300 L0,262 C10,256 22,258 30,266 C38,262 48,268 50,280 L56,300 Z" fill="#05070a"/>
+  <path d="M400,300 L400,256 C390,252 380,256 374,264 C364,262 356,272 356,284 L350,300 Z" fill="#05070a"/>
+
+  <!-- 6 VIGNETTE -->
+  <rect width="400" height="300" fill="url(#c5b-vig)"/>
+</svg>

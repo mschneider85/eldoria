@@ -1,0 +1,506 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300">
+  <defs>
+    <filter id="c1b-blur-s" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="1.2"/></filter>
+    <filter id="c1b-blur-m" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="4"/></filter>
+    <filter id="c1b-blur-l" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="12"/></filter>
+    <filter id="c1b-glow" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="2" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+
+    <!-- sky -->
+    <linearGradient id="c1b-sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1f2358"/>
+      <stop offset="0.25" stop-color="#4b3f86"/>
+      <stop offset="0.45" stop-color="#b86a9c"/>
+      <stop offset="0.6" stop-color="#f29a8e"/>
+      <stop offset="0.72" stop-color="#ffd08a"/>
+      <stop offset="1" stop-color="#fff0c0"/>
+    </linearGradient>
+    <radialGradient id="c1b-sunGlow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#fffbe8"/>
+      <stop offset="0.12" stop-color="#fff0b0"/>
+      <stop offset="0.35" stop-color="#ffc870" stop-opacity="0.6"/>
+      <stop offset="1" stop-color="#ff9a70" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="c1b-cloud" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8a5f9e"/>
+      <stop offset="0.6" stop-color="#e58aa0"/>
+      <stop offset="1" stop-color="#ffd59a"/>
+    </linearGradient>
+    <linearGradient id="c1b-far" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#c486a8"/>
+      <stop offset="1" stop-color="#e8b0a8"/>
+    </linearGradient>
+    <linearGradient id="c1b-mid" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#7a5a8a"/>
+      <stop offset="1" stop-color="#5a4070"/>
+    </linearGradient>
+    <linearGradient id="c1b-wall" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#2e2440"/>
+      <stop offset="0.6" stop-color="#5a4460"/>
+      <stop offset="1" stop-color="#b07a70"/>
+    </linearGradient>
+    <linearGradient id="c1b-wallTop" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#8a6a88"/>
+      <stop offset="1" stop-color="#ffc79a"/>
+    </linearGradient>
+    <pattern id="c1b-bricks" width="22" height="11" patternUnits="userSpaceOnUse">
+      <path d="M0 0.5 H22 M0.5 0 V5.5 M11.5 5.5 V11 M0 5.5 H22" stroke="#1a1426" stroke-width="0.7" opacity="0.5" fill="none"/>
+    </pattern>
+
+    <!-- materials -->
+    <linearGradient id="c1b-steel" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#2b3150"/>
+      <stop offset="0.25" stop-color="#6f7898"/>
+      <stop offset="0.45" stop-color="#d9deef"/>
+      <stop offset="0.52" stop-color="#ffffff"/>
+      <stop offset="0.6" stop-color="#b5a2c0"/>
+      <stop offset="0.8" stop-color="#f0b4a0"/>
+      <stop offset="1" stop-color="#ffe0b0"/>
+    </linearGradient>
+    <linearGradient id="c1b-steelV" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f6f2ff"/>
+      <stop offset="0.35" stop-color="#9aa2c2"/>
+      <stop offset="0.6" stop-color="#e7a3a8"/>
+      <stop offset="0.8" stop-color="#4a4f72"/>
+      <stop offset="1" stop-color="#262a45"/>
+    </linearGradient>
+    <radialGradient id="c1b-steelR" cx="0.7" cy="0.3" r="0.8">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="0.25" stop-color="#e6dcef"/>
+      <stop offset="0.55" stop-color="#8d92b4"/>
+      <stop offset="1" stop-color="#2a2e4a"/>
+    </radialGradient>
+    <linearGradient id="c1b-gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff4b8"/>
+      <stop offset="0.3" stop-color="#f0c04a"/>
+      <stop offset="0.6" stop-color="#a0650f"/>
+      <stop offset="0.8" stop-color="#e8b040"/>
+      <stop offset="1" stop-color="#6a400a"/>
+    </linearGradient>
+    <linearGradient id="c1b-goldH" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#6a400a"/>
+      <stop offset="0.35" stop-color="#d69a2a"/>
+      <stop offset="0.7" stop-color="#fff0b0"/>
+      <stop offset="1" stop-color="#f4c860"/>
+    </linearGradient>
+    <linearGradient id="c1b-shield" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#0b1a4a"/>
+      <stop offset="0.45" stop-color="#1b3f9a"/>
+      <stop offset="0.8" stop-color="#2d5fc8"/>
+      <stop offset="1" stop-color="#6f8fe0"/>
+    </linearGradient>
+    <linearGradient id="c1b-cape" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#0a1640"/>
+      <stop offset="0.5" stop-color="#1c3f96"/>
+      <stop offset="0.85" stop-color="#3566c8"/>
+      <stop offset="1" stop-color="#7d8fd6"/>
+    </linearGradient>
+    <linearGradient id="c1b-tabard" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#0c1a48"/>
+      <stop offset="0.5" stop-color="#1d3f94"/>
+      <stop offset="1" stop-color="#3a64c0"/>
+    </linearGradient>
+    <radialGradient id="c1b-skin" cx="0.62" cy="0.38" r="0.75">
+      <stop offset="0" stop-color="#fbdcc4"/>
+      <stop offset="0.45" stop-color="#eab89a"/>
+      <stop offset="0.8" stop-color="#b87c6a"/>
+      <stop offset="1" stop-color="#7e4a48"/>
+    </radialGradient>
+    <linearGradient id="c1b-hair" x1="0" y1="0" x2="1" y2="0.3">
+      <stop offset="0" stop-color="#3a1408"/>
+      <stop offset="0.45" stop-color="#7a2c12"/>
+      <stop offset="0.8" stop-color="#c2562a"/>
+      <stop offset="1" stop-color="#ffb070"/>
+    </linearGradient>
+    <linearGradient id="c1b-plume" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#e8eeff"/>
+      <stop offset="0.5" stop-color="#9ab4f0"/>
+      <stop offset="1" stop-color="#ffd8b0"/>
+    </linearGradient>
+    <radialGradient id="c1b-vig" cx="0.5" cy="0.45" r="0.72">
+      <stop offset="0.55" stop-color="#000" stop-opacity="0"/>
+      <stop offset="0.85" stop-color="#150a1e" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#0a0510" stop-opacity="0.75"/>
+    </radialGradient>
+    <circle id="c1b-mote" r="0.9" fill="#fff2c8"/>
+    <circle id="c1b-rivet" r="1.1" fill="#f3e6d0" stroke="#2a2e4a" stroke-width="0.4"/>
+  </defs>
+
+  <!-- ================= 1. SKY ================= -->
+  <rect width="400" height="300" fill="url(#c1b-sky)"/>
+  <!-- stars fading -->
+  <g fill="#fff" opacity="0.7">
+    <circle cx="40" cy="20" r="0.7"/><circle cx="88" cy="36" r="0.5"/><circle cx="140" cy="14" r="0.6"/>
+    <circle cx="260" cy="18" r="0.5"/><circle cx="330" cy="30" r="0.7"/><circle cx="370" cy="12" r="0.5"/>
+    <circle cx="60" cy="52" r="0.4"/><circle cx="300" cy="46" r="0.4"/>
+  </g>
+  <!-- sun -->
+  <circle cx="330" cy="176" r="110" fill="url(#c1b-sunGlow)"/>
+  <circle cx="330" cy="176" r="16" fill="#fffbe8" filter="url(#c1b-glow)"/>
+  <!-- sun rays -->
+  <g filter="url(#c1b-blur-m)" opacity="0.28" fill="#fff4c8">
+    <path d="M330 176 L400 70 L400 110 Z"/>
+    <path d="M330 176 L250 0 L285 0 Z"/>
+    <path d="M330 176 L150 40 L165 22 Z"/>
+    <path d="M330 176 L360 0 L380 0 Z"/>
+    <path d="M330 176 L60 110 L66 96 Z"/>
+  </g>
+  <!-- clouds -->
+  <g filter="url(#c1b-blur-s)">
+    <path d="M-10 92 C20 80 50 84 70 90 C90 80 120 82 140 92 C150 98 120 104 90 102 C60 108 20 104 -10 102 Z" fill="url(#c1b-cloud)" opacity="0.85"/>
+    <path d="M230 70 C260 58 290 62 310 68 C330 60 370 62 410 72 L410 86 C370 90 330 88 300 86 C270 90 240 84 230 70 Z" fill="url(#c1b-cloud)" opacity="0.8"/>
+    <path d="M150 128 C180 120 220 122 250 130 C270 126 300 128 320 136 C300 142 260 142 230 140 C200 144 160 140 150 128 Z" fill="#ffc9a0" opacity="0.7"/>
+    <path d="M0 140 C30 132 70 134 90 140 C70 146 30 148 0 148 Z" fill="#f8b09c" opacity="0.6"/>
+  </g>
+  <path d="M236 84 C270 86 330 86 408 84" stroke="#ffe7b0" stroke-width="1.2" fill="none" opacity="0.8"/>
+  <path d="M-4 101 C40 104 90 102 138 94" stroke="#ffd8a8" stroke-width="1" fill="none" opacity="0.7"/>
+
+  <!-- ================= 2. DISTANT LAND & CASTLE ================= -->
+  <path d="M0 186 C40 178 80 182 120 176 C160 170 200 178 240 174 C280 170 320 178 360 172 L400 176 V230 H0 Z" fill="url(#c1b-far)" opacity="0.9"/>
+  <!-- distant towers left -->
+  <g fill="#b07898" opacity="0.85">
+    <path d="M28 186 V140 L22 140 L32 118 L42 140 L36 140 V186 Z"/>
+    <path d="M44 186 V152 H62 V186 Z"/>
+    <path d="M44 152 V147 H48 V152 M51 152 V147 H55 V152 M58 152 V147 H62 V152"/>
+    <path d="M64 186 V132 L60 132 L69 112 L78 132 L74 132 V186 Z"/>
+  </g>
+  <path d="M69 112 V104 L76 106 L69 108" fill="#e4a0b0" opacity="0.8"/>
+  <!-- mist -->
+  <rect x="0" y="176" width="400" height="30" fill="#ffd9c0" opacity="0.35" filter="url(#c1b-blur-m)"/>
+  <!-- mid hills -->
+  <path d="M0 210 C50 196 100 204 150 198 C200 192 260 204 310 196 C350 190 380 198 400 196 V260 H0 Z" fill="url(#c1b-mid)" opacity="0.85"/>
+  <path d="M200 194 C240 200 280 200 320 192" stroke="#ffc8a0" stroke-width="1" fill="none" opacity="0.6"/>
+
+  <!-- ================= 3. CASTLE WALL (foreground architecture) ================= -->
+  <!-- right tower -->
+  <g>
+    <path d="M346 300 V120 H392 V300 Z" fill="url(#c1b-wall)"/>
+    <path d="M346 300 V120 H392 V300 Z" fill="url(#c1b-bricks)"/>
+    <path d="M342 120 V108 H350 V114 H358 V108 H366 V114 H374 V108 H382 V114 H390 V108 H396 V120 Z" fill="url(#c1b-wall)"/>
+    <path d="M342 108 H350 M358 108 H366 M374 108 H382 M390 108 H396" stroke="#ffd0a0" stroke-width="1.2"/>
+    <path d="M346 120 V300" stroke="#ffcf9e" stroke-width="1.2" opacity="0.7"/>
+    <path d="M362 150 C362 142 372 142 372 150 V172 H362 Z" fill="#150e1c"/>
+    <path d="M364 170 C364 160 370 160 370 170 Z" fill="#ffb060" opacity="0.8"/>
+  </g>
+  <!-- parapet behind her -->
+  <g>
+    <path d="M0 214 H14 V202 H32 V214 H50 V202 H68 V214 H86 V202 H104 V214 H300 V202 H318 V214 H336 V202 H350 V300 H0 Z" fill="url(#c1b-wall)"/>
+    <path d="M0 214 H14 V202 H32 V214 H50 V202 H68 V214 H86 V202 H104 V214 H300 V202 H318 V214 H336 V202 H350 V300 H0 Z" fill="url(#c1b-bricks)"/>
+    <g stroke="url(#c1b-wallTop)" stroke-width="1.6">
+      <path d="M14 202 H32 M50 202 H68 M86 202 H104 M300 202 H318 M336 202 H350 M0 214 H14 M32 214 H50 M68 214 H86 M104 214 H300 M318 214 H336"/>
+    </g>
+    <rect x="0" y="214" width="350" height="86" fill="#1a1024" opacity="0.25"/>
+  </g>
+
+  <!-- pennant on the left merlon -->
+  <g>
+    <path d="M23 202 V132" stroke="#2a1e30" stroke-width="2"/>
+    <path d="M24 202 V132" stroke="#ffd0a0" stroke-width="0.6" opacity="0.7"/>
+    <circle cx="23" cy="131" r="2" fill="url(#c1b-gold)"/>
+    <path d="M24 134 C38 130 50 138 64 134 C58 140 60 146 66 150 C52 154 38 146 24 152 Z" fill="url(#c1b-cape)"/>
+    <path d="M24 134 C38 130 50 138 64 134" stroke="url(#c1b-goldH)" stroke-width="1.2" fill="none"/>
+    <circle cx="40" cy="142" r="3.5" fill="url(#c1b-gold)" opacity="0.9"/>
+    <path d="M24 152 C38 146 52 154 66 150" stroke="#ffd0a0" stroke-width="0.8" fill="none" opacity="0.8"/>
+  </g>
+  <!-- ================= 4. KNIGHT ================= -->
+  <!-- cape billowing to the right -->
+  <g>
+    <path d="M232 132 C260 140 292 150 318 170 C334 184 340 204 338 226 C330 250 322 270 326 300 H226 Z" fill="url(#c1b-cape)"/>
+    <path d="M262 150 C286 176 300 214 298 300" stroke="#07102e" stroke-width="7" fill="none" opacity="0.4" filter="url(#c1b-blur-s)"/>
+    <path d="M292 164 C312 186 320 222 316 262" stroke="#8aa8f0" stroke-width="2.5" fill="none" opacity="0.55" filter="url(#c1b-blur-s)"/>
+    <path d="M318 170 C334 184 340 204 338 226 C330 250 322 270 326 300" stroke="#ffd0a0" stroke-width="1.6" fill="none" opacity="0.85"/>
+    <path d="M320 300 C318 280 324 262 332 246" stroke="url(#c1b-goldH)" stroke-width="2.5" fill="none"/>
+    <path d="M168 134 C150 150 142 190 142 300 H180 Z" fill="#0a1640"/>
+  </g>
+
+  <!-- hair behind head (wind-blown to the right) -->
+  <g transform="translate(208 122) scale(1.1) translate(-208 -122)">
+  <path d="M190 72 C196 58 216 54 228 64 C236 70 240 80 252 84 C262 88 272 86 282 80 C276 92 264 98 250 98 C262 104 272 104 280 100 C272 112 256 114 242 108 C236 116 232 122 228 128 L196 126 C188 110 186 86 190 72 Z" fill="url(#c1b-hair)"/>
+  <g fill="none" stroke-linecap="round">
+    <path d="M226 70 C238 80 256 88 278 82" stroke="#ffb070" stroke-width="0.8" opacity="0.8"/>
+    <path d="M228 80 C240 92 258 98 276 100" stroke="#e07a40" stroke-width="0.7" opacity="0.8"/>
+    <path d="M226 92 C236 102 250 108 266 108" stroke="#ffc890" stroke-width="0.6" opacity="0.7"/>
+    <path d="M230 64 C244 72 260 80 280 80" stroke="#5a1c0a" stroke-width="0.6" opacity="0.7"/>
+    <path d="M280 80 C286 78 290 74 294 72 M280 100 C286 100 290 98 296 96" stroke="#d86a34" stroke-width="0.7"/>
+  </g>
+  </g>
+
+  <!-- neck -->
+  <path d="M199 110 H215 L216 132 H198 Z" fill="#c68a74"/>
+  <path d="M199 114 C204 120 210 122 215 118 L215 126 C210 128 204 126 199 122 Z" fill="#7e4a48" opacity="0.6"/>
+
+  <!-- ===== torso armour ===== -->
+  <!-- tabard skirt -->
+  <path d="M176 214 C190 222 220 222 236 214 L248 300 H166 Z" fill="url(#c1b-tabard)"/>
+  <path d="M192 226 C190 250 188 276 186 300 M222 226 C226 250 228 276 230 300" stroke="#050c2a" stroke-width="2" fill="none" opacity="0.5"/>
+  <path d="M176 214 L166 300 M236 214 L248 300" stroke="url(#c1b-goldH)" stroke-width="2.2"/>
+  <!-- faulds (lames) -->
+  <g>
+    <path d="M176 206 C190 214 222 214 236 206 L238 220 C222 228 190 228 174 220 Z" fill="url(#c1b-steel)" stroke="#1f2340" stroke-width="0.6"/>
+    <path d="M174 218 C190 226 222 226 238 218 L240 232 C222 240 190 240 172 232 Z" fill="url(#c1b-steel)" stroke="#1f2340" stroke-width="0.6"/>
+    <path d="M172 230 C190 238 222 238 240 230 L241 242 C222 250 190 250 171 242 Z" fill="url(#c1b-steel)" stroke="#1f2340" stroke-width="0.6"/>
+    <path d="M176 207.5 C190 215 222 215 236 207.5 M174 219.5 C190 227 222 227 238 219.5 M172 231.5 C190 239 222 239 240 231.5" stroke="#fff" stroke-width="0.5" fill="none" opacity="0.7"/>
+    <use href="#c1b-rivet" x="180" y="215"/><use href="#c1b-rivet" x="232" y="215"/>
+    <use href="#c1b-rivet" x="178" y="227"/><use href="#c1b-rivet" x="234" y="227"/>
+    <use href="#c1b-rivet" x="176" y="239"/><use href="#c1b-rivet" x="236" y="239"/>
+  </g>
+  <!-- belt -->
+  <path d="M175 200 C190 207 222 207 237 200 L237 208 C222 215 190 215 175 208 Z" fill="#3a2214"/>
+  <rect x="200" y="202" width="12" height="10" rx="1.5" fill="url(#c1b-gold)" stroke="#4a2a06" stroke-width="0.5"/>
+  <!-- breastplate -->
+  <path d="M170 142 C172 134 186 128 206 128 C226 128 240 134 242 142 C242 160 238 172 236 186 C234 198 226 204 206 206 C186 204 178 198 176 186 C174 172 170 160 170 142 Z" fill="url(#c1b-steel)" stroke="#1f2340" stroke-width="0.8"/>
+  <!-- plate shading -->
+  <path d="M170 142 C172 134 186 128 206 128 C194 140 188 170 190 204 C182 200 175 194 173 184 Z" fill="#232848" opacity="0.45"/>
+  <!-- centre ridge -->
+  <path d="M206 130 C207 150 207 176 206 206" stroke="#ffffff" stroke-width="1.2" fill="none" opacity="0.9"/>
+  <path d="M204.6 131 C205.6 150 205.6 176 204.6 205" stroke="#3a3f60" stroke-width="0.8" fill="none"/>
+  <!-- lower plate (plackart) -->
+  <path d="M184 178 C194 172 218 172 228 178 C228 190 222 200 206 202 C190 200 184 190 184 178 Z" fill="none" stroke="#2a2e4a" stroke-width="0.7" opacity="0.8"/>
+  <path d="M185 179.5 C195 173.5 217 173.5 227 179.5" stroke="#fff" stroke-width="0.5" fill="none" opacity="0.7"/>
+  <use href="#c1b-rivet" x="188" y="182"/><use href="#c1b-rivet" x="224" y="182"/>
+  <!-- pink sky reflection bands -->
+  <path d="M212 136 C222 140 230 150 232 166 C228 158 220 148 212 144 Z" fill="#ffd7c8" opacity="0.8"/>
+  <path d="M214 176 C222 176 230 172 236 164 C234 180 226 192 216 196 Z" fill="#ffb4a0" opacity="0.55"/>
+  <ellipse cx="226" cy="152" rx="3" ry="8" fill="#ffffff" opacity="0.8" filter="url(#c1b-blur-s)"/>
+  <!-- sun emblem etched on chest -->
+  <g transform="translate(206 162)" opacity="0.85">
+    <circle r="7" fill="none" stroke="url(#c1b-gold)" stroke-width="1.6"/>
+    <circle r="3" fill="url(#c1b-gold)"/>
+    <g stroke="#e8b040" stroke-width="1" stroke-linecap="round">
+      <path d="M0 -9.5 V-13 M0 9.5 V13 M-9.5 0 H-13 M9.5 0 H13 M-6.7 -6.7 L-9 -9 M6.7 -6.7 L9 -9 M-6.7 6.7 L-9 9 M6.7 6.7 L9 9"/>
+    </g>
+  </g>
+  <!-- gold neckline trim -->
+  <path d="M184 132 C194 138 218 138 228 132" stroke="url(#c1b-goldH)" stroke-width="2.6" fill="none"/>
+  <!-- gorget -->
+  <path d="M192 122 C198 126 214 126 220 122 L224 134 C214 140 198 140 188 134 Z" fill="url(#c1b-steel)" stroke="#1f2340" stroke-width="0.6"/>
+  <path d="M190 128 C200 133 212 133 222 128" stroke="#fff" stroke-width="0.5" fill="none" opacity="0.8"/>
+
+  <!-- ===== right pauldron (viewer right, sunlit) ===== -->
+  <g>
+    <path d="M226 134 C240 126 260 128 270 140 C276 150 276 162 272 170 C264 166 252 164 240 166 C236 156 232 144 226 134 Z" fill="url(#c1b-steelR)" stroke="#1f2340" stroke-width="0.7"/>
+    <path d="M238 164 C250 162 264 164 272 170 L270 180 C262 174 250 172 240 174 Z" fill="url(#c1b-steel)" stroke="#1f2340" stroke-width="0.6"/>
+    <path d="M240 173 C250 171 262 173 270 180 L267 189 C260 183 250 181 242 183 Z" fill="url(#c1b-steel)" stroke="#1f2340" stroke-width="0.6"/>
+    <path d="M228 136 C242 128 260 130 268 140" stroke="url(#c1b-goldH)" stroke-width="2" fill="none"/>
+    <path d="M262 136 C270 144 273 154 272 164" stroke="#fff6e0" stroke-width="1.4" fill="none"/>
+    <use href="#c1b-rivet" x="246" y="140"/><use href="#c1b-rivet" x="258" y="143"/>
+    <path d="M250 146 C254 146 258 150 258 154" stroke="#fff" stroke-width="1" opacity="0.8" fill="none"/>
+  </g>
+  <!-- left arm (viewer right): upper arm down to elbow -->
+  <path d="M244 180 C254 180 266 186 272 194 L286 214 C288 222 282 228 274 226 L250 206 C244 198 242 190 244 180 Z" fill="url(#c1b-steel)" stroke="#1f2340" stroke-width="0.6"/>
+  <path d="M268 190 L282 210" stroke="#ffe8c8" stroke-width="1.2" fill="none"/>
+  <!-- couter (elbow cop) -->
+  <path d="M274 206 C284 204 292 212 290 222 C288 230 278 232 272 226 C268 220 268 210 274 206 Z" fill="url(#c1b-steelR)" stroke="#1f2340" stroke-width="0.6"/>
+  <circle cx="281" cy="217" r="3" fill="none" stroke="url(#c1b-goldH)" stroke-width="1"/>
+  <!-- forearm under helmet -->
+  <path d="M286 222 C284 234 276 244 262 252 C256 254 250 250 252 244 C262 238 272 230 276 220 Z" fill="url(#c1b-steel)" stroke="#1f2340" stroke-width="0.6"/>
+
+  <!-- ===== helmet (armet) cradled on forearm ===== -->
+  <g>
+    <path d="M270 198 C282 184 302 180 318 188 C330 194 338 206 342 222 C332 212 320 206 310 206 C320 212 326 222 328 234 C318 222 302 214 288 212 Z" fill="url(#c1b-plume)"/>
+    <g stroke="#ffffff" stroke-width="0.6" fill="none" opacity="0.85">
+      <path d="M276 196 C292 186 308 190 322 200"/>
+      <path d="M282 204 C298 198 314 206 328 222"/>
+      <path d="M290 200 C304 196 318 202 334 214"/>
+    </g>
+    <path d="M286 208 C302 206 314 212 324 228" stroke="#6a86d0" stroke-width="0.7" fill="none"/>
+    <path d="M252 220 C250 204 262 194 275 194 C288 195 295 206 294 220 L293 232 C291 242 283 248 272 248 C260 248 252 240 252 230 Z" fill="url(#c1b-steelR)" stroke="#1f2340" stroke-width="0.8"/>
+    <path d="M258 202 C266 195 278 193 290 202" stroke="url(#c1b-goldH)" stroke-width="2.4" fill="none"/>
+    <path d="M286 212 C290 222 290 234 284 244" stroke="#2a2e4a" stroke-width="0.7" fill="none"/>
+    <use href="#c1b-rivet" x="287" y="214"/>
+    <path d="M254 212 C262 209 274 210 284 214 L285 229 C276 234 262 236 250 231 C246 228 246 220 254 212 Z" fill="url(#c1b-steelV)" stroke="#1f2340" stroke-width="0.7"/>
+    <path d="M249 223 C258 225 272 225 285 222" stroke="#ffffff" stroke-width="0.8" fill="none" opacity="0.85"/>
+    <path d="M249.5 224 C258 226.2 272 226.2 285 223" stroke="#2a2e4a" stroke-width="0.5" fill="none"/>
+    <path d="M255 216.5 C263 214.5 274 215 283 217.5 L283 219.5 C274 217.5 263 217 255.5 219 Z" fill="#07080f"/>
+    <g stroke="#07080f" stroke-width="0.9" stroke-linecap="round">
+      <path d="M257 228 h3 M262 229 h3 M267 229.4 h3 M272 229 h3 M277 228 h3"/>
+    </g>
+    <path d="M254 212 C262 209 274 210 284 214" stroke="url(#c1b-goldH)" stroke-width="1.2" fill="none"/>
+    <path d="M256 240 C264 246 280 246 290 238 L289 243 C280 250 264 250 257 245 Z" fill="url(#c1b-steel)" stroke="#1f2340" stroke-width="0.5"/>
+    <path d="M288 204 C294 212 296 222 294 232" stroke="#fff4dc" stroke-width="1.4" fill="none"/>
+    <ellipse cx="282" cy="204" rx="3.5" ry="2.2" fill="#fff" opacity="0.9" filter="url(#c1b-blur-s)"/>
+    <!-- gauntlet cupping the helmet from below-front -->
+    <path d="M250 238 C252 234 258 234 262 236 L266 246 C262 252 254 252 250 248 Z" fill="url(#c1b-steel)" stroke="#1f2340" stroke-width="0.6"/>
+    <path d="M250 238 C247 234 247 229 250 227 C252 226 254 228 254 231 L255 236 Z" fill="url(#c1b-steelR)" stroke="#1f2340" stroke-width="0.5"/>
+    <path d="M254 236 C252 231 253 227 256 226 C258 226 259 228 259 231 L259 236 Z" fill="url(#c1b-steelR)" stroke="#1f2340" stroke-width="0.5"/>
+    <path d="M259 237 C258 232 259 229 262 228.6 C264 228.6 264.6 231 264 234 L263 238 Z" fill="url(#c1b-steelR)" stroke="#1f2340" stroke-width="0.5"/>
+    <path d="M251 242 C255 240 260 240 264 242" stroke="#fff" stroke-width="0.5" fill="none"/>
+  </g>
+
+  <!-- ===== left pauldron (viewer left, shadow side) ===== -->
+  <g>
+    <path d="M186 134 C172 126 152 128 142 140 C136 150 136 162 140 170 C148 166 160 164 172 166 C176 156 180 144 186 134 Z" fill="url(#c1b-steelR)" stroke="#1f2340" stroke-width="0.7"/>
+    <path d="M186 134 C172 126 152 128 142 140 C136 150 136 162 140 170 C148 166 160 164 172 166 C176 156 180 144 186 134 Z" fill="#1a1e3c" opacity="0.35"/>
+    <path d="M184 136 C170 128 152 130 144 140" stroke="url(#c1b-goldH)" stroke-width="2" fill="none"/>
+    <use href="#c1b-rivet" x="166" y="140"/><use href="#c1b-rivet" x="154" y="143"/>
+    <path d="M160 134 C168 132 176 134 180 138" stroke="#ffd7c8" stroke-width="0.8" fill="none" opacity="0.7"/>
+  </g>
+
+  <!-- ===== tower shield ===== -->
+  <g>
+    <!-- arm behind shield hint -->
+    <path d="M140 168 C136 176 138 186 146 190" stroke="#2a2e4a" stroke-width="10" fill="none"/>
+    <!-- shield body -->
+    <path d="M70 126 C94 116 132 116 158 126 L156 232 C154 254 136 270 114 282 C92 270 74 254 72 232 Z" fill="url(#c1b-gold)" stroke="#2a1804" stroke-width="1"/>
+    <path d="M76 130 C98 121 128 121 152 130 L150 231 C148 250 132 264 114 275 C96 264 80 250 78 231 Z" fill="url(#c1b-shield)"/>
+    <!-- inner trim -->
+    <path d="M82 135 C102 127 126 127 146 135 L144 230 C142 246 130 258 114 267 C98 258 86 246 84 230 Z" fill="none" stroke="#e8b440" stroke-width="0.8" opacity="0.8"/>
+    <!-- sun emblem -->
+    <g transform="translate(114 192)">
+      <circle r="44" fill="#ffe8a0" opacity="0.18" filter="url(#c1b-blur-m)"/>
+      <g fill="url(#c1b-gold)" stroke="#5a3508" stroke-width="0.5">
+        <path d="M0 -40 L5 -18 L0 -14 L-5 -18 Z"/>
+        <path d="M0 40 L5 18 L0 14 L-5 18 Z"/>
+        <path d="M-30 0 L-17 -5 L-13 0 L-17 5 Z"/>
+        <path d="M30 0 L17 -5 L13 0 L17 5 Z"/>
+        <path d="M-22 -26 L-9 -15 L-13 -10 Z"/>
+        <path d="M22 -26 L13 -10 L9 -15 Z"/>
+        <path d="M-22 26 L-13 10 L-9 15 Z"/>
+        <path d="M22 26 L9 15 L13 10 Z"/>
+      </g>
+      <g fill="#f4c860" opacity="0.8">
+        <path d="M-12 -30 L-5 -17 L-9 -15 Z M12 -30 L9 -15 L5 -17 Z M-12 30 L-9 15 L-5 17 Z M12 30 L5 17 L9 15 Z"/>
+        <path d="M-27 -12 L-15 -7 L-16 -3 Z M27 -12 L16 -3 L15 -7 Z M-27 12 L-16 3 L-15 7 Z M27 12 L15 7 L16 3 Z"/>
+      </g>
+      <circle r="13" fill="url(#c1b-gold)" stroke="#5a3508" stroke-width="0.7"/>
+      <circle r="9.5" fill="none" stroke="#6a400a" stroke-width="0.6"/>
+      <!-- sun face boss -->
+      <circle r="6" fill="url(#c1b-steelR)"/>
+      <circle cx="2" cy="-2" r="1.8" fill="#fff"/>
+      <path d="M-8 -8 C-4 -12 4 -12 8 -8" stroke="#fff6d0" stroke-width="1" fill="none" opacity="0.9"/>
+    </g>
+    <!-- battle scratches -->
+    <g stroke="#9ab0e8" stroke-width="0.5" opacity="0.7" fill="none">
+      <path d="M92 150 l14 8 M130 238 l10 -6 M96 244 l6 10 M140 148 l-8 10"/>
+    </g>
+    <!-- rivets on rim -->
+    <g>
+      <use href="#c1b-rivet" x="80" y="140"/><use href="#c1b-rivet" x="148" y="140"/>
+      <use href="#c1b-rivet" x="80" y="186"/><use href="#c1b-rivet" x="148" y="186"/>
+      <use href="#c1b-rivet" x="82" y="232"/><use href="#c1b-rivet" x="146" y="232"/>
+      <use href="#c1b-rivet" x="114" y="122"/>
+    </g>
+    <!-- sunlit right edge -->
+    <path d="M158 126 L156 232 C154 254 136 270 114 282" stroke="#fff0c0" stroke-width="1.4" fill="none"/>
+    <!-- sheen -->
+    <path d="M132 132 C142 160 144 200 138 240" stroke="#a8c4ff" stroke-width="4" fill="none" opacity="0.35" filter="url(#c1b-blur-s)"/>
+    <!-- cool shadow side -->
+    <path d="M76 130 C80 170 80 220 82 244 C88 256 98 266 110 274 C96 264 80 250 78 231 Z" fill="#050a24" opacity="0.4"/>
+  </g>
+
+  <!-- ===== HEAD ===== -->
+  <g transform="translate(208 122) scale(1.1) translate(-208 -122)">
+    <!-- face -->
+    <path d="M190 80 C189 96 192 108 198 115 C202 119 206 121 209 121 C213 121 217 118 220 114 C225 106 227 94 226 80 C224 64 192 62 190 80 Z" fill="url(#c1b-skin)"/>
+    <!-- shadow side (viewer left) -->
+    <path d="M191 78 C190 94 193 106 199 114 C202 117 205 119 207 120 C200 112 196 100 196 88 C196 82 194 78 191 78 Z" fill="#7e4a48" opacity="0.3"/>
+    <path d="M191 96 C192 106 196 113 202 118 C198 118 194 112 192 104 Z" fill="#6a3a3a" opacity="0.25" filter="url(#c1b-blur-s)"/>
+    <!-- warm sun rim on right edge -->
+    <path d="M225.5 80 C226.5 94 225 106 220 114" stroke="#ffe0a8" stroke-width="1.3" fill="none"/>
+    <!-- jaw shadow -->
+    <path d="M198 115 C202 119 206 121 209 121 C213 121 217 118 220 114 C216 117 212 118 209 118 C205 118 201 117 198 115 Z" fill="#8a5048" opacity="0.5"/>
+    <!-- eye sockets -->
+    <ellipse cx="200" cy="91" rx="6" ry="3.5" fill="#b87c6a" opacity="0.4"/>
+    <ellipse cx="217" cy="91" rx="5" ry="3.3" fill="#b87c6a" opacity="0.35"/>
+    <!-- near eye -->
+    <path d="M194.5 91.5 C196.5 88.7 202 88.3 205 90.8 C203 93.3 197.5 93.6 194.5 91.5 Z" fill="#f6efe8"/>
+    <circle cx="200.6" cy="91" r="2.1" fill="#3f7a6a"/>
+    <circle cx="200.6" cy="91" r="2.1" fill="none" stroke="#1e3a34" stroke-width="0.4"/>
+    <circle cx="200.6" cy="91" r="0.95" fill="#0a1210"/>
+    <circle cx="201.4" cy="90.2" r="0.6" fill="#fff"/>
+    <path d="M194 91.6 C196 88 202 87.5 205.6 90.8" stroke="#2a120c" stroke-width="1.1" fill="none" stroke-linecap="round"/>
+    <path d="M194 91.6 l-1.4 -0.8 M195 90.2 l-1 -1.2" stroke="#2a120c" stroke-width="0.5"/>
+    <path d="M195.5 92.8 C198 94 202 93.8 204.5 91.8" stroke="#a86a5a" stroke-width="0.5" fill="none"/>
+    <!-- far eye (slightly foreshortened) -->
+    <path d="M212.5 90.8 C214.5 88.5 219 88.5 221 90.8 C219.5 92.8 214.5 93 212.5 90.8 Z" fill="#f6efe8"/>
+    <circle cx="216.6" cy="90.7" r="1.9" fill="#3f7a6a"/>
+    <circle cx="216.6" cy="90.7" r="0.85" fill="#0a1210"/>
+    <circle cx="217.3" cy="90" r="0.55" fill="#fff"/>
+    <path d="M212 90.9 C214 87.6 219 87.4 221.6 90.6" stroke="#2a120c" stroke-width="1" fill="none" stroke-linecap="round"/>
+    <path d="M221.6 90.6 l1.4 -0.7 M221 89.3 l1 -1.1" stroke="#2a120c" stroke-width="0.5"/>
+    <path d="M213.4 92 C215.5 93.3 219 93.2 220.6 91.4" stroke="#a86a5a" stroke-width="0.5" fill="none"/>
+    <!-- determined brows (slightly lowered inner ends) -->
+    <path d="M193 86.5 C196 83.8 201 83.4 206 86.2 C206 87.2 205.2 87.6 204.4 87.3 C200.5 85.7 196.8 86 193.8 87.6 C193 87.9 192.6 87.1 193 86.5 Z" fill="#5a200e"/>
+    <path d="M211 86.2 C215 83.6 219.5 83.6 222.6 86 C222.9 86.8 222.3 87.3 221.6 87 C219 85.6 215.5 85.6 212.2 87.2 C211.4 87.5 210.7 86.9 211 86.2 Z" fill="#5a200e"/>
+    <!-- nose -->
+    <path d="M207.5 90 C208.5 95 210.5 99 212.5 102.5 C212 104.6 210 105.4 208 105" stroke="#9a5e52" stroke-width="0.8" fill="none"/>
+    <path d="M206.5 92 C206.8 96 207.4 99 208.2 101" stroke="#ffe8d8" stroke-width="0.9" fill="none" opacity="0.8"/>
+    <path d="M204.5 103.6 C205.5 105.2 207 105.4 208 104.8" stroke="#7e4a48" stroke-width="0.7" fill="none"/>
+    <path d="M211.5 103.8 C211 105 210 105.3 209.4 105" stroke="#7e4a48" stroke-width="0.6" fill="none"/>
+    <ellipse cx="210" cy="102.4" rx="1.4" ry="1" fill="#fff0e4" opacity="0.7"/>
+    <!-- cheek colour & bone light -->
+    <ellipse cx="219" cy="100" rx="4" ry="2.6" fill="#e88a80" opacity="0.35"/>
+    <ellipse cx="197" cy="100" rx="4" ry="2.6" fill="#d8786e" opacity="0.25"/>
+    <path d="M218 96 C221 97 223 99 224 102" stroke="#fff2e0" stroke-width="1.2" fill="none" opacity="0.6" filter="url(#c1b-blur-s)"/>
+    <!-- small scar on cheek -->
+    <path d="M196 98 L199.5 101.5" stroke="#c07868" stroke-width="0.6"/>
+    <path d="M196.6 99.8 l1.2 -0.8 M198 101 l1.2 -0.8" stroke="#c07868" stroke-width="0.35"/>
+    <!-- mouth (firm, resolute) -->
+    <path d="M203 110.2 C206 109.2 210 109.2 214.5 110.4 C211 111.4 206.5 111.4 203 110.2 Z" fill="#a8504c"/>
+    <path d="M202.5 110.4 C206.5 111.5 211 111.6 215 110.5 C212.5 114.4 205.5 114.6 202.5 110.4 Z" fill="#c8706a"/>
+    <path d="M202.5 110.3 C206 110.8 211 110.8 215 110.4" stroke="#5a2020" stroke-width="0.7" fill="none"/>
+    <path d="M206 112.3 C208 112.8 210 112.8 212 112.3" stroke="#f4b8a8" stroke-width="0.5" fill="none"/>
+    <path d="M202.3 110 l-0.8 0.8 M215.2 110.1 l0.8 0.8" stroke="#8a4a44" stroke-width="0.5"/>
+    <path d="M207 116.5 C208.5 117.2 210.5 117.2 212 116.5" stroke="#9a5e52" stroke-width="0.5" fill="none" opacity="0.7"/>
+    <!-- ear (partially under hair) -->
+    <path d="M190.5 88 C187 87 186 92 187 97 C188 101 190 102 192 101 Z" fill="#b87c6a"/>
+    <!-- hair front: parted, swept back, with loose strands -->
+    <path d="M189 84 C186 70 194 58 208 57 C222 56 230 66 228 82 C226 74 220 68 212 66 C204 70 196 74 193 86 C192 90 190 94 189 98 Z" fill="url(#c1b-hair)"/>
+    <path d="M208 58 C204 62 200 68 196 76 M214 60 C210 64 206 68 204 72 M220 62 C224 68 226 74 227 80" stroke="#ffb070" stroke-width="0.7" fill="none" opacity="0.85"/>
+    <path d="M200 64 C196 70 194 78 192 86" stroke="#3a1408" stroke-width="0.6" fill="none"/>
+    <!-- side-swept fringe lowering the hairline -->
+    <path d="M190 86 C189 74 196 64 208 62 C220 61 228 68 228 80 C224 74 218 72 212 73 C206 75 202 78 199 82 C196 86 194 90 193 94 C192 91 191 88 190 86 Z" fill="url(#c1b-hair)"/>
+    <path d="M196 80 C200 72 208 67 218 68 M199 84 C203 77 210 72 220 72 M194 88 C196 80 200 74 206 70" stroke="#ffb070" stroke-width="0.6" fill="none" opacity="0.9"/>
+    <path d="M201 81 C206 76 212 74 219 74" stroke="#4a180a" stroke-width="0.6" fill="none"/>
+    <path d="M212 73 C218 72 224 74 228 80 C230 84 230 88 229 92" stroke="#c2562a" stroke-width="1" fill="none"/>
+    <!-- loose strands blowing across face and to the right -->
+    <path d="M212 66 C218 68 224 72 232 70 C238 68 244 70 250 74" stroke="#c2562a" stroke-width="0.8" fill="none"/>
+    <path d="M206 66 C214 74 222 80 234 82" stroke="#ff9a5a" stroke-width="0.6" fill="none" opacity="0.9"/>
+    <path d="M190 90 C188 100 188 108 192 116 M189 96 C187 104 188 112 190 118" stroke="#6a2410" stroke-width="0.7" fill="none"/>
+    <!-- braid over the back -->
+    <g>
+      <ellipse cx="226" cy="99" rx="2.6" ry="3.4" transform="rotate(35 226 99)" fill="url(#c1b-hair)" stroke="#3a1408" stroke-width="0.4"/>
+      <path d="M224.8 97.2 C226 98 226.6 99 226.8 100.6" stroke="#ffb070" stroke-width="0.5" fill="none"/>
+      <ellipse cx="229" cy="103.5" rx="2.6" ry="3.4" transform="rotate(-35 229 103.5)" fill="url(#c1b-hair)" stroke="#3a1408" stroke-width="0.4"/>
+      <path d="M227.8 101.7 C229 102.5 229.6 103.5 229.8 105.1" stroke="#ffb070" stroke-width="0.5" fill="none"/>
+      <ellipse cx="232" cy="108" rx="2.6" ry="3.4" transform="rotate(35 232 108)" fill="url(#c1b-hair)" stroke="#3a1408" stroke-width="0.4"/>
+      <path d="M230.8 106.2 C232 107 232.6 108 232.8 109.6" stroke="#ffb070" stroke-width="0.5" fill="none"/>
+      <ellipse cx="234.5" cy="112.5" rx="2.6" ry="3.4" transform="rotate(-35 234.5 112.5)" fill="url(#c1b-hair)" stroke="#3a1408" stroke-width="0.4"/>
+      <path d="M233.3 110.7 C234.5 111.5 235.1 112.5 235.3 114.1" stroke="#ffb070" stroke-width="0.5" fill="none"/>
+      <ellipse cx="236.5" cy="117" rx="2.6" ry="3.4" transform="rotate(35 236.5 117)" fill="url(#c1b-hair)" stroke="#3a1408" stroke-width="0.4"/>
+      <path d="M235.3 115.2 C236.5 116 237.1 117 237.3 118.6" stroke="#ffb070" stroke-width="0.5" fill="none"/>
+      <ellipse cx="238" cy="121.5" rx="2.6" ry="3.4" transform="rotate(-35 238 121.5)" fill="url(#c1b-hair)" stroke="#3a1408" stroke-width="0.4"/>
+      <path d="M236.8 119.7 C238 120.5 238.6 121.5 238.8 123.1" stroke="#ffb070" stroke-width="0.5" fill="none"/>
+      <path d="M238 124 C239 127 238 130 240 132 M238.5 124 C240.5 126 241 129 243 130" stroke="#c2562a" stroke-width="0.6" fill="none"/>
+      <rect x="236" y="122.5" width="4" height="2" rx="0.8" fill="url(#c1b-gold)" transform="rotate(-25 238 123.5)"/>
+    </g>
+  </g>
+
+  <!-- ================= 5. FX ================= -->
+  <!-- sun flare accents -->
+  <g filter="url(#c1b-glow)">
+    <path d="M272 156 l1.5 -5 l1.5 5 l5 1.5 l-5 1.5 l-1.5 5 l-1.5 -5 l-5 -1.5 Z" fill="#fff" opacity="0.9"/>
+    <path d="M290 212 l1 -3.5 l1 3.5 l3.5 1 l-3.5 1 l-1 3.5 l-1 -3.5 l-3.5 -1 Z" fill="#fff" opacity="0.9"/>
+    <path d="M156 128 l1 -3 l1 3 l3 1 l-3 1 l-1 3 l-1 -3 l-3 -1 Z" fill="#fff" opacity="0.8"/>
+  </g>
+  <!-- warm sun wash from the right -->
+  <rect width="400" height="300" fill="url(#c1b-sunGlow)" opacity="0.18"/>
+  <!-- drifting motes / embers -->
+  <g opacity="0.85">
+    <use href="#c1b-mote" x="300" y="150"/><use href="#c1b-mote" x="318" y="120"/><use href="#c1b-mote" x="280" y="110"/>
+    <use href="#c1b-mote" x="250" y="60"/><use href="#c1b-mote" x="170" y="104"/><use href="#c1b-mote" x="60" y="80"/>
+    <use href="#c1b-mote" x="340" y="240"/><use href="#c1b-mote" x="160" y="240"/><use href="#c1b-mote" x="40" y="160"/>
+    <use href="#c1b-mote" x="226" y="46"/><use href="#c1b-mote" x="310" y="92"/>
+  </g>
+  <!-- wind streaks -->
+  <g stroke="#fff0e0" stroke-width="0.5" fill="none" opacity="0.5">
+    <path d="M120 44 C150 40 170 42 190 38"/>
+    <path d="M250 124 C280 120 300 124 330 118"/>
+    <path d="M30 120 C50 118 70 120 90 116"/>
+  </g>
+
+  <!-- ================= 6. VIGNETTE ================= -->
+  <rect width="400" height="300" fill="url(#c1b-vig)"/>
+</svg>

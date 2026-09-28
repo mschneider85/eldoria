@@ -1,0 +1,484 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300">
+  <defs>
+    <linearGradient id="c5d-wall" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0b0c12"/>
+      <stop offset="0.5" stop-color="#1c2026"/>
+      <stop offset="1" stop-color="#101418"/>
+    </linearGradient>
+    <radialGradient id="c5d-backLight" cx="0.5" cy="0.45" r="0.55">
+      <stop offset="0" stop-color="#3a5a4a" stop-opacity="0.9"/>
+      <stop offset="0.6" stop-color="#1f2c30" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#0b0c12" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="c5d-stoneBlk" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#3a4148"/>
+      <stop offset="1" stop-color="#1a1e24"/>
+    </linearGradient>
+    <linearGradient id="c5d-arch" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#1a1e24"/>
+      <stop offset="0.5" stop-color="#454c52"/>
+      <stop offset="1" stop-color="#1a1e24"/>
+    </linearGradient>
+    <linearGradient id="c5d-floor" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#222a2a"/>
+      <stop offset="1" stop-color="#07090a"/>
+    </linearGradient>
+    <radialGradient id="c5d-bone" cx="0.4" cy="0.3" r="0.8">
+      <stop offset="0" stop-color="#f2eedc"/>
+      <stop offset="0.5" stop-color="#b8b29a"/>
+      <stop offset="1" stop-color="#4a4838"/>
+    </radialGradient>
+    <linearGradient id="c5d-boneV" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#5a5846"/>
+      <stop offset="0.45" stop-color="#e6e0c8"/>
+      <stop offset="1" stop-color="#8a8670"/>
+    </linearGradient>
+    <linearGradient id="c5d-rust" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#a8a49a"/>
+      <stop offset="0.35" stop-color="#7a6a58"/>
+      <stop offset="0.7" stop-color="#6a3e22"/>
+      <stop offset="1" stop-color="#3a2014"/>
+    </linearGradient>
+    <linearGradient id="c5d-blade" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#4a4238"/>
+      <stop offset="0.45" stop-color="#b0aca2"/>
+      <stop offset="0.55" stop-color="#8a8274"/>
+      <stop offset="1" stop-color="#3a2c20"/>
+    </linearGradient>
+    <radialGradient id="c5d-wood" cx="0.45" cy="0.4" r="0.65">
+      <stop offset="0" stop-color="#6a4a30"/>
+      <stop offset="0.7" stop-color="#3e2a1a"/>
+      <stop offset="1" stop-color="#1e140c"/>
+    </radialGradient>
+    <radialGradient id="c5d-iron" cx="0.4" cy="0.35" r="0.7">
+      <stop offset="0" stop-color="#8a8a86"/>
+      <stop offset="0.5" stop-color="#4a4440"/>
+      <stop offset="1" stop-color="#1c1814"/>
+    </radialGradient>
+    <radialGradient id="c5d-flame" cx="0.5" cy="0.7" r="0.6">
+      <stop offset="0" stop-color="#f0ffe0"/>
+      <stop offset="0.35" stop-color="#8fff8a"/>
+      <stop offset="1" stop-color="#1a8a3a" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="c5d-candleGlow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#7fff8a" stop-opacity="0.45"/>
+      <stop offset="0.5" stop-color="#3ac05a" stop-opacity="0.12"/>
+      <stop offset="1" stop-color="#1a4a2a" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="c5d-wax" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#5a5a44"/>
+      <stop offset="0.5" stop-color="#c8c4a0"/>
+      <stop offset="1" stop-color="#6a6850"/>
+    </linearGradient>
+    <radialGradient id="c5d-eye" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="0.3" stop-color="#b8ffa0"/>
+      <stop offset="0.7" stop-color="#3ae060" stop-opacity="0.5"/>
+      <stop offset="1" stop-color="#3ae060" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="c5d-mail" width="4" height="3.4" patternUnits="userSpaceOnUse">
+      <rect width="4" height="3.4" fill="#2a2622"/>
+      <ellipse cx="2" cy="1.7" rx="1.6" ry="1.3" fill="none" stroke="#7a7266" stroke-width="0.7"/>
+      <ellipse cx="0" cy="0" rx="1.6" ry="1.3" fill="none" stroke="#5a5048" stroke-width="0.7"/>
+      <ellipse cx="4" cy="0" rx="1.6" ry="1.3" fill="none" stroke="#5a5048" stroke-width="0.7"/>
+      <ellipse cx="0" cy="3.4" rx="1.6" ry="1.3" fill="none" stroke="#5a5048" stroke-width="0.7"/>
+      <ellipse cx="4" cy="3.4" rx="1.6" ry="1.3" fill="none" stroke="#5a5048" stroke-width="0.7"/>
+    </pattern>
+    <linearGradient id="c5d-mailShade" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#050404" stop-opacity="0.7"/>
+      <stop offset="0.5" stop-color="#050404" stop-opacity="0"/>
+      <stop offset="0.85" stop-color="#6a3e22" stop-opacity="0.25"/>
+      <stop offset="1" stop-color="#8fff8a" stop-opacity="0.25"/>
+    </linearGradient>
+    <radialGradient id="c5d-vig" cx="0.5" cy="0.42" r="0.75">
+      <stop offset="0.5" stop-color="#000" stop-opacity="0"/>
+      <stop offset="1" stop-color="#020303" stop-opacity="0.88"/>
+    </radialGradient>
+    <filter id="c5d-glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="2.5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="c5d-soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="6"/>
+    </filter>
+    <filter id="c5d-blur" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="1.2"/>
+    </filter>
+  </defs>
+
+  <!-- 1 CRYPT BACK WALL -->
+  <rect id="c5d-bg" width="400" height="300" fill="url(#c5d-wall)"/>
+  <!-- brick courses -->
+  <g stroke="#0a0b0e" stroke-width="1.2" fill="none" opacity="0.9">
+    <path d="M0,30 H400 M0,58 H400 M0,86 H400 M0,114 H400 M0,142 H400 M0,170 H400 M0,198 H400"/>
+    <path d="M30,0 V30 M90,0 V30 M150,0 V30 M210,0 V30 M270,0 V30 M330,0 V30 M390,0 V30
+             M60,30 V58 M120,30 V58 M180,30 V58 M240,30 V58 M300,30 V58 M360,30 V58
+             M30,58 V86 M90,58 V86 M150,58 V86 M210,58 V86 M270,58 V86 M330,58 V86 M390,58 V86
+             M60,86 V114 M120,86 V114 M180,86 V114 M240,86 V114 M300,86 V114 M360,86 V114
+             M30,114 V142 M90,114 V142 M150,114 V142 M210,114 V142 M270,114 V142 M330,114 V142 M390,114 V142
+             M60,142 V170 M120,142 V170 M180,142 V170 M240,142 V170 M300,142 V170 M360,142 V170
+             M30,170 V198 M90,170 V198 M150,170 V198 M210,170 V198 M270,170 V198 M330,170 V198 M390,170 V198"/>
+  </g>
+  <g stroke="#4a5256" stroke-width="0.7" fill="none" opacity="0.35">
+    <path d="M0,31 H400 M0,59 H400 M0,87 H400 M0,115 H400 M0,143 H400 M0,171 H400"/>
+  </g>
+  <!-- central back arch opening (deeper crypt) -->
+  <path d="M130,240 L130,110 C130,60 270,60 270,110 L270,240 Z" fill="#06080a"/>
+  <path d="M130,240 L130,110 C130,60 270,60 270,110 L270,240 Z" fill="url(#c5d-backLight)"/>
+  <!-- distant corridor with sarcophagi -->
+  <path d="M160,220 L166,200 L234,200 L240,220 Z" fill="#1a2224"/>
+  <path d="M168,200 L172,190 L228,190 L232,200 Z" fill="#26302e"/>
+  <path d="M176,190 C184,180 216,180 224,190" stroke="#3a4a44" stroke-width="2" fill="none"/>
+  <path d="M150,160 L150,120 C150,96 250,96 250,120 L250,160" stroke="#1a2224" stroke-width="3" fill="none" opacity="0.8"/>
+  <!-- arch voussoirs -->
+  <g fill="url(#c5d-stoneBlk)" stroke="#07080a" stroke-width="1">
+    <path d="M118,240 L118,110 L130,110 L130,240 Z"/>
+    <path d="M270,240 L270,110 L282,110 L282,240 Z"/>
+    <path d="M118,110 C118,90 124,76 134,66 L142,74 C135,82 130,96 130,110 Z"/>
+    <path d="M134,66 C146,56 160,50 174,47 L176,58 C164,60 152,66 142,74 Z"/>
+    <path d="M174,47 C186,45 214,45 226,47 L224,58 C212,56 188,56 176,58 Z"/>
+    <path d="M226,47 C240,50 254,56 266,66 L258,74 C248,66 236,60 224,58 Z"/>
+    <path d="M266,66 C276,76 282,90 282,110 L270,110 C270,96 265,82 258,74 Z"/>
+  </g>
+  <path d="M190,46 L210,46 L208,60 L192,60 Z" fill="#4a5256" stroke="#07080a"/>
+  <!-- keystone skull -->
+  <ellipse cx="200" cy="52" rx="6" ry="5.5" fill="url(#c5d-bone)"/>
+  <circle cx="197.6" cy="51.5" r="1.4" fill="#0a0a08"/><circle cx="202.4" cy="51.5" r="1.4" fill="#0a0a08"/>
+
+  <!-- ossuary niches with skulls (sides) -->
+  <g id="c5d-niches">
+    <path d="M20,120 L20,98 C20,86 50,86 50,98 L50,120 Z M346,120 L346,98 C346,86 376,86 376,98 L376,120 Z" fill="#060708"/>
+    <path d="M20,176 L20,154 C20,142 50,142 50,154 L50,176 Z M346,176 L346,154 C346,142 376,142 376,154 L376,176 Z" fill="#060708"/>
+    <g fill="url(#c5d-bone)" opacity="0.8">
+      <ellipse cx="30" cy="113" rx="6" ry="5.5"/><ellipse cx="42" cy="114" rx="5.5" ry="5"/>
+      <ellipse cx="356" cy="113" rx="6" ry="5.5"/><ellipse cx="368" cy="114" rx="5.5" ry="5"/>
+      <ellipse cx="35" cy="170" rx="7" ry="6"/><ellipse cx="361" cy="170" rx="7" ry="6"/>
+    </g>
+    <g fill="#0a0a08" opacity="0.9">
+      <circle cx="28" cy="112" r="1.4"/><circle cx="32" cy="112" r="1.4"/><circle cx="40" cy="113" r="1.3"/><circle cx="44" cy="113" r="1.3"/>
+      <circle cx="354" cy="112" r="1.4"/><circle cx="358" cy="112" r="1.4"/><circle cx="366" cy="113" r="1.3"/><circle cx="370" cy="113" r="1.3"/>
+      <circle cx="32.5" cy="169" r="1.6"/><circle cx="37.5" cy="169" r="1.6"/><circle cx="358.5" cy="169" r="1.6"/><circle cx="363.5" cy="169" r="1.6"/>
+    </g>
+  </g>
+
+  <!-- candle ledges -->
+  <g id="c5d-candlesL">
+    <circle cx="78" cy="150" r="70" fill="url(#c5d-candleGlow)"/>
+    <path d="M52,190 L108,190 L104,198 L56,198 Z" fill="url(#c5d-stoneBlk)"/>
+    <path d="M52,190 L108,190" stroke="#8fd8a0" stroke-width="0.8" opacity="0.6"/>
+    <!-- wax drips down ledge -->
+    <path d="M62,190 L70,190 L70,196 C70,200 68,204 66,202 L66,196 Z M86,190 L96,190 L95,202 C95,206 92,206 92,200 Z" fill="#b8b490"/>
+    <path d="M64,190 L64,164 L72,164 L72,190 Z" fill="url(#c5d-wax)"/>
+    <path d="M80,190 L80,150 L90,150 L90,190 Z" fill="url(#c5d-wax)"/>
+    <path d="M96,190 L96,172 L102,172 L102,190 Z" fill="url(#c5d-wax)"/>
+    <path d="M80,150 C82,154 84,152 86,156 C88,152 90,154 90,150 Z" fill="#e0dcb8"/>
+    <path d="M80,150 C80,160 82,164 81,172 M90,152 C89,158 90,162 89,166 M64,164 C64,170 66,174 65,178" stroke="#e8e4c8" stroke-width="1.4" fill="none" opacity="0.8"/>
+    <path d="M68,164 v-4 M85,150 v-4 M99,172 v-3" stroke="#1a1a14" stroke-width="0.8"/>
+    <g filter="url(#c5d-glow)">
+      <path d="M68,160 C64,154 66,148 68,142 C70,148 72,154 68,160 Z" fill="url(#c5d-flame)"/>
+      <path d="M85,146 C80,138 82,130 85,122 C88,130 90,138 85,146 Z" fill="url(#c5d-flame)"/>
+      <path d="M99,169 C96,164 97,159 99,154 C101,159 102,164 99,169 Z" fill="url(#c5d-flame)"/>
+    </g>
+  </g>
+  <g id="c5d-candlesR">
+    <circle cx="322" cy="150" r="70" fill="url(#c5d-candleGlow)"/>
+    <path d="M292,190 L348,190 L344,198 L296,198 Z" fill="url(#c5d-stoneBlk)"/>
+    <path d="M292,190 L348,190" stroke="#8fd8a0" stroke-width="0.8" opacity="0.6"/>
+    <path d="M304,190 L312,190 L311,200 C311,204 308,204 308,198 Z M330,190 L338,190 L338,196 C338,200 336,204 334,200 Z" fill="#b8b490"/>
+    <path d="M298,190 L298,176 L304,176 L304,190 Z" fill="url(#c5d-wax)"/>
+    <path d="M310,190 L310,146 L320,146 L320,190 Z" fill="url(#c5d-wax)"/>
+    <path d="M328,190 L328,166 L336,166 L336,190 Z" fill="url(#c5d-wax)"/>
+    <path d="M310,146 C310,156 312,160 311,168 M320,148 C319,154 320,160 319,164 M336,166 C336,172 334,176 335,180" stroke="#e8e4c8" stroke-width="1.4" fill="none" opacity="0.8"/>
+    <path d="M301,176 v-3 M315,146 v-4 M332,166 v-4" stroke="#1a1a14" stroke-width="0.8"/>
+    <g filter="url(#c5d-glow)">
+      <path d="M301,173 C298,168 299,163 301,158 C303,163 304,168 301,173 Z" fill="url(#c5d-flame)"/>
+      <path d="M315,142 C310,134 312,126 315,118 C318,126 320,134 315,142 Z" fill="url(#c5d-flame)"/>
+      <path d="M332,162 C328,156 330,150 332,144 C334,150 336,156 332,162 Z" fill="url(#c5d-flame)"/>
+    </g>
+  </g>
+
+  <!-- cobwebs in upper corners -->
+  <g fill="none" stroke="#c8d0cc" stroke-linecap="round" opacity="0.4">
+    <path d="M0,0 L70,0 M0,0 L0,64 M0,0 L60,40 M0,0 L30,58 M0,0 L66,18" stroke-width="0.7"/>
+    <path d="M14,0 C14,8 8,12 0,12 M28,0 C28,14 16,22 0,24 M44,0 C44,20 26,34 0,38 M60,0 C60,26 36,46 0,54" stroke-width="0.6"/>
+    <path d="M400,0 L330,0 M400,0 L400,64 M400,0 L340,40 M400,0 L370,58 M400,0 L334,18" stroke-width="0.7"/>
+    <path d="M386,0 C386,8 392,12 400,12 M372,0 C372,14 384,22 400,24 M356,0 C356,20 374,34 400,38 M340,0 C340,26 364,46 400,54" stroke-width="0.6"/>
+    <path d="M60,40 C62,52 60,60 62,72" stroke-width="0.4"/>
+  </g>
+  <circle cx="62" cy="74" r="1.8" fill="#0a0a0a"/>
+  <path d="M60,73 l-3,-2 M60,75 l-3,2 M64,73 l3,-2 M64,75 l3,2" stroke="#0a0a0a" stroke-width="0.5"/>
+
+  <!-- floor -->
+  <path d="M0,228 L400,228 L400,300 L0,300 Z" fill="url(#c5d-floor)"/>
+  <g stroke="#06080a" stroke-width="1.2" fill="none">
+    <path d="M0,246 H400 M0,270 H400 M80,228 L60,246 M160,228 L150,246 M240,228 L250,246 M320,228 L340,246 M40,246 L10,270 M120,246 L106,270 M200,246 L200,270 M280,246 L294,270 M360,246 L390,270"/>
+  </g>
+  <path d="M0,229 H400" stroke="#6a8a7a" stroke-width="0.8" opacity="0.4"/>
+  <!-- scattered bones and skull on floor -->
+  <g>
+    <path d="M40,262 L80,254" stroke="url(#c5d-boneV)" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="39" cy="262" r="2.6" fill="#b8b29a"/><circle cx="81" cy="254" r="2.6" fill="#b8b29a"/>
+    <ellipse cx="340" cy="252" rx="10" ry="8.5" fill="url(#c5d-bone)"/>
+    <path d="M334,251 a2.6,2.6 0 1,0 5.2,0 a2.6,2.6 0 1,0 -5.2,0 M341,251 a2.6,2.6 0 1,0 5.2,0 a2.6,2.6 0 1,0 -5.2,0" fill="#0a0a08"/>
+    <path d="M336,258 h8" stroke="#3a3628" stroke-width="1"/>
+    <path d="M300,264 L330,270" stroke="url(#c5d-boneV)" stroke-width="2.6" stroke-linecap="round"/>
+  </g>
+  <!-- green ground mist -->
+  <ellipse cx="200" cy="236" rx="200" ry="20" fill="#5fd07a" opacity="0.12" filter="url(#c5d-soft)"/>
+
+  <!-- 4 CHARACTER: SKELETON WARRIOR -->
+  <!-- ground shadow -->
+  <ellipse cx="200" cy="282" rx="80" ry="8" fill="#000" opacity="0.6" filter="url(#c5d-soft)"/>
+
+  <!-- eerie backlight for separation -->
+  <ellipse cx="205" cy="150" rx="70" ry="95" fill="#4fd070" opacity="0.16" filter="url(#c5d-soft)"/>
+  <!-- tattered cloak behind -->
+  <path d="M166,128 C150,150 144,190 146,230 L152,224 L154,244 L162,230 L168,248 L172,232 L180,250 C184,210 196,170 200,140 C210,170 216,210 222,250 L228,234 L234,248 L238,230 L246,244 L248,224 L254,230 C256,190 250,150 234,128 Z" fill="#1a1a1c"/>
+  <path d="M166,128 C150,150 144,190 146,230" stroke="#6ac080" stroke-width="0.9" fill="none" opacity="0.4"/>
+  <path d="M234,128 C250,150 256,190 254,230" stroke="#6ac080" stroke-width="0.9" fill="none" opacity="0.5"/>
+
+  <!-- LEGS -->
+  <g id="c5d-legs">
+    <!-- femurs -->
+    <path d="M188,214 C186,228 182,240 178,252" stroke="url(#c5d-boneV)" stroke-width="8" stroke-linecap="round" fill="none"/>
+    <path d="M212,214 C216,228 222,240 226,252" stroke="url(#c5d-boneV)" stroke-width="8" stroke-linecap="round" fill="none"/>
+    <!-- knees -->
+    <ellipse cx="177" cy="254" rx="6" ry="5" fill="url(#c5d-bone)"/>
+    <ellipse cx="227" cy="254" rx="6" ry="5" fill="url(#c5d-bone)"/>
+    <!-- tibia + fibula -->
+    <path d="M176,258 L170,290" stroke="url(#c5d-boneV)" stroke-width="6.5" stroke-linecap="round"/>
+    <path d="M181,259 L176,290" stroke="#8a8670" stroke-width="2.2" stroke-linecap="round"/>
+    <path d="M228,258 L236,290" stroke="url(#c5d-boneV)" stroke-width="6.5" stroke-linecap="round"/>
+    <path d="M223,259 L230,290" stroke="#8a8670" stroke-width="2.2" stroke-linecap="round"/>
+    <!-- rusty greave on one shin -->
+    <path d="M222,262 L236,260 L240,284 L230,288 Z" fill="url(#c5d-rust)" stroke="#1a100a" stroke-width="0.7"/>
+    <path d="M224,266 L237,264" stroke="#c8c0b0" stroke-width="0.7" opacity="0.6"/>
+  </g>
+
+  <!-- PELVIS + spine base -->
+  <path d="M184,204 C186,198 214,198 216,204 C220,212 214,220 206,222 L200,216 L194,222 C186,220 180,212 184,204 Z" fill="url(#c5d-bone)"/>
+  <path d="M192,210 a3,3 0 1,0 0.1,0 M208,210 a3,3 0 1,0 0.1,0" fill="#0a0a08"/>
+
+  <!-- RIBCAGE (under the torn mail) -->
+  <g id="c5d-ribs">
+    <path d="M172,132 C178,124 222,124 228,132 L226,190 C216,198 184,198 174,190 Z" fill="#070807"/>
+    <!-- spine -->
+    <g fill="url(#c5d-bone)">
+      <rect x="196" y="176" width="8" height="5" rx="2"/><rect x="196" y="183" width="8" height="5" rx="2"/><rect x="196.5" y="190" width="7" height="5" rx="2"/><rect x="197" y="197" width="6" height="5" rx="2"/>
+    </g>
+    <!-- sternum -->
+    <path d="M197,130 L203,130 L204,162 L200,168 L196,162 Z" fill="url(#c5d-boneV)"/>
+    <g fill="none" stroke="url(#c5d-boneV)" stroke-linecap="round">
+      <path d="M197,136 C186,133 177,138 175,148" stroke-width="3.4"/>
+      <path d="M197,146 C185,143 176,149 174,160" stroke-width="3.4"/>
+      <path d="M197,156 C186,154 178,160 176,171" stroke-width="3.2"/>
+      <path d="M198,166 C188,165 181,170 179,180" stroke-width="3"/>
+      <path d="M198,175 C191,175 186,179 185,186" stroke-width="2.6"/>
+      <path d="M203,136 C214,133 223,138 225,148" stroke-width="3.4"/>
+      <path d="M203,146 C215,143 224,149 226,160" stroke-width="3.4"/>
+      <path d="M203,156 C214,154 222,160 224,171" stroke-width="3.2"/>
+      <path d="M202,166 C212,165 219,170 221,180" stroke-width="3"/>
+      <path d="M202,175 C209,175 214,179 215,186" stroke-width="2.6"/>
+    </g>
+  </g>
+
+  <!-- TORN CHAINMAIL HAUBERK -->
+  <g id="c5d-mailG">
+    <path fill-rule="evenodd" fill="url(#c5d-mail)" d="
+      M166,130 C172,124 186,122 194,126 L196,140 L190,150 L186,166 L178,172 L180,186 L188,192 L196,188 L204,194 L214,186 L222,176 L218,160 L212,150 L206,140 L206,126 C214,122 228,124 234,130 C238,160 238,196 236,226 L230,220 L226,232 L220,222 L214,236 L208,224 L200,234 L194,222 L186,236 L180,222 L174,232 L170,220 L164,226 C162,196 162,160 166,130 Z"/>
+    <path fill="url(#c5d-mailShade)" d="M166,130 C172,124 186,122 194,126 L196,140 L190,150 L186,166 L178,172 L180,186 L188,192 L196,188 L204,194 L214,186 L222,176 L218,160 L212,150 L206,140 L206,126 C214,122 228,124 234,130 C238,160 238,196 236,226 L230,220 L226,232 L220,222 L214,236 L208,224 L200,234 L194,222 L186,236 L180,222 L174,232 L170,220 L164,226 C162,196 162,160 166,130 Z"/>
+    <!-- torn hole edges -->
+    <path d="M194,126 L196,140 L190,150 L186,166 L178,172 L180,186 L188,192 L196,188 L204,194 L214,186 L222,176 L218,160 L212,150 L206,140 L206,126" stroke="#9a9084" stroke-width="0.8" fill="none" opacity="0.8"/>
+    <!-- loose rings dangling -->
+    <g fill="none" stroke="#8a8074" stroke-width="0.7">
+      <circle cx="184" cy="168" r="1.4"/><circle cx="183" cy="171" r="1.4"/><circle cx="216" cy="190" r="1.4"/><circle cx="217" cy="193" r="1.4"/><circle cx="217" cy="196" r="1.3"/>
+    </g>
+    <!-- leather belt -->
+    <path d="M164,200 C180,204 220,204 236,200 L236,210 C220,214 180,214 164,210 Z" fill="#3a2616"/>
+    <path d="M164,201 C180,205 220,205 236,201" stroke="#7a5a3a" stroke-width="0.8" fill="none"/>
+    <rect x="194" y="200" width="12" height="11" rx="1.5" fill="none" stroke="url(#c5d-rust)" stroke-width="2.2"/>
+    <path d="M200,202 v7" stroke="#8a7a60" stroke-width="1.2"/>
+    <path d="M176,210 L174,222 L180,220 Z" fill="#3a2616"/>
+  </g>
+
+  <!-- NECK vertebrae -->
+  <g fill="url(#c5d-bone)">
+    <rect x="195" y="104" width="10" height="6" rx="2"/><rect x="195.5" y="111" width="9" height="6" rx="2"/><rect x="196" y="118" width="8" height="6" rx="2"/>
+  </g>
+  <!-- clavicles & shoulders -->
+  <path d="M198,126 C186,122 172,124 162,130" stroke="url(#c5d-boneV)" stroke-width="3.6" stroke-linecap="round" fill="none"/>
+  <path d="M202,126 C214,122 228,124 238,130" stroke="url(#c5d-boneV)" stroke-width="3.6" stroke-linecap="round" fill="none"/>
+  <!-- rusted pauldron on sword shoulder -->
+  <path d="M226,124 C236,116 252,118 256,130 C258,138 254,144 248,146 C242,138 234,134 224,134 Z" fill="url(#c5d-rust)" stroke="#1a100a" stroke-width="0.8"/>
+  <path d="M230,122 C240,118 250,122 254,130" stroke="#d8d0c0" stroke-width="0.8" fill="none" opacity="0.7"/>
+  <path d="M232,130 C240,130 246,134 250,140" stroke="#1a100a" stroke-width="0.8" fill="none"/>
+  <circle cx="244" cy="126" r="1.2" fill="#c8c0b0"/><circle cx="250" cy="134" r="1.2" fill="#c8c0b0"/>
+  <path d="M236,120 L240,106 L244,120 Z" fill="url(#c5d-rust)"/>
+
+  <!-- SWORD ARM (viewer right), raised -->
+  <g id="c5d-armR">
+    <ellipse cx="244" cy="136" rx="6" ry="6" fill="url(#c5d-bone)"/>
+    <path d="M246,138 C252,150 258,160 264,166" stroke="url(#c5d-boneV)" stroke-width="5" stroke-linecap="round" fill="none"/>
+    <circle cx="265" cy="167" r="4" fill="url(#c5d-bone)"/>
+    <path d="M266,164 C270,150 274,138 276,126" stroke="url(#c5d-boneV)" stroke-width="3.6" stroke-linecap="round" fill="none"/>
+    <path d="M262,162 C266,148 268,136 270,126" stroke="#8a8670" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+    <!-- leather bracer remnant -->
+    <path d="M264,148 L276,150 L274,160 L262,158 Z" fill="#3a2616" stroke="#1a0e06" stroke-width="0.6"/>
+    <path d="M264,152 L275,154" stroke="#7a5a3a" stroke-width="0.6"/>
+  </g>
+
+  <!-- RUSTY NOTCHED SWORD -->
+  <g id="c5d-sword">
+    <!-- blade -->
+    <path d="M270,114 L296,30 L301,22 L302,32 L282,118 Z
+             " fill="url(#c5d-blade)" stroke="#1a120a" stroke-width="0.7"/>
+    <!-- notches (cut out with background-dark) -->
+    <path d="M285,70 l3,2 l-1,-5 Z M291,50 l3,1 l-1,-4 Z M280,96 l-3,1 l2,-5 Z M276,106 l3,1 l-1,-4 Z" fill="#101410"/>
+    <!-- fuller -->
+    <path d="M276,112 L297,34" stroke="#3a3228" stroke-width="1.4"/>
+    <path d="M278,112 L298,36" stroke="#d8d4c8" stroke-width="0.6" opacity="0.6"/>
+    <!-- rust patches -->
+    <g fill="#7a3a18" opacity="0.8">
+      <ellipse cx="279" cy="100" rx="3" ry="5" transform="rotate(16 279 100)"/>
+      <ellipse cx="288" cy="72" rx="2" ry="4" transform="rotate(16 288 72)"/>
+      <ellipse cx="295" cy="44" rx="1.6" ry="3" transform="rotate(16 295 44)"/>
+    </g>
+    <!-- green candle reflection edge -->
+    <path d="M270,114 L296,30" stroke="#a8ffb0" stroke-width="0.8" opacity="0.6"/>
+    <!-- crossguard -->
+    <path d="M260,114 C266,112 286,118 292,122 L290,126 C284,122 266,118 260,118 Z" fill="url(#c5d-rust)" stroke="#1a100a" stroke-width="0.6"/>
+    <!-- grip -->
+    <path d="M276,120 L272,136" stroke="#2a1a0e" stroke-width="4.5" stroke-linecap="round"/>
+    <path d="M273,124 l4,1 M272,128 l4,1 M271,132 l4,1" stroke="#5a3a20" stroke-width="0.8"/>
+    <circle cx="271" cy="139" r="3.2" fill="url(#c5d-rust)"/>
+  </g>
+  <!-- hand bones gripping sword -->
+  <g fill="none" stroke-linecap="round">
+    <path d="M270,126 C276,124 280,126 280,130" stroke="#e6e0c8" stroke-width="2.3"/>
+    <path d="M269,130 C275,128 279,130 279,134" stroke="#d8d2b8" stroke-width="2.3"/>
+    <path d="M269,134 C274,132 278,134 277,138" stroke="#c8c2a8" stroke-width="2.1"/>
+    <path d="M270,124 C268,120 270,118 274,118" stroke="#e6e0c8" stroke-width="2.2"/>
+  </g>
+
+  <!-- SKULL -->
+  <g id="c5d-skull">
+    <path d="M200,52 C218,52 228,64 228,80 C228,88 226,93 222,96 L221,104 C219,108 214,110 210,110 L190,110 C186,110 181,108 179,104 L178,96 C174,93 172,88 172,80 C172,64 182,52 200,52 Z" fill="url(#c5d-bone)"/>
+    <path d="M172,80 C172,70 176,62 182,57 C178,68 178,82 180,94 L178,96 C174,93 172,88 172,80 Z" fill="#3a3828" opacity="0.6"/>
+    <path d="M222,62 C226,68 228,74 228,80" stroke="#b8ffb0" stroke-width="1.2" fill="none" opacity="0.6"/>
+    <g fill="#5a5438" opacity="0.35">
+      <ellipse cx="206" cy="60" rx="5" ry="3"/><ellipse cx="180" cy="72" rx="3" ry="5"/><ellipse cx="216" cy="98" rx="3" ry="2"/>
+    </g>
+    <path d="M172,80 C172,70 176,62 182,57" stroke="#a8ffb0" stroke-width="1" fill="none" opacity="0.45"/>
+    <!-- crack & dent -->
+    <path d="M186,56 L190,64 L186,68 L190,74" stroke="#3a3628" stroke-width="0.9" fill="none"/>
+    <path d="M212,58 C216,58 218,62 216,64" stroke="#5a5846" stroke-width="1.2" fill="none"/>
+    <!-- brow -->
+    <path d="M174,76 C182,78 191,81 199,86 L199,82 C191,77 182,74 175,73 Z" fill="#8a846c"/><path d="M226,76 C218,78 209,81 201,86 L201,82 C209,77 218,74 225,73 Z" fill="#a8a288"/>
+    <!-- sockets -->
+    <path d="M176,79 C183,81 191,83 198,87 C197,92 192,95 186,95 C179,95 176,89 176,79 Z" fill="#050604"/>
+    <path d="M224,79 C217,81 209,83 202,87 C203,92 208,95 214,95 C221,95 224,89 224,79 Z" fill="#050604"/>
+    <circle cx="188" cy="89" r="5.5" fill="url(#c5d-eye)"/>
+    <circle cx="212" cy="89" r="5.5" fill="url(#c5d-eye)"/>
+    <circle cx="188" cy="89" r="1.3" fill="#ffffff" filter="url(#c5d-glow)"/>
+    <circle cx="212" cy="89" r="1.3" fill="#ffffff" filter="url(#c5d-glow)"/>
+    <!-- nose -->
+    <path d="M200,92 C197,96 196,100 197,102 L200,101 L203,102 C204,100 203,96 200,92 Z" fill="#070806"/>
+    <!-- cheekbones -->
+    <path d="M178,97 C183,95 187,97 190,100 M222,97 C217,95 213,97 210,100" stroke="#5a5846" stroke-width="1.1" fill="none"/>
+    <!-- upper teeth -->
+    <path d="M187,104 C193,106 207,106 213,104 L212,108 L188,108 Z" fill="#8a846c"/>
+    <g fill="#b8b096" stroke="#3a3628" stroke-width="0.5">
+      <path d="M189,105.5 h3 v4 q-1.5,1 -3,0 z"/><path d="M192.3,105.8 h3 v4.3 q-1.5,1 -3,0 z"/><path d="M195.6,106 h3 v4.5 q-1.5,1 -3,0 z"/>
+      <path d="M201.4,106 h3 v4.5 q-1.5,1 -3,0 z"/><path d="M204.7,105.8 h3 v4.3 q-1.5,1 -3,0 z"/><path d="M208,105.5 h3 v4 q-1.5,1 -3,0 z"/>
+    </g>
+    <!-- missing tooth gap -->
+    <rect x="198.8" y="106" width="2.4" height="3.6" fill="#050604"/>
+    <!-- jaw -->
+    <path d="M179,103 C180,114 184,121 191,124 L209,124 C216,121 220,114 221,103 L218,106 C217,112 213,115 209,116 L191,116 C187,115 183,112 182,106 Z" fill="url(#c5d-bone)"/>
+    <path d="M188,111 L212,111 L211,116 L189,116 Z" fill="#050604"/>
+    <g fill="#a8a088" stroke="#3a3628" stroke-width="0.5">
+      <path d="M190,116 v-3.6 q1.4,-1 2.8,0 v3.6 z"/><path d="M193.2,116 v-4 q1.4,-1 2.8,0 v4 z"/><path d="M196.4,116 v-4 q1.4,-1 2.8,0 v4 z"/>
+      <path d="M200.8,116 v-4 q1.4,-1 2.8,0 v4 z"/><path d="M204,116 v-4 q1.4,-1 2.8,0 v4 z"/><path d="M207.2,116 v-3.6 q1.4,-1 2.8,0 v3.6 z"/>
+    </g>
+  </g>
+  <!-- dented rusty half-helm -->
+  <path d="M174,74 C172,56 184,44 200,44 C216,44 228,56 226,74 C222,70 214,66 200,66 C186,66 178,70 174,74 Z" fill="url(#c5d-rust)" stroke="#1a100a" stroke-width="0.8"/>
+  <path d="M178,64 C184,52 192,48 200,48" stroke="#e0d8c8" stroke-width="1" fill="none" opacity="0.7"/>
+  <path d="M198,44 L202,44 L202,66 L198,66 Z" fill="#5a3a22"/>
+  <path d="M212,50 C216,54 216,58 212,60" stroke="#2a180c" stroke-width="1.2" fill="none"/>
+  <g fill="#c8c0b0"><circle cx="182" cy="68" r="1"/><circle cx="192" cy="66" r="1"/><circle cx="208" cy="66" r="1"/><circle cx="218" cy="68" r="1"/></g>
+  <path d="M174,74 L172,86 L178,82 Z" fill="url(#c5d-rust)"/>
+  <path d="M226,74 L228,86 L222,82 Z" fill="url(#c5d-rust)"/>
+
+  <!-- SHIELD ARM (viewer left) behind shield -->
+  <ellipse cx="160" cy="136" rx="6" ry="6" fill="url(#c5d-bone)"/>
+  <path d="M158,138 C152,150 146,160 142,168" stroke="url(#c5d-boneV)" stroke-width="5" stroke-linecap="round" fill="none"/>
+
+  <!-- BATTERED ROUND SHIELD -->
+  <g id="c5d-shield">
+    <ellipse cx="136" cy="182" rx="50" ry="52" fill="#120c08"/>
+    <!-- wooden planks -->
+    <ellipse cx="136" cy="182" rx="46" ry="48" fill="url(#c5d-wood)"/>
+    <g stroke="#1a100a" stroke-width="1.2" fill="none">
+      <path d="M112,140 C110,168 110,196 112,226 M128,135 C127,166 127,198 128,230 M144,135 C145,166 145,198 144,230 M160,140 C162,168 162,196 160,226"/>
+    </g>
+    <g stroke="#8a6a48" stroke-width="0.6" fill="none" opacity="0.5">
+      <path d="M113,142 C111,168 111,196 113,224 M129,137 C128,166 128,198 129,228 M145,137 C146,166 146,198 145,228 M161,142 C163,168 163,196 161,224"/>
+      <path d="M100,160 c6,2 10,6 12,12 M118,200 c4,4 6,10 5,16 M150,150 c4,4 6,8 6,14"/>
+    </g>
+    <!-- faded painted emblem (skull sigil, flaking) -->
+    <path d="M122,190 C122,180 150,180 150,190 C150,198 144,202 142,206 L130,206 C128,202 122,198 122,190 Z" fill="#5a1a14" opacity="0.55"/>
+    <!-- iron rim with notches -->
+    <path fill-rule="evenodd" fill="url(#c5d-iron)" d="M136,130 C164,130 186,153 186,182 C186,211 164,234 136,234 C108,234 86,211 86,182 C86,153 108,130 136,130 Z M136,137 C160,137 179,157 179,182 C179,207 160,227 136,227 C112,227 93,207 93,182 C93,157 112,137 136,137 Z"/>
+    <path d="M100,148 C112,136 126,131 140,131" stroke="#c8c4b8" stroke-width="1" fill="none" opacity="0.6"/>
+    <path d="M180,160 C185,172 186,186 183,200" stroke="#8fff9a" stroke-width="1" fill="none" opacity="0.4"/>
+    <!-- notches in rim -->
+    <path d="M86,178 l6,2 l-6,4 Z M172,146 l-4,5 l6,0 Z M118,232 l2,-6 l4,6 Z" fill="#101410"/>
+    <!-- rim rivets -->
+    <g fill="#9a9690">
+      <circle cx="136" cy="133.5" r="1.4"/><circle cx="170" cy="147" r="1.4"/><circle cx="182.5" cy="182" r="1.4"/><circle cx="170" cy="217" r="1.4"/>
+      <circle cx="136" cy="230.5" r="1.4"/><circle cx="102" cy="217" r="1.4"/><circle cx="89.5" cy="182" r="1.4"/><circle cx="102" cy="147" r="1.4"/>
+    </g>
+    <!-- central boss (dented) -->
+    <circle cx="136" cy="182" r="14" fill="url(#c5d-iron)" stroke="#0a0806" stroke-width="1"/>
+    <path d="M126,176 C130,170 138,169 143,172" stroke="#d8d4c8" stroke-width="1.2" fill="none" opacity="0.7"/>
+    <path d="M138,184 C141,186 142,190 140,192" stroke="#1a1410" stroke-width="1.4" fill="none"/>
+    <!-- cracks / gouges -->
+    <path d="M150,140 L154,156 L150,164 L156,176" stroke="#0a0604" stroke-width="1.4" fill="none"/>
+    <path d="M104,206 L114,212 L112,220" stroke="#0a0604" stroke-width="1.2" fill="none"/>
+    <path d="M108,158 l14,8 M110,162 l12,6" stroke="#0a0604" stroke-width="1" opacity="0.8"/>
+    <!-- broken arrow stuck in shield -->
+    <path d="M158,200 L178,214" stroke="#4a3220" stroke-width="2" stroke-linecap="round"/>
+    <path d="M176,212 L184,214 L180,218 L186,222 L178,220 L176,216 Z" fill="#6a6a60"/>
+    <path d="M178,212 l3,-4 M181,215 l4,-3" stroke="#8a8274" stroke-width="1"/>
+    <path d="M158,200 l-2,-1" stroke="#1a100a" stroke-width="2"/>
+    <!-- green candle rim on right edge -->
+    <path d="M136,130 C164,130 186,153 186,182" stroke="#a8ffb0" stroke-width="0.9" fill="none" opacity="0.35"/>
+  </g>
+  <!-- fingers curling over shield rim -->
+  <g fill="none" stroke-linecap="round">
+    <path d="M170,150 C176,150 180,154 178,158" stroke="#e6e0c8" stroke-width="2.2"/>
+    <path d="M166,146 C172,144 177,147 176,152" stroke="#d8d2b8" stroke-width="2.1"/>
+  </g>
+
+  <!-- green rim light from candles on skeleton -->
+  <g stroke="#a8ffb0" fill="none" stroke-linecap="round" opacity="0.55">
+    <path d="M228,80 C228,88 226,93 222,96" stroke-width="1"/>
+    <path d="M226,136 C230,160 232,190 232,214" stroke-width="0.9"/>
+    <path d="M230,258 L238,288" stroke-width="0.8"/>
+  </g>
+
+  <!-- 5 FOREGROUND: dust motes, mist, hanging web strands -->
+  <path d="M-20,262 C40,250 100,272 170,262 C240,252 300,274 420,258 L420,300 L-20,300 Z" fill="#6ac080" opacity="0.14" filter="url(#c5d-soft)"/>
+  <g fill="#d8ffd0" opacity="0.7">
+    <circle cx="96" cy="100" r="0.9"/><circle cx="120" cy="60" r="0.7"/><circle cx="300" cy="90" r="0.9"/><circle cx="336" cy="130" r="0.7"/>
+    <circle cx="60" cy="200" r="0.8"/><circle cx="350" cy="214" r="1"/><circle cx="250" cy="70" r="0.7"/><circle cx="150" cy="100" r="0.6"/>
+  </g>
+  <g fill="#8fff9a" filter="url(#c5d-glow)" opacity="0.8">
+    <circle cx="84" cy="116" r="0.9"/><circle cx="318" cy="104" r="1"/><circle cx="72" cy="130" r="0.7"/><circle cx="328" cy="120" r="0.7"/>
+  </g>
+  <path d="M388,0 C386,30 390,50 388,80" stroke="#c8d0cc" stroke-width="0.4" fill="none" opacity="0.4"/>
+
+  <!-- 6 VIGNETTE -->
+  <rect width="400" height="300" fill="url(#c5d-vig)"/>
+</svg>
