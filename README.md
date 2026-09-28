@@ -38,8 +38,10 @@ python3 -m http.server 8765   # dann http://localhost:8765
 | `js/audio.js`  | Soundeffekte und Hintergrundmusik, live mit der Web-Audio-API erzeugt (keine Audiodateien) |
 | `js/ui.js`     | Menü, Rundenablauf, Hot-Seat-Übergaben, Animationen |
 | `art/src/**/*.svg` | Handgezeichnete SVG-Illustrationen (32 Helden, 14 Schlachtfelder, Kartenrückseite) – die Quellen |
+| `art/src/textures/*.webp` | Graue Strukturkarten (Stein, Metall, Stoff, Holz, Haar, Schuppen …, CC0), die beim Bauen über die Illustrationen gelegt werden. In einem SVG markiert man Flächen mit `data-tx="stone"` am Verlauf oder `filter="url(#tx-metal)"` an Form/Gruppe (Varianten `-soft`, `-fine`) – Details in `tools/texturize.py` |
 | `art/cards`, `art/terrains` | Daraus erzeugte WebP-Bilder (groß + `.thumb` für kleine Darstellungen), die das Spiel lädt: nach Änderungen an einem SVG `tools/build-art.sh` ausführen |
 | `art/cursors/*.svg` | Eigene Mauszeiger (Pfeil, Panzerhandschuh, Lupe, Info) |
+| `tools/texturize.py` | Setzt die Material-Texturen in ein SVG ein (von `build-art.sh` und `render-svg.sh` aufgerufen) |
 | `tools/render-svg.sh` | Rendert ein SVG per Headless-Chromium als PNG (zum Prüfen von Illustrationen) |
 | `test/simulate.js` | KI-gegen-KI-Partien mit Statistik: `node test/simulate.js 500` |
 

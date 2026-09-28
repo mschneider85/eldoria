@@ -4,9 +4,9 @@
 <radialGradient id="t-moonwood-mglow" cx="0.5" cy="0.3" r="0.5"><stop offset="0" stop-color="#e8f0ff" stop-opacity="0.9"/><stop offset="0.2" stop-color="#a0c0ff" stop-opacity="0.45"/><stop offset="0.55" stop-color="#6a6ad0" stop-opacity="0.15"/><stop offset="1" stop-color="#3a3a8a" stop-opacity="0"/></radialGradient>
 <radialGradient id="t-moonwood-moon" cx="0.42" cy="0.42" r="0.6"><stop offset="0" stop-color="#ffffff"/><stop offset="0.6" stop-color="#e8eeff"/><stop offset="1" stop-color="#b8c8f0"/></radialGradient>
 <linearGradient id="t-moonwood-far" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a3a7a"/><stop offset="1" stop-color="#2a3a6a"/></linearGradient>
-<linearGradient id="t-moonwood-trunk" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#1a1440"/><stop offset="0.5" stop-color="#3a2a6a"/><stop offset="1" stop-color="#120e30"/></linearGradient>
+<linearGradient id="t-moonwood-trunk" data-tx="bark" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#1a1440"/><stop offset="0.5" stop-color="#3a2a6a"/><stop offset="1" stop-color="#120e30"/></linearGradient>
 <linearGradient id="t-moonwood-pond" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a5aa0"/><stop offset="0.5" stop-color="#1e2a5a"/><stop offset="1" stop-color="#0e1438"/></linearGradient>
-<linearGradient id="t-moonwood-gnd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1a1a44"/><stop offset="1" stop-color="#080820"/></linearGradient>
+<linearGradient id="t-moonwood-gnd" data-tx="grass-soft" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1a1a44"/><stop offset="1" stop-color="#080820"/></linearGradient>
 <radialGradient id="t-moonwood-tq" cx="0.5" cy="0.5" r="0.5"><stop offset="0" stop-color="#e0fff8"/><stop offset="0.3" stop-color="#40f0d8"/><stop offset="1" stop-color="#10a0a0" stop-opacity="0"/></radialGradient>
 <filter id="t-moonwood-g2" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="1.8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
 <filter id="t-moonwood-b6" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6"/></filter>
@@ -199,6 +199,8 @@
 <rect y="160" width="400" height="50" fill="#6a7ad0" opacity="0.3" filter="url(#t-moonwood-b6)"/>
 <path d="M57.7 232C66.2 187 65.9 127 84.9 82L91.1 82C81.3 127 73.8 187 82.3 232Z" fill="url(#t-moonwood-trunk)"/>
 <path d="M79.2 232C73.1 187 79.8 127 90.3 82" stroke="#8a8ae0" stroke-width="0.7" fill="none" opacity="0.5"/>
+<!-- Baumkronen: Blätterdach-Struktur -->
+<g filter="url(#tx-moss-soft)">
 <path d="M75.3 164.5C66.6 168.9 58.1 162.5 53.7 155.9" stroke="#1e1648" stroke-width="2.2" fill="none" stroke-linecap="round"/>
 <ellipse cx="60.1" cy="146.1" rx="4.1" ry="3.5" fill="#2a2060"/>
 <ellipse cx="54.3" cy="146.6" rx="4.6" ry="3.9" fill="#4a3a9a"/>
@@ -272,6 +274,7 @@
 <ellipse cx="93.3" cy="66.8" rx="8" ry="6.8" fill="#5a3aa8"/>
 <ellipse cx="85.4" cy="69" rx="5.3" ry="4.5" fill="#5a3aa8"/>
 <ellipse cx="89.4" cy="75.6" rx="8.7" ry="7.4" fill="#5a3aa8"/>
+</g>
 <path d="M97 81.1L97 85.5" stroke="#40f0d8" stroke-width="0.3" opacity="0.6"/>
 <circle cx="97" cy="85.5" r="1" fill="#80fff0" filter="url(#t-moonwood-g2)"/>
 <path d="M83.7 82L83.7 86.4" stroke="#40f0d8" stroke-width="0.3" opacity="0.6"/>
@@ -282,6 +285,7 @@
 <circle cx="92" cy="87" r="1" fill="#80fff0" filter="url(#t-moonwood-g2)"/>
 <path d="M326.6 230C335.8 182 327.2 118 314.6 70L321.4 70C344 118 344.2 182 353.4 230Z" fill="url(#t-moonwood-trunk)"/>
 <path d="M350.1 230C343.4 182 342.3 118 320.5 70" stroke="#8a8ae0" stroke-width="0.7" fill="none" opacity="0.5"/>
+<g filter="url(#tx-moss-soft)">
 <path d="M333.6 158C319.4 162.8 303 151.1 298.2 143.9" stroke="#1e1648" stroke-width="2.4" fill="none" stroke-linecap="round"/>
 <ellipse cx="300.6" cy="138.6" rx="3.9" ry="3.3" fill="#4a3a9a"/>
 <ellipse cx="297.2" cy="132.5" rx="4.7" ry="4" fill="#4a3a9a"/>
@@ -355,6 +359,7 @@
 <ellipse cx="324.8" cy="49.8" rx="8.1" ry="6.9" fill="#3a2a7a"/>
 <ellipse cx="326" cy="67.8" rx="5.9" ry="5" fill="#6a4ab8"/>
 <ellipse cx="302.9" cy="66.5" rx="5.3" ry="4.5" fill="#2a2060"/>
+</g>
 <path d="M300.6 71.4L300.6 76.2" stroke="#40f0d8" stroke-width="0.3" opacity="0.6"/>
 <circle cx="300.6" cy="76.2" r="1.1" fill="#80fff0" filter="url(#t-moonwood-g2)"/>
 <path d="M327.3 68.3L327.3 73.1" stroke="#40f0d8" stroke-width="0.3" opacity="0.6"/>
@@ -365,6 +370,7 @@
 <circle cx="326.8" cy="74.8" r="1.1" fill="#80fff0" filter="url(#t-moonwood-g2)"/>
 <path d="M123.3 214C127.9 190 127.4 158 136.3 134L139.7 134C135.8 158 132.1 190 136.7 214Z" fill="url(#t-moonwood-trunk)"/>
 <path d="M135 214C131.7 190 135 158 139.3 134" stroke="#8a8ae0" stroke-width="0.4" fill="none" opacity="0.5"/>
+<g filter="url(#tx-moss-fine)">
 <path d="M132.3 178C127.3 180.4 122.2 176.6 119.8 173" stroke="#1e1648" stroke-width="1.2" fill="none" stroke-linecap="round"/>
 <ellipse cx="116" cy="170" rx="2.9" ry="2.5" fill="#2a2a70"/>
 <ellipse cx="115.2" cy="169.1" rx="3.4" ry="2.9" fill="#4a4aa0"/>
@@ -438,6 +444,7 @@
 <ellipse cx="144.4" cy="125.6" rx="2.5" ry="2.1" fill="#3a3a8a"/>
 <ellipse cx="148.7" cy="133.4" rx="4.5" ry="3.8" fill="#3a3a8a"/>
 <ellipse cx="130.2" cy="129.9" rx="2.8" ry="2.4" fill="#3a3a8a"/>
+</g>
 <path d="M134.8 135.5L134.8 137.9" stroke="#40f0d8" stroke-width="0.3" opacity="0.6"/>
 <circle cx="134.8" cy="137.9" r="0.5" fill="#80fff0" filter="url(#t-moonwood-g2)"/>
 <path d="M139.9 133.8L139.9 136.2" stroke="#40f0d8" stroke-width="0.3" opacity="0.6"/>
@@ -448,6 +455,7 @@
 <circle cx="129.9" cy="137.3" r="0.5" fill="#80fff0" filter="url(#t-moonwood-g2)"/>
 <path d="M272.7 212C277.7 185 273.8 149 270.2 122L273.8 122C282.9 149 282.3 185 287.3 212Z" fill="url(#t-moonwood-trunk)"/>
 <path d="M285.5 212C281.8 185 282 149 273.4 122" stroke="#8a8ae0" stroke-width="0.4" fill="none" opacity="0.5"/>
+<g filter="url(#tx-moss-fine)">
 <path d="M277.7 171.5C272.2 174.1 266.7 170 264.1 166.1" stroke="#1e1648" stroke-width="1.3" fill="none" stroke-linecap="round"/>
 <ellipse cx="267.7" cy="165.1" rx="2.3" ry="1.9" fill="#3a3a8a"/>
 <ellipse cx="269.5" cy="163.9" rx="2.5" ry="2.1" fill="#3a3a8a"/>
@@ -521,6 +529,7 @@
 <ellipse cx="277" cy="119.6" rx="4.8" ry="4.1" fill="#4a4aa0"/>
 <ellipse cx="272.6" cy="120.9" rx="4.8" ry="4.1" fill="#3a3a8a"/>
 <ellipse cx="267.7" cy="112.9" rx="3.4" ry="2.9" fill="#4a4aa0"/>
+</g>
 <path d="M278.6 123.1L278.6 125.7" stroke="#40f0d8" stroke-width="0.3" opacity="0.6"/>
 <circle cx="278.6" cy="125.7" r="0.6" fill="#80fff0" filter="url(#t-moonwood-g2)"/>
 <path d="M282.2 122.7L282.2 125.3" stroke="#40f0d8" stroke-width="0.3" opacity="0.6"/>
@@ -641,11 +650,14 @@
 <path d="M18 238Q21.8 232.5 25.5 234.1" stroke="#1a6a6a" stroke-width="0.6" fill="none"/>
 <circle cx="25.5" cy="234.1" r="0.9" fill="#80fff0" filter="url(#t-moonwood-g2)"/>
 <ellipse cx="243" cy="200" rx="22" ry="18" fill="#40f0d8" opacity="0.25" filter="url(#t-moonwood-b6)"/>
+<!-- Steinbogen am Teich -->
+<g filter="url(#tx-stone-fine)">
 <path d="M225.8 216L226.6 190L228 188L229.4 190L230.2 216Z" fill="#8a90d0"/>
 <path d="M227 214L227.4 191" stroke="#e0e8ff" stroke-width="0.5"/>
 <path d="M255.8 216L256.6 190L258 188L259.4 190L260.2 216Z" fill="#8a90d0"/>
 <path d="M257 214L257.4 191" stroke="#e0e8ff" stroke-width="0.5"/>
 <path d="M224 190C226 172 260 172 262 190C256 180 230 180 224 190Z" fill="#a8b0e8"/>
+</g>
 <path d="M236 176C232 172 234 164 240 162C236 166 238 172 244 174C241 176 238 176 236 176Z" fill="#e0fff8" filter="url(#t-moonwood-g2)"/>
 <path d="M228 196C236 204 250 204 258 196" stroke="#40f0d8" stroke-width="0.6" fill="none" filter="url(#t-moonwood-g2)"/>
 <path d="M387.9 267.1Q388.1 263.7 387.6 261.4Q388.4 264.3 388.9 267.1Z" fill="#141444"/>

@@ -247,20 +247,24 @@ button:disabled { cursor: var(--cur-default); }
   --fc: #8b7355;
   position: relative; width: var(--qw); height: calc(var(--qw) * 1.5); flex: none; color: #2a1a0a; text-align: left; overflow: hidden;
   padding: calc(var(--qw) * .028); border-radius: 14px;
-  background: linear-gradient(135deg, #f7e3a0, #b8862b 28%, #f2d27a 52%, #8a5d17 78%, #e9c877);
+  background: var(--tex-grunge), linear-gradient(135deg, #f7e3a0, #b8862b 28%, #f2d27a 52%, #8a5d17 78%, #e9c877);
+  background-blend-mode: soft-light, normal;
   box-shadow: 0 0 0 1.5px #2a1804, inset 0 0 0 1px rgba(255, 255, 255, .55), 0 8px 18px rgba(0, 0, 0, .6);
 }
 .qcard .frame {
   height: 100%; border-radius: 10px; overflow: hidden; display: flex; flex-direction: column;
   background:
+    var(--tex-paper),
     radial-gradient(ellipse at 20% 10%, rgba(255, 255, 255, .5), transparent 50%),
     radial-gradient(ellipse at 80% 90%, rgba(150, 110, 50, .25), transparent 60%),
     linear-gradient(180deg, #f6ecd2, #e2cf9f);
+  background-blend-mode: multiply, normal, normal, normal;
   box-shadow: inset 0 0 0 2px #3a2508, inset 0 0 0 3.5px var(--fc), inset 0 0 14px rgba(90, 60, 20, .35);
 }
 .qcard .head {
   display: flex; align-items: center; justify-content: space-between; gap: 4px; padding: 3px 6px 3px 4px; flex: none;
-  background: linear-gradient(180deg, color-mix(in srgb, var(--fc) 75%, white), var(--fc) 55%, color-mix(in srgb, var(--fc) 70%, black));
+  background: var(--tex-paper), linear-gradient(180deg, color-mix(in srgb, var(--fc) 75%, white), var(--fc) 55%, color-mix(in srgb, var(--fc) 70%, black));
+  background-blend-mode: soft-light, normal;
   color: #fff; font-weight: 800; font-size: calc(var(--qw) * .066); text-shadow: 0 1px 2px rgba(0, 0, 0, .7);
   border-bottom: 1.5px solid #3a2508;
 }
@@ -279,7 +283,8 @@ button:disabled { cursor: var(--cur-default); }
   position: relative; z-index: 2; flex: none; align-self: center; width: 96%; margin-top: calc(var(--qw) * -.075);
   font-family: var(--display); font-weight: 900; text-align: center; font-size: calc(var(--qw) * .074); line-height: 1.1;
   padding: 4px 12px; color: #fff2c4; text-shadow: 0 1px 2px #000;
-  background: linear-gradient(180deg, color-mix(in srgb, var(--fc) 55%, #2a1804), color-mix(in srgb, var(--fc) 30%, #120a02));
+  background: var(--tex-paper), linear-gradient(180deg, color-mix(in srgb, var(--fc) 55%, #2a1804), color-mix(in srgb, var(--fc) 30%, #120a02));
+  background-blend-mode: soft-light, normal;
   clip-path: polygon(5% 0, 95% 0, 100% 50%, 95% 100%, 5% 100%, 0 50%);
   box-shadow: inset 0 1.5px 0 var(--gold), inset 0 -1.5px 0 var(--gold);
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;

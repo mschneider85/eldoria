@@ -6,32 +6,32 @@
     <stop offset="0.65" stop-color="#2a0a10"/>
     <stop offset="1" stop-color="#0a0308"/>
   </radialGradient>
-  <linearGradient id="c7d-rock" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="300">
+  <linearGradient id="c7d-rock" data-tx="cliff" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="300">
     <stop offset="0" stop-color="#0c0408"/>
     <stop offset="0.6" stop-color="#241014"/>
     <stop offset="1" stop-color="#5a2012"/>
   </linearGradient>
-  <linearGradient id="c7d-rockfar" x1="0" y1="0" x2="0" y2="1">
+  <linearGradient id="c7d-rockfar" data-tx="cliff-soft" x1="0" y1="0" x2="0" y2="1">
     <stop offset="0" stop-color="#2a0c10"/>
     <stop offset="1" stop-color="#7a2a14"/>
   </linearGradient>
-  <linearGradient id="c7d-ledge" x1="0" y1="0" x2="0" y2="1">
+  <linearGradient id="c7d-ledge" data-tx="cliff" x1="0" y1="0" x2="0" y2="1">
     <stop offset="0" stop-color="#5a2a1c"/>
     <stop offset="0.3" stop-color="#2a1210"/>
     <stop offset="1" stop-color="#0a0406"/>
   </linearGradient>
-  <linearGradient id="c7d-lava" x1="0" y1="0" x2="0" y2="1">
+  <linearGradient id="c7d-lava" data-tx="lava" x1="0" y1="0" x2="0" y2="1">
     <stop offset="0" stop-color="#ffd870"/>
     <stop offset="0.25" stop-color="#ff9a28"/>
     <stop offset="0.65" stop-color="#d23c0c"/>
     <stop offset="1" stop-color="#7a1005"/>
   </linearGradient>
-  <linearGradient id="c7d-lavafall" x1="0" y1="0" x2="1" y2="0">
+  <linearGradient id="c7d-lavafall" data-tx="lava-fine" x1="0" y1="0" x2="1" y2="0">
     <stop offset="0" stop-color="#c83a10"/>
     <stop offset="0.5" stop-color="#ffd060"/>
     <stop offset="1" stop-color="#c83a10"/>
   </linearGradient>
-  <radialGradient id="c7d-skin" gradientUnits="userSpaceOnUse" cx="150" cy="100" r="170">
+  <radialGradient id="c7d-skin" data-tx="leather-soft" gradientUnits="userSpaceOnUse" cx="150" cy="100" r="170">
     <stop offset="0" stop-color="#e86a5a"/>
     <stop offset="0.3" stop-color="#b03040"/>
     <stop offset="0.6" stop-color="#6a1838"/>
@@ -46,7 +46,7 @@
     <stop offset="0" stop-color="#3a0e26"/>
     <stop offset="1" stop-color="#1a0612"/>
   </linearGradient>
-  <linearGradient id="c7d-horn" x1="0" y1="1" x2="0" y2="0">
+  <linearGradient id="c7d-horn" data-tx="marble-fine" x1="0" y1="1" x2="0" y2="0">
     <stop offset="0" stop-color="#2a1210"/>
     <stop offset="0.6" stop-color="#7a5a40"/>
     <stop offset="1" stop-color="#f0dcb0"/>
@@ -118,7 +118,7 @@
 <path d="M292 60 C290 100 296 130 292 170 L306 170 C302 130 306 100 304 60 Z" fill="url(#c7d-lavafall)" opacity="0.75" filter="url(#c7d-soft)"/>
 <ellipse cx="299" cy="170" rx="22" ry="6" fill="#ffc050" opacity="0.6" filter="url(#c7d-glow)"/>
 <path d="M88 80 C88 110 92 130 90 160 L98 160 C98 130 96 110 96 80 Z" fill="url(#c7d-lavafall)" opacity="0.5" filter="url(#c7d-soft)"/>
-<g fill="url(#c7d-rockfar)">
+<g fill="url(#c7d-rockfar)" filter="url(#tx-cliff-fine)">
   <path d="M60 232 L70 190 L76 176 L82 192 L90 232 Z"/><path d="M92 232 L98 206 L102 198 L106 208 L112 232 Z"/>
   <path d="M308 232 L316 202 L320 186 L326 204 L334 232 Z"/><path d="M336 232 L342 212 L346 204 L350 214 L354 232 Z"/>
 </g>
@@ -130,7 +130,7 @@
 <path d="M0 0 L0 300 L40 300 C36 260 50 230 40 200 C30 170 46 140 34 110 C26 84 40 50 30 30 C26 20 30 8 40 0 Z" fill="url(#c7d-rock)"/>
 <path d="M400 0 L400 300 L362 300 C368 262 352 232 362 200 C372 168 356 140 368 110 C376 84 362 52 372 30 C376 20 372 8 362 0 Z" fill="url(#c7d-rock)"/>
 <path d="M40 200 C30 170 46 140 34 110 C26 84 40 50 30 30 M362 200 C372 168 356 140 368 110 C376 84 362 52 372 30" fill="none" stroke="#ff7a3a" stroke-width="1" opacity="0.45"/>
-<g fill="url(#c7d-rock)">
+<g fill="url(#c7d-rock)" filter="url(#tx-cliff)">
   <path d="M40 0 L70 0 C66 14 64 26 58 44 C54 30 48 16 40 0 Z"/>
   <path d="M90 0 L120 0 C114 12 110 22 106 34 C102 22 96 12 90 0 Z"/>
   <path d="M150 0 L176 0 C172 8 168 16 164 26 C160 16 156 8 150 0 Z"/>
@@ -142,9 +142,9 @@
   <path d="M58 44 C54 30 48 16 42 4 M106 34 C102 22 96 12 92 4 M306 46 C302 30 296 16 292 4 M246 30 C242 18 236 10 232 4"/>
 </g>
 <g>
-  <path d="M40 150 L52 126 L58 150 Z M50 152 L62 136 L64 154 Z M34 156 L42 140 L46 158 Z" fill="#3aa020" stroke="#0a3a06" stroke-width="0.5"/>
+  <path d="M40 150 L52 126 L58 150 Z M50 152 L62 136 L64 154 Z M34 156 L42 140 L46 158 Z" fill="#3aa020" stroke="#0a3a06" stroke-width="0.5" filter="url(#tx-ice-fine)"/>
   <path d="M52 126 L55 150 M62 136 L63 152" stroke="#d8ff90" stroke-width="0.6"/>
-  <path d="M356 120 L366 96 L372 122 Z M348 124 L354 108 L360 126 Z M366 124 L376 110 L378 128 Z" fill="#3aa020" stroke="#0a3a06" stroke-width="0.5"/>
+  <path d="M356 120 L366 96 L372 122 Z M348 124 L354 108 L360 126 Z M366 124 L376 110 L378 128 Z" fill="#3aa020" stroke="#0a3a06" stroke-width="0.5" filter="url(#tx-ice-fine)"/>
   <path d="M366 96 L369 122 M354 108 L357 124" stroke="#d8ff90" stroke-width="0.6"/>
   <ellipse cx="50" cy="146" rx="18" ry="14" fill="url(#c7d-felglow)" opacity="0.6"/>
   <ellipse cx="364" cy="116" rx="18" ry="14" fill="url(#c7d-felglow)" opacity="0.6"/>
@@ -157,7 +157,7 @@
 <!-- ============ LAVA POOLS ============ -->
 <path d="M0 238 C60 230 120 238 200 236 C280 234 340 228 400 236 L400 300 L0 300 Z" fill="url(#c7d-lava)"/>
 <ellipse cx="200" cy="244" rx="180" ry="10" fill="#fff4b0" opacity="0.35" filter="url(#c7d-glow)"/>
-<g fill="#4a1208" opacity="0.85">
+<g fill="#4a1208" opacity="0.85" filter="url(#tx-cliff-fine)">
   <path d="M0 262 C20 256 40 258 54 264 C48 272 20 274 0 270 Z"/>
   <path d="M84 270 C100 264 118 266 126 272 C118 278 96 280 84 276 Z"/>
   <path d="M286 272 C300 266 320 266 330 272 C322 280 298 280 286 276 Z"/>
@@ -199,8 +199,9 @@
 <circle cx="138" cy="96" r="80" fill="url(#c7d-felglow)" opacity="0.5"/>
 
 <!-- wings -->
-<use href="#c7d-wingL"/>
-<use href="#c7d-wingL" transform="matrix(-1 0 0 1 410 0)"/>
+<!-- Textur außen um die Flügel: in gespiegelten <use> wird das Relief falsch beleuchtet -->
+<g filter="url(#tx-leather-soft)"><use href="#c7d-wingL"/></g>
+<g filter="url(#tx-leather-soft)"><use href="#c7d-wingL" transform="matrix(-1 0 0 1 410 0)"/></g>
 
 <!-- tail -->
 <path d="M214 184 C236 196 256 206 270 200 C282 194 284 180 278 170" fill="none" stroke="#3a0a26" stroke-width="5" stroke-linecap="round"/>
@@ -220,7 +221,7 @@
 <path d="M200 186 C208 190 218 190 226 182" fill="none" stroke="#ffa060" stroke-width="1.2" opacity="0.7"/>
 <path d="M218 128 C228 138 234 154 232 170 C230 184 220 192 208 192 C220 184 226 172 226 158 C226 146 222 136 214 128 Z" fill="#1a0414" opacity="0.55"/>
 <!-- loincloth -->
-<path d="M186 178 C196 184 216 184 228 176 L226 186 C222 196 214 204 208 208 C202 202 192 194 186 186 Z" fill="#2a1418" stroke="#0a0406" stroke-width="0.6"/>
+<path d="M186 178 C196 184 216 184 228 176 L226 186 C222 196 214 204 208 208 C202 202 192 194 186 186 Z" fill="#2a1418" stroke="#0a0406" stroke-width="0.6" filter="url(#tx-cloth-fine)"/>
 <path d="M186 178 C196 184 216 184 228 176" fill="none" stroke="#8a5a30" stroke-width="1.6"/>
 <circle cx="207" cy="182" r="2" fill="#c8a050" stroke="#3a2410" stroke-width="0.4"/>
 

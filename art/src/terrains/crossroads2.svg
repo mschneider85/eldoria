@@ -1,14 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300">
 <defs>
-<linearGradient id="t-crossroads2-tent" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a1e10"/><stop offset="0.5" stop-color="#8a5a30"/><stop offset="1" stop-color="#5a3418"/></linearGradient>
+<linearGradient id="t-crossroads2-tent" data-tx="cloth-soft" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a1e10"/><stop offset="0.5" stop-color="#8a5a30"/><stop offset="1" stop-color="#5a3418"/></linearGradient>
 <radialGradient id="t-crossroads2-warm" cx="0.5" cy="0.72" r="0.6"><stop offset="0" stop-color="#ffd890" stop-opacity="0.75"/><stop offset="0.35" stop-color="#e09040" stop-opacity="0.35"/><stop offset="1" stop-color="#5a2a10" stop-opacity="0"/></radialGradient>
 <linearGradient id="t-crossroads2-panel" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#000" stop-opacity="0.35"/><stop offset="0.5" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity="0.4"/></linearGradient>
 <linearGradient id="t-crossroads2-night" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a1030"/><stop offset="1" stop-color="#1a2a50"/></linearGradient>
-<linearGradient id="t-crossroads2-tabletop" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5a3218"/><stop offset="1" stop-color="#3a1e0c"/></linearGradient>
-<linearGradient id="t-crossroads2-tablefront" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a1e0c"/><stop offset="1" stop-color="#1a0c04"/></linearGradient>
-<linearGradient id="t-crossroads2-map" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e8d0a0"/><stop offset="1" stop-color="#c8a870"/></linearGradient>
-<linearGradient id="t-crossroads2-steel" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#e8e8f0"/><stop offset="0.5" stop-color="#9a9aa8"/><stop offset="1" stop-color="#5a5a68"/></linearGradient>
-<linearGradient id="t-crossroads2-floor" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a1a10"/><stop offset="1" stop-color="#0e0804"/></linearGradient>
+<linearGradient id="t-crossroads2-tabletop" data-tx="wood" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5a3218"/><stop offset="1" stop-color="#3a1e0c"/></linearGradient>
+<linearGradient id="t-crossroads2-tablefront" data-tx="wood" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a1e0c"/><stop offset="1" stop-color="#1a0c04"/></linearGradient>
+<linearGradient id="t-crossroads2-map" data-tx="plaster-soft" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e8d0a0"/><stop offset="1" stop-color="#c8a870"/></linearGradient>
+<linearGradient id="t-crossroads2-steel" data-tx="metal-fine" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#e8e8f0"/><stop offset="0.5" stop-color="#9a9aa8"/><stop offset="1" stop-color="#5a5a68"/></linearGradient>
+<linearGradient id="t-crossroads2-floor" data-tx="ground" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a1a10"/><stop offset="1" stop-color="#0e0804"/></linearGradient>
 <filter id="t-crossroads2-g2" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="1.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
 <filter id="t-crossroads2-b8" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="8"/></filter>
 <filter id="t-crossroads2-b2" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2"/></filter>
@@ -94,12 +94,15 @@
 <circle cx="208" cy="198" r="5" fill="#ff8a30" opacity="0.4" filter="url(#t-crossroads2-b2)"/><circle cx="208" cy="198" r="1" fill="#ffd080"/>
 <circle cx="222" cy="204" r="5" fill="#ff8a30" opacity="0.4" filter="url(#t-crossroads2-b2)"/><circle cx="222" cy="204" r="1" fill="#ffd080"/>
 </g>
-<path d="M170 212L170 120C176 96 190 82 200 78C188 90 180 110 178 140C176 170 184 190 162 212Z" fill="#7a4a24"/>
-<path d="M230 212L230 120C224 96 210 82 200 78C212 90 220 110 222 140C224 170 216 190 238 212Z" fill="#6a4020"/>
+<path d="M170 212L170 120C176 96 190 82 200 78C188 90 180 110 178 140C176 170 184 190 162 212Z" fill="#7a4a24" filter="url(#tx-cloth)"/>
+<path d="M230 212L230 120C224 96 210 82 200 78C212 90 220 110 222 140C224 170 216 190 238 212Z" fill="#6a4020" filter="url(#tx-cloth)"/>
 <path d="M172 150C176 152 180 152 182 148M228 150C224 152 220 152 218 148" stroke="#c8a060" stroke-width="1.4" fill="none"/>
+<!-- Zeltmast -->
+<g filter="url(#tx-wood-v)">
 <rect x="197" y="-10" width="6" height="90" fill="#3a2010"/><rect x="198" y="-10" width="1.5" height="90" fill="#8a6038" opacity="0.7"/>
+</g>
 <path d="M110 60h36" stroke="#3a2010" stroke-width="2" stroke-linecap="round"/>
-<path d="M113 60L143 60L143 152L128 141.5L113 152Z" fill="#8a1a1a"/>
+<path d="M113 60L143 60L143 152L128 141.5L113 152Z" fill="#8a1a1a" filter="url(#tx-cloth)"/>
 <path d="M120.5 60L120.5 148" stroke="#000" stroke-width="3.6" opacity="0.25"/>
 <path d="M115 62L115 150L128 139.5L141 150L141 62" stroke="#e8b848" stroke-width="1" fill="none"/>
 <path d="M128 87.8l7 5l-2 10l-10 0l-2 -10z" fill="#e8b848"/>
@@ -110,7 +113,7 @@
 <path d="M134.5 152l0 4" stroke="#e8b848" stroke-width="0.8"/>
 <path d="M141 152l0 4" stroke="#e8b848" stroke-width="0.8"/>
 <path d="M254 60h36" stroke="#3a2010" stroke-width="2" stroke-linecap="round"/>
-<path d="M257 60L287 60L287 152L272 141.5L257 152Z" fill="#1a3a8a"/>
+<path d="M257 60L287 60L287 152L272 141.5L257 152Z" fill="#1a3a8a" filter="url(#tx-cloth)"/>
 <path d="M264.5 60L264.5 148" stroke="#000" stroke-width="3.6" opacity="0.25"/>
 <path d="M259 62L259 150L272 139.5L285 150L285 62" stroke="#e8c860" stroke-width="1" fill="none"/>
 <path d="M265 89.8L279 103.8M279 89.8L265 103.8" stroke="#e8c860" stroke-width="2"/>
@@ -120,36 +123,44 @@
 <path d="M272 152l0 4" stroke="#e8c860" stroke-width="0.8"/>
 <path d="M278.5 152l0 4" stroke="#e8c860" stroke-width="0.8"/>
 <path d="M285 152l0 4" stroke="#e8c860" stroke-width="0.8"/>
-<path d="M18 236L22 150M78 236L74 150M20 160L76 160M20 200L76 200" stroke="#4a2a14" stroke-width="3" stroke-linecap="round"/>
-<path d="M28 232L28 110" stroke="#5a3418" stroke-width="1.4"/>
+<path d="M18 236L22 150M78 236L74 150M20 160L76 160M20 200L76 200" stroke="#4a2a14" stroke-width="3" stroke-linecap="round" filter="url(#tx-wood-v)"/>
+<!-- Speer-/Hellebardenschaefte heller und dicker, sonst schweben die Spitzen frei ueber dem Gestell -->
+<path d="M28 232L28 110" stroke="#2e1808" stroke-width="2"/>
 <path d="M28 110l-3 -4l3 -12l3 12z" fill="url(#t-crossroads2-steel)"/>
 <path d="M36.2 214L36.2 130L38 124L39.8 130L39.8 214Z" fill="url(#t-crossroads2-steel)"/>
 <path d="M38 214h10" stroke="#c8a040" stroke-width="2.2" stroke-linecap="round" transform="translate(-5 0)"/>
 <path d="M38 216v10" stroke="#3a2010" stroke-width="2"/><circle cx="38" cy="228" r="2" fill="#c8a040"/>
-<path d="M48 230L48 136" stroke="#5a3418" stroke-width="1.8"/>
-<path d="M48 140C54 134 58 132 60 128C62 138 60 150 56 158C54 152 51 150 48 150Z" fill="url(#t-crossroads2-steel)"/>
+<path d="M48 230L48 126" stroke="#2e1808" stroke-width="2.2"/>
+<path d="M48 126l-2 -3l2 -8l2 8z" fill="url(#t-crossroads2-steel)"/>
+<!-- Hellebardenblatt schmaler, damit es nicht in das rechte Schwert ragt -->
+<g transform="translate(48 0) scale(0.6 1) translate(-48 0)"><path d="M48 140C54 134 58 132 60 128C62 138 60 150 56 158C54 152 51 150 48 150Z" fill="url(#t-crossroads2-steel)"/></g>
 <path d="M56.2 214L56.2 130L58 124L59.8 130L59.8 214Z" fill="url(#t-crossroads2-steel)"/>
 <path d="M58 214h10" stroke="#c8a040" stroke-width="2.2" stroke-linecap="round" transform="translate(-5 0)"/>
 <path d="M58 216v10" stroke="#3a2010" stroke-width="2"/><circle cx="58" cy="228" r="2" fill="#c8a040"/>
-<path d="M68 232L68 110" stroke="#5a3418" stroke-width="1.4"/>
+<path d="M68 232L68 110" stroke="#2e1808" stroke-width="2"/>
 <path d="M68 110l-3 -4l3 -12l3 12z" fill="url(#t-crossroads2-steel)"/>
-<g transform="translate(0 -60)"><path d="M84 206L108 206L108 222C108 234 96 242 96 242C96 242 84 234 84 222Z" fill="#8a1a1a" stroke="#c8a040" stroke-width="1.6"/>
+<g transform="translate(0 -60)"><path d="M84 206L108 206L108 222C108 234 96 242 96 242C96 242 84 234 84 222Z" fill="#8a1a1a" stroke="#c8a040" stroke-width="1.6" filter="url(#tx-leather-fine)"/>
 <path d="M96 210V238M86 220H106" stroke="#c8a040" stroke-width="1.2"/><path d="M84 206L96 200L108 206" stroke="#3a2010" stroke-width="0.8" fill="none"/></g>
 <path d="M348 236L348 170" stroke="#3a2010" stroke-width="2"/>
 <path d="M334 176C334 168 362 168 362 176L360 204C356 208 340 208 336 204Z" fill="url(#t-crossroads2-steel)" opacity="0.9"/>
 <path d="M340 164C340 150 356 150 356 164L356 170L340 170Z" fill="url(#t-crossroads2-steel)"/><path d="M342 162h12" stroke="#1a1a20" stroke-width="1.4"/>
-<path d="M348 150C344 142 352 136 348 128" stroke="#a81a1a" stroke-width="2.4" fill="none" stroke-linecap="round"/>
-<path d="M330 178C326 186 326 196 330 200M366 178C370 186 370 196 366 200" stroke="#7a7a88" stroke-width="3" fill="none"/>
+<!-- Helmbusch sitzt auf dem Helm statt darueber zu schweben -->
+<path d="M348 154C344 146 352 140 348 132" stroke="#a81a1a" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+<!-- Arme an den Schultern angesetzt (vorher freischwebend neben dem Torso) -->
+<path d="M335 175C328 182 327 194 330 202M361 175C368 182 369 194 366 202" stroke="#7a7a88" stroke-width="3" fill="none"/>
 <path d="M-10 228L410 228L410 300L-10 300Z" fill="url(#t-crossroads2-floor)"/>
+<!-- Teppich -->
+<g filter="url(#tx-cloth)">
 <path d="M40 246L360 246L400 300L0 300Z" fill="#5a1a14"/><path d="M52 250L348 250L384 300L16 300Z" fill="none" stroke="#c8903a" stroke-width="1.2"/>
+</g>
 <rect width="400" height="300" fill="url(#t-crossroads2-warm)"/>
 <ellipse cx="200" cy="262" rx="160" ry="10" fill="#000" opacity="0.45" filter="url(#t-crossroads2-b2)"/>
 <path d="M56 248L344 248L344 262L56 262Z" fill="url(#t-crossroads2-tablefront)"/>
-<path d="M66 262L72 262L72 290L66 290ZM328 262L334 262L334 290L328 290Z" fill="#1a0c04"/>
+<path d="M66 262L72 262L72 290L66 290ZM328 262L334 262L334 290L328 290Z" fill="#1a0c04" filter="url(#tx-wood-v)"/>
 <path d="M92 204L308 204L344 248L56 248Z" fill="url(#t-crossroads2-tabletop)"/>
 <path d="M56 248L344 248" stroke="#a87040" stroke-width="1"/>
 <path d="M112 208L290 207L318 243L84 244Z" fill="url(#t-crossroads2-map)"/>
-<path d="M84 244C80 246 80 250 86 250L316 249C322 249 322 245 318 243" fill="#b89860"/>
+<path d="M84 244C80 246 80 250 86 250L316 249C322 249 322 245 318 243" fill="#b89860" filter="url(#tx-plaster-soft)"/>
 <clipPath id="t-crossroads2-mc"><path d="M112 208L290 207L318 243L84 244Z"/></clipPath>
 <g clip-path="url(#t-crossroads2-mc)">
 <path d="M100 244C120 232 110 222 128 216C150 210 170 220 190 214C210 208 240 212 260 220C280 228 300 226 318 244Z" fill="#c8b078" opacity="0.8"/>
@@ -232,7 +243,10 @@
 <path d="M200 80L200 96" stroke="#2a1a0a" stroke-width="0.8"/>
 <circle cx="200" cy="104" r="20" fill="#ffb050" opacity="0.3" filter="url(#t-crossroads2-b8)"/>
 <path d="M195 98h10l-1.5 12h-7z" fill="#ffd080" stroke="#3a2010" stroke-width="1" filter="url(#t-crossroads2-g2)"/><path d="M194 98l6 -4l6 4z" fill="#3a2010"/>
+<!-- Truhe -->
+<g filter="url(#tx-wood)">
 <path d="M356 246L396 246L396 272L356 272Z" fill="#4a2a14"/><path d="M356 246C356 236 396 236 396 246Z" fill="#5a3418"/>
+</g>
 <path d="M356 246h40M366 238v34M386 238v34" stroke="#c8a040" stroke-width="1.2" fill="none"/><rect x="374" y="248" width="4" height="5" fill="#c8a040"/>
 <circle cx="95.1" cy="122.3" r="0.57" fill="#ffe0a0" opacity="0.30"/>
 <circle cx="70" cy="215.8" r="0.60" fill="#ffe0a0" opacity="0.68"/>

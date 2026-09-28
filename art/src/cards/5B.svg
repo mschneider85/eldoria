@@ -16,24 +16,24 @@
       <stop offset="0.5" stop-color="#b8f08e"/>
       <stop offset="1" stop-color="#5fae5a"/>
     </radialGradient>
-    <linearGradient id="c5b-castle" x1="0" y1="0" x2="0" y2="1">
+    <linearGradient id="c5b-castle" data-tx="stone-fine" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#1a1d2e"/>
       <stop offset="1" stop-color="#0c0e18"/>
     </linearGradient>
-    <linearGradient id="c5b-hill" x1="0" y1="0" x2="0" y2="1">
+    <linearGradient id="c5b-hill" data-tx="ground-soft" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#1d2a33"/>
       <stop offset="1" stop-color="#0a0f14"/>
     </linearGradient>
-    <linearGradient id="c5b-ground" x1="0" y1="0" x2="0" y2="1">
+    <linearGradient id="c5b-ground" data-tx="ground-soft" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#1b242a"/>
       <stop offset="1" stop-color="#06080b"/>
     </linearGradient>
-    <linearGradient id="c5b-steel" x1="0" y1="0" x2="1" y2="1">
+    <linearGradient id="c5b-steel" data-tx="metal-soft" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#7a86a0"/>
       <stop offset="0.35" stop-color="#303848"/>
       <stop offset="1" stop-color="#0b0d14"/>
     </linearGradient>
-    <linearGradient id="c5b-steelV" x1="0" y1="0" x2="0" y2="1">
+    <linearGradient id="c5b-steelV" data-tx="metal-fine" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#6c7890"/>
       <stop offset="0.3" stop-color="#2b3242"/>
       <stop offset="1" stop-color="#0a0c12"/>
@@ -43,12 +43,12 @@
       <stop offset="0.25" stop-color="#3a4a4a"/>
       <stop offset="1" stop-color="#0c0e16"/>
     </linearGradient>
-    <radialGradient id="c5b-bone" cx="0.4" cy="0.3" r="0.8">
+    <radialGradient id="c5b-bone" data-tx="marble-fine" cx="0.4" cy="0.3" r="0.8">
       <stop offset="0" stop-color="#e6ece4"/>
       <stop offset="0.5" stop-color="#a3ada6"/>
       <stop offset="1" stop-color="#3b4248"/>
     </radialGradient>
-    <linearGradient id="c5b-boneV" x1="0" y1="0" x2="1" y2="0">
+    <linearGradient id="c5b-boneV" data-tx="marble-fine" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0" stop-color="#d8e2da"/>
       <stop offset="0.6" stop-color="#8a958f"/>
       <stop offset="1" stop-color="#3a4145"/>
@@ -58,12 +58,12 @@
       <stop offset="0.5" stop-color="#6fd8ff"/>
       <stop offset="1" stop-color="#e6fbff"/>
     </linearGradient>
-    <linearGradient id="c5b-cape" x1="0" y1="0" x2="1" y2="1">
+    <linearGradient id="c5b-cape" data-tx="cloth" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#2a1e3a"/>
       <stop offset="0.5" stop-color="#160f22"/>
       <stop offset="1" stop-color="#07050c"/>
     </linearGradient>
-    <linearGradient id="c5b-cloth" x1="0" y1="0" x2="0" y2="1">
+    <linearGradient id="c5b-cloth" data-tx="cloth" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#2c2140"/>
       <stop offset="1" stop-color="#0c0814"/>
     </linearGradient>
@@ -131,7 +131,7 @@
   <rect x="0" y="150" width="400" height="90" fill="url(#c5b-mist)"/>
 
   <!-- 3 MIDGROUND: dead trees, ground -->
-  <g fill="#0b0f14" stroke="#0b0f14" stroke-linecap="round">
+  <g fill="#0b0f14" stroke="#0b0f14" stroke-linecap="round" filter="url(#tx-bark-fine)">
     <path d="M28,236 C30,210 26,190 34,170 L37,172 C31,190 36,210 34,236 Z"/>
     <path d="M33,190 C24,182 18,178 10,178" stroke-width="2" fill="none"/>
     <path d="M34,182 C42,172 50,168 58,166" stroke-width="1.6" fill="none"/>
@@ -139,9 +139,9 @@
   </g>
   <path d="M0,232 C80,222 150,236 220,228 C290,220 350,232 400,224 L400,300 L0,300 Z" fill="url(#c5b-ground)"/>
   <!-- broken tombstones -->
-  <path d="M350,236 L352,214 C354,206 366,206 368,214 L370,236 Z" fill="#1c2228"/>
+  <path d="M350,236 L352,214 C354,206 366,206 368,214 L370,236 Z" fill="#1c2228" filter="url(#tx-stone-fine)"/>
   <path d="M352,214 C354,206 366,206 368,214" stroke="#8fd8a0" stroke-width="0.8" fill="none" opacity="0.5"/>
-  <path d="M40,242 L41,226 L50,222 L52,244 Z" fill="#1a2026"/>
+  <path d="M40,242 L41,226 L50,222 L52,244 Z" fill="#1a2026" filter="url(#tx-stone-fine)"/>
 
   <!-- ground glow under horse -->
   <ellipse cx="220" cy="272" rx="140" ry="14" fill="#6fe08a" opacity="0.14" filter="url(#c5b-soft)"/>
@@ -149,8 +149,8 @@
   <!-- 4 CHARACTER: HORSE -->
   <g id="c5b-horse">
     <!-- far legs (darker) -->
-    <path d="M178,200 C186,204 190,214 188,226 L186,240 L180,240 L178,222 Z" fill="#141820"/>
-    <path d="M284,196 C294,200 300,214 298,228 L296,238 L288,238 L284,220 Z" fill="#141820"/>
+    <path d="M178,200 C186,204 190,214 188,226 L186,240 L180,240 L178,222 Z" fill="#141820" filter="url(#tx-metal-fine)"/>
+    <path d="M284,196 C294,200 300,214 298,228 L296,238 L288,238 L284,220 Z" fill="#141820" filter="url(#tx-metal-fine)"/>
     <g stroke-linecap="round" fill="none">
       <path d="M183,240 L184,278" stroke="#4a5256" stroke-width="5.5"/>
       <path d="M292,238 L290,278" stroke="#4a5256" stroke-width="6"/>
@@ -170,7 +170,7 @@
     <path d="M124,98 C140,92 170,108 194,128 L300,136 C314,138 322,154 320,176 C318,196 306,208 296,212 L180,214 C166,212 156,202 152,188 C148,170 136,148 122,134 Z" fill="#0d1016"/>
 
     <!-- exposed ribcage in the middle -->
-    <g stroke-linecap="round" fill="none">
+    <g stroke-linecap="round" fill="none" filter="url(#tx-marble-fine)">
       <path d="M184,150 C182,176 186,198 194,210" stroke="url(#c5b-boneV)" stroke-width="3.2"/>
       <path d="M196,140 C196,170 200,196 208,210" stroke="url(#c5b-boneV)" stroke-width="3.2"/>
       <path d="M210,142 C210,172 214,198 222,212" stroke="url(#c5b-boneV)" stroke-width="3.2"/>
@@ -204,7 +204,7 @@
     <!-- tattered saddle cloth -->
     <path d="M198,134 L262,136 C264,150 264,164 264,178 L258,174 L254,186 L248,176 L242,190 L236,178 L230,188 L224,176 L218,186 L212,174 L206,182 L202,172 L198,178 C197,164 197,148 198,134 Z" fill="url(#c5b-cloth)"/>
     <path d="M206,150 C206,160 207,168 208,176 M222,150 C222,162 223,172 224,180 M242,150 C242,162 243,174 244,184" stroke="#05030a" stroke-width="1.5" fill="none" opacity="0.7"/>
-    <path d="M198,140 L264,142 L264,150 L198,148 Z" fill="#3a2e52"/>
+    <path d="M198,140 L264,142 L264,150 L198,148 Z" fill="#3a2e52" filter="url(#tx-cloth-fine)"/>
     <path d="M204,144 l3,-3 l3,3 M222,145 l3,-3 l3,3 M240,145 l3,-3 l3,3 M256,145 l3,-3 l3,3" stroke="#6fd8ff" stroke-width="0.8" fill="none" opacity="0.8"/>
     <!-- spine ridge along back -->
     <g fill="url(#c5b-bone)">
@@ -234,13 +234,14 @@
     <path d="M146,226 L128,216 L148,220 Z" fill="#8a96a8"/>
     <!-- standing front leg (near-mid) -->
     <path d="M166,200 C176,204 180,214 178,226 L174,240 L164,238 L164,220 Z" fill="url(#c5b-steelV)" stroke="#05060a" stroke-width="0.8"/>
-    <path d="M170,240 L170,276" stroke="url(#c5b-boneV)" stroke-width="6.5" stroke-linecap="round"/>
+    <!-- leicht schräg: bei exakt senkrechter Linie hat die objectBoundingBox-Verlaufsfüllung Breite 0 und der Knochen wird gar nicht gezeichnet -->
+    <path d="M170,240 L169,276" stroke="url(#c5b-boneV)" stroke-width="6.5" stroke-linecap="round"/>
     <circle cx="170" cy="240" r="4.6" fill="url(#c5b-bone)"/>
     <circle cx="170" cy="276" r="3.6" fill="url(#c5b-bone)"/>
     <g transform="translate(0,12)"><path d="M160,264 C164,259 176,259 180,264 L182,276 L158,276 Z" fill="url(#c5b-steelV)" stroke="#05060a" stroke-width="0.7"/></g>
 
     <!-- NECK armour (crinet) -->
-    <path d="M122,100 C140,90 170,104 196,132 L186,142 C168,130 150,124 132,134 C126,122 122,110 122,100 Z" fill="#0f1219"/>
+    <path d="M122,100 C140,90 170,104 196,132 L186,142 C168,130 150,124 132,134 C126,122 122,110 122,100 Z" fill="#0f1219" filter="url(#tx-metal-fine)"/>
     <path d="M126,100 C136,96 146,100 152,106 L146,124 C140,120 134,120 128,124 Z" fill="url(#c5b-steel)" stroke="#05060a" stroke-width="0.8"/>
     <path d="M150,104 C160,104 170,112 176,120 L166,136 C160,130 152,128 146,128 Z" fill="url(#c5b-steel)" stroke="#05060a" stroke-width="0.8"/>
     <path d="M174,116 C184,120 192,128 198,136 L186,146 C180,140 172,136 164,136 Z" fill="url(#c5b-steel)" stroke="#05060a" stroke-width="0.8"/>
@@ -262,7 +263,7 @@
     <!-- HORSE HEAD (skull with chamfron) -->
     <path d="M128,96 C130,108 126,124 118,134 C110,142 102,150 94,154 L72,156 C66,154 64,148 68,144 L96,108 C104,98 116,92 128,96 Z" fill="url(#c5b-bone)"/>
     <!-- lower jaw -->
-    <path d="M120,132 C114,142 104,152 94,158 L74,160 C70,160 68,157 70,155 L92,150 C102,146 110,138 114,128 Z" fill="#8a948e"/>
+    <path d="M120,132 C114,142 104,152 94,158 L74,160 C70,160 68,157 70,155 L92,150 C102,146 110,138 114,128 Z" fill="#8a948e" filter="url(#tx-marble-fine)"/>
     <path d="M76,154 L92,151 L92,155 L76,158 Z" fill="#050608"/>
     <g stroke="#d8e0d8" stroke-width="1.2">
       <path d="M78,153 v3 M81,152.5 v3.5 M84,152 v3.5 M87,151.5 v3.5 M90,151 v3.5"/>
@@ -276,8 +277,8 @@
     <path d="M110,104 C104,90 102,78 104,64 C108,78 114,90 118,102 Z" fill="url(#c5b-steelV)" stroke="#05060a" stroke-width="0.6"/>
     <path d="M104,64 C108,78 114,90 118,102" stroke="#b8ffc8" stroke-width="0.7" fill="none" opacity="0.6"/>
     <!-- ears -->
-    <path d="M124,96 L130,76 L134,98 Z" fill="#7a857f"/>
-    <path d="M118,96 L118,80 L126,96 Z" fill="#5a6460"/>
+    <g filter="url(#tx-marble-fine)"><path d="M124,96 L130,76 L134,98 Z" fill="#7a857f"/>
+    <path d="M118,96 L118,80 L126,96 Z" fill="#5a6460"/></g>
     <!-- eye socket glow -->
     <path d="M104,118 C108,112 118,112 120,118 C118,124 110,126 104,122 Z" fill="#030406"/>
     <circle cx="112" cy="119" r="8" fill="url(#c5b-eye)"/>
@@ -325,7 +326,7 @@
     <circle cx="213.5" cy="112.5" r="1" fill="#6fd8ff"/><circle cx="222.5" cy="112.5" r="1" fill="#6fd8ff"/>
     <path d="M214,121 v3 M216.5,121 v3 M219,121 v3 M221.5,121 v3" stroke="#3a4248" stroke-width="0.6"/>
     <!-- faulds / belt -->
-    <path d="M198,130 L238,130 L240,140 L196,140 Z" fill="#1a1d26"/>
+    <path d="M198,130 L238,130 L240,140 L196,140 Z" fill="#1a1d26" filter="url(#tx-leather-fine)"/>
     <path d="M198,134 L238,134" stroke="#6fd8ff" stroke-width="0.6" opacity="0.6"/>
     <rect x="214" y="131" width="8" height="8" rx="1" fill="#7c889c"/>
 
@@ -356,7 +357,7 @@
     <!-- HELMET -->
     <g id="c5b-helm">
       <!-- gorget -->
-      <path d="M208,86 L230,86 L232,94 L206,94 Z" fill="#1a1d26"/>
+      <path d="M208,86 L230,86 L232,94 L206,94 Z" fill="#1a1d26" filter="url(#tx-metal-fine)"/>
       <!-- horns sweeping back -->
       <path d="M210,58 C200,50 194,38 196,24 C200,34 206,42 214,48 Z" fill="url(#c5b-steelV)" stroke="#05060a" stroke-width="0.6"/>
       <path d="M228,58 C238,50 246,38 246,24 C240,34 234,40 226,46 Z" fill="url(#c5b-steelV)" stroke="#05060a" stroke-width="0.6"/>

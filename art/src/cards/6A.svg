@@ -8,38 +8,38 @@
 <stop offset=".6" stop-color="#ff7a24" stop-opacity=".3"/><stop offset="1" stop-color="#ff5a1a" stop-opacity="0"/></radialGradient>
 <radialGradient id="c6a-ray" cx="200" cy="72" r="230" gradientUnits="userSpaceOnUse">
 <stop offset=".1" stop-color="#fff4c0" stop-opacity=".7"/><stop offset=".6" stop-color="#ffc060" stop-opacity=".2"/><stop offset="1" stop-color="#ffb040" stop-opacity="0"/></radialGradient>
-<linearGradient id="c6a-farmtn" x1="0" y1="0" x2="0" y2="1">
+<linearGradient id="c6a-farmtn" data-tx="cliff-fine" x1="0" y1="0" x2="0" y2="1">
 <stop offset="0" stop-color="#a85060"/><stop offset="1" stop-color="#eaa47c"/></linearGradient>
-<linearGradient id="c6a-rock" x1="0" y1="0" x2="0" y2="1">
+<linearGradient id="c6a-rock" data-tx="cliff" x1="0" y1="0" x2="0" y2="1">
 <stop offset="0" stop-color="#4a2220"/><stop offset=".4" stop-color="#241012"/><stop offset="1" stop-color="#0a0406"/></linearGradient>
 <linearGradient id="c6a-rockrim" x1="0" y1="0" x2="1" y2="0">
 <stop offset="0" stop-color="#ffc060"/><stop offset=".5" stop-color="#fff0b0"/><stop offset="1" stop-color="#ff7a24"/></linearGradient>
-<radialGradient id="c6a-memb" cx="200" cy="78" r="200" gradientUnits="userSpaceOnUse">
+<radialGradient id="c6a-memb" data-tx="leather-soft" cx="200" cy="78" r="200" gradientUnits="userSpaceOnUse">
 <stop offset="0" stop-color="#ffe08a"/><stop offset=".22" stop-color="#ff9a3a"/><stop offset=".45" stop-color="#e0441c"/>
 <stop offset=".7" stop-color="#9a1418"/><stop offset="1" stop-color="#3a040c"/></radialGradient>
 <linearGradient id="c6a-bone" x1="0" y1="0" x2="0" y2="1">
 <stop offset="0" stop-color="#ffd870"/><stop offset=".5" stop-color="#c8601c"/><stop offset="1" stop-color="#6a1810"/></linearGradient>
-<linearGradient id="c6a-arm" x1="0" y1="0" x2="0" y2="1">
+<linearGradient id="c6a-arm" data-tx="scales-fine" x1="0" y1="0" x2="0" y2="1">
 <stop offset="0" stop-color="#ff9a40"/><stop offset=".35" stop-color="#b82a1a"/><stop offset="1" stop-color="#4a060e"/></linearGradient>
-<linearGradient id="c6a-body" x1="0" y1="0" x2="1" y2="0">
+<linearGradient id="c6a-body" data-tx="scales-soft" x1="0" y1="0" x2="1" y2="0">
 <stop offset="0" stop-color="#3a040c"/><stop offset=".2" stop-color="#861616"/><stop offset=".5" stop-color="#b42c1a"/><stop offset=".8" stop-color="#861616"/><stop offset="1" stop-color="#3a040c"/></linearGradient>
-<linearGradient id="c6a-limb" x1="0" y1="0" x2="1" y2="0">
+<linearGradient id="c6a-limb" data-tx="scales-soft" x1="0" y1="0" x2="1" y2="0">
 <stop offset="0" stop-color="#ff8a3a"/><stop offset=".2" stop-color="#b8261a"/><stop offset=".7" stop-color="#6a0c12"/><stop offset="1" stop-color="#3a040a"/></linearGradient>
-<linearGradient id="c6a-neck" x1="0" y1="0" x2="1" y2="0">
+<linearGradient id="c6a-neck" data-tx="scales-soft" x1="0" y1="0" x2="1" y2="0">
 <stop offset="0" stop-color="#5a0a10"/><stop offset=".5" stop-color="#b02a1c"/><stop offset=".85" stop-color="#e0601e"/><stop offset="1" stop-color="#ffc060"/></linearGradient>
-<linearGradient id="c6a-head" x1="0" y1="0" x2="0" y2="1">
+<linearGradient id="c6a-head" data-tx="scales-fine" x1="0" y1="0" x2="0" y2="1">
 <stop offset="0" stop-color="#e0501e"/><stop offset=".4" stop-color="#b0221a"/><stop offset=".8" stop-color="#6a0c12"/><stop offset="1" stop-color="#3a040a"/></linearGradient>
-<linearGradient id="c6a-gold" x1="0" y1="0" x2="0" y2="1">
+<linearGradient id="c6a-gold" data-tx="gold" x1="0" y1="0" x2="0" y2="1">
 <stop offset="0" stop-color="#fff2b0"/><stop offset=".35" stop-color="#f3b73a"/><stop offset=".7" stop-color="#b86a14"/><stop offset="1" stop-color="#6a3208"/></linearGradient>
-<linearGradient id="c6a-goldh" x1="0" y1="0" x2="1" y2="0">
+<linearGradient id="c6a-goldh" data-tx="gold" x1="0" y1="0" x2="1" y2="0">
 <stop offset="0" stop-color="#7a3a0c"/><stop offset=".45" stop-color="#f7cf5a"/><stop offset=".6" stop-color="#fff4c0"/><stop offset="1" stop-color="#a85a12"/></linearGradient>
-<linearGradient id="c6a-horn" x1="0" y1="1" x2="0" y2="0">
+<linearGradient id="c6a-horn" data-tx="marble-fine" x1="0" y1="1" x2="0" y2="0">
 <stop offset="0" stop-color="#4a200a"/><stop offset=".35" stop-color="#b8701a"/><stop offset=".75" stop-color="#ffd870"/><stop offset="1" stop-color="#fffbe0"/></linearGradient>
-<linearGradient id="c6a-hornside" x1="0" y1="0" x2="1" y2="0">
+<linearGradient id="c6a-hornside" data-tx="marble-fine" x1="0" y1="0" x2="1" y2="0">
 <stop offset="0" stop-color="#5a2a0a"/><stop offset=".5" stop-color="#e8a83a"/><stop offset=".8" stop-color="#fff0b0"/><stop offset="1" stop-color="#c07a1a"/></linearGradient>
 <radialGradient id="c6a-core" cx="200" cy="152" r="46" gradientUnits="userSpaceOnUse">
 <stop offset="0" stop-color="#ffffff"/><stop offset=".18" stop-color="#fff2a0"/><stop offset=".45" stop-color="#ffa030"/><stop offset=".75" stop-color="#e0401a" stop-opacity=".5"/><stop offset="1" stop-color="#a01a14" stop-opacity="0"/></radialGradient>
-<linearGradient id="c6a-plate" x1="0" y1="0" x2="0" y2="1">
+<linearGradient id="c6a-plate" data-tx="marble-fine" x1="0" y1="0" x2="0" y2="1">
 <stop offset="0" stop-color="#fff0b0"/><stop offset=".4" stop-color="#f0b040"/><stop offset="1" stop-color="#9a5010"/></linearGradient>
 <radialGradient id="c6a-eye" cx=".45" cy=".5" r=".6">
 <stop offset="0" stop-color="#ffffff"/><stop offset=".35" stop-color="#fff080"/><stop offset=".8" stop-color="#ff9a10"/><stop offset="1" stop-color="#c04a08"/></radialGradient>
@@ -47,7 +47,7 @@
 <stop offset=".55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#10020a" stop-opacity=".78"/></radialGradient>
 <linearGradient id="c6a-ao" x1="0" y1="0" x2="0" y2="1">
 <stop offset="0" stop-color="#1a0206" stop-opacity="0"/><stop offset=".6" stop-color="#1a0206" stop-opacity=".25"/><stop offset="1" stop-color="#1a0206" stop-opacity=".75"/></linearGradient>
-<linearGradient id="c6a-tail" x1="0" y1="0" x2="0" y2="1">
+<linearGradient id="c6a-tail" data-tx="scales" x1="0" y1="0" x2="0" y2="1">
 <stop offset="0" stop-color="#e0501e"/><stop offset=".35" stop-color="#a01c18"/><stop offset="1" stop-color="#3a040c"/></linearGradient>
 <linearGradient id="c6a-cseabg" x1="0" y1="0" x2="0" y2="1">
 <stop offset="0" stop-color="#f0a078"/><stop offset=".4" stop-color="#b85a5a"/><stop offset="1" stop-color="#3a1026"/></linearGradient>

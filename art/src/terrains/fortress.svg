@@ -1,10 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300">
 <defs>
 <linearGradient id="t-fortress-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1c1a3a"/><stop offset="0.4" stop-color="#4a3060"/><stop offset="0.7" stop-color="#b05a4a"/><stop offset="0.9" stop-color="#f09a50"/></linearGradient>
-<linearGradient id="t-fortress-wall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8a7a78"/><stop offset="0.5" stop-color="#5e5058"/><stop offset="1" stop-color="#2e2630"/></linearGradient>
-<linearGradient id="t-fortress-tower" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3a3038"/><stop offset="0.35" stop-color="#7a6a6a"/><stop offset="0.6" stop-color="#6a5a60"/><stop offset="1" stop-color="#2a2230"/></linearGradient>
-<linearGradient id="t-fortress-keep" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6a5a78"/><stop offset="1" stop-color="#8a6a7a"/></linearGradient>
-<linearGradient id="t-fortress-gnd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a2a26"/><stop offset="1" stop-color="#120c0c"/></linearGradient>
+<linearGradient id="t-fortress-wall" data-tx="stone-fine" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8a7a78"/><stop offset="0.5" stop-color="#5e5058"/><stop offset="1" stop-color="#2e2630"/></linearGradient>
+<linearGradient id="t-fortress-tower" data-tx="stone-fine" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3a3038"/><stop offset="0.35" stop-color="#7a6a6a"/><stop offset="0.6" stop-color="#6a5a60"/><stop offset="1" stop-color="#2a2230"/></linearGradient>
+<linearGradient id="t-fortress-keep" data-tx="stone-far" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6a5a78"/><stop offset="1" stop-color="#8a6a7a"/></linearGradient>
+<linearGradient id="t-fortress-gnd" data-tx="ground-soft" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a2a26"/><stop offset="1" stop-color="#120c0c"/></linearGradient>
 <linearGradient id="t-fortress-gate" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffb050"/><stop offset="1" stop-color="#8a3a10"/></linearGradient>
 <linearGradient id="t-fortress-shade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#10080a" stop-opacity="0.7"/></linearGradient>
 <pattern id="t-fortress-brick" width="12" height="6" patternUnits="userSpaceOnUse"><path d="M0 0.3H12M0 3.3H12M4 0.3V3.3M10 3.3V6.3" stroke="#1e161c" stroke-width="0.45" opacity="0.55" fill="none"/><path d="M0.5 0.9H3.5M6.5 3.9H9.5" stroke="#a89a94" stroke-width="0.3" opacity="0.35"/></pattern>
@@ -153,7 +153,7 @@
 <path d="M87.4 145l0 -4l1 -1.5l1 1.5l0 4z" fill="#141018"/><path d="M89.2 140l0 -6" stroke="#141018" stroke-width="0.4"/>
 <path d="M33.6 145l0 -4l1 -1.5l1 1.5l0 4z" fill="#141018"/><path d="M35.4 140l0 -6" stroke="#141018" stroke-width="0.4"/>
 <rect x="22" y="86" width="60" height="164" fill="url(#t-fortress-tower)"/>
-<path d="M18 82L86 82L84 90L20 90Z" fill="#5a4a52"/>
+<path d="M18 82L86 82L84 90L20 90Z" fill="#5a4a52" filter="url(#tx-stone-fine)"/>
 <path d="M19 90l1.5 3l1.5 -3z" fill="#2a2028"/>
 <path d="M24 90l1.5 3l1.5 -3z" fill="#2a2028"/>
 <path d="M29 90l1.5 3l1.5 -3z" fill="#2a2028"/>
@@ -178,14 +178,14 @@
 <path d="M64 148.4L64 157.2" stroke="#3a2010" stroke-width="0.5"/>
 <path d="M50.2 191.6L50.2 184.6A2 2 0 0 1 53.8 184.6L53.8 191.6Z" fill="#ffb050" filter="url(#t-fortress-g2)"/>
 <path d="M52 182.8L52 191.6" stroke="#3a2010" stroke-width="0.5"/>
-<path d="M45 92L59 92L59 118L52 113L45 118Z" fill="#8a1a22"/>
+<path d="M45 92L59 92L59 118L52 113L45 118Z" fill="#8a1a22" filter="url(#tx-cloth)"/>
 <path d="M52 96L56 104L48 104Z" fill="#e0b040"/>
 <path d="M45 92.5L59 92.5" stroke="#e0b040" stroke-width="0.6"/>
 <rect x="80.8" y="90" width="1.2" height="160" fill="#f0a070" opacity="0.5"/>
 <path d="M52 75L52 56" stroke="#2a2028" stroke-width="0.8"/>
-<path d="M52 56C57 54 61 59 66 57C62 63 57 60 52 63Z" fill="#a8202a"/>
+<path d="M52 56C57 54 61 59 66 57C62 63 57 60 52 63Z" fill="#a8202a" filter="url(#tx-cloth-fine)"/>
 <rect x="318" y="92" width="60" height="158" fill="url(#t-fortress-tower)"/>
-<path d="M314 88L382 88L380 96L316 96Z" fill="#5a4a52"/>
+<path d="M314 88L382 88L380 96L316 96Z" fill="#5a4a52" filter="url(#tx-stone-fine)"/>
 <path d="M315 96l1.5 3l1.5 -3z" fill="#2a2028"/>
 <path d="M320 96l1.5 3l1.5 -3z" fill="#2a2028"/>
 <path d="M325 96l1.5 3l1.5 -3z" fill="#2a2028"/>
@@ -210,12 +210,12 @@
 <path d="M360 151.9L360 160.7" stroke="#3a2010" stroke-width="0.5"/>
 <path d="M346.2 193.9L346.2 186.9A2 2 0 0 1 349.8 186.9L349.8 193.9Z" fill="#ffb050" filter="url(#t-fortress-g2)"/>
 <path d="M348 185.1L348 193.9" stroke="#3a2010" stroke-width="0.5"/>
-<path d="M341 98L355 98L355 124L348 119L341 124Z" fill="#8a1a22"/>
+<path d="M341 98L355 98L355 124L348 119L341 124Z" fill="#8a1a22" filter="url(#tx-cloth)"/>
 <path d="M348 102L352 110L344 110Z" fill="#e0b040"/>
 <path d="M341 98.5L355 98.5" stroke="#e0b040" stroke-width="0.6"/>
 <rect x="376.8" y="96" width="1.2" height="154" fill="#f0a070" opacity="0.5"/>
 <path d="M348 81L348 62" stroke="#2a2028" stroke-width="0.8"/>
-<path d="M348 62C353 60 357 65 362 63C358 69 353 66 348 69Z" fill="#a8202a"/>
+<path d="M348 62C353 60 357 65 362 63C358 69 353 66 348 69Z" fill="#a8202a" filter="url(#tx-cloth-fine)"/>
 <rect x="150" y="112" width="100" height="138" fill="url(#t-fortress-tower)"/>
 <path d="M146 113L146 106L152 106L152 113L156 113L156 106L162 106L162 113L166 113L166 106L172 106L172 113L176 113L176 106L182 106L182 113L186 113L186 106L192 106L192 113L196 113L196 106L202 106L202 113L206 113L206 106L212 106L212 113L216 113L216 106L222 106L222 113L226 113L226 106L232 106L232 113L236 113L236 106L242 106L242 113L246 113L246 106L252 106L252 113L254 113Z" fill="url(#t-fortress-tower)"/>
 <rect x="150" y="112" width="100" height="138" fill="url(#t-fortress-brick)"/>
@@ -354,9 +354,9 @@
 <path d="M65.3 138.6l6 -2.2" stroke="#1a1010" stroke-width="0.5" opacity="0.8"/>
 <rect x="-5" y="200" width="410" height="50" fill="url(#t-fortress-shade)"/>
 <path d="M-10 248C60 244 140 252 200 250C260 248 340 244 410 248L410 300L-10 300Z" fill="url(#t-fortress-gnd)"/>
-<path d="M-10 252C80 250 150 256 200 256C260 256 330 250 410 252L410 258C330 256 260 262 200 262C140 262 80 256 -10 258Z" fill="#3a2a40"/>
+<path d="M-10 252C80 250 150 256 200 256C260 256 330 250 410 252L410 258C330 256 260 262 200 262C140 262 80 256 -10 258Z" fill="#3a2a40" filter="url(#tx-plaster-soft)"/>
 <path d="M180 256L220 256L216 262L184 262Z" fill="#ff9a40" opacity="0.5"/>
-<path d="M180 250L180 262L220 262L220 250Z" fill="#5a3a20"/>
+<path d="M180 250L180 262L220 262L220 250Z" fill="#5a3a20" filter="url(#tx-wood-v)"/>
 <path d="M182 250L182 262" stroke="#2a1a10" stroke-width="0.5"/>
 <path d="M186 250L186 262" stroke="#2a1a10" stroke-width="0.5"/>
 <path d="M190 250L190 262" stroke="#2a1a10" stroke-width="0.5"/>
@@ -459,9 +459,10 @@
 <path d="M27.7 273.3Q28.2 270.6 28 268.8Q28.5 271.1 28.9 273.3Z" fill="#3a2a20"/>
 <path d="M20 280L60 268L64 272L24 284Z" fill="#2a1a10"/><circle cx="30" cy="283" r="7" fill="none" stroke="#1a100a" stroke-width="2"/>
 <path d="M30 276L30 290M23 283L37 283M25 278L35 288M35 278L25 288" stroke="#1a100a" stroke-width="0.8"/>
-<path d="M340 290L346 262" stroke="#1a100a" stroke-width="1"/><path d="M346 262l-1.5 -4l1.5 -3l1.5 3z" fill="#8a8a90"/>
-<path d="M350 290L356 262" stroke="#1a100a" stroke-width="1"/><path d="M356 262l-1.5 -4l1.5 -3l1.5 3z" fill="#8a8a90"/>
-<path d="M362 290L368 262" stroke="#1a100a" stroke-width="1"/><path d="M368 262l-1.5 -4l1.5 -3l1.5 3z" fill="#8a8a90"/>
+<!-- Speerschaefte heller, damit die Spitzen nicht frei in der Luft haengen -->
+<path d="M340 290L346 262" stroke="#54402e" stroke-width="1.2"/><path d="M346 262l-1.5 -4l1.5 -3l1.5 3z" fill="#8a8a90"/>
+<path d="M350 290L356 262" stroke="#54402e" stroke-width="1.2"/><path d="M356 262l-1.5 -4l1.5 -3l1.5 3z" fill="#8a8a90"/>
+<path d="M362 290L368 262" stroke="#54402e" stroke-width="1.2"/><path d="M368 262l-1.5 -4l1.5 -3l1.5 3z" fill="#8a8a90"/>
 <circle cx="272.2" cy="128" r="0.51" fill="#ffb050" opacity="0.69"/>
 <circle cx="74" cy="162.5" r="0.51" fill="#ffb050" opacity="0.55"/>
 <circle cx="256.8" cy="244" r="0.35" fill="#ffb050" opacity="0.81"/>

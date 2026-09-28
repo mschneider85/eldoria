@@ -2,11 +2,11 @@
 <defs>
 <linearGradient id="t-plain-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2d4f86"/><stop offset="0.35" stop-color="#5f86b8"/><stop offset="0.62" stop-color="#e9c486"/><stop offset="0.78" stop-color="#f6d98f"/></linearGradient>
 <radialGradient id="t-plain-sun" cx="0.72" cy="0.34" r="0.5"><stop offset="0" stop-color="#fffbe6"/><stop offset="0.08" stop-color="#fff2b8"/><stop offset="0.25" stop-color="#ffd97a" stop-opacity="0.6"/><stop offset="1" stop-color="#ffb347" stop-opacity="0"/></radialGradient>
-<linearGradient id="t-plain-mtn" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8d9fc0"/><stop offset="1" stop-color="#c9b99a"/></linearGradient>
-<linearGradient id="t-plain-h1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d7b25e"/><stop offset="1" stop-color="#a8843c"/></linearGradient>
-<linearGradient id="t-plain-h2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c99a3c"/><stop offset="1" stop-color="#8a6424"/></linearGradient>
-<linearGradient id="t-plain-h3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b98424"/><stop offset="1" stop-color="#5e3f12"/></linearGradient>
-<linearGradient id="t-plain-fg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8f621b"/><stop offset="1" stop-color="#3a2608"/></linearGradient>
+<linearGradient id="t-plain-mtn" data-tx="cliff-far" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8d9fc0"/><stop offset="1" stop-color="#c9b99a"/></linearGradient>
+<linearGradient id="t-plain-h1" data-tx="grass-fine" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d7b25e"/><stop offset="1" stop-color="#a8843c"/></linearGradient>
+<linearGradient id="t-plain-h2" data-tx="grass-soft" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c99a3c"/><stop offset="1" stop-color="#8a6424"/></linearGradient>
+<linearGradient id="t-plain-h3" data-tx="grass-soft" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b98424"/><stop offset="1" stop-color="#5e3f12"/></linearGradient>
+<linearGradient id="t-plain-fg" data-tx="grass" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8f621b"/><stop offset="1" stop-color="#3a2608"/></linearGradient>
 <linearGradient id="t-plain-cl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff8e8"/><stop offset="0.45" stop-color="#f1d3a6"/><stop offset="0.8" stop-color="#c49a8e"/><stop offset="1" stop-color="#8a7288"/></linearGradient>
 <linearGradient id="t-plain-ray" x1="0.72" y1="0.3" x2="0.3" y2="1"><stop offset="0" stop-color="#fff4c8" stop-opacity="0.55"/><stop offset="1" stop-color="#fff4c8" stop-opacity="0"/></linearGradient>
 <filter id="t-plain-b2" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2"/></filter>
@@ -240,6 +240,7 @@
 <path d="M-10 205C50 185 110 182 170 195C230 208 290 186 350 182C380 180 400 186 410 188L410 300L-10 300Z" fill="url(#t-plain-h2)"/>
 <path d="M170 195C230 208 290 186 350 182C380 180 400 186 410 188" stroke="#ffe39a" stroke-width="1.5" fill="none" opacity="0.6" filter="url(#t-plain-b1)"/>
 <path d="M-10 205C50 185 110 182 170 195" stroke="#ffe39a" stroke-width="1.2" fill="none" opacity="0.5" filter="url(#t-plain-b1)"/>
+<g filter="url(#tx-grass-fine)"><!-- Baum: Laub -->
 <path d="M206.2 199Q204.9 193.7 205.9 190L204.1 190Q202.8 193.7 203.8 199Z" fill="#3b2a14"/>
 <path d="M205.7 189.5Q203.6 186.6 201.2 184.3L200.2 185.1Q202.4 187.6 204.3 190.5Z" fill="#3b2a14"/>
 <path d="M200.8 184.1Q198.5 183.3 196.4 183.4L196.2 184.3Q198.3 184.4 200.5 185.3Z" fill="#3b2a14"/>
@@ -347,6 +348,7 @@
 <ellipse cx="213" cy="181.1" rx="2" ry="1.7" fill="#6f7c2c"/>
 <ellipse cx="215.4" cy="180.9" rx="1.8" ry="1.5" fill="#6f7c2c"/>
 <ellipse cx="214.6" cy="184.1" rx="2.8" ry="2.4" fill="#4d5a1e"/>
+</g>
 <path d="M217 205.1Q218.1 203 219.7 201.6Q218.4 203.4 217.9 205.1Z" fill="#d6ad55"/>
 <path d="M118.9 217.1Q119.5 215.5 119.4 214.4Q119.8 215.8 120.2 217.1Z" fill="#b08433"/>
 <path d="M277.5 207.3Q278.1 204.8 278.4 203Q278.4 205.2 278.5 207.3Z" fill="#9a7026"/>
@@ -588,8 +590,9 @@
 <path d="M401.3 243.9Q402.9 238.9 405.2 235.6Q403.3 239.7 402.7 243.9Z" fill="#8a5f1d"/>
 <path d="M403.6 234Q404.4 231.3 405.2 229.6Q404.6 231.8 404.5 234Z" fill="#a8782c"/>
 <path d="M206.5 249.5Q208.7 245.1 212 242.1Q209.1 245.8 208.2 249.5Z" fill="#e0b660"/>
-<path d="M120 300C150 282 200 272 215 258C228 246 196 240 204 232C208 228 214 226 222 224L226 225C220 230 216 234 218 238C226 248 244 254 232 266C220 280 210 290 200 300Z" fill="#c9a66a" opacity="0.6"/>
 <path d="M-10 268C80 258 150 262 220 270C290 278 340 262 410 262L410 300L-10 300Z" fill="url(#t-plain-fg)"/>
+<!-- Weg bis zur Hügelkuppe verlängert und vor den Vordergrundstreifen gelegt (endete vorher mitten im Feld) -->
+<path d="M120 300C150 282 200 272 215 258C228 246 196 240 204 232C210 226 220 214 227 199.5L228.6 199.8C225 212 222 220 226 225C220 230 216 234 218 238C226 248 244 254 232 266C220 280 210 290 200 300Z" fill="#c9a66a" opacity="0.6" filter="url(#tx-ground-soft)"/>
 <path d="M155.4 291.7Q156.5 285.2 155.8 280.9Q157.2 286.3 158.2 291.7Z" fill="#b98a3a"/>
 <path d="M315.8 298.2Q320 285.6 326 277.1Q320.8 287.7 318.9 298.2Z" fill="#3e2808"/>
 <path d="M312.5 266.8Q312.3 261.1 310.4 257.3Q312.7 262 313.8 266.8Z" fill="#9a6c22"/>
@@ -855,11 +858,11 @@
 <path d="M176.9 56.3q2 -2 4 0q2 -2 4 0" stroke="#3a2f33" stroke-width="0.6" fill="none"/>
 <path d="M188.6 64.3q2 -2 4 0q2 -2 4 0" stroke="#3a2f33" stroke-width="0.6" fill="none"/>
 <path d="M205.9 57.2q2 -2 4 0q2 -2 4 0" stroke="#3a2f33" stroke-width="0.6" fill="none"/>
-<path d="M52 262L56 176" stroke="#2a1a0c" stroke-width="2.2"/>
+<path d="M52 262L56 176" stroke="#2a1a0c" stroke-width="2.2" filter="url(#tx-wood-v)"/>
 <path d="M56 176L54 174M56 176L58 172" stroke="#c9a040" stroke-width="1"/>
-<path d="M55.5 181C66 179 78 184 90 180L86 190L92 199C80 204 68 198 55 202Z" fill="#8f1d18"/>
+<g filter="url(#tx-cloth)"><path d="M55.5 181C66 179 78 184 90 180L86 190L92 199C80 204 68 198 55 202Z" fill="#8f1d18"/>
 <path d="M55.5 181C66 179 78 184 90 180L88 184C76 187 66 183 55.3 185Z" fill="#c23a2c"/>
-<path d="M68 186l4 4 -4 5 -4 -5z" fill="#e8c05a"/>
+<path d="M68 186l4 4 -4 5 -4 -5z" fill="#e8c05a"/></g>
 <path d="M58 181L58 201M88 181" stroke="#e8c05a" stroke-width="0.6"/>
 <path d="M52 262L56 176" stroke="#6a4a24" stroke-width="0.6" transform="translate(0.8 0)"/>
 <rect width="400" height="300" fill="url(#t-plain-vig)"/>

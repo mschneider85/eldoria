@@ -32,11 +32,11 @@
       <stop offset="0" stop-color="#c486a8"/>
       <stop offset="1" stop-color="#e8b0a8"/>
     </linearGradient>
-    <linearGradient id="c1b-mid" x1="0" y1="0" x2="0" y2="1">
+    <linearGradient id="c1b-mid" data-tx="grass-fine" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#7a5a8a"/>
       <stop offset="1" stop-color="#5a4070"/>
     </linearGradient>
-    <linearGradient id="c1b-wall" x1="0" y1="0" x2="1" y2="0">
+    <linearGradient id="c1b-wall" data-tx="stone-soft" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0" stop-color="#2e2440"/>
       <stop offset="0.6" stop-color="#5a4460"/>
       <stop offset="1" stop-color="#b07a70"/>
@@ -50,7 +50,7 @@
     </pattern>
 
     <!-- materials -->
-    <linearGradient id="c1b-steel" x1="0" y1="0" x2="1" y2="0">
+    <linearGradient id="c1b-steel" data-tx="metal-soft" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0" stop-color="#2b3150"/>
       <stop offset="0.25" stop-color="#6f7898"/>
       <stop offset="0.45" stop-color="#d9deef"/>
@@ -59,50 +59,50 @@
       <stop offset="0.8" stop-color="#f0b4a0"/>
       <stop offset="1" stop-color="#ffe0b0"/>
     </linearGradient>
-    <linearGradient id="c1b-steelV" x1="0" y1="0" x2="0" y2="1">
+    <linearGradient id="c1b-steelV" data-tx="metal" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#f6f2ff"/>
       <stop offset="0.35" stop-color="#9aa2c2"/>
       <stop offset="0.6" stop-color="#e7a3a8"/>
       <stop offset="0.8" stop-color="#4a4f72"/>
       <stop offset="1" stop-color="#262a45"/>
     </linearGradient>
-    <radialGradient id="c1b-steelR" cx="0.7" cy="0.3" r="0.8">
+    <radialGradient id="c1b-steelR" data-tx="metal-soft" cx="0.7" cy="0.3" r="0.8">
       <stop offset="0" stop-color="#ffffff"/>
       <stop offset="0.25" stop-color="#e6dcef"/>
       <stop offset="0.55" stop-color="#8d92b4"/>
       <stop offset="1" stop-color="#2a2e4a"/>
     </radialGradient>
-    <linearGradient id="c1b-gold" x1="0" y1="0" x2="0" y2="1">
+    <linearGradient id="c1b-gold" data-tx="gold" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#fff4b8"/>
       <stop offset="0.3" stop-color="#f0c04a"/>
       <stop offset="0.6" stop-color="#a0650f"/>
       <stop offset="0.8" stop-color="#e8b040"/>
       <stop offset="1" stop-color="#6a400a"/>
     </linearGradient>
-    <linearGradient id="c1b-goldH" x1="0" y1="0" x2="1" y2="0">
+    <linearGradient id="c1b-goldH" data-tx="gold" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0" stop-color="#6a400a"/>
       <stop offset="0.35" stop-color="#d69a2a"/>
       <stop offset="0.7" stop-color="#fff0b0"/>
       <stop offset="1" stop-color="#f4c860"/>
     </linearGradient>
-    <linearGradient id="c1b-shield" x1="0" y1="0" x2="1" y2="0">
+    <linearGradient id="c1b-shield" data-tx="metal-soft" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0" stop-color="#0b1a4a"/>
       <stop offset="0.45" stop-color="#1b3f9a"/>
       <stop offset="0.8" stop-color="#2d5fc8"/>
       <stop offset="1" stop-color="#6f8fe0"/>
     </linearGradient>
-    <linearGradient id="c1b-cape" x1="0" y1="0" x2="1" y2="0">
+    <linearGradient id="c1b-cape" data-tx="cloth" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0" stop-color="#0a1640"/>
       <stop offset="0.5" stop-color="#1c3f96"/>
       <stop offset="0.85" stop-color="#3566c8"/>
       <stop offset="1" stop-color="#7d8fd6"/>
     </linearGradient>
-    <linearGradient id="c1b-tabard" x1="0" y1="0" x2="1" y2="0">
+    <linearGradient id="c1b-tabard" data-tx="cloth" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0" stop-color="#0c1a48"/>
       <stop offset="0.5" stop-color="#1d3f94"/>
       <stop offset="1" stop-color="#3a64c0"/>
     </linearGradient>
-    <radialGradient id="c1b-skin" cx="0.62" cy="0.38" r="0.75">
+    <radialGradient id="c1b-skin" data-tx="skin" cx="0.62" cy="0.38" r="0.75">
       <stop offset="0" stop-color="#fbdcc4"/>
       <stop offset="0.45" stop-color="#eab89a"/>
       <stop offset="0.8" stop-color="#b87c6a"/>
@@ -114,7 +114,7 @@
       <stop offset="0.8" stop-color="#c2562a"/>
       <stop offset="1" stop-color="#ffb070"/>
     </linearGradient>
-    <linearGradient id="c1b-plume" x1="0" y1="0" x2="1" y2="0">
+    <linearGradient id="c1b-plume" data-tx="hair-soft" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0" stop-color="#e8eeff"/>
       <stop offset="0.5" stop-color="#9ab4f0"/>
       <stop offset="1" stop-color="#ffd8b0"/>
@@ -160,7 +160,7 @@
   <!-- ================= 2. DISTANT LAND & CASTLE ================= -->
   <path d="M0 186 C40 178 80 182 120 176 C160 170 200 178 240 174 C280 170 320 178 360 172 L400 176 V230 H0 Z" fill="url(#c1b-far)" opacity="0.9"/>
   <!-- distant towers left -->
-  <g fill="#b07898" opacity="0.85">
+  <g fill="#b07898" opacity="0.85" filter="url(#tx-stone-fine)">
     <path d="M28 186 V140 L22 140 L32 118 L42 140 L36 140 V186 Z"/>
     <path d="M44 186 V152 H62 V186 Z"/>
     <path d="M44 152 V147 H48 V152 M51 152 V147 H55 V152 M58 152 V147 H62 V152"/>
@@ -212,7 +212,7 @@
     <path d="M292 164 C312 186 320 222 316 262" stroke="#8aa8f0" stroke-width="2.5" fill="none" opacity="0.55" filter="url(#c1b-blur-s)"/>
     <path d="M318 170 C334 184 340 204 338 226 C330 250 322 270 326 300" stroke="#ffd0a0" stroke-width="1.6" fill="none" opacity="0.85"/>
     <path d="M320 300 C318 280 324 262 332 246" stroke="url(#c1b-goldH)" stroke-width="2.5" fill="none"/>
-    <path d="M168 134 C150 150 142 190 142 300 H180 Z" fill="#0a1640"/>
+    <path d="M168 134 C150 150 142 190 142 300 H180 Z" fill="#0a1640" filter="url(#tx-cloth)"/>
   </g>
 
   <!-- hair behind head (wind-blown to the right) -->
@@ -228,7 +228,7 @@
   </g>
 
   <!-- neck -->
-  <path d="M199 110 H215 L216 132 H198 Z" fill="#c68a74"/>
+  <path d="M199 110 H215 L216 132 H198 Z" fill="#c68a74" filter="url(#tx-skin)"/>
   <path d="M199 114 C204 120 210 122 215 118 L215 126 C210 128 204 126 199 122 Z" fill="#7e4a48" opacity="0.6"/>
 
   <!-- ===== torso armour ===== -->
@@ -247,7 +247,7 @@
     <use href="#c1b-rivet" x="176" y="239"/><use href="#c1b-rivet" x="236" y="239"/>
   </g>
   <!-- belt -->
-  <path d="M175 200 C190 207 222 207 237 200 L237 208 C222 215 190 215 175 208 Z" fill="#3a2214"/>
+  <path d="M175 200 C190 207 222 207 237 200 L237 208 C222 215 190 215 175 208 Z" fill="#3a2214" filter="url(#tx-leather)"/>
   <rect x="200" y="202" width="12" height="10" rx="1.5" fill="url(#c1b-gold)" stroke="#4a2a06" stroke-width="0.5"/>
   <!-- breastplate -->
   <path d="M170 142 C172 134 186 128 206 128 C226 128 240 134 242 142 C242 160 238 172 236 186 C234 198 226 204 206 206 C186 204 178 198 176 186 C174 172 170 160 170 142 Z" fill="url(#c1b-steel)" stroke="#1f2340" stroke-width="0.8"/>
@@ -445,13 +445,13 @@
     <path d="M202.3 110 l-0.8 0.8 M215.2 110.1 l0.8 0.8" stroke="#8a4a44" stroke-width="0.5"/>
     <path d="M207 116.5 C208.5 117.2 210.5 117.2 212 116.5" stroke="#9a5e52" stroke-width="0.5" fill="none" opacity="0.7"/>
     <!-- ear (partially under hair) -->
-    <path d="M190.5 88 C187 87 186 92 187 97 C188 101 190 102 192 101 Z" fill="#b87c6a"/>
+    <path d="M190.5 88 C187 87 186 92 187 97 C188 101 190 102 192 101 Z" fill="#b87c6a" filter="url(#tx-skin)"/>
     <!-- hair front: parted, swept back, with loose strands -->
-    <path d="M189 84 C186 70 194 58 208 57 C222 56 230 66 228 82 C226 74 220 68 212 66 C204 70 196 74 193 86 C192 90 190 94 189 98 Z" fill="url(#c1b-hair)"/>
+    <path d="M189 84 C186 70 194 58 208 57 C222 56 230 66 228 82 C226 74 220 68 212 66 C204 70 196 74 193 86 C192 90 190 94 189 98 Z" fill="url(#c1b-hair)" filter="url(#tx-hair-fine)"/>
     <path d="M208 58 C204 62 200 68 196 76 M214 60 C210 64 206 68 204 72 M220 62 C224 68 226 74 227 80" stroke="#ffb070" stroke-width="0.7" fill="none" opacity="0.85"/>
     <path d="M200 64 C196 70 194 78 192 86" stroke="#3a1408" stroke-width="0.6" fill="none"/>
     <!-- side-swept fringe lowering the hairline -->
-    <path d="M190 86 C189 74 196 64 208 62 C220 61 228 68 228 80 C224 74 218 72 212 73 C206 75 202 78 199 82 C196 86 194 90 193 94 C192 91 191 88 190 86 Z" fill="url(#c1b-hair)"/>
+    <path d="M190 86 C189 74 196 64 208 62 C220 61 228 68 228 80 C224 74 218 72 212 73 C206 75 202 78 199 82 C196 86 194 90 193 94 C192 91 191 88 190 86 Z" fill="url(#c1b-hair)" filter="url(#tx-hair-fine)"/>
     <path d="M196 80 C200 72 208 67 218 68 M199 84 C203 77 210 72 220 72 M194 88 C196 80 200 74 206 70" stroke="#ffb070" stroke-width="0.6" fill="none" opacity="0.9"/>
     <path d="M201 81 C206 76 212 74 219 74" stroke="#4a180a" stroke-width="0.6" fill="none"/>
     <path d="M212 73 C218 72 224 74 228 80 C230 84 230 88 229 92" stroke="#c2562a" stroke-width="1" fill="none"/>

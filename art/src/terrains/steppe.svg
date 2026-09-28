@@ -2,10 +2,10 @@
 <defs>
 <linearGradient id="t-steppe-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a0f24"/><stop offset="0.3" stop-color="#6e1a26"/><stop offset="0.55" stop-color="#c2361f"/><stop offset="0.72" stop-color="#f07a2a"/><stop offset="0.8" stop-color="#ffb04a"/></linearGradient>
 <radialGradient id="t-steppe-sun" cx="0.5" cy="0.62" r="0.55"><stop offset="0" stop-color="#fff0b0"/><stop offset="0.1" stop-color="#ffc45a"/><stop offset="0.3" stop-color="#ff7a2a" stop-opacity="0.6"/><stop offset="1" stop-color="#c2361f" stop-opacity="0"/></radialGradient>
-<linearGradient id="t-steppe-mesa" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8a2a24"/><stop offset="1" stop-color="#c2502a"/></linearGradient>
-<linearGradient id="t-steppe-mesa2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5a1a1c"/><stop offset="1" stop-color="#8a3322"/></linearGradient>
-<linearGradient id="t-steppe-gr1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c8562a"/><stop offset="1" stop-color="#9a3a1c"/></linearGradient>
-<linearGradient id="t-steppe-gr2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8a3218"/><stop offset="1" stop-color="#3a120a"/></linearGradient>
+<linearGradient id="t-steppe-mesa" data-tx="cliff-fine" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8a2a24"/><stop offset="1" stop-color="#c2502a"/></linearGradient>
+<linearGradient id="t-steppe-mesa2" data-tx="ground-fine" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5a1a1c"/><stop offset="1" stop-color="#8a3322"/></linearGradient>
+<linearGradient id="t-steppe-gr1" data-tx="ground-soft" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c8562a"/><stop offset="1" stop-color="#9a3a1c"/></linearGradient>
+<linearGradient id="t-steppe-gr2" data-tx="ground" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8a3218"/><stop offset="1" stop-color="#3a120a"/></linearGradient>
 <linearGradient id="t-steppe-pole" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2a120a"/><stop offset="0.5" stop-color="#5a2c16"/><stop offset="1" stop-color="#1a0a06"/></linearGradient>
 <linearGradient id="t-steppe-dust" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ffb070" stop-opacity="0"/><stop offset="0.5" stop-color="#ff9a5a" stop-opacity="0.5"/><stop offset="1" stop-color="#ffb070" stop-opacity="0"/></linearGradient>
 <filter id="t-steppe-b3" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3"/></filter>
@@ -118,12 +118,12 @@
 <path d="M0 0" fill="none"/>
 <ellipse cx="300" cy="236" rx="48" ry="3" fill="#3a120a" opacity="0.4"/>
 <path d="M118.9 226L153 229.3L121.1 226Z" fill="#2a0a06" opacity="0.4"/>
-<path d="M118.3 226L118.9 176L121.1 176L121.7 226Z" fill="url(#t-steppe-pole)"/>
+<path d="M118.3 226L118.9 176L121.1 176L121.7 226Z" fill="url(#t-steppe-pole)" filter="url(#tx-wood-v-fine)"/>
 <path d="M118.6 193.5L121.4 194.2" stroke="#a87840" stroke-width="0.4"/>
 <path d="M118.6 196L121.4 196.7" stroke="#a87840" stroke-width="0.4"/>
 <path d="M118.6 198.5L121.4 199.2" stroke="#a87840" stroke-width="0.4"/>
 <path d="M118.6 201L121.4 201.7" stroke="#a87840" stroke-width="0.4"/>
-<path d="M110.1 187L129.9 185.9L129.9 187.6L110.1 188.7Z" fill="#3a1a0c"/>
+<path d="M110.1 187L129.9 185.9L129.9 187.6L110.1 188.7Z" fill="#3a1a0c" filter="url(#tx-wood-fine)"/>
 <path d="M111.8 187.8L111.8 192.7" stroke="#2a120a" stroke-width="0.2"/>
 <path d="M111.8 192.7L111.8 195.4" stroke="#e8d3b0" stroke-width="0.7" stroke-linecap="round"/>
 <path d="M115 187.8L115 195" stroke="#2a120a" stroke-width="0.2"/>
@@ -132,7 +132,7 @@
 <path d="M125 194.7L125 197.5" stroke="#e8d3b0" stroke-width="0.7" stroke-linecap="round"/>
 <path d="M128.2 187.8L128.2 193.1" stroke="#2a120a" stroke-width="0.2"/>
 <path d="M128.2 193.1L128.2 195.8" stroke="#e8d3b0" stroke-width="0.7" stroke-linecap="round"/>
-<path d="M116.7 188.7L123.3 187.8L122.8 199.1L121.1 196.9L120 200.8L118.3 197.4L116.7 200.2Z" fill="#8a1410"/>
+<path d="M116.7 188.7L123.3 187.8L122.8 199.1L121.1 196.9L120 200.8L118.3 197.4L116.7 200.2Z" fill="#8a1410" filter="url(#tx-cloth-fine)"/>
 <path d="M118.6 191.4l1.4 -1.7 l1.4 1.7 l-0.6 3.3 l-1.7 0 z" fill="#1a0404"/>
 <path d="M117.8 173.2C113.4 172.7 111.2 168.8 112.8 165" stroke="#e8d3b0" stroke-width="1" fill="none" stroke-linecap="round"/>
 <path d="M122.2 173.2C126.6 172.7 128.8 168.8 127.2 165" stroke="#e8d3b0" stroke-width="1" fill="none" stroke-linecap="round"/>
@@ -147,12 +147,12 @@
 <path d="M110.1 187L110.7 183.7L111.2 187Z" fill="#d8c3a0"/>
 <path d="M128.8 187L129.3 183.7L129.9 187Z" fill="#d8c3a0"/>
 <path d="M344.1 222L372 224.7L345.9 222Z" fill="#2a0a06" opacity="0.4"/>
-<path d="M343.6 222L344.1 182L345.9 182L346.4 222Z" fill="url(#t-steppe-pole)"/>
+<path d="M343.6 222L344.1 182L345.9 182L346.4 222Z" fill="url(#t-steppe-pole)" filter="url(#tx-wood-v-fine)"/>
 <path d="M343.8 196L346.2 196.5" stroke="#a87840" stroke-width="0.4"/>
 <path d="M343.8 198L346.2 198.5" stroke="#a87840" stroke-width="0.4"/>
 <path d="M343.8 200L346.2 200.5" stroke="#a87840" stroke-width="0.4"/>
 <path d="M343.8 202L346.2 202.5" stroke="#a87840" stroke-width="0.4"/>
-<path d="M336.9 190.8L353.1 189.9L353.1 191.2L336.9 192.2Z" fill="#3a1a0c"/>
+<path d="M336.9 190.8L353.1 189.9L353.1 191.2L336.9 192.2Z" fill="#3a1a0c" filter="url(#tx-wood-fine)"/>
 <path d="M338.2 191.5L338.2 195.7" stroke="#2a120a" stroke-width="0.2"/>
 <path d="M338.2 195.7L338.2 198" stroke="#e8d3b0" stroke-width="0.5" stroke-linecap="round"/>
 <path d="M340.9 191.5L340.9 196.5" stroke="#2a120a" stroke-width="0.2"/>
@@ -161,7 +161,7 @@
 <path d="M349.1 196.1L349.1 198.3" stroke="#e8d3b0" stroke-width="0.5" stroke-linecap="round"/>
 <path d="M351.8 191.5L351.8 196.7" stroke="#2a120a" stroke-width="0.2"/>
 <path d="M351.8 196.7L351.8 199" stroke="#e8d3b0" stroke-width="0.5" stroke-linecap="round"/>
-<path d="M342.3 192.2L347.7 191.5L347.2 200.7L345.9 198.9L345 202.1L343.6 199.4L342.3 201.6Z" fill="#8a1410"/>
+<path d="M342.3 192.2L347.7 191.5L347.2 200.7L345.9 198.9L345 202.1L343.6 199.4L342.3 201.6Z" fill="#8a1410" filter="url(#tx-cloth-fine)"/>
 <path d="M343.9 194.4l1.1 -1.4 l1.1 1.4 l-0.5 2.7 l-1.4 0 z" fill="#1a0404"/>
 <path d="M343.2 179.8C339.6 179.3 337.8 176.2 339.1 173" stroke="#e8d3b0" stroke-width="0.8" fill="none" stroke-linecap="round"/>
 <path d="M346.8 179.8C350.4 179.3 352.2 176.2 350.9 173" stroke="#e8d3b0" stroke-width="0.8" fill="none" stroke-linecap="round"/>
@@ -297,12 +297,14 @@
 <path d="M304.7 254.2Q306.8 251.4 310.8 249.5Q307.1 251.9 305.6 254.2Z" fill="#5a1a0c"/>
 <path d="M397.1 248Q398 246.6 399.4 245.6Q398.2 246.8 397.7 248Z" fill="#3a0e06"/>
 <path d="M59.1 272L149 280.7L64.9 272Z" fill="#2a0a06" opacity="0.4"/>
-<path d="M57.6 272L59.1 112L64.9 112L66.3 272Z" fill="url(#t-steppe-pole)"/>
+<path d="M57.6 272L59.1 112L64.9 112L66.3 272Z" fill="url(#t-steppe-pole)" filter="url(#tx-wood-v)"/>
+<!-- Streiflicht direkt auf den Pfahl (vorher über Schädelkiefer und Banner gezeichnet) -->
+<path d="M64.3 117L65.8 272" stroke="#ff9a4a" stroke-width="0.7" opacity="0.7"/>
 <path d="M58.2 168L65.8 169.7" stroke="#a87840" stroke-width="1.2"/>
 <path d="M58.2 176L65.8 177.7" stroke="#a87840" stroke-width="1.2"/>
 <path d="M58.2 184L65.8 185.7" stroke="#a87840" stroke-width="1.2"/>
 <path d="M58.2 192L65.8 193.7" stroke="#a87840" stroke-width="1.2"/>
-<path d="M35.9 147.2L88.1 144.3L88.1 148.6L35.9 151.5Z" fill="#3a1a0c"/>
+<path d="M35.9 147.2L88.1 144.3L88.1 148.6L35.9 151.5Z" fill="#3a1a0c" filter="url(#tx-wood)"/>
 <path d="M40.2 149.4L40.2 163.8" stroke="#2a120a" stroke-width="0.6"/>
 <path d="M40.2 163.8L40.2 171" stroke="#e8d3b0" stroke-width="1.7" stroke-linecap="round"/>
 <path d="M49 149.4L49 162.3" stroke="#2a120a" stroke-width="0.6"/>
@@ -311,23 +313,22 @@
 <path d="M75 166.6L75 173.9" stroke="#e8d3b0" stroke-width="1.7" stroke-linecap="round"/>
 <path d="M83.8 149.4L83.8 161.6" stroke="#2a120a" stroke-width="0.6"/>
 <path d="M83.8 161.6L83.8 168.9" stroke="#e8d3b0" stroke-width="1.7" stroke-linecap="round"/>
-<path d="M53.3 151.5L70.7 149.4L69.2 179.1L64.9 173.3L62 183.4L57.6 174.8L53.3 182Z" fill="#8a1410"/>
+<path d="M53.3 151.5L70.7 149.4L69.2 179.1L64.9 173.3L62 183.4L57.6 174.8L53.3 182Z" fill="#8a1410" filter="url(#tx-cloth)"/>
 <path d="M58.4 158.8l3.6 -4.3 l3.6 4.3 l-1.4 8.7 l-4.3 0 z" fill="#1a0404"/>
 <path d="M56.2 104.8C44.6 103.3 38.8 93.2 43.2 83" stroke="#e8d3b0" stroke-width="2.6" fill="none" stroke-linecap="round"/>
 <path d="M67.8 104.8C79.4 103.3 85.2 93.2 80.8 83" stroke="#e8d3b0" stroke-width="2.6" fill="none" stroke-linecap="round"/>
-<path d="M54.8 107.7C53.3 96.1 70.7 96.1 69.2 107.7C67.8 112 66.3 114.9 64.9 116.4L59.1 116.4L56.2 112Z" fill="#efe0c2"/>
+<path d="M54.8 107.7C53.3 96.1 70.7 96.1 69.2 107.7C67.8 112 66.3 114.9 64.9 116.4L59.1 116.4L56.2 112Z" fill="#efe0c2" filter="url(#tx-plaster-fine)"/>
 <ellipse cx="59.1" cy="106.2" rx="2.2" ry="2.5" fill="#2a0806"/>
 <ellipse cx="64.9" cy="106.2" rx="2.2" ry="2.5" fill="#2a0806"/>
 <circle cx="59.1" cy="106.2" r="0.7" fill="#ff5a1a"/>
 <circle cx="64.9" cy="106.2" r="0.7" fill="#ff5a1a"/>
 <path d="M59.1 114.9q-2.9 2.9 -4.3 -1.4" stroke="#fff4dc" stroke-width="1.3" fill="none" stroke-linecap="round"/>
 <path d="M64.9 114.9q2.9 2.9 4.3 -1.4" stroke="#fff4dc" stroke-width="1.3" fill="none" stroke-linecap="round"/>
-<path d="M64.3 112L65.8 272" stroke="#ff9a4a" stroke-width="0.7" opacity="0.7"/>
 <path d="M35.9 147.2L37.4 138.5L38.8 147.2Z" fill="#d8c3a0"/>
 <path d="M85.2 147.2L86.7 138.5L88.1 147.2Z" fill="#d8c3a0"/>
-<circle cx="62" cy="200" r="13" fill="#4a1a0c" stroke="#2a0a04" stroke-width="2"/>
+<g filter="url(#tx-leather)"><!-- Schild --><circle cx="62" cy="200" r="13" fill="#4a1a0c" stroke="#2a0a04" stroke-width="2"/>
 <circle cx="62" cy="200" r="9" fill="none" stroke="#9a5a2a" stroke-width="1.2"/>
-<path d="M62 190L66 200L62 210L58 200Z" fill="#8a1410"/>
+<path d="M62 190L66 200L62 210L58 200Z" fill="#8a1410"/></g>
 <circle cx="73" cy="200" r="0.9" fill="#d8a060"/>
 <circle cx="69.8" cy="207.8" r="0.9" fill="#d8a060"/>
 <circle cx="62" cy="211" r="0.9" fill="#d8a060"/>
@@ -337,6 +338,8 @@
 <circle cx="62" cy="189" r="0.9" fill="#d8a060"/>
 <circle cx="69.8" cy="192.2" r="0.9" fill="#d8a060"/>
 <path d="M72 192A13 13 0 0 1 72 208" stroke="#ff9a4a" stroke-width="1" fill="none" opacity="0.8"/>
+<!-- Schnüre: Federn hingen sonst frei unter dem Schild -->
+<path d="M53.5 209.5L50 226M57 211L54 230M68.5 210L70 228" stroke="#2a120a" stroke-width="0.6" fill="none"/>
 <path d="M50 226q-2 8 1 14q3 -6 -1 -14z" fill="#1a0a06"/>
 <path d="M54 230q-2 8 1 14q3 -6 -1 -14z" fill="#6a1a10"/>
 <path d="M70 228q-2 8 1 14q3 -6 -1 -14z" fill="#2a120a"/>
@@ -351,11 +354,11 @@
 <g transform="translate(298.9 255.2) rotate(-23.4)"><path d="M-3 0L3 0" stroke="#b88a68" stroke-width="1.3" stroke-linecap="round"/><circle cx="-3" cy="-0.6" r="0.9" fill="#b88a68"/><circle cx="-3" cy="0.6" r="0.9" fill="#b88a68"/><circle cx="3" cy="-0.6" r="0.9" fill="#b88a68"/><circle cx="3" cy="0.6" r="0.9" fill="#b88a68"/></g>
 <g transform="translate(341.8 265.2) rotate(25)"><path d="M-4.2 0L4.2 0" stroke="#b88a68" stroke-width="1.3" stroke-linecap="round"/><circle cx="-4.2" cy="-0.6" r="0.9" fill="#b88a68"/><circle cx="-4.2" cy="0.6" r="0.9" fill="#b88a68"/><circle cx="4.2" cy="-0.6" r="0.9" fill="#b88a68"/><circle cx="4.2" cy="0.6" r="0.9" fill="#b88a68"/></g>
 <path d="M236 262C236 254 250 254 250 262L248 266L238 266Z" fill="#c8a07c"/><circle cx="240" cy="261" r="1.4" fill="#3a120a"/><circle cx="246" cy="261" r="1.4" fill="#3a120a"/>
-<path d="M142 268C144.7 258.4 154 256.8 158 268C154 270 146 270 142 268Z" fill="#2a0c06"/>
+<path d="M142 268C144.7 258.4 154 256.8 158 268C154 270 146 270 142 268Z" fill="#2a0c06" filter="url(#tx-cliff-fine)"/>
 <path d="M146.8 260C150 257.1 154 258.1 157.3 267" stroke="#d0602a" stroke-width="0.8" fill="none" opacity="0.7"/>
-<path d="M359 262C362.7 248.8 375.5 246.6 381 262C375.5 264 364.5 264 359 262Z" fill="#2a0c06"/>
+<path d="M359 262C362.7 248.8 375.5 246.6 381 262C375.5 264 364.5 264 359 262Z" fill="#2a0c06" filter="url(#tx-cliff-fine)"/>
 <path d="M365.6 251C370 247 375.5 248.4 380 261" stroke="#d0602a" stroke-width="0.8" fill="none" opacity="0.7"/>
-<path d="M195 276C196.7 270 202.5 269 205 276C202.5 278 197.5 278 195 276Z" fill="#2a0c06"/>
+<path d="M195 276C196.7 270 202.5 269 205 276C202.5 278 197.5 278 195 276Z" fill="#2a0c06" filter="url(#tx-cliff-fine)"/>
 <path d="M198 271C200 269.2 202.5 269.8 204.5 275" stroke="#d0602a" stroke-width="0.8" fill="none" opacity="0.7"/>
 <path d="M250 70c-4.2 -4.2 -9.8 -4.2 -15.4 -1.4c4.2 -0.3 8.4 0.3 12.6 2.2c1.4 0.6 4.2 0.6 5.6 0c4.2 -2.8 9.8 -2.8 15.4 -1.4z" fill="#1a0608" opacity="0.9"/>
 <path d="M290 55c-3 -3 -7 -3 -11 -1c3 -0.2 6 0.2 9 1.6c1 0.4 3 0.4 4 0c3 -2 7 -2 11 -1z" fill="#1a0608" opacity="0.8"/>

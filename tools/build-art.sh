@@ -13,7 +13,9 @@ render() { # svg out.webp breite höhe
   local in out w h tmp
   in=$(realpath "$1"); out=$(realpath -m "$2"); w=$3; h=$4
   tmp=$(mktemp -d)
-  printf '<html><body style="margin:0"><img src="file://%s" style="width:%dpx;height:%dpx;display:block"></body></html>' "$in" "$w" "$h" > "$tmp/p.html"
+  # Material-Texturen (tx-…) einsetzen, siehe tools/texturize.py
+  python3 "$TOOLS/texturize.py" "$in" "$tmp/in.svg"
+  printf '<html><body style="margin:0"><img src="file://%s" style="width:%dpx;height:%dpx;display:block"></body></html>' "$tmp/in.svg" "$w" "$h" > "$tmp/p.html"
   timeout 60 "$CHROME" --headless=new --no-sandbox --disable-gpu --hide-scrollbars --allow-file-access-from-files \
     --window-size="$w,$h" --screenshot="$tmp/o.png" "file://$tmp/p.html" >/dev/null 2>&1
   convert "$tmp/o.png" -quality "$QUALITY" -define webp:method=6 "$out"
@@ -22,7 +24,8 @@ render() { # svg out.webp breite höhe
   rm -rf "$tmp"
   echo "$(basename "$out") $(stat -c %s "$out")"
 }
-export -f render; export CHROME QUALITY
+TOOLS=$(pwd)/tools
+export -f render; export CHROME QUALITY TOOLS
 
 jobs=()
 for svg in art/src/cards/*.svg art/src/terrains/*.svg; do

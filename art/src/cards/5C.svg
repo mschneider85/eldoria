@@ -16,7 +16,7 @@
       <stop offset="0.6" stop-color="#d4ece8"/>
       <stop offset="1" stop-color="#8fb4b4"/>
     </radialGradient>
-    <linearGradient id="c5c-far" x1="0" y1="0" x2="0" y2="1">
+    <linearGradient id="c5c-far" data-tx="ground-fine" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#2a3a4c"/>
       <stop offset="1" stop-color="#3a5460"/>
     </linearGradient>
@@ -24,37 +24,37 @@
       <stop offset="0" stop-color="#141a26"/>
       <stop offset="1" stop-color="#0c1018"/>
     </linearGradient>
-    <linearGradient id="c5c-stone" x1="0" y1="0" x2="1" y2="0">
+    <linearGradient id="c5c-stone" data-tx="stone" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0" stop-color="#1e252e"/>
       <stop offset="0.6" stop-color="#3c4a52"/>
       <stop offset="1" stop-color="#7fb8b4"/>
     </linearGradient>
-    <linearGradient id="c5c-stoneL" x1="1" y1="0" x2="0" y2="0">
+    <linearGradient id="c5c-stoneL" data-tx="stone" x1="1" y1="0" x2="0" y2="0">
       <stop offset="0" stop-color="#1e252e"/>
       <stop offset="0.6" stop-color="#3c4a52"/>
       <stop offset="1" stop-color="#7fb8b4"/>
     </linearGradient>
-    <linearGradient id="c5c-ground" x1="0" y1="0" x2="0" y2="1">
+    <linearGradient id="c5c-ground" data-tx="ground-soft" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#1a2a2c"/>
       <stop offset="1" stop-color="#05080a"/>
     </linearGradient>
-    <linearGradient id="c5c-ghost" x1="0" y1="0" x2="0" y2="1">
+    <linearGradient id="c5c-ghost" data-tx="cloth-soft" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#f4fffc" stop-opacity="0.85"/>
       <stop offset="0.35" stop-color="#b8f4ec" stop-opacity="0.6"/>
       <stop offset="0.75" stop-color="#5fc8c0" stop-opacity="0.45"/>
       <stop offset="1" stop-color="#3a9aa0" stop-opacity="0"/>
     </linearGradient>
-    <linearGradient id="c5c-ghostSide" x1="0" y1="0" x2="1" y2="0">
+    <linearGradient id="c5c-ghostSide" data-tx="cloth-soft" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0" stop-color="#5fc8c0" stop-opacity="0"/>
       <stop offset="0.5" stop-color="#a8efe6" stop-opacity="0.7"/>
       <stop offset="1" stop-color="#e8fffa" stop-opacity="0.9"/>
     </linearGradient>
-    <linearGradient id="c5c-ghostSideR" x1="1" y1="0" x2="0" y2="0">
+    <linearGradient id="c5c-ghostSideR" data-tx="cloth-soft" x1="1" y1="0" x2="0" y2="0">
       <stop offset="0" stop-color="#5fc8c0" stop-opacity="0"/>
       <stop offset="0.5" stop-color="#a8efe6" stop-opacity="0.7"/>
       <stop offset="1" stop-color="#e8fffa" stop-opacity="0.9"/>
     </linearGradient>
-    <radialGradient id="c5c-face" cx="0.5" cy="0.4" r="0.6">
+    <radialGradient id="c5c-face" data-tx="skin-soft" cx="0.5" cy="0.4" r="0.6">
       <stop offset="0" stop-color="#ffffff"/>
       <stop offset="0.55" stop-color="#d4faf4"/>
       <stop offset="1" stop-color="#7fd4cc"/>
@@ -113,7 +113,7 @@
 
   <!-- 2 FAR: ruined chapel, hills -->
   <path d="M0,190 C60,172 110,182 170,176 C240,170 300,180 400,168 L400,240 L0,240 Z" fill="url(#c5c-far)" opacity="0.8"/>
-  <g fill="#1c2634" opacity="0.9">
+  <g fill="#1c2634" opacity="0.9" filter="url(#tx-stone-fine)">
     <path d="M40,190 L40,140 L56,124 L72,140 L72,190 Z"/>
     <path d="M52,124 L56,92 L60,124 Z"/>
     <path d="M55,88 h2 v6 h-2 z M52,92 h8 v2 h-8 z"/>
@@ -128,14 +128,14 @@
 
   <!-- 3 MIDGROUND: fence, graves, tree -->
   <!-- iron fence -->
-  <g stroke="#0e141c" stroke-width="1.4" fill="#0e141c">
+  <g stroke="#0e141c" stroke-width="1.4" fill="#0e141c" filter="url(#tx-metal-fine)">
     <path d="M0,200 L140,196 M0,208 L140,204" fill="none"/>
     <path d="M260,196 L400,200 M260,204 L400,208" fill="none"/>
     <path d="M8,214 V190 l-2,-3 l2,-4 l2,4 l-2,3 M24,213 V189 l-2,-3 l2,-4 l2,4 l-2,3 M40,212 V188 l-2,-3 l2,-4 l2,4 l-2,3 M56,212 V188 l-2,-3 l2,-4 l2,4 l-2,3 M72,211 V187 l-2,-3 l2,-4 l2,4 l-2,3 M88,210 V186 l-2,-3 l2,-4 l2,4 l-2,3 M104,209 V185 l-2,-3 l2,-4 l2,4 l-2,3 M120,208 V184 l-2,-3 l2,-4 l2,4 l-2,3 M136,208 V184 l-2,-3 l2,-4 l2,4 l-2,3"/>
     <path d="M264,208 V184 l-2,-3 l2,-4 l2,4 l-2,3 M280,208 V184 l-2,-3 l2,-4 l2,4 l-2,3 M296,209 V185 l-2,-3 l2,-4 l2,4 l-2,3 M312,210 V186 l-2,-3 l2,-4 l2,4 l-2,3 M328,211 V187 l-2,-3 l2,-4 l2,4 l-2,3 M344,212 V188 l-2,-3 l2,-4 l2,4 l-2,3 M360,212 V188 l-2,-3 l2,-4 l2,4 l-2,3 M376,213 V189 l-2,-3 l2,-4 l2,4 l-2,3 M392,214 V190 l-2,-3 l2,-4 l2,4 l-2,3"/>
   </g>
   <!-- gnarled tree (left) -->
-  <g fill="#070a0f">
+  <g fill="#070a0f" filter="url(#tx-bark)">
     <path d="M18,260 C24,230 22,200 30,170 C34,150 30,130 20,112 L24,110 C34,124 40,140 40,156 C46,140 56,128 70,120 L72,124 C60,134 50,148 46,166 C44,190 44,220 48,260 Z"/>
     <path d="M22,112 C14,100 6,96 -2,96 L-2,92 C8,92 18,98 26,108 Z"/>
     <path d="M70,122 C80,118 88,110 92,100 L95,102 C90,114 82,122 72,126 Z"/>
@@ -158,7 +158,7 @@
     <path d="M60,224 C62,210 84,210 86,224" stroke="#0e141a" stroke-width="1" fill="none"/>
     <path d="M66,230 h14 M68,236 h10 M66,242 h14" stroke="#0e141a" stroke-width="1.2"/>
     <path d="M88,220 C88,210 82,206 76,205" stroke="#a8f4ea" stroke-width="1.2" fill="none" opacity="0.8"/>
-    <path d="M56,250 C60,246 66,248 70,244 L72,262 L56,262 Z" fill="#1c3a2c" opacity="0.8"/>
+    <path d="M56,250 C60,246 66,248 70,244 L72,262 L56,262 Z" fill="#1c3a2c" opacity="0.8" filter="url(#tx-moss-fine)"/>
     <!-- left celtic cross -->
     <path d="M118,264 L118,226 L106,226 L106,216 L118,216 L118,204 L128,204 L128,216 L140,216 L140,226 L128,226 L128,264 Z" fill="url(#c5c-stone)"/>
     <circle cx="123" cy="221" r="9" fill="none" stroke="#3c4a52" stroke-width="2.5"/>
@@ -171,7 +171,7 @@
     <!-- right broken pointed -->
     <path d="M340,268 L340,232 L352,216 L364,232 L362,248 L366,252 L364,268 Z" fill="url(#c5c-stoneL)"/>
     <path d="M340,232 L352,216" stroke="#a8f4ea" stroke-width="1" opacity="0.7"/>
-    <path d="M344,256 C350,252 356,254 362,250 L364,268 L340,268 Z" fill="#1c3a2c" opacity="0.8"/>
+    <path d="M344,256 C350,252 356,254 362,250 L364,268 L340,268 Z" fill="#1c3a2c" opacity="0.8" filter="url(#tx-moss-fine)"/>
     <!-- small grave far right -->
     <path d="M372,262 L372,242 C372,234 388,234 388,242 L388,262 Z" fill="url(#c5c-stoneL)" opacity="0.9"/>
   </g>
@@ -199,7 +199,7 @@
   <g stroke="#0e141a" stroke-width="0.8" fill="none">
     <path d="M62,212 L66,220 L64,226 M350,222 L354,232 L350,238 M378,244 L382,252"/>
   </g>
-  <g fill="#2a4a36" opacity="0.7">
+  <g fill="#2a4a36" opacity="0.7" filter="url(#tx-moss-fine)">
     <ellipse cx="104" cy="224" rx="4" ry="2"/><ellipse cx="294" cy="222" rx="5" ry="2"/><ellipse cx="124" cy="262" rx="5" ry="2"/><ellipse cx="330" cy="224" rx="3" ry="1.6"/>
   </g>
   <!-- 4 CHARACTER: BANSHEE -->

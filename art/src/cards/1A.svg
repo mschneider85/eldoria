@@ -10,7 +10,7 @@
     </filter>
 
     <!-- ===== environment ===== -->
-    <linearGradient id="c1a-wall" x1="0" y1="0" x2="0" y2="1">
+    <linearGradient id="c1a-wall" data-tx="stone-soft" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#1a2138"/>
       <stop offset="0.55" stop-color="#252c44"/>
       <stop offset="1" stop-color="#141827"/>
@@ -29,7 +29,7 @@
       <path d="M0 0.5 H36 M0 10.5 H36 M0.5 0 V10 M18.5 10 V20" stroke="#0a0d18" stroke-width="1" opacity="0.55"/>
       <path d="M0 1.5 H36 M0 11.5 H36" stroke="#6a7698" stroke-width="0.5" opacity="0.25"/>
     </pattern>
-    <linearGradient id="c1a-pillar" x1="0" y1="0" x2="1" y2="0">
+    <linearGradient id="c1a-pillar" data-tx="stone-soft" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0" stop-color="#0e1220"/>
       <stop offset="0.35" stop-color="#4a5270"/>
       <stop offset="0.55" stop-color="#6c7594"/>
@@ -44,41 +44,41 @@
       <stop offset="0.6" stop-color="#ffe3a0" stop-opacity="0.3"/>
       <stop offset="1" stop-color="#ffe3a0" stop-opacity="0"/>
     </linearGradient>
-    <linearGradient id="c1a-banner" x1="0" y1="0" x2="1" y2="0">
+    <linearGradient id="c1a-banner" data-tx="cloth" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0" stop-color="#0c1d52"/>
       <stop offset="0.3" stop-color="#1f47a8"/>
       <stop offset="0.55" stop-color="#15347f"/>
       <stop offset="0.8" stop-color="#2553b8"/>
       <stop offset="1" stop-color="#0a1740"/>
     </linearGradient>
-    <linearGradient id="c1a-floor" x1="0" y1="0" x2="0" y2="1">
+    <linearGradient id="c1a-floor" data-tx="marble" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#3a3f55"/>
       <stop offset="1" stop-color="#11131d"/>
     </linearGradient>
 
     <!-- ===== materials ===== -->
-    <linearGradient id="c1a-gold" x1="0" y1="0" x2="0" y2="1">
+    <linearGradient id="c1a-gold" data-tx="gold" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#fff4b8"/>
       <stop offset="0.25" stop-color="#f2c54e"/>
       <stop offset="0.55" stop-color="#a86b12"/>
       <stop offset="0.75" stop-color="#e9b440"/>
       <stop offset="1" stop-color="#6e430b"/>
     </linearGradient>
-    <linearGradient id="c1a-goldH" x1="0" y1="0" x2="1" y2="0">
+    <linearGradient id="c1a-goldH" data-tx="gold" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0" stop-color="#6e430b"/>
       <stop offset="0.3" stop-color="#f6d064"/>
       <stop offset="0.5" stop-color="#fff6c4"/>
       <stop offset="0.7" stop-color="#d69a2a"/>
       <stop offset="1" stop-color="#5a3508"/>
     </linearGradient>
-    <linearGradient id="c1a-velvet" x1="0" y1="0" x2="1" y2="0">
+    <linearGradient id="c1a-velvet" data-tx="cloth" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0" stop-color="#2a0710"/>
       <stop offset="0.3" stop-color="#6d1224"/>
       <stop offset="0.5" stop-color="#8e1a30"/>
       <stop offset="0.75" stop-color="#5a0e1c"/>
       <stop offset="1" stop-color="#22050c"/>
     </linearGradient>
-    <linearGradient id="c1a-mantle" x1="0" y1="0" x2="1" y2="0.3">
+    <linearGradient id="c1a-mantle" data-tx="cloth" x1="0" y1="0" x2="1" y2="0.3">
       <stop offset="0" stop-color="#2e5fc4"/>
       <stop offset="0.35" stop-color="#1a3b90"/>
       <stop offset="0.7" stop-color="#0f245f"/>
@@ -98,38 +98,38 @@
       <stop offset="0.4" stop-color="#000" stop-opacity="0"/>
       <stop offset="1" stop-color="#000" stop-opacity="0.45"/>
     </linearGradient>
-    <linearGradient id="c1a-tunic" x1="0" y1="0" x2="1" y2="0">
+    <linearGradient id="c1a-tunic" data-tx="cloth" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0" stop-color="#23427f"/>
       <stop offset="0.5" stop-color="#162b5c"/>
       <stop offset="1" stop-color="#0a1635"/>
     </linearGradient>
-    <linearGradient id="c1a-ermine" x1="0" y1="0" x2="1" y2="0.4">
+    <linearGradient id="c1a-ermine" data-tx="hair-soft" x1="0" y1="0" x2="1" y2="0.4">
       <stop offset="0" stop-color="#ffffff"/>
       <stop offset="0.5" stop-color="#ece6da"/>
       <stop offset="1" stop-color="#9ea3b8"/>
     </linearGradient>
-    <radialGradient id="c1a-skin" cx="0.38" cy="0.35" r="0.75">
+    <radialGradient id="c1a-skin" data-tx="skin" cx="0.38" cy="0.35" r="0.75">
       <stop offset="0" stop-color="#f3c9a4"/>
       <stop offset="0.45" stop-color="#d99f78"/>
       <stop offset="0.8" stop-color="#a86a4c"/>
       <stop offset="1" stop-color="#6e3f2d"/>
     </radialGradient>
-    <radialGradient id="c1a-skinHand" cx="0.35" cy="0.3" r="0.8">
+    <radialGradient id="c1a-skinHand" data-tx="skin" cx="0.35" cy="0.3" r="0.8">
       <stop offset="0" stop-color="#f0c29c"/>
       <stop offset="0.6" stop-color="#c98a64"/>
       <stop offset="1" stop-color="#7a4632"/>
     </radialGradient>
-    <linearGradient id="c1a-beard" x1="0" y1="0" x2="1" y2="1">
+    <linearGradient id="c1a-beard" data-tx="hair" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#b8a590"/>
       <stop offset="0.4" stop-color="#7d6450"/>
       <stop offset="1" stop-color="#3a2a20"/>
     </linearGradient>
-    <linearGradient id="c1a-hair" x1="0" y1="0" x2="1" y2="0">
+    <linearGradient id="c1a-hair" data-tx="hair" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0" stop-color="#a38e78"/>
       <stop offset="0.5" stop-color="#5e4938"/>
       <stop offset="1" stop-color="#2c2018"/>
     </linearGradient>
-    <linearGradient id="c1a-steel" x1="0" y1="0" x2="1" y2="0">
+    <linearGradient id="c1a-steel" data-tx="metal-fine" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0" stop-color="#5d6a82"/>
       <stop offset="0.45" stop-color="#e8f0ff"/>
       <stop offset="0.5" stop-color="#ffffff"/>
@@ -188,7 +188,7 @@
   <rect width="400" height="300" fill="url(#c1a-torchLight)"/>
 
   <!-- vaulted ceiling arches -->
-  <path d="M0 0 H400 V22 C340 4 260 -2 200 8 C140 -2 60 4 0 22 Z" fill="#0c0f1c" opacity="0.8"/>
+  <path d="M0 0 H400 V22 C340 4 260 -2 200 8 C140 -2 60 4 0 22 Z" fill="#0c0f1c" opacity="0.8" filter="url(#tx-stone-soft)"/>
   <path d="M0 22 C60 4 140 -2 200 8 C260 -2 340 4 400 22" fill="none" stroke="#5a6488" stroke-width="1.2" opacity="0.5"/>
 
   <!-- pillars -->
@@ -206,7 +206,7 @@
   <!-- ===== stained glass window (left) ===== -->
   <g>
     <ellipse cx="71" cy="95" rx="60" ry="90" fill="#c9d9ff" opacity="0.22" filter="url(#c1a-blur-l)"/>
-    <path d="M34 178 V62 C34 36 52 18 71 11 C90 18 108 36 108 62 V178 Z" fill="#2c2f40" stroke="#0a0c14" stroke-width="1.5"/>
+    <path d="M34 178 V62 C34 36 52 18 71 11 C90 18 108 36 108 62 V178 Z" fill="#2c2f40" stroke="#0a0c14" stroke-width="1.5" filter="url(#tx-stone)"/>
     <path d="M34 178 V62 C34 36 52 18 71 11 C90 18 108 36 108 62 V178" fill="none" stroke="#7e87a6" stroke-width="0.8" opacity="0.6"/>
     <g clip-path="url(#c1a-winClip)">
       <rect x="38" y="14" width="68" height="160" fill="url(#c1a-winGlow)"/>
@@ -238,7 +238,7 @@
     <!-- mullion stone frame -->
     <path d="M71 11 V178" stroke="#3a3f55" stroke-width="2.4"/>
     <path d="M70 11 V178" stroke="#8a93b0" stroke-width="0.6" opacity="0.6"/>
-    <rect x="30" y="176" width="82" height="7" fill="#3c4258"/>
+    <rect x="30" y="176" width="82" height="7" fill="#3c4258" filter="url(#tx-stone)"/>
     <rect x="30" y="176" width="82" height="1.5" fill="#9aa3c0" opacity="0.6"/>
   </g>
 
@@ -393,15 +393,15 @@
       <circle cx="199.5" cy="199.5" r="0.5"/><circle cx="199.5" cy="215.5" r="0.5"/><circle cx="199.5" cy="231.5" r="0.5"/><circle cx="199.5" cy="247.5" r="0.5"/>
     </g>
     <!-- belt -->
-    <path d="M161 240 C180 246 220 246 239 240 L240 252 C220 258 180 258 160 252 Z" fill="#2a1a10"/>
+    <path d="M161 240 C180 246 220 246 239 240 L240 252 C220 258 180 258 160 252 Z" fill="#2a1a10" filter="url(#tx-leather)"/>
     <path d="M161 240 C180 246 220 246 239 240" stroke="#c99a36" stroke-width="0.8" fill="none"/>
     <rect x="193" y="241" width="14" height="14" rx="2" fill="url(#c1a-gold)" stroke="#5a3508" stroke-width="0.6"/>
     <rect x="196.5" y="244.5" width="7" height="7" rx="1" fill="url(#c1a-sapph)"/>
 
     <!-- mantle inner front edges with embroidered gold trim -->
-    <path d="M168 146 C164 190 160 250 158 300 H148 C150 250 154 190 160 146 Z" fill="#0d1c4a"/>
+    <path d="M168 146 C164 190 160 250 158 300 H148 C150 250 154 190 160 146 Z" fill="#0d1c4a" filter="url(#tx-cloth)"/>
     <path d="M158 146 C154 190 150 250 148 300" stroke="url(#c1a-goldH)" stroke-width="7" fill="none"/>
-    <path d="M232 146 C236 190 240 250 242 300 H252 C250 250 246 190 240 146 Z" fill="#081435"/>
+    <path d="M232 146 C236 190 240 250 242 300 H252 C250 250 246 190 240 146 Z" fill="#081435" filter="url(#tx-cloth)"/>
     <path d="M242 146 C246 190 250 250 252 300" stroke="url(#c1a-goldH)" stroke-width="7" fill="none"/>
     <g fill="#7a1024">
       <circle cx="156.3" cy="170" r="1.5"/><circle cx="154.2" cy="200" r="1.5"/><circle cx="152.3" cy="230" r="1.5"/><circle cx="150.6" cy="260" r="1.5"/>
@@ -483,7 +483,7 @@
     <circle cx="275" cy="182" r="3" fill="url(#c1a-sapph)" stroke="#3a2206" stroke-width="0.4"/>
     <circle cx="274" cy="181" r="0.9" fill="#fff"/>
     <!-- grip -->
-    <rect x="271.5" y="187" width="7" height="30" fill="#3a1d0e"/>
+    <rect x="271.5" y="187" width="7" height="30" fill="#3a1d0e" filter="url(#tx-leather-fine)"/>
     <path d="M271.5 190 l7 3 M271.5 195 l7 3 M271.5 200 l7 3 M271.5 205 l7 3 M271.5 210 l7 3" stroke="#c99a36" stroke-width="0.7"/>
     <!-- pommel -->
     <path d="M275 216 C281 216 283 221 280 225 C278 228 272 228 270 225 C267 221 269 216 275 216 Z" fill="url(#c1a-gold)" stroke="#3a2206" stroke-width="0.5"/>
@@ -556,11 +556,11 @@
     <!-- beard cast shadow on the fur -->
     <path d="M186 140 C192 160 198 176 204 186 C210 176 218 160 222 140 Z" fill="#2a2f48" opacity="0.55" filter="url(#c1a-blur-m)"/>
     <!-- neck shadow behind beard -->
-    <path d="M186 118 H214 V140 H186 Z" fill="#7a4632"/>
+    <path d="M186 118 H214 V140 H186 Z" fill="#7a4632" filter="url(#tx-skin)"/>
     <!-- ears -->
-    <path d="M178 86 C173 84 171 90 172 96 C173 102 176 106 180 106 Z" fill="#c98a64"/>
+    <path d="M178 86 C173 84 171 90 172 96 C173 102 176 106 180 106 Z" fill="#c98a64" filter="url(#tx-skin)"/>
     <path d="M176 91 C175 95 176 99 178 101" stroke="#7a4632" stroke-width="0.7" fill="none"/>
-    <path d="M222 86 C227 84 229 90 228 96 C227 102 224 106 220 106 Z" fill="#9a5e44"/>
+    <path d="M222 86 C227 84 229 90 228 96 C227 102 224 106 220 106 Z" fill="#9a5e44" filter="url(#tx-skin)"/>
     <path d="M224 91 C225 95 224 99 222 101" stroke="#5a3222" stroke-width="0.7" fill="none"/>
     <!-- face -->
     <path d="M178 76 C177 95 179 110 186 120 C191 127 196 130 200 130 C204 130 209 127 214 120 C221 110 223 95 222 76 C220 64 180 64 178 76 Z" fill="url(#c1a-skin)"/>
@@ -598,8 +598,8 @@
     <!-- crow's feet -->
     <path d="M182 93 l-2.5 -1 M182.4 94.5 l-2.4 0.5 M218 93 l2.5 -1 M217.6 94.5 l2.4 0.5" stroke="#8c5238" stroke-width="0.4"/>
     <!-- brows (heavy, stern) -->
-    <path d="M181 88 C184 84 190 83 197.5 86.5 C198 87.5 197 88.2 196 88 C191 86.4 186 86.6 182.5 89 C181.5 89.4 180.6 88.8 181 88 Z" fill="#6b5746"/>
-    <path d="M219 88 C216 84 210 83 202.5 86.5 C202 87.5 203 88.2 204 88 C209 86.4 214 86.6 217.5 89 C218.5 89.4 219.4 88.8 219 88 Z" fill="#4e3d30"/>
+    <path d="M181 88 C184 84 190 83 197.5 86.5 C198 87.5 197 88.2 196 88 C191 86.4 186 86.6 182.5 89 C181.5 89.4 180.6 88.8 181 88 Z" fill="#6b5746" filter="url(#tx-hair-fine)"/>
+    <path d="M219 88 C216 84 210 83 202.5 86.5 C202 87.5 203 88.2 204 88 C209 86.4 214 86.6 217.5 89 C218.5 89.4 219.4 88.8 219 88 Z" fill="#4e3d30" filter="url(#tx-hair-fine)"/>
     <path d="M183 86.5 l3 -1 M187 85.2 l3 -0.6 M191 85 l3 0.3 M209 85 l-3 0.3 M213 85.2 l-3 -0.6 M217 86.5 l-3 -1" stroke="#c8b8a4" stroke-width="0.4"/>
     <!-- frown lines -->
     <path d="M198.5 87.5 C199 89 199 90.5 198.6 92 M201.5 87.5 C201 89 201 90.5 201.4 92" stroke="#8c5238" stroke-width="0.5" fill="none"/>
@@ -681,20 +681,20 @@
     <!-- mouth line & lower lip -->
     <path d="M193.5 117.6 C197 118.8 203 118.8 206.5 117.6" stroke="#3a1a14" stroke-width="0.9" fill="none"/>
     <!-- mustache -->
-    <path d="M200 110 C196 108.5 191 109 188 112 C185 115 183 120 182 124 C185 120 189 117 193 116.4 C196 116 198 115.6 200 114.4 C202 115.6 204 116 207 116.4 C211 117 215 120 218 124 C217 120 215 115 212 112 C209 109 204 108.5 200 110 Z" fill="#8a735e"/>
+    <path d="M200 110 C196 108.5 191 109 188 112 C185 115 183 120 182 124 C185 120 189 117 193 116.4 C196 116 198 115.6 200 114.4 C202 115.6 204 116 207 116.4 C211 117 215 120 218 124 C217 120 215 115 212 112 C209 109 204 108.5 200 110 Z" fill="#8a735e" filter="url(#tx-hair-fine)"/>
     <path d="M199 111 C195 110.5 191 112 188.5 114.5 M201 111 C205 110.5 209 112 211.5 114.5" stroke="#d8c7b0" stroke-width="0.6" fill="none"/>
     <path d="M199 113 C195 113 190 116 186 120 M201 113 C205 113 210 116 214 120" stroke="#3a2a20" stroke-width="0.6" fill="none"/>
     <!-- sideburns / hair falling at sides -->
-    <path d="M178 70 C172 80 172 96 176 108 C174 100 176 88 181 80 Z" fill="#6e5846"/>
-    <path d="M222 70 C228 80 228 96 224 108 C226 100 224 88 219 80 Z" fill="#3a2c22"/>
-    <path d="M176 76 C170 96 170 120 166 140 C172 124 174 106 178 90" fill="#8d7762" opacity="0.9"/>
-    <path d="M224 76 C230 96 230 120 234 140 C228 124 226 106 222 90" fill="#3e3026" opacity="0.9"/>
+    <path d="M178 70 C172 80 172 96 176 108 C174 100 176 88 181 80 Z" fill="#6e5846" filter="url(#tx-hair-fine)"/>
+    <path d="M222 70 C228 80 228 96 224 108 C226 100 224 88 219 80 Z" fill="#3a2c22" filter="url(#tx-hair-fine)"/>
+    <path d="M176 76 C170 96 170 120 166 140 C172 124 174 106 178 90" fill="#8d7762" opacity="0.9" filter="url(#tx-hair)"/>
+    <path d="M224 76 C230 96 230 120 234 140 C228 124 226 106 222 90" fill="#3e3026" opacity="0.9" filter="url(#tx-hair)"/>
     <path d="M174 84 C171 100 170 118 167 134" stroke="#cbb8a2" stroke-width="0.5" fill="none"/>
     <path d="M226 84 C229 100 230 118 233 134" stroke="#ff9d55" stroke-width="0.5" fill="none" opacity="0.6"/>
     <!-- flowing locks over the ermine -->
-    <path d="M172 108 C168 120 170 132 166 146 C170 142 172 136 174 128 C175 138 173 146 170 154 C176 146 178 134 177 122 Z" fill="#8d7762"/>
+    <path d="M172 108 C168 120 170 132 166 146 C170 142 172 136 174 128 C175 138 173 146 170 154 C176 146 178 134 177 122 Z" fill="#8d7762" filter="url(#tx-hair)"/>
     <path d="M170 116 C169 128 169 138 167 146" stroke="#d6c4ae" stroke-width="0.5" fill="none"/>
-    <path d="M228 108 C232 120 230 132 234 146 C230 142 228 136 226 128 C225 138 227 146 230 154 C224 146 222 134 223 122 Z" fill="#3e3026"/>
+    <path d="M228 108 C232 120 230 132 234 146 C230 142 228 136 226 128 C225 138 227 146 230 154 C224 146 222 134 223 122 Z" fill="#3e3026" filter="url(#tx-hair)"/>
     <path d="M230 116 C231 128 231 138 233 146" stroke="#ff9d55" stroke-width="0.5" fill="none" opacity="0.6"/>
   </g>
 

@@ -2,12 +2,12 @@
 <defs>
 <linearGradient id="t-forest-bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1a2a1c"/><stop offset="0.5" stop-color="#3a5a3a"/><stop offset="0.75" stop-color="#4a6a48"/><stop offset="1" stop-color="#1a2a18"/></linearGradient>
 <radialGradient id="t-forest-hot" cx="0.62" cy="0.45" r="0.45"><stop offset="0" stop-color="#e8f0b0" stop-opacity="0.7"/><stop offset="0.4" stop-color="#a0c070" stop-opacity="0.3"/><stop offset="1" stop-color="#3a5a3a" stop-opacity="0"/></radialGradient>
-<linearGradient id="t-forest-t1" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#5a7a64"/><stop offset="1" stop-color="#7a9a80"/></linearGradient>
-<linearGradient id="t-forest-t2" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#1e2e22"/><stop offset="0.4" stop-color="#3a4e3a"/><stop offset="1" stop-color="#18241a"/></linearGradient>
-<linearGradient id="t-forest-t3" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#0a0e0a"/><stop offset="0.35" stop-color="#2a2a1e"/><stop offset="0.6" stop-color="#1e1e16"/><stop offset="1" stop-color="#060806"/></linearGradient>
+<linearGradient id="t-forest-t1" data-tx="bark-far" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#5a7a64"/><stop offset="1" stop-color="#7a9a80"/></linearGradient>
+<linearGradient id="t-forest-t2" data-tx="bark-soft" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#1e2e22"/><stop offset="0.4" stop-color="#3a4e3a"/><stop offset="1" stop-color="#18241a"/></linearGradient>
+<linearGradient id="t-forest-t3" data-tx="bark" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#0a0e0a"/><stop offset="0.35" stop-color="#2a2a1e"/><stop offset="0.6" stop-color="#1e1e16"/><stop offset="1" stop-color="#060806"/></linearGradient>
 <linearGradient id="t-forest-ray" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fbffd8" stop-opacity="0.9"/><stop offset="0.7" stop-color="#f4f8c0" stop-opacity="0.35"/><stop offset="1" stop-color="#f4f8c0" stop-opacity="0"/></linearGradient>
 <linearGradient id="t-forest-fog" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#b0c8a8" stop-opacity="0"/><stop offset="0.5" stop-color="#b0c8a8" stop-opacity="0.55"/><stop offset="1" stop-color="#b0c8a8" stop-opacity="0"/></linearGradient>
-<linearGradient id="t-forest-gnd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a3a22"/><stop offset="1" stop-color="#0a0e08"/></linearGradient>
+<linearGradient id="t-forest-gnd" data-tx="grass" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a3a22"/><stop offset="1" stop-color="#0a0e08"/></linearGradient>
 <filter id="t-forest-b6" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6"/></filter>
 <filter id="t-forest-b2" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2"/></filter>
 <filter id="t-forest-g2" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="1.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
@@ -16,22 +16,23 @@
 </defs>
 <rect width="400" height="300" fill="url(#t-forest-bg)"/>
 <rect width="400" height="300" fill="url(#t-forest-hot)"/>
-<path d="M233.3 -10C231.4 100 230 207 229.2 210L235.7 210C234.9 207 236.3 100 237.2 -10Z" fill="url(#t-forest-t1)"/>
-<path d="M368 -10C366.9 100 366.4 206.2 365.5 210L373.7 210C372.8 206.2 373.2 100 373.1 -10Z" fill="url(#t-forest-t1)"/>
-<path d="M82.5 -10C82.6 100 83.3 206.9 82.5 210L89.1 210C88.4 206.9 87.7 100 86.6 -10Z" fill="url(#t-forest-t1)"/>
-<path d="M277.8 -10C275.9 100 274.4 207 273.7 210L280.3 210C279.5 207 280.9 100 281.8 -10Z" fill="url(#t-forest-t1)"/>
-<path d="M23.7 -10C24.4 100 25.7 207 24.9 210L31.4 210C30.6 207 29.4 100 27.7 -10Z" fill="url(#t-forest-t1)"/>
-<path d="M305.5 -10C305 100 305 206.5 304.2 210L311.7 210C310.9 206.5 310.8 100 310.1 -10Z" fill="url(#t-forest-t1)"/>
-<path d="M127 -10C126.5 100 126.8 205.7 125.7 210L135.1 210C134 205.7 133.7 100 132.7 -10Z" fill="url(#t-forest-t1)"/>
-<path d="M79.7 -10C79.6 100 80.2 206.3 79.3 210L87.3 210C86.4 206.3 85.8 100 84.6 -10Z" fill="url(#t-forest-t1)"/>
-<path d="M42.2 -10C40.8 100 40.3 205.1 39 210L49.6 210C48.4 205.1 48.9 100 48.6 -10Z" fill="url(#t-forest-t1)"/>
-<path d="M261.9 -10C261.4 100 261.7 205 260.4 210L271.4 210C270.1 205 269.8 100 268.6 -10Z" fill="url(#t-forest-t1)"/>
-<path d="M148.7 -10C148.4 100 148.7 206.3 147.7 210L155.7 210C154.8 206.3 154.5 100 153.6 -10Z" fill="url(#t-forest-t1)"/>
-<path d="M265.7 -10C265.5 100 265.6 207.6 265 210L270.2 210C269.6 207.6 269.5 100 269 -10Z" fill="url(#t-forest-t1)"/>
-<path d="M208.9 -10C209.7 100 211.2 206.6 210.3 210L217.8 210C216.9 206.6 215.5 100 213.5 -10Z" fill="url(#t-forest-t1)"/>
-<path d="M280.6 -10C280 100 279.8 207.6 279.2 210L284.5 210C283.9 207.6 284.1 100 283.8 -10Z" fill="url(#t-forest-t1)"/>
-<path d="M57.8 -10C58.3 100 59.3 207.5 58.6 210L64.1 210C63.4 207.5 62.5 100 61.1 -10Z" fill="url(#t-forest-t1)"/>
-<path d="M25.5 -10C24.5 100 23.9 207.1 23.2 210L29.4 210C28.7 207.1 29.2 100 29.3 -10Z" fill="url(#t-forest-t1)"/>
+<!-- Ferne Staemme bis zum Waldboden verlaengert (endeten vorher schwebend im Nebel bei y=210) -->
+<path d="M233.3 -10C231.4 100 230 207 229.2 224L235.7 224C234.9 207 236.3 100 237.2 -10Z" fill="url(#t-forest-t1)"/>
+<path d="M368 -10C366.9 100 366.4 206.2 365.5 224L373.7 224C372.8 206.2 373.2 100 373.1 -10Z" fill="url(#t-forest-t1)"/>
+<path d="M82.5 -10C82.6 100 83.3 206.9 82.5 224L89.1 224C88.4 206.9 87.7 100 86.6 -10Z" fill="url(#t-forest-t1)"/>
+<path d="M277.8 -10C275.9 100 274.4 207 273.7 224L280.3 224C279.5 207 280.9 100 281.8 -10Z" fill="url(#t-forest-t1)"/>
+<path d="M23.7 -10C24.4 100 25.7 207 24.9 224L31.4 224C30.6 207 29.4 100 27.7 -10Z" fill="url(#t-forest-t1)"/>
+<path d="M305.5 -10C305 100 305 206.5 304.2 224L311.7 224C310.9 206.5 310.8 100 310.1 -10Z" fill="url(#t-forest-t1)"/>
+<path d="M127 -10C126.5 100 126.8 205.7 125.7 224L135.1 224C134 205.7 133.7 100 132.7 -10Z" fill="url(#t-forest-t1)"/>
+<path d="M79.7 -10C79.6 100 80.2 206.3 79.3 224L87.3 224C86.4 206.3 85.8 100 84.6 -10Z" fill="url(#t-forest-t1)"/>
+<path d="M42.2 -10C40.8 100 40.3 205.1 39 224L49.6 224C48.4 205.1 48.9 100 48.6 -10Z" fill="url(#t-forest-t1)"/>
+<path d="M261.9 -10C261.4 100 261.7 205 260.4 224L271.4 224C270.1 205 269.8 100 268.6 -10Z" fill="url(#t-forest-t1)"/>
+<path d="M148.7 -10C148.4 100 148.7 206.3 147.7 224L155.7 224C154.8 206.3 154.5 100 153.6 -10Z" fill="url(#t-forest-t1)"/>
+<path d="M265.7 -10C265.5 100 265.6 207.6 265 224L270.2 224C269.6 207.6 269.5 100 269 -10Z" fill="url(#t-forest-t1)"/>
+<path d="M208.9 -10C209.7 100 211.2 206.6 210.3 224L217.8 224C216.9 206.6 215.5 100 213.5 -10Z" fill="url(#t-forest-t1)"/>
+<path d="M280.6 -10C280 100 279.8 207.6 279.2 224L284.5 224C283.9 207.6 284.1 100 283.8 -10Z" fill="url(#t-forest-t1)"/>
+<path d="M57.8 -10C58.3 100 59.3 207.5 58.6 224L64.1 224C63.4 207.5 62.5 100 61.1 -10Z" fill="url(#t-forest-t1)"/>
+<path d="M25.5 -10C24.5 100 23.9 207.1 23.2 224L29.4 224C28.7 207.1 29.2 100 29.3 -10Z" fill="url(#t-forest-t1)"/>
 <rect y="120" width="400" height="110" fill="#a8c098" opacity="0.35" filter="url(#t-forest-b6)"/>
 <path d="M31.3 -10C29 108 28.3 215.3 16.8 226L57.8 226C46.2 215.3 46.8 108 45.6 -10Z" fill="url(#t-forest-t2)"/>
 <path d="M32.5 -10Q33.1 6.2 31.8 22.3Q31.6 38.4 31.6 54.6Q33.3 70.7 31.5 86.9Q31.8 96.4 32.3 105.9Q31.4 114.9 32.2 123.8Q31 135.8 30.9 147.9Q31.2 164 31.2 180.2Q32.5 193.9 31.3 207.5Q31.6 216.3 30.4 222" stroke="#101a12" stroke-width="0.5" fill="none" opacity="0.7"/>
@@ -97,6 +98,8 @@
 <g filter="url(#t-forest-b6)">
 <rect x="-20" y="195" width="440" height="30" fill="url(#t-forest-fog)" opacity="0.8"/>
 </g>
+<!-- Blätterdach: Moos-Struktur -->
+<g filter="url(#tx-moss)">
 <path d="M-10 -10L410 -10L410 30C380 44 350 26 320 40C290 54 260 30 230 36C200 42 170 20 140 34C110 48 80 30 50 42C30 50 10 36 -10 44Z" fill="#081008"/>
 <g filter="url(#t-forest-b1)">
 <ellipse cx="148.2" cy="1.9" rx="16.1" ry="13.7" fill="#0e1a0e"/>
@@ -174,12 +177,13 @@
 <ellipse cx="247.1" cy="43.5" rx="6.8" ry="5.8" fill="#4a6a30" opacity="0.5"/>
 <ellipse cx="284.4" cy="40.8" rx="7.8" ry="6.7" fill="#4a6a30" opacity="0.5"/>
 </g>
+</g>
 <path d="M-10 222C60 216 140 224 200 222C260 220 340 216 410 222L410 300L-10 300Z" fill="url(#t-forest-gnd)"/>
 <ellipse cx="170" cy="236" rx="40" ry="4.8" fill="#c8d890" opacity="0.35" filter="url(#t-forest-b2)"/>
 <ellipse cx="240" cy="232" rx="30" ry="3.5999999999999996" fill="#c8d890" opacity="0.35" filter="url(#t-forest-b2)"/>
 <ellipse cx="120" cy="246" rx="22" ry="2.6399999999999997" fill="#c8d890" opacity="0.35" filter="url(#t-forest-b2)"/>
 <ellipse cx="300" cy="240" rx="26" ry="3.12" fill="#c8d890" opacity="0.35" filter="url(#t-forest-b2)"/>
-<path d="M170 300C180 280 200 260 206 240C208 232 212 226 216 222L222 222C222 230 224 240 232 256C240 272 250 288 262 300Z" fill="#4a4a30" opacity="0.5"/>
+<path d="M170 300C180 280 200 260 206 240C208 232 212 226 216 222L222 222C222 230 224 240 232 256C240 272 250 288 262 300Z" fill="#4a4a30" opacity="0.5" filter="url(#tx-ground)"/>
 <path d="M90 238Q86.4 232.6 83.2 234.1" stroke="#3a5a2a" stroke-width="0.5" fill="none"/>
 <path d="M88.9 236.1l1.8 1.8" stroke="#3a5a2a" stroke-width="0.7"/>
 <path d="M88.9 236.1l-1.8 1.1" stroke="#3a5a2a" stroke-width="0.7"/>
@@ -490,6 +494,7 @@
 <path d="M366.9 232C346.5 242.4 313.9 255 289.4 262.4C322 260 346.5 260 374.9 258Z" fill="url(#t-forest-t3)"/>
 <path d="M44 -10C40 80 38 160 44 250" stroke="#8aa060" stroke-width="1.2" fill="none" opacity="0.5"/>
 <path d="M352 -10C356 80 358 160 350 250" stroke="#b0c070" stroke-width="1.4" fill="none" opacity="0.5"/>
+<g filter="url(#tx-moss-fine)">
 <ellipse cx="42" cy="148.5" rx="2.9" ry="2.4" fill="#3a5a22" opacity="0.8"/>
 <ellipse cx="37.1" cy="164.2" rx="2.7" ry="2.3" fill="#3a5a22" opacity="0.8"/>
 <ellipse cx="40" cy="168.5" rx="2.9" ry="2.5" fill="#3a5a22" opacity="0.8"/>
@@ -520,6 +525,7 @@
 <ellipse cx="355.4" cy="106.8" rx="2.1" ry="1.8" fill="#3a5a22" opacity="0.8"/>
 <ellipse cx="355.8" cy="138.1" rx="2.7" ry="2.3" fill="#3a5a22" opacity="0.8"/>
 <ellipse cx="354.6" cy="124.1" rx="1.8" ry="1.6" fill="#3a5a22" opacity="0.8"/>
+</g>
 <path d="M70 20C74 56 67 83 71 110" stroke="#0e1a0e" stroke-width="1" fill="none"/>
 <ellipse cx="71" cy="35" rx="1.6" ry="0.8" fill="#1a2e16" transform="rotate(30 71 35)"/>
 <ellipse cx="71" cy="50" rx="1.6" ry="0.8" fill="#1a2e16" transform="rotate(30 71 50)"/>

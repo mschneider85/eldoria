@@ -31,17 +31,17 @@
       <stop offset="0" stop-color="#d88a6a"/>
       <stop offset="1" stop-color="#e8a870"/>
     </linearGradient>
-    <linearGradient id="c1d-field1" x1="0" y1="0" x2="1" y2="0">
+    <linearGradient id="c1d-field1" data-tx="grass-fine" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0" stop-color="#ffd878"/>
       <stop offset="0.5" stop-color="#e0a040"/>
       <stop offset="1" stop-color="#a86a30"/>
     </linearGradient>
-    <linearGradient id="c1d-field2" x1="0" y1="0" x2="1" y2="0">
+    <linearGradient id="c1d-field2" data-tx="grass-soft" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0" stop-color="#f4c060"/>
       <stop offset="0.6" stop-color="#c0822e"/>
       <stop offset="1" stop-color="#7a4a26"/>
     </linearGradient>
-    <linearGradient id="c1d-field3" x1="0" y1="0" x2="1" y2="0">
+    <linearGradient id="c1d-field3" data-tx="grass-soft" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0" stop-color="#d8a040"/>
       <stop offset="0.6" stop-color="#8a5a24"/>
       <stop offset="1" stop-color="#4a2e1c"/>
@@ -50,7 +50,7 @@
       <stop offset="0" stop-color="#fff4c0"/>
       <stop offset="1" stop-color="#e8905a"/>
     </linearGradient>
-    <linearGradient id="c1d-stone" x1="0" y1="0" x2="1" y2="0">
+    <linearGradient id="c1d-stone" data-tx="stone-soft" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0" stop-color="#c88a5a"/>
       <stop offset="0.3" stop-color="#8a5a48"/>
       <stop offset="1" stop-color="#3a2634"/>
@@ -64,38 +64,38 @@
     </pattern>
 
     <!-- materials -->
-    <linearGradient id="c1d-cloak" x1="0" y1="0" x2="1" y2="0">
+    <linearGradient id="c1d-cloak" data-tx="cloth" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0" stop-color="#3a5ab8"/>
       <stop offset="0.35" stop-color="#1c3380"/>
       <stop offset="0.75" stop-color="#101c4a"/>
       <stop offset="1" stop-color="#080e28"/>
     </linearGradient>
-    <linearGradient id="c1d-hood" x1="0" y1="0" x2="1" y2="0.2">
+    <linearGradient id="c1d-hood" data-tx="cloth" x1="0" y1="0" x2="1" y2="0.2">
       <stop offset="0" stop-color="#5a78d0"/>
       <stop offset="0.3" stop-color="#26448f"/>
       <stop offset="1" stop-color="#0c1638"/>
     </linearGradient>
-    <linearGradient id="c1d-tunic" x1="0" y1="0" x2="1" y2="0">
+    <linearGradient id="c1d-tunic" data-tx="cloth" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0" stop-color="#3a62c0"/>
       <stop offset="0.5" stop-color="#1e3a88"/>
       <stop offset="1" stop-color="#0c1a44"/>
     </linearGradient>
-    <linearGradient id="c1d-leather" x1="0" y1="0" x2="1" y2="0">
+    <linearGradient id="c1d-leather" data-tx="leather" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0" stop-color="#c0804a"/>
       <stop offset="0.5" stop-color="#7a4a26"/>
       <stop offset="1" stop-color="#3a2014"/>
     </linearGradient>
-    <linearGradient id="c1d-leatherV" x1="0" y1="0" x2="0" y2="1">
+    <linearGradient id="c1d-leatherV" data-tx="leather" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#d8965a"/>
       <stop offset="0.5" stop-color="#8a5430"/>
       <stop offset="1" stop-color="#3a2014"/>
     </linearGradient>
-    <linearGradient id="c1d-bow" x1="0" y1="0" x2="1" y2="0">
+    <linearGradient id="c1d-bow" data-tx="wood-v" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0" stop-color="#ffd08a"/>
       <stop offset="0.4" stop-color="#a8683a"/>
       <stop offset="1" stop-color="#4a2a18"/>
     </linearGradient>
-    <linearGradient id="c1d-gold" x1="0" y1="0" x2="0" y2="1">
+    <linearGradient id="c1d-gold" data-tx="gold" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#fff4b8"/>
       <stop offset="0.3" stop-color="#f0c04a"/>
       <stop offset="0.6" stop-color="#a0650f"/>
@@ -107,12 +107,12 @@
       <stop offset="0.4" stop-color="#e0a834"/>
       <stop offset="1" stop-color="#5a3508"/>
     </linearGradient>
-    <linearGradient id="c1d-skin" x1="0" y1="0" x2="1" y2="0">
+    <linearGradient id="c1d-skin" data-tx="skin" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0" stop-color="#ffd0a0"/>
       <stop offset="0.35" stop-color="#d8966c"/>
       <stop offset="1" stop-color="#6a3c34"/>
     </linearGradient>
-    <linearGradient id="c1d-steel" x1="0" y1="0" x2="0" y2="1">
+    <linearGradient id="c1d-steel" data-tx="metal-fine" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#fff2d8"/>
       <stop offset="0.5" stop-color="#a8a0a8"/>
       <stop offset="1" stop-color="#3a3444"/>
@@ -190,7 +190,7 @@
   <g>
     <path d="M340 300 V96 H392 V300 Z" fill="url(#c1d-stone)"/>
     <path d="M340 300 V96 H392 V300 Z" fill="url(#c1d-bricks)"/>
-    <path d="M336 96 V84 H346 V90 H356 V84 H366 V90 H376 V84 H386 V90 H396 V96 Z" fill="#6a4450"/>
+    <path d="M336 96 V84 H346 V90 H356 V84 H366 V90 H376 V84 H386 V90 H396 V96 Z" fill="#6a4450" filter="url(#tx-stone-soft)"/>
     <path d="M336 84 H346 M356 84 H366 M376 84 H386" stroke="#ffc890" stroke-width="1.2"/>
     <path d="M340 96 V300" stroke="#ffc890" stroke-width="1.4" opacity="0.8"/>
     <path d="M358 130 C358 122 368 122 368 130 V152 H358 Z" fill="#140a10"/>
@@ -236,7 +236,7 @@
   <!-- ===== draw arm (right arm, far side): elbow raised behind the head ===== -->
   <g>
     <!-- upper arm from far shoulder up to elbow -->
-    <path d="M240 132 C254 120 272 104 288 92 C296 88 304 94 300 102 C290 114 272 128 256 142 Z" fill="#14285e"/>
+    <path d="M240 132 C254 120 272 104 288 92 C296 88 304 94 300 102 C290 114 272 128 256 142 Z" fill="#14285e" filter="url(#tx-cloth)"/>
     <!-- forearm from elbow forward to the anchor hand -->
     <path d="M296 88 C280 88 250 92 214 96 L214 108 C250 106 280 104 298 102 C306 100 306 90 296 88 Z" fill="url(#c1d-tunic)"/>
     <path d="M296 88 C280 88 250 92 220 96" stroke="#8aa4f0" stroke-width="0.9" fill="none" opacity="0.8"/>
@@ -264,10 +264,10 @@
   <path d="M244 124 L252 128 L210 206 L202 202 Z" fill="url(#c1d-leatherV)" stroke="#2a1408" stroke-width="0.5"/>
   <rect x="222" y="160" width="8" height="7" rx="1" fill="url(#c1d-gold)" transform="rotate(28 226 163)"/>
   <!-- belt -->
-  <path d="M196 204 C214 212 236 212 252 204 L252 214 C236 222 214 222 196 214 Z" fill="#2a1408"/>
+  <path d="M196 204 C214 212 236 212 252 204 L252 214 C236 222 214 222 196 214 Z" fill="#2a1408" filter="url(#tx-leather)"/>
   <rect x="214" y="206" width="10" height="10" rx="1.5" fill="url(#c1d-gold)"/>
   <path d="M230 212 H244 V226 C244 230 230 230 230 226 Z" fill="url(#c1d-leather)" stroke="#2a1408" stroke-width="0.5"/>
-  <path d="M230 212 H244 V218 C240 220 234 220 230 218 Z" fill="#8a5430" stroke="#2a1408" stroke-width="0.4"/>
+  <path d="M230 212 H244 V218 C240 220 234 220 230 218 Z" fill="#8a5430" stroke="#2a1408" stroke-width="0.4" filter="url(#tx-leather)"/>
   <circle cx="237" cy="218" r="1" fill="url(#c1d-gold)"/>
   <!-- stitching on jerkin -->
   <path d="M204 140 C203 160 203 184 206 204 M244 136 C247 158 247 182 244 202" stroke="#e8b070" stroke-width="0.4" stroke-dasharray="1.2 1.2" fill="none" opacity="0.8"/>

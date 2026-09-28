@@ -15,7 +15,7 @@
     <stop offset="0.3" stop-color="#ff9070" stop-opacity="0.5"/>
     <stop offset="1" stop-color="#ff5040" stop-opacity="0"/>
   </radialGradient>
-  <linearGradient id="c7b-stone" gradientUnits="userSpaceOnUse" x1="0" y1="20" x2="0" y2="260">
+  <linearGradient id="c7b-stone" data-tx="stone" gradientUnits="userSpaceOnUse" x1="0" y1="20" x2="0" y2="260">
     <stop offset="0" stop-color="#1a0c1c"/>
     <stop offset="0.6" stop-color="#2e1428"/>
     <stop offset="1" stop-color="#4a1c2c"/>
@@ -24,28 +24,28 @@
     <stop offset="0" stop-color="#4a1426"/>
     <stop offset="1" stop-color="#8a2a2a"/>
   </linearGradient>
-  <linearGradient id="c7b-floor" x1="0" y1="0" x2="0" y2="1">
+  <linearGradient id="c7b-floor" data-tx="stone" x1="0" y1="0" x2="0" y2="1">
     <stop offset="0" stop-color="#3a1428"/>
     <stop offset="0.4" stop-color="#241020"/>
     <stop offset="1" stop-color="#0a040a"/>
   </linearGradient>
-  <radialGradient id="c7b-robe" gradientUnits="userSpaceOnUse" cx="200" cy="170" r="150">
+  <radialGradient id="c7b-robe" data-tx="cloth" gradientUnits="userSpaceOnUse" cx="200" cy="170" r="150">
     <stop offset="0" stop-color="#9a58d8"/>
     <stop offset="0.25" stop-color="#5a2688"/>
     <stop offset="0.55" stop-color="#2c1048"/>
     <stop offset="1" stop-color="#0c0414"/>
   </radialGradient>
-  <radialGradient id="c7b-robein" gradientUnits="userSpaceOnUse" cx="200" cy="175" r="110">
+  <radialGradient id="c7b-robein" data-tx="cloth" gradientUnits="userSpaceOnUse" cx="200" cy="175" r="110">
     <stop offset="0" stop-color="#6a2a70"/>
     <stop offset="0.5" stop-color="#3a1240"/>
     <stop offset="1" stop-color="#14041a"/>
   </radialGradient>
-  <linearGradient id="c7b-trim" x1="0" y1="0" x2="1" y2="0">
+  <linearGradient id="c7b-trim" data-tx="gold-fine" x1="0" y1="0" x2="1" y2="0">
     <stop offset="0" stop-color="#5a3a20"/>
     <stop offset="0.5" stop-color="#d0a060"/>
     <stop offset="1" stop-color="#5a3a20"/>
   </linearGradient>
-  <radialGradient id="c7b-skin" gradientUnits="userSpaceOnUse" cx="200" cy="150" r="80">
+  <radialGradient id="c7b-skin" data-tx="skin" gradientUnits="userSpaceOnUse" cx="200" cy="150" r="80">
     <stop offset="0" stop-color="#e8d0ff"/>
     <stop offset="0.35" stop-color="#b090d0"/>
     <stop offset="0.7" stop-color="#6a4a88"/>
@@ -56,7 +56,7 @@
     <stop offset="0.45" stop-color="#0a0412" stop-opacity="0.55"/>
     <stop offset="0.75" stop-color="#0a0412" stop-opacity="0"/>
   </linearGradient>
-  <linearGradient id="c7b-horn" x1="0" y1="1" x2="1" y2="0">
+  <linearGradient id="c7b-horn" data-tx="marble-fine" x1="0" y1="1" x2="1" y2="0">
     <stop offset="0" stop-color="#1a1018"/>
     <stop offset="0.5" stop-color="#5a4050"/>
     <stop offset="1" stop-color="#d0b8c0"/>
@@ -101,7 +101,7 @@
 <!-- ============ SKY ============ -->
 <rect width="400" height="300" fill="url(#c7b-sky)"/>
 <circle cx="200" cy="78" r="104" fill="url(#c7b-moonhalo)"/>
-<circle cx="200" cy="78" r="66" fill="url(#c7b-moon)"/>
+<circle cx="200" cy="78" r="66" fill="url(#c7b-moon)" filter="url(#tx-plaster-soft)"/>
 <g fill="#a0403a" opacity="0.5">
   <ellipse cx="184" cy="60" rx="9" ry="6"/><ellipse cx="220" cy="84" rx="12" ry="7"/><ellipse cx="206" cy="52" rx="5" ry="4"/>
   <ellipse cx="176" cy="92" rx="6" ry="4"/><ellipse cx="228" cy="62" rx="4" ry="3"/>
@@ -113,7 +113,7 @@
 <path d="M130 104 C160 98 190 104 220 100 C250 96 270 102 290 100 C260 110 220 110 190 112 C160 112 140 110 130 104 Z" fill="#1a0410" opacity="0.6"/>
 
 <!-- ============ DISTANT RUINS ============ -->
-<g fill="url(#c7b-stonefar)" opacity="0.8">
+<g fill="url(#c7b-stonefar)" opacity="0.8" filter="url(#tx-stone-fine)">
   <path d="M0 200 L0 150 L12 150 L12 120 L18 110 L24 120 L24 150 L40 150 L40 134 L50 134 L50 200 Z"/>
   <path d="M350 200 L350 128 L356 118 L356 100 L362 92 L368 100 L368 118 L374 128 L374 146 L390 146 L390 132 L400 132 L400 200 Z"/>
   <path d="M50 200 L50 170 C60 160 72 160 82 170 L82 200 Z"/>
@@ -128,11 +128,11 @@
   <path d="M74 76 L74 234 M82 76 L82 234 M90 76 L90 234 M98 76 L98 234" stroke="#0a040c" stroke-width="1.6"/>
   <path d="M75 76 L75 234 M83 76 L83 234 M91 76 L91 234" stroke="#8a4a50" stroke-width="0.5" opacity="0.5"/>
   <path d="M104 76 L104 234" stroke="#c04a3a" stroke-width="1" opacity="0.5"/>
-  <path d="M64 62 L112 62 L114 54 L62 54 Z" fill="#2a1226"/>
+  <path d="M64 62 L112 62 L114 54 L62 54 Z" fill="#2a1226" filter="url(#tx-stone)"/>
   <path d="M62 54 L114 54" stroke="#c05a4a" stroke-width="0.8" opacity="0.5"/>
   <!-- arch springing from left, broken -->
   <path d="M62 54 C70 20 120 0 170 -2 L176 12 C150 16 132 22 118 34 L126 42 L112 50 C110 52 112 54 114 54 Z" fill="url(#c7b-stone)"/>
-  <path d="M170 -2 L176 12 L168 10 L172 18 L160 16 Z" fill="#1a0a18"/>
+  <path d="M170 -2 L176 12 L168 10 L172 18 L160 16 Z" fill="#1a0a18" filter="url(#tx-stone-fine)"/>
   <path d="M66 50 C76 22 120 6 168 4" fill="none" stroke="#c05a4a" stroke-width="0.8" opacity="0.4"/>
   <!-- right column (broken top) -->
   <path d="M294 236 L294 110 L300 100 L306 106 L312 94 L318 104 L326 98 L330 110 L330 236 Z" fill="url(#c7b-stone)"/>
@@ -146,13 +146,13 @@
     <path d="M308 128 L312 122 L316 128 M312 128 L312 140 M308 146 L316 150 L308 154"/>
   </g>
   <!-- rubble at column bases -->
-  <path d="M60 236 C62 226 74 224 82 230 C90 222 104 224 112 232 L116 240 L58 240 Z" fill="#1a0a16"/>
-  <path d="M288 238 C290 228 302 226 310 232 C318 226 330 228 336 236 L338 242 L286 242 Z" fill="#1a0a16"/>
+  <path d="M60 236 C62 226 74 224 82 230 C90 222 104 224 112 232 L116 240 L58 240 Z" fill="#1a0a16" filter="url(#tx-cliff-fine)"/>
+  <path d="M288 238 C290 228 302 226 310 232 C318 226 330 228 336 236 L338 242 L286 242 Z" fill="#1a0a16" filter="url(#tx-cliff-fine)"/>
   <path d="M62 230 C66 226 74 226 80 230 M292 232 C296 228 304 228 308 232" stroke="#c04a3a" stroke-width="0.7" fill="none" opacity="0.6"/>
 </g>
 <!-- fallen column piece -->
-<path d="M18 250 L60 238 L66 256 L24 268 Z" fill="#2a1226"/>
-<ellipse cx="63" cy="247" rx="4" ry="9" transform="rotate(-18 63 247)" fill="#4a2030"/>
+<path d="M18 250 L60 238 L66 256 L24 268 Z" fill="#2a1226" filter="url(#tx-stone)"/>
+<ellipse cx="63" cy="247" rx="4" ry="9" transform="rotate(-18 63 247)" fill="#4a2030" filter="url(#tx-stone-fine)"/>
 <path d="M22 256 L62 244" stroke="#0a040c" stroke-width="1"/>
 
 <!-- ============ FLOOR ============ -->
@@ -207,7 +207,7 @@
 <path d="M176 140 C174 180 170 240 167 300 M224 140 C226 180 230 240 233 300" fill="none" stroke="#1a0a06" stroke-width="0.6"/>
 <path d="M112 240 C150 232 250 232 288 240 L296 300 L104 300 Z" fill="#05010a" opacity="0.45" filter="url(#c7b-soft)"/>
 <!-- sash / belt with gem -->
-<path d="M160 214 C180 208 220 208 240 214 L242 224 C220 218 180 218 158 224 Z" fill="#2a0c30" stroke="#0a0210" stroke-width="0.6"/>
+<path d="M160 214 C180 208 220 208 240 214 L242 224 C220 218 180 218 158 224 Z" fill="#2a0c30" stroke="#0a0210" stroke-width="0.6" filter="url(#tx-cloth-fine)"/>
 <path d="M160 214 C180 208 220 208 240 214" fill="none" stroke="#d0a060" stroke-width="0.8"/>
 <path d="M200 210 L206 218 L200 228 L194 218 Z" fill="#c050ff" stroke="#3a1a0a" stroke-width="0.8" filter="url(#c7b-bloom)"/>
 <path d="M196 230 C194 244 192 258 190 272 M204 230 C206 244 208 258 210 272" fill="none" stroke="#2a0c30" stroke-width="3"/>
@@ -228,15 +228,15 @@
 <path d="M200 48 C182 48 170 64 169 84 C168 104 178 122 200 130 C222 122 232 104 231 84 C230 64 218 48 200 48 Z" fill="#07020c"/>
 
 <!-- hair strands -->
-<path d="M184 62 C176 78 174 100 178 124 C182 110 182 90 188 70 Z" fill="#1a0a24"/>
-<path d="M216 62 C224 78 226 100 222 124 C218 110 218 90 212 70 Z" fill="#1a0a24"/>
+<path d="M184 62 C176 78 174 100 178 124 C182 110 182 90 188 70 Z" fill="#1a0a24" filter="url(#tx-hair-fine)"/>
+<path d="M216 62 C224 78 226 100 222 124 C218 110 218 90 212 70 Z" fill="#1a0a24" filter="url(#tx-hair-fine)"/>
 <path d="M180 80 C178 96 178 110 180 120 M220 80 C222 96 222 110 220 120" fill="none" stroke="#7a4aa0" stroke-width="0.6" opacity="0.6"/>
 
 <!-- face -->
 <path d="M200 60 C189 60 183 70 183 84 C183 98 190 110 200 116 C210 110 217 98 217 84 C217 70 211 60 200 60 Z" fill="url(#c7b-skin)"/>
 <path d="M186 96 C188 104 194 112 200 116 C206 112 212 104 214 96 C210 106 206 110 200 112 C194 110 190 106 186 96 Z" fill="#f0e0ff" opacity="0.5"/>
 <!-- hair fringe across forehead -->
-<path d="M184 74 C186 64 194 58 200 58 C208 58 214 64 216 74 C212 68 206 66 202 70 C198 64 192 66 184 74 Z" fill="#1a0a24"/>
+<path d="M184 74 C186 64 194 58 200 58 C208 58 214 64 216 74 C212 68 206 66 202 70 C198 64 192 66 184 74 Z" fill="#1a0a24" filter="url(#tx-hair-fine)"/>
 <!-- small curved horns -->
 <path d="M190 66 C186 58 182 50 174 44 C170 42 164 42 160 44 C166 44 172 46 176 50 C180 56 182 62 186 70 Z" fill="url(#c7b-horn)" stroke="#0a0408" stroke-width="0.5"/>
 <path d="M210 66 C214 58 218 50 226 44 C230 42 236 42 240 44 C234 44 228 46 224 50 C220 56 218 62 214 70 Z" fill="url(#c7b-horn)" stroke="#0a0408" stroke-width="0.5"/>
@@ -330,11 +330,11 @@
 <!-- ============ FOREGROUND ============ -->
 <!-- floating rubble -->
 <g>
-  <path d="M40 176 L52 170 L58 178 L50 186 L40 184 Z" fill="#2a1226"/>
+  <path d="M40 176 L52 170 L58 178 L50 186 L40 184 Z" fill="#2a1226" filter="url(#tx-cliff-fine)"/>
   <path d="M40 184 L50 186 L58 178" fill="none" stroke="#b060ff" stroke-width="0.8" opacity="0.7"/>
-  <path d="M344 186 L356 180 L364 188 L356 196 L346 194 Z" fill="#2a1226"/>
+  <path d="M344 186 L356 180 L364 188 L356 196 L346 194 Z" fill="#2a1226" filter="url(#tx-cliff-fine)"/>
   <path d="M346 194 L356 196 L364 188" fill="none" stroke="#b060ff" stroke-width="0.8" opacity="0.7"/>
-  <path d="M120 88 L128 84 L132 90 L126 96 Z M280 80 L288 78 L290 86 L282 88 Z" fill="#2a1226"/>
+  <path d="M120 88 L128 84 L132 90 L126 96 Z M280 80 L288 78 L290 86 L282 88 Z" fill="#2a1226" filter="url(#tx-cliff-fine)"/>
 </g>
 <!-- low shadow mist -->
 <g filter="url(#c7b-haze)" opacity="0.7">

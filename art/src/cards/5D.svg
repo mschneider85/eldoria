@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300">
   <defs>
-    <linearGradient id="c5d-wall" x1="0" y1="0" x2="0" y2="1">
+    <linearGradient id="c5d-wall" data-tx="stone-soft" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#0b0c12"/>
       <stop offset="0.5" stop-color="#1c2026"/>
       <stop offset="1" stop-color="#101418"/>
@@ -10,7 +10,7 @@
       <stop offset="0.6" stop-color="#1f2c30" stop-opacity="0.5"/>
       <stop offset="1" stop-color="#0b0c12" stop-opacity="0"/>
     </radialGradient>
-    <linearGradient id="c5d-stoneBlk" x1="0" y1="0" x2="1" y2="1">
+    <linearGradient id="c5d-stoneBlk" data-tx="stone" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#3a4148"/>
       <stop offset="1" stop-color="#1a1e24"/>
     </linearGradient>
@@ -19,38 +19,38 @@
       <stop offset="0.5" stop-color="#454c52"/>
       <stop offset="1" stop-color="#1a1e24"/>
     </linearGradient>
-    <linearGradient id="c5d-floor" x1="0" y1="0" x2="0" y2="1">
+    <linearGradient id="c5d-floor" data-tx="stone" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#222a2a"/>
       <stop offset="1" stop-color="#07090a"/>
     </linearGradient>
-    <radialGradient id="c5d-bone" cx="0.4" cy="0.3" r="0.8">
+    <radialGradient id="c5d-bone" data-tx="marble-fine" cx="0.4" cy="0.3" r="0.8">
       <stop offset="0" stop-color="#f2eedc"/>
       <stop offset="0.5" stop-color="#b8b29a"/>
       <stop offset="1" stop-color="#4a4838"/>
     </radialGradient>
-    <linearGradient id="c5d-boneV" x1="0" y1="0" x2="1" y2="0">
+    <linearGradient id="c5d-boneV" data-tx="marble-fine" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0" stop-color="#5a5846"/>
       <stop offset="0.45" stop-color="#e6e0c8"/>
       <stop offset="1" stop-color="#8a8670"/>
     </linearGradient>
-    <linearGradient id="c5d-rust" x1="0" y1="0" x2="1" y2="1">
+    <linearGradient id="c5d-rust" data-tx="metal" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#a8a49a"/>
       <stop offset="0.35" stop-color="#7a6a58"/>
       <stop offset="0.7" stop-color="#6a3e22"/>
       <stop offset="1" stop-color="#3a2014"/>
     </linearGradient>
-    <linearGradient id="c5d-blade" x1="0" y1="0" x2="1" y2="0">
+    <linearGradient id="c5d-blade" data-tx="metal-fine" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0" stop-color="#4a4238"/>
       <stop offset="0.45" stop-color="#b0aca2"/>
       <stop offset="0.55" stop-color="#8a8274"/>
       <stop offset="1" stop-color="#3a2c20"/>
     </linearGradient>
-    <radialGradient id="c5d-wood" cx="0.45" cy="0.4" r="0.65">
+    <radialGradient id="c5d-wood" data-tx="wood-v" cx="0.45" cy="0.4" r="0.65">
       <stop offset="0" stop-color="#6a4a30"/>
       <stop offset="0.7" stop-color="#3e2a1a"/>
       <stop offset="1" stop-color="#1e140c"/>
     </radialGradient>
-    <radialGradient id="c5d-iron" cx="0.4" cy="0.35" r="0.7">
+    <radialGradient id="c5d-iron" data-tx="metal" cx="0.4" cy="0.35" r="0.7">
       <stop offset="0" stop-color="#8a8a86"/>
       <stop offset="0.5" stop-color="#4a4440"/>
       <stop offset="1" stop-color="#1c1814"/>
@@ -65,7 +65,7 @@
       <stop offset="0.5" stop-color="#3ac05a" stop-opacity="0.12"/>
       <stop offset="1" stop-color="#1a4a2a" stop-opacity="0"/>
     </radialGradient>
-    <linearGradient id="c5d-wax" x1="0" y1="0" x2="1" y2="0">
+    <linearGradient id="c5d-wax" data-tx="marble-fine" x1="0" y1="0" x2="1" y2="0">
       <stop offset="0" stop-color="#5a5a44"/>
       <stop offset="0.5" stop-color="#c8c4a0"/>
       <stop offset="1" stop-color="#6a6850"/>
@@ -76,7 +76,7 @@
       <stop offset="0.7" stop-color="#3ae060" stop-opacity="0.5"/>
       <stop offset="1" stop-color="#3ae060" stop-opacity="0"/>
     </radialGradient>
-    <pattern id="c5d-mail" width="4" height="3.4" patternUnits="userSpaceOnUse">
+    <pattern id="c5d-mail" data-tx="metal-fine" width="4" height="3.4" patternUnits="userSpaceOnUse">
       <rect width="4" height="3.4" fill="#2a2622"/>
       <ellipse cx="2" cy="1.7" rx="1.6" ry="1.3" fill="none" stroke="#7a7266" stroke-width="0.7"/>
       <ellipse cx="0" cy="0" rx="1.6" ry="1.3" fill="none" stroke="#5a5048" stroke-width="0.7"/>
@@ -126,8 +126,8 @@
   <path d="M130,240 L130,110 C130,60 270,60 270,110 L270,240 Z" fill="#06080a"/>
   <path d="M130,240 L130,110 C130,60 270,60 270,110 L270,240 Z" fill="url(#c5d-backLight)"/>
   <!-- distant corridor with sarcophagi -->
-  <path d="M160,220 L166,200 L234,200 L240,220 Z" fill="#1a2224"/>
-  <path d="M168,200 L172,190 L228,190 L232,200 Z" fill="#26302e"/>
+  <g filter="url(#tx-stone-fine)"><path d="M160,220 L166,200 L234,200 L240,220 Z" fill="#1a2224"/>
+  <path d="M168,200 L172,190 L228,190 L232,200 Z" fill="#26302e"/></g>
   <path d="M176,190 C184,180 216,180 224,190" stroke="#3a4a44" stroke-width="2" fill="none"/>
   <path d="M150,160 L150,120 C150,96 250,96 250,120 L250,160" stroke="#1a2224" stroke-width="3" fill="none" opacity="0.8"/>
   <!-- arch voussoirs -->
@@ -140,7 +140,7 @@
     <path d="M226,47 C240,50 254,56 266,66 L258,74 C248,66 236,60 224,58 Z"/>
     <path d="M266,66 C276,76 282,90 282,110 L270,110 C270,96 265,82 258,74 Z"/>
   </g>
-  <path d="M190,46 L210,46 L208,60 L192,60 Z" fill="#4a5256" stroke="#07080a"/>
+  <path d="M190,46 L210,46 L208,60 L192,60 Z" fill="#4a5256" stroke="#07080a" filter="url(#tx-stone)"/>
   <!-- keystone skull -->
   <ellipse cx="200" cy="52" rx="6" ry="5.5" fill="url(#c5d-bone)"/>
   <circle cx="197.6" cy="51.5" r="1.4" fill="#0a0a08"/><circle cx="202.4" cy="51.5" r="1.4" fill="#0a0a08"/>
@@ -149,7 +149,7 @@
   <g id="c5d-niches">
     <path d="M20,120 L20,98 C20,86 50,86 50,98 L50,120 Z M346,120 L346,98 C346,86 376,86 376,98 L376,120 Z" fill="#060708"/>
     <path d="M20,176 L20,154 C20,142 50,142 50,154 L50,176 Z M346,176 L346,154 C346,142 376,142 376,154 L376,176 Z" fill="#060708"/>
-    <g fill="url(#c5d-bone)" opacity="0.8">
+    <g fill="url(#c5d-bone)" opacity="0.8" filter="url(#tx-marble-fine)">
       <ellipse cx="30" cy="113" rx="6" ry="5.5"/><ellipse cx="42" cy="114" rx="5.5" ry="5"/>
       <ellipse cx="356" cy="113" rx="6" ry="5.5"/><ellipse cx="368" cy="114" rx="5.5" ry="5"/>
       <ellipse cx="35" cy="170" rx="7" ry="6"/><ellipse cx="361" cy="170" rx="7" ry="6"/>
@@ -216,8 +216,10 @@
   <path d="M0,229 H400" stroke="#6a8a7a" stroke-width="0.8" opacity="0.4"/>
   <!-- scattered bones and skull on floor -->
   <g>
+    <g filter="url(#tx-marble-fine)">
     <path d="M40,262 L80,254" stroke="url(#c5d-boneV)" stroke-width="3" stroke-linecap="round"/>
     <circle cx="39" cy="262" r="2.6" fill="#b8b29a"/><circle cx="81" cy="254" r="2.6" fill="#b8b29a"/>
+    </g>
     <ellipse cx="340" cy="252" rx="10" ry="8.5" fill="url(#c5d-bone)"/>
     <path d="M334,251 a2.6,2.6 0 1,0 5.2,0 a2.6,2.6 0 1,0 -5.2,0 M341,251 a2.6,2.6 0 1,0 5.2,0 a2.6,2.6 0 1,0 -5.2,0" fill="#0a0a08"/>
     <path d="M336,258 h8" stroke="#3a3628" stroke-width="1"/>
@@ -228,17 +230,18 @@
 
   <!-- 4 CHARACTER: SKELETON WARRIOR -->
   <!-- ground shadow -->
-  <ellipse cx="200" cy="282" rx="80" ry="8" fill="#000" opacity="0.6" filter="url(#c5d-soft)"/>
+  <ellipse cx="200" cy="291" rx="80" ry="8" fill="#000" opacity="0.6" filter="url(#c5d-soft)"/>
 
   <!-- eerie backlight for separation -->
   <ellipse cx="205" cy="150" rx="70" ry="95" fill="#4fd070" opacity="0.16" filter="url(#c5d-soft)"/>
   <!-- tattered cloak behind -->
-  <path d="M166,128 C150,150 144,190 146,230 L152,224 L154,244 L162,230 L168,248 L172,232 L180,250 C184,210 196,170 200,140 C210,170 216,210 222,250 L228,234 L234,248 L238,230 L246,244 L248,224 L254,230 C256,190 250,150 234,128 Z" fill="#1a1a1c"/>
+  <path d="M166,128 C150,150 144,190 146,230 L152,224 L154,244 L162,230 L168,248 L172,232 L180,250 C184,210 196,170 200,140 C210,170 216,210 222,250 L228,234 L234,248 L238,230 L246,244 L248,224 L254,230 C256,190 250,150 234,128 Z" fill="#1a1a1c" filter="url(#tx-cloth)"/>
   <path d="M166,128 C150,150 144,190 146,230" stroke="#6ac080" stroke-width="0.9" fill="none" opacity="0.4"/>
   <path d="M234,128 C250,150 256,190 254,230" stroke="#6ac080" stroke-width="0.9" fill="none" opacity="0.5"/>
 
   <!-- LEGS -->
   <g id="c5d-legs">
+    <g filter="url(#tx-marble-fine)">
     <!-- femurs -->
     <path d="M188,214 C186,228 182,240 178,252" stroke="url(#c5d-boneV)" stroke-width="8" stroke-linecap="round" fill="none"/>
     <path d="M212,214 C216,228 222,240 226,252" stroke="url(#c5d-boneV)" stroke-width="8" stroke-linecap="round" fill="none"/>
@@ -250,6 +253,12 @@
     <path d="M181,259 L176,290" stroke="#8a8670" stroke-width="2.2" stroke-linecap="round"/>
     <path d="M228,258 L236,290" stroke="url(#c5d-boneV)" stroke-width="6.5" stroke-linecap="round"/>
     <path d="M223,259 L230,290" stroke="#8a8670" stroke-width="2.2" stroke-linecap="round"/>
+    <!-- Fußknochen: vorher endeten die Schienbeine als Stümpfe ohne Füße -->
+    <path d="M174,288 C168,287 160,289 156,293 C158,296 168,296 175,294 Z" fill="url(#c5d-bone)" stroke="#5a5646" stroke-width="0.5"/>
+    <path d="M232,288 C238,287 246,289 250,293 C248,296 238,296 231,294 Z" fill="url(#c5d-bone)" stroke="#5a5646" stroke-width="0.5"/>
+    <path d="M160,293 l-2,1.5 M164,292.5 l-1.5,2" stroke="#6a6652" stroke-width="0.6"/>
+    <path d="M246,293 l2,1.5 M242,292.5 l1.5,2" stroke="#6a6652" stroke-width="0.6"/>
+    </g>
     <!-- rusty greave on one shin -->
     <path d="M222,262 L236,260 L240,284 L230,288 Z" fill="url(#c5d-rust)" stroke="#1a100a" stroke-width="0.7"/>
     <path d="M224,266 L237,264" stroke="#c8c0b0" stroke-width="0.7" opacity="0.6"/>
@@ -263,12 +272,12 @@
   <g id="c5d-ribs">
     <path d="M172,132 C178,124 222,124 228,132 L226,190 C216,198 184,198 174,190 Z" fill="#070807"/>
     <!-- spine -->
-    <g fill="url(#c5d-bone)">
+    <g fill="url(#c5d-bone)" filter="url(#tx-marble-fine)">
       <rect x="196" y="176" width="8" height="5" rx="2"/><rect x="196" y="183" width="8" height="5" rx="2"/><rect x="196.5" y="190" width="7" height="5" rx="2"/><rect x="197" y="197" width="6" height="5" rx="2"/>
     </g>
     <!-- sternum -->
     <path d="M197,130 L203,130 L204,162 L200,168 L196,162 Z" fill="url(#c5d-boneV)"/>
-    <g fill="none" stroke="url(#c5d-boneV)" stroke-linecap="round">
+    <g fill="none" stroke="url(#c5d-boneV)" stroke-linecap="round" filter="url(#tx-marble-fine)">
       <path d="M197,136 C186,133 177,138 175,148" stroke-width="3.4"/>
       <path d="M197,146 C185,143 176,149 174,160" stroke-width="3.4"/>
       <path d="M197,156 C186,154 178,160 176,171" stroke-width="3.2"/>
@@ -294,15 +303,15 @@
       <circle cx="184" cy="168" r="1.4"/><circle cx="183" cy="171" r="1.4"/><circle cx="216" cy="190" r="1.4"/><circle cx="217" cy="193" r="1.4"/><circle cx="217" cy="196" r="1.3"/>
     </g>
     <!-- leather belt -->
-    <path d="M164,200 C180,204 220,204 236,200 L236,210 C220,214 180,214 164,210 Z" fill="#3a2616"/>
+    <path d="M164,200 C180,204 220,204 236,200 L236,210 C220,214 180,214 164,210 Z" fill="#3a2616" filter="url(#tx-leather-fine)"/>
     <path d="M164,201 C180,205 220,205 236,201" stroke="#7a5a3a" stroke-width="0.8" fill="none"/>
     <rect x="194" y="200" width="12" height="11" rx="1.5" fill="none" stroke="url(#c5d-rust)" stroke-width="2.2"/>
     <path d="M200,202 v7" stroke="#8a7a60" stroke-width="1.2"/>
-    <path d="M176,210 L174,222 L180,220 Z" fill="#3a2616"/>
+    <path d="M176,210 L174,222 L180,220 Z" fill="#3a2616" filter="url(#tx-leather-fine)"/>
   </g>
 
   <!-- NECK vertebrae -->
-  <g fill="url(#c5d-bone)">
+  <g fill="url(#c5d-bone)" filter="url(#tx-marble-fine)">
     <rect x="195" y="104" width="10" height="6" rx="2"/><rect x="195.5" y="111" width="9" height="6" rx="2"/><rect x="196" y="118" width="8" height="6" rx="2"/>
   </g>
   <!-- clavicles & shoulders -->
@@ -323,7 +332,7 @@
     <path d="M266,164 C270,150 274,138 276,126" stroke="url(#c5d-boneV)" stroke-width="3.6" stroke-linecap="round" fill="none"/>
     <path d="M262,162 C266,148 268,136 270,126" stroke="#8a8670" stroke-width="2.4" stroke-linecap="round" fill="none"/>
     <!-- leather bracer remnant -->
-    <path d="M264,148 L276,150 L274,160 L262,158 Z" fill="#3a2616" stroke="#1a0e06" stroke-width="0.6"/>
+    <path d="M264,148 L276,150 L274,160 L262,158 Z" fill="#3a2616" stroke="#1a0e06" stroke-width="0.6" filter="url(#tx-leather-fine)"/>
     <path d="M264,152 L275,154" stroke="#7a5a3a" stroke-width="0.6"/>
   </g>
 

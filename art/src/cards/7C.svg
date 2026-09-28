@@ -12,32 +12,32 @@
     <stop offset="0.4" stop-color="#ff7a30" stop-opacity="0.45"/>
     <stop offset="1" stop-color="#ff4010" stop-opacity="0"/>
   </radialGradient>
-  <linearGradient id="c7c-mtn" x1="0" y1="0" x2="0" y2="1">
+  <linearGradient id="c7c-mtn" data-tx="cliff-soft" x1="0" y1="0" x2="0" y2="1">
     <stop offset="0" stop-color="#3a0e16"/>
     <stop offset="1" stop-color="#8a2a18"/>
   </linearGradient>
-  <linearGradient id="c7c-mtn2" x1="0" y1="0" x2="0" y2="1">
+  <linearGradient id="c7c-mtn2" data-tx="cliff-soft" x1="0" y1="0" x2="0" y2="1">
     <stop offset="0" stop-color="#1c0610"/>
     <stop offset="1" stop-color="#4a1410"/>
   </linearGradient>
-  <linearGradient id="c7c-ground" x1="0" y1="0" x2="0" y2="1">
+  <linearGradient id="c7c-ground" data-tx="ground" x1="0" y1="0" x2="0" y2="1">
     <stop offset="0" stop-color="#4a1c14"/>
     <stop offset="0.3" stop-color="#2a0e0c"/>
     <stop offset="1" stop-color="#0c0406"/>
   </linearGradient>
-  <linearGradient id="c7c-hide" gradientUnits="userSpaceOnUse" x1="0" y1="60" x2="0" y2="250">
+  <linearGradient id="c7c-hide" data-tx="leather" gradientUnits="userSpaceOnUse" x1="0" y1="60" x2="0" y2="250">
     <stop offset="0" stop-color="#4a1a26"/>
     <stop offset="0.25" stop-color="#3a1426"/>
     <stop offset="0.6" stop-color="#241022"/>
     <stop offset="0.85" stop-color="#1e2418"/>
     <stop offset="1" stop-color="#3a6a20"/>
   </linearGradient>
-  <linearGradient id="c7c-hidefar" gradientUnits="userSpaceOnUse" x1="0" y1="120" x2="0" y2="250">
+  <linearGradient id="c7c-hidefar" data-tx="leather-soft" gradientUnits="userSpaceOnUse" x1="0" y1="120" x2="0" y2="250">
     <stop offset="0" stop-color="#0e050c"/>
     <stop offset="0.8" stop-color="#140e10"/>
     <stop offset="1" stop-color="#2a5418"/>
   </linearGradient>
-  <linearGradient id="c7c-spine" x1="0" y1="1" x2="0" y2="0">
+  <linearGradient id="c7c-spine" data-tx="marble-fine" x1="0" y1="1" x2="0" y2="0">
     <stop offset="0" stop-color="#1a0a10"/>
     <stop offset="0.6" stop-color="#5a3030"/>
     <stop offset="1" stop-color="#e8c8a0"/>
@@ -69,7 +69,8 @@
   </radialGradient>
   <filter id="c7c-glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="5"/></filter>
   <filter id="c7c-soft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="1.3"/></filter>
-  <filter id="c7c-haze" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="11"/></filter>
+  <!-- Filterbereich vergrößert: bei -30% wurde der Atem-Nebel als harter Balken abgeschnitten -->
+  <filter id="c7c-haze" x="-150%" y="-400%" width="400%" height="900%"><feGaussianBlur stdDeviation="11"/></filter>
   <filter id="c7c-bloom" x="-50%" y="-50%" width="200%" height="200%">
     <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="b"/>
     <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
@@ -129,8 +130,8 @@
   <path d="M110 246 L118 256 L114 266 L124 274 M270 246 L262 256 L268 266 L260 278"/>
 </g>
 <!-- scorched rocks -->
-<path d="M8 252 C14 244 28 244 34 252 C30 258 14 258 8 252 Z" fill="#1a0808"/>
-<path d="M360 250 C366 242 384 242 390 250 C384 256 366 256 360 250 Z" fill="#1a0808"/>
+<path d="M8 252 C14 244 28 244 34 252 C30 258 14 258 8 252 Z" fill="#1a0808" filter="url(#tx-cliff-fine)"/>
+<path d="M360 250 C366 242 384 242 390 250 C384 256 366 256 360 250 Z" fill="#1a0808" filter="url(#tx-cliff-fine)"/>
 <path d="M10 250 C16 246 26 246 32 250 M362 248 C368 244 382 244 388 248" fill="none" stroke="#ff7a30" stroke-width="0.6" opacity="0.7"/>
 
 <!-- ============ THE HELLHOUND ============ -->
@@ -175,7 +176,7 @@
 </g>
 
 <!-- chest ruff -->
-<path d="M132 150 L124 160 L136 158 L130 170 L142 166 L138 180 L150 174 L148 188 L160 180 L162 196 L170 186 L176 200 L180 188 C168 188 150 176 140 160 Z" fill="#241022"/>
+<path d="M132 150 L124 160 L136 158 L130 170 L142 166 L138 180 L150 174 L148 188 L160 180 L162 196 L170 186 L176 200 L180 188 C168 188 150 176 140 160 Z" fill="#241022" filter="url(#tx-hair-fine)"/>
 <path d="M124 160 L136 158 M130 170 L142 166 M138 180 L150 174 M148 188 L160 180" fill="none" stroke="#9aff60" stroke-width="0.6" opacity="0.5"/>
 <!-- near hind leg -->
 <path d="M256 118 C290 106 334 118 336 152 C338 172 326 188 318 200 C316 206 318 212 322 218 C322 230 320 238 320 244 C322 250 314 254 300 253 C290 252 290 246 298 242 C300 232 300 222 298 214 C292 204 282 196 272 186 C258 172 248 150 256 118 Z" fill="url(#c7c-hide)" stroke="#07020a" stroke-width="1.2"/>
@@ -201,8 +202,8 @@
 <path d="M166 118 C180 112 196 116 204 128 C194 126 182 126 170 130 Z M170 130 C182 126 196 128 206 140 C194 138 182 138 172 142 Z" fill="url(#c7c-spine)" stroke="#0a0406" stroke-width="0.5" opacity="0.9"/>
 <path d="M268 124 C284 118 302 120 314 130 C300 130 286 130 272 136 Z" fill="url(#c7c-spine)" stroke="#0a0406" stroke-width="0.5" opacity="0.9"/>
 <!-- elbow & hock fur -->
-<path d="M194 196 L204 206 L196 206 L200 214 L190 208 Z" fill="#241022"/>
-<path d="M318 196 L330 204 L320 206 L326 214 L314 208 Z" fill="#241022"/>
+<path d="M194 196 L204 206 L196 206 L200 214 L190 208 Z" fill="#241022" filter="url(#tx-hair-fine)"/>
+<path d="M318 196 L330 204 L320 206 L326 214 L314 208 Z" fill="#241022" filter="url(#tx-hair-fine)"/>
 <!-- neck mass -->
 <path d="M110 100 C122 80 150 76 168 90 C180 102 184 120 178 136 C168 152 150 160 132 154 C120 140 110 122 110 100 Z" fill="url(#c7c-hide)"/>
 <path d="M128 144 C138 152 156 154 170 146" fill="none" stroke="#0a0308" stroke-width="1.3" opacity="0.7"/>
@@ -252,7 +253,8 @@
 <path d="M74 116 C74 122 75 128 77 132 C78 126 79 121 79 117 Z" fill="url(#c7c-fang)" stroke="#3a2418" stroke-width="0.4"/>
 <path d="M100 118 C100 123 101 127 103 130 C104 125 104 121 104 118 Z" fill="url(#c7c-fang)" stroke="#3a2418" stroke-width="0.4"/>
 <!-- drool/fel saliva strand -->
-<path d="M82 124 C82 130 83 136 82 140" fill="none" stroke="#9aff60" stroke-width="0.7" opacity="0.7"/>
+<!-- Faden endet an den unteren Zähnen statt quer über den Unterkiefer zu laufen -->
+<path d="M82 124 C82 127 83 130 82.5 132" fill="none" stroke="#9aff60" stroke-width="0.7" opacity="0.7"/>
 <!-- brow ridge -->
 <path d="M100 88 C108 82 118 82 126 86 C122 90 114 92 106 94 C102 93 100 91 100 88 Z" fill="#12050e"/>
 <path d="M100 88 C108 82 118 82 126 86" fill="none" stroke="#ff8a5a" stroke-width="0.8" opacity="0.6"/>
@@ -261,10 +263,10 @@
 <path d="M104 95 C108 91 114 90 120 91 C116 95 110 97 104 95 Z" fill="url(#c7c-eye)"/>
 <path d="M112 92 L113 95.5" stroke="#1a3a0a" stroke-width="0.9"/>
 <!-- cheek plates / jaw muscle -->
-<path d="M122 100 C132 96 142 100 144 110 C136 114 128 114 122 110 Z" fill="#2a0e1c" opacity="0.8"/>
+<path d="M122 100 C132 96 142 100 144 110 C136 114 128 114 122 110 Z" fill="#2a0e1c" opacity="0.8" filter="url(#tx-leather-fine)"/>
 <path d="M124 104 C130 102 138 104 142 108" fill="none" stroke="#0a0308" stroke-width="0.8"/>
 <!-- horns / ear -->
-<path d="M136 80 C142 70 152 62 166 58 C158 66 152 74 150 86 Z" fill="#1a0a14" stroke="#0a0406" stroke-width="0.6"/>
+<path d="M136 80 C142 70 152 62 166 58 C158 66 152 74 150 86 Z" fill="#1a0a14" stroke="#0a0406" stroke-width="0.6" filter="url(#tx-leather-fine)"/>
 <path d="M140 80 C146 72 154 66 162 62" fill="none" stroke="#ff7a4a" stroke-width="0.7" opacity="0.6"/>
 <path d="M120 78 C122 68 128 60 136 54 C134 64 132 72 132 80 Z" fill="url(#c7c-spine)" stroke="#0a0406" stroke-width="0.5"/>
 <!-- small spikes on jaw -->

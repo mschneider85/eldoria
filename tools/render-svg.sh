@@ -3,8 +3,9 @@
 # Aufruf: render.sh input.svg output.png
 IN=$(realpath "$1"); OUT=$(realpath -m "$2")
 TMP=$(mktemp -d)
+python3 "$(dirname "$0")/texturize.py" "$IN" "$TMP/in.svg"   # Material-Texturen einsetzen
 cat > "$TMP/p.html" <<HTML
-<html><body style="margin:0;background:#222"><img src="file://$IN" style="width:800px;height:600px;display:block"></body></html>
+<html><body style="margin:0;background:#222"><img src="file://$TMP/in.svg" style="width:800px;height:600px;display:block"></body></html>
 HTML
 ~/.cache/ms-playwright/chromium-1223/chrome-linux64/chrome --headless=new --no-sandbox --disable-gpu --hide-scrollbars \
   --allow-file-access-from-files --window-size=800,600 --screenshot="$OUT" "file://$TMP/p.html" >/dev/null 2>&1

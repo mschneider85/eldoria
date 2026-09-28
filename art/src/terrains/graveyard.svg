@@ -3,11 +3,11 @@
 <linearGradient id="t-graveyard-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#050c10"/><stop offset="0.5" stop-color="#0e2a2a"/><stop offset="1" stop-color="#2a5a48"/></linearGradient>
 <radialGradient id="t-graveyard-moong" cx="0.6" cy="0.3" r="0.45"><stop offset="0" stop-color="#d8ffc8" stop-opacity="0.9"/><stop offset="0.2" stop-color="#90f0a0" stop-opacity="0.5"/><stop offset="0.6" stop-color="#3aa070" stop-opacity="0.15"/><stop offset="1" stop-color="#1a5040" stop-opacity="0"/></radialGradient>
 <radialGradient id="t-graveyard-moon" cx="0.4" cy="0.4" r="0.6"><stop offset="0" stop-color="#f4fff0"/><stop offset="0.7" stop-color="#c8f0c0"/><stop offset="1" stop-color="#88c898"/></radialGradient>
-<linearGradient id="t-graveyard-hill1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1a3a34"/><stop offset="1" stop-color="#0e201e"/></linearGradient>
-<linearGradient id="t-graveyard-hill2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#12261e"/><stop offset="1" stop-color="#060e0c"/></linearGradient>
-<linearGradient id="t-graveyard-stone" x1="0" y1="0" x2="1" y2="0.3"><stop offset="0" stop-color="#8a9a90"/><stop offset="0.5" stop-color="#5a6a64"/><stop offset="1" stop-color="#2a3634"/></linearGradient>
-<linearGradient id="t-graveyard-stoneD" x1="0" y1="0" x2="1" y2="0.3"><stop offset="0" stop-color="#4a5a56"/><stop offset="1" stop-color="#1a2422"/></linearGradient>
-<linearGradient id="t-graveyard-maus" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7a8a84"/><stop offset="0.6" stop-color="#4a5a56"/><stop offset="1" stop-color="#1e2a28"/></linearGradient>
+<linearGradient id="t-graveyard-hill1" data-tx="grass-soft" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1a3a34"/><stop offset="1" stop-color="#0e201e"/></linearGradient>
+<linearGradient id="t-graveyard-hill2" data-tx="grass" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#12261e"/><stop offset="1" stop-color="#060e0c"/></linearGradient>
+<linearGradient id="t-graveyard-stone" data-tx="stone-fine" x1="0" y1="0" x2="1" y2="0.3"><stop offset="0" stop-color="#8a9a90"/><stop offset="0.5" stop-color="#5a6a64"/><stop offset="1" stop-color="#2a3634"/></linearGradient>
+<linearGradient id="t-graveyard-stoneD" data-tx="stone-fine" x1="0" y1="0" x2="1" y2="0.3"><stop offset="0" stop-color="#4a5a56"/><stop offset="1" stop-color="#1a2422"/></linearGradient>
+<linearGradient id="t-graveyard-maus" data-tx="stone-fine" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7a8a84"/><stop offset="0.6" stop-color="#4a5a56"/><stop offset="1" stop-color="#1e2a28"/></linearGradient>
 <linearGradient id="t-graveyard-mist" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#a8e0c0" stop-opacity="0"/><stop offset="0.5" stop-color="#a8e0c0" stop-opacity="0.5"/><stop offset="1" stop-color="#a8e0c0" stop-opacity="0"/></linearGradient>
 <filter id="t-graveyard-g2" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="2.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
 <filter id="t-graveyard-b6" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6"/></filter>
@@ -135,11 +135,11 @@
 <rect x="-20" y="172" width="440" height="16" fill="url(#t-graveyard-mist)" opacity="0.7"/>
 </g>
 <path d="M262 222L262 168L352 168L352 222Z" fill="url(#t-graveyard-maus)"/>
-<path d="M256 168L307.0 146L358 168Z" fill="#5a6a64"/>
+<path d="M256 168L307.0 146L358 168Z" fill="#5a6a64" filter="url(#tx-stone-fine)"/>
 <path d="M256 168L307.0 146L358 168" stroke="#9ab0a4" stroke-width="1" fill="none"/>
 <path d="M297.0 162L307.0 150L317.0 162Z" fill="#2a3634"/>
 <circle cx="307.0" cy="158" r="2.5" fill="#6aff9a" filter="url(#t-graveyard-g2)"/>
-<rect x="256" y="168" width="102" height="4" fill="#8a9a90"/>
+<rect x="256" y="168" width="102" height="4" fill="#8a9a90" filter="url(#tx-stone-fine)"/>
 <rect x="265" y="172" width="6" height="46" fill="url(#t-graveyard-maus)"/>
 <rect x="264" y="172" width="8" height="2" fill="#9aaaa0"/><rect x="264" y="218" width="8" height="3" fill="#6a7a74"/>
 <path d="M267 175V218" stroke="#2a3634" stroke-width="0.5"/>
@@ -154,8 +154,8 @@
 <path d="M345 175V218" stroke="#2a3634" stroke-width="0.5"/>
 <path d="M297.0 222L297.0 186A10 10 0 0 1 317.0 186L317.0 222Z" fill="#6aff9a" opacity="0.9" filter="url(#t-graveyard-g2)"/>
 <path d="M299.0 222L299.0 188A8 8 0 0 1 315.0 188L315.0 222Z" fill="#d8ffe0"/>
-<path d="M304.0 222L312.0 190L309.0 190" stroke="#2a4a3a" stroke-width="0.8" fill="none"/>
-<path d="M309.0 222L317.0 222L317.0 187L309.0 185Z" fill="#1e2a28"/>
+<!-- Offener Tuerfluegel: innerhalb der Laibung angeschlagen (ragte vorher in den Leuchtrand), schraege Streulinie entfernt -->
+<path d="M309.0 222L315.0 222L315.0 189L309.0 186Z" fill="#1e2a28"/>
 <path d="M270 180l4 6l-2 5l3 7M340 176l-3 8l2 4" stroke="#1a2422" stroke-width="0.6" fill="none"/>
 <circle cx="338.6" cy="167.6" r="1.5" fill="#2a4a30" opacity="0.8"/>
 <circle cx="323.1" cy="170.6" r="1.8" fill="#2a4a30" opacity="0.8"/>
@@ -172,6 +172,8 @@
 <circle cx="300.1" cy="170.1" r="1.2" fill="#2a4a30" opacity="0.8"/>
 <circle cx="259.1" cy="166.8" r="1.1" fill="#2a4a30" opacity="0.8"/>
 <ellipse cx="307.0" cy="226" rx="40" ry="8" fill="#6aff9a" opacity="0.35" filter="url(#t-graveyard-b6)"/>
+<!-- Kahler Baum: Rinde -->
+<g filter="url(#tx-bark-fine)">
 <path d="M75.5 240.4Q77.6 221.4 76.6 198.4L69.3 197.8Q68.5 220.8 64.5 239.6Z" fill="#050c0c"/>
 <path d="M76.3 196.8Q74 178.9 63.5 167.2L59.1 168.9Q68.4 181.1 69.5 199.4Z" fill="#050c0c"/>
 <path d="M62.9 166.3Q56.8 156.4 44.9 150.2L42.7 152.4Q54.1 159.2 59.6 169.8Z" fill="#050c0c"/>
@@ -305,6 +307,7 @@
 <path d="M145.1 180.2Q149.8 181.6 153.4 183.9L153.8 183Q150.3 180.6 145.7 178.9Z" fill="#050c0c"/>
 <path d="M144.8 179.5Q143.9 182.9 144.9 187.7L145.8 187.7Q145.1 182.9 146.1 179.6Z" fill="#050c0c"/>
 <path d="M58 242C50 240 40 244 30 248L60 246ZM82 242C92 240 100 246 110 248L80 246Z" fill="#050c0c"/>
+</g>
 <g filter="url(#t-graveyard-b6)"><ellipse cx="200" cy="214" rx="220" ry="7" fill="#a8e0c0" opacity="0.35"/></g>
 <path d="M-10 226C60 214 140 216 210 222C280 228 340 216 410 220L410 300L-10 300Z" fill="url(#t-graveyard-hill2)"/>
 <path d="M116 222C160 219 210 222 250 226" stroke="#050a0a" stroke-width="1" fill="none"/><path d="M116 214C160 211 210 214 250 218" stroke="#050a0a" stroke-width="0.8" fill="none"/>
@@ -377,7 +380,7 @@
 <path d="M-2 0L-2 -16L-8 -16L-8 -20L-2 -20L-2 -27L2 -27L2 -20L8 -20L8 -16L2 -16L2 0Z" fill="url(#t-graveyard-stoneD)"/>
 <path d="M-7 0C-5 -3 -2 -2 0 -1C3 -3 5 -2 7 0Z" fill="#2a4a30"/>
 </g>
-<path d="M-10 250C80 244 160 250 220 256C290 262 350 248 410 250L410 300L-10 300Z" fill="#040a08"/>
+<path d="M-10 250C80 244 160 250 220 256C290 262 350 248 410 250L410 300L-10 300Z" fill="#040a08" filter="url(#tx-ground)"/>
 <g transform="translate(110 262) rotate(-9) scale(1.6)">
 <ellipse cx="0" cy="1" rx="10" ry="2.5" fill="#000" opacity="0.5"/>
 <path d="M-7 0L-7 -18C-7 -26 7 -26 7 -18L7 0Z" fill="url(#t-graveyard-stone)"/>
@@ -401,7 +404,7 @@
 <path d="M-8 0L-8 -14L-5 -18L5 -18L8 -14L8 0Z" fill="url(#t-graveyard-stone)"/><path d="M-3 -12l3 -3l3 3l-3 3z" fill="#1a2422"/>
 <path d="M-7 0C-5 -3 -2 -2 0 -1C3 -3 5 -2 7 0Z" fill="#2a4a30"/>
 </g>
-<path d="M220 270C230 262 262 262 272 270Z" fill="#12201a"/><path d="M226 270h40" stroke="#0a1410" stroke-width="2"/>
+<path d="M220 270C230 262 262 262 272 270Z" fill="#12201a" filter="url(#tx-ground-fine)"/><path d="M226 270h40" stroke="#0a1410" stroke-width="2"/>
 <path d="M276 270L284 244" stroke="#3a2a1a" stroke-width="1.4"/><path d="M280 244l6 1l-2 -8l-5 1z" fill="#6a7a74"/>
 <path d="M122 283.9Q123.5 281.8 125.1 280.3Q123.9 282.1 123.7 283.9Z" fill="#12261e"/>
 <path d="M397.8 266.7Q399.6 262.2 402.4 259.3Q399.9 263 399 266.7Z" fill="#12261e"/>

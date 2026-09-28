@@ -2,13 +2,13 @@
 <defs>
 <linearGradient id="t-volcano-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0e0708"/><stop offset="0.35" stop-color="#2a0f0c"/><stop offset="0.65" stop-color="#6a1c0e"/><stop offset="0.85" stop-color="#a8360f"/></linearGradient>
 <radialGradient id="t-volcano-glow" cx="0.5" cy="0.4" r="0.6"><stop offset="0" stop-color="#ffcf5a"/><stop offset="0.12" stop-color="#ff7a1a" stop-opacity="0.9"/><stop offset="0.4" stop-color="#c2300a" stop-opacity="0.5"/><stop offset="1" stop-color="#6a1c0e" stop-opacity="0"/></radialGradient>
-<linearGradient id="t-volcano-cone" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a1a14"/><stop offset="0.5" stop-color="#1e0e0c"/><stop offset="1" stop-color="#0e0606"/></linearGradient>
+<linearGradient id="t-volcano-cone" data-tx="cliff" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a1a14"/><stop offset="0.5" stop-color="#1e0e0c"/><stop offset="1" stop-color="#0e0606"/></linearGradient>
 <linearGradient id="t-volcano-cone2" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#5a2418" stop-opacity="0.9"/><stop offset="1" stop-color="#1a0a08" stop-opacity="0"/></linearGradient>
-<linearGradient id="t-volcano-far" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a1c14"/><stop offset="1" stop-color="#2a100c"/></linearGradient>
+<linearGradient id="t-volcano-far" data-tx="cliff-far" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4a1c14"/><stop offset="1" stop-color="#2a100c"/></linearGradient>
 <linearGradient id="t-volcano-ash" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a1c1c"/><stop offset="0.5" stop-color="#3a2220"/><stop offset="0.85" stop-color="#7a2e16"/><stop offset="1" stop-color="#c2501a"/></linearGradient>
 <linearGradient id="t-volcano-lava" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff0a0"/><stop offset="0.3" stop-color="#ffb030"/><stop offset="1" stop-color="#e0400a"/></linearGradient>
 <linearGradient id="t-volcano-lavah" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ffe070"/><stop offset="1" stop-color="#ff5a10"/></linearGradient>
-<linearGradient id="t-volcano-rock" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a1410"/><stop offset="1" stop-color="#080404"/></linearGradient>
+<linearGradient id="t-volcano-rock" data-tx="cliff" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a1410"/><stop offset="1" stop-color="#080404"/></linearGradient>
 <filter id="t-volcano-g3" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
 <filter id="t-volcano-b2" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2"/></filter>
 <filter id="t-volcano-b6" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6"/></filter>
@@ -235,7 +235,8 @@
 <path d="M178 116C177.7 121.7 175.3 138.5 176 150C176.7 161.5 182 174.2 182 185C182 195.8 175.3 205.8 176 215C176.7 224.2 184.3 235.8 186 240" stroke="#ffa020" stroke-width="2.6" fill="none" stroke-linecap="round"/>
 <path d="M178 116C177.7 121.7 175.3 138.5 176 150C176.7 161.5 182 174.2 182 185C182 195.8 175.3 205.8 176 215C176.7 224.2 184.3 235.8 186 240" stroke="#fff0a0" stroke-width="0.9" fill="none" stroke-linecap="round"/>
 </g>
-<path d="M60 240C110 236 170 244 230 240C290 236 340 244 410 240L410 262C340 258 280 264 220 258C160 252 100 262 -10 256L-10 244C20 242 40 241 60 240Z" fill="url(#t-volcano-lava)" filter="url(#t-volcano-g3)"/>
+<g filter="url(#t-volcano-g3)"><!-- Lavasee: erst Textur, dann Glühen --><path d="M60 240C110 236 170 244 230 240C290 236 340 244 410 240L410 262C340 258 280 264 220 258C160 252 100 262 -10 256L-10 244C20 242 40 241 60 240Z" fill="url(#t-volcano-lava)" filter="url(#tx-lava)"/></g>
+<g filter="url(#tx-cliff-fine)"><!-- erstarrte Schollen auf dem Lavasee -->
 <path d="M208.7 248.5l5.9 -1.5l8.9 1l-4.5 2l-8.9 -0.5z" fill="#2a0c06" opacity="0.8"/>
 <path d="M78.8 252.4l5.1 -1.5l7.7 1l-3.8 2l-7.7 -0.5z" fill="#2a0c06" opacity="0.8"/>
 <path d="M230.9 254.3l5 -1.5l7.5 1l-3.7 2l-7.5 -0.5z" fill="#2a0c06" opacity="0.8"/>
@@ -262,12 +263,13 @@
 <path d="M24.4 247.4l5.8 -1.5l8.7 1l-4.3 2l-8.7 -0.5z" fill="#2a0c06" opacity="0.8"/>
 <path d="M351.3 252.8l5.9 -1.5l8.8 1l-4.4 2l-8.8 -0.5z" fill="#2a0c06" opacity="0.8"/>
 <path d="M230.9 245.2l3.8 -1.5l5.6 1l-2.8 2l-5.6 -0.5z" fill="#2a0c06" opacity="0.8"/>
+</g>
 <rect x="-10" y="226" width="420" height="20" fill="#ff6a1a" opacity="0.35" filter="url(#t-volcano-b6)"/>
 <path d="M-10 262C20 254 50 250 70 256C85 244 100 246 112 258C140 262 170 266 200 270C230 262 260 258 290 264C310 250 330 248 350 258C370 256 390 252 410 256L410 300L-10 300Z" fill="url(#t-volcano-rock)"/>
 <path d="M-10 262C20 254 50 250 70 256C85 244 100 246 112 258M290 264C310 250 330 248 350 258C370 256 390 252 410 256" stroke="#ff6a1a" stroke-width="1.2" fill="none" opacity="0.8" filter="url(#t-volcano-b1)"/>
-<path d="M-10 270L-10 150L2 140L10 160L18 200L26 230L34 270Z" fill="#0a0404"/>
+<path d="M-10 270L-10 150L2 140L10 160L18 200L26 230L34 270Z" fill="#0a0404" filter="url(#tx-cliff)"/>
 <path d="M2 140L10 160L18 200L26 230" stroke="#c2400f" stroke-width="1" fill="none" opacity="0.7"/>
-<path d="M410 270L410 170L398 176L390 205L378 240L370 270Z" fill="#0a0404"/>
+<path d="M410 270L410 170L398 176L390 205L378 240L370 270Z" fill="#0a0404" filter="url(#tx-cliff)"/>
 <path d="M398 176L390 205L378 240" stroke="#c2400f" stroke-width="1" fill="none" opacity="0.6"/>
 <path d="M217.9 282.4l3.6 0.4l5.5 1l4.9 0.6" stroke="#ff8a20" stroke-width="0.8" fill="none" filter="url(#t-volcano-g3)"/>
 <path d="M175.6 282.5l3.7 0.4l3.7 1.5l4.5 1.8" stroke="#ff8a20" stroke-width="0.8" fill="none" filter="url(#t-volcano-g3)"/>

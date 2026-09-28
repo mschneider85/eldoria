@@ -2,13 +2,13 @@
 <defs>
 <linearGradient id="t-mines-bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a0706"/><stop offset="0.5" stop-color="#2a1a12"/><stop offset="1" stop-color="#140c08"/></linearGradient>
 <radialGradient id="t-mines-gateglow" cx="0.5" cy="0.45" r="0.5"><stop offset="0" stop-color="#ffd890"/><stop offset="0.2" stop-color="#ffa040" stop-opacity="0.8"/><stop offset="0.6" stop-color="#8a4a1a" stop-opacity="0.3"/><stop offset="1" stop-color="#2a1a12" stop-opacity="0"/></radialGradient>
-<linearGradient id="t-mines-rockL" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#1a120c"/><stop offset="0.7" stop-color="#3a281c"/><stop offset="1" stop-color="#6a4a2c"/></linearGradient>
-<linearGradient id="t-mines-rockR" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#6a4a2c"/><stop offset="0.3" stop-color="#3a281c"/><stop offset="1" stop-color="#1a120c"/></linearGradient>
-<linearGradient id="t-mines-pil" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2a1e16"/><stop offset="0.3" stop-color="#8a6a4a"/><stop offset="0.55" stop-color="#6a5038"/><stop offset="1" stop-color="#1e140e"/></linearGradient>
+<linearGradient id="t-mines-rockL" data-tx="cliff" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#1a120c"/><stop offset="0.7" stop-color="#3a281c"/><stop offset="1" stop-color="#6a4a2c"/></linearGradient>
+<linearGradient id="t-mines-rockR" data-tx="cliff" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#6a4a2c"/><stop offset="0.3" stop-color="#3a281c"/><stop offset="1" stop-color="#1a120c"/></linearGradient>
+<linearGradient id="t-mines-pil" data-tx="wood-v" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2a1e16"/><stop offset="0.3" stop-color="#8a6a4a"/><stop offset="0.55" stop-color="#6a5038"/><stop offset="1" stop-color="#1e140e"/></linearGradient>
 <linearGradient id="t-mines-chasm" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#050303"/><stop offset="0.6" stop-color="#2a0e04"/><stop offset="1" stop-color="#c2400a"/></linearGradient>
-<linearGradient id="t-mines-floor" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a2a1e"/><stop offset="1" stop-color="#0e0806"/></linearGradient>
-<linearGradient id="t-mines-cry" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e0ffff"/><stop offset="0.4" stop-color="#40e0f0"/><stop offset="1" stop-color="#1a5a8a"/></linearGradient>
-<linearGradient id="t-mines-cry2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f0e0ff"/><stop offset="0.4" stop-color="#b070ff"/><stop offset="1" stop-color="#4a2a8a"/></linearGradient>
+<linearGradient id="t-mines-floor" data-tx="ground" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a2a1e"/><stop offset="1" stop-color="#0e0806"/></linearGradient>
+<linearGradient id="t-mines-cry" data-tx="ice-fine" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e0ffff"/><stop offset="0.4" stop-color="#40e0f0"/><stop offset="1" stop-color="#1a5a8a"/></linearGradient>
+<linearGradient id="t-mines-cry2" data-tx="ice-fine" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f0e0ff"/><stop offset="0.4" stop-color="#b070ff"/><stop offset="1" stop-color="#4a2a8a"/></linearGradient>
 <filter id="t-mines-g2" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
 <filter id="t-mines-b6" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6"/></filter>
 <filter id="t-mines-b2" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2"/></filter>
@@ -22,13 +22,13 @@
 <path d="M180 180L180 132L190 122L210 122L220 132L220 180Z" fill="#ffc870"/>
 <path d="M180 180L180 132L190 122L210 122L220 132L220 180" stroke="#5a3a1c" stroke-width="3" fill="none"/>
 <path d="M200 122L200 180M186 150L214 150" stroke="#b07a3a" stroke-width="0.8" opacity="0.7"/>
-<path d="M159 180L160 150L159 144L162 138L166 134L170 138L173 144L172 150L173 180Z" fill="#2a1a10"/>
+<path d="M159 180L160 150L159 144L162 138L166 134L170 138L173 144L172 150L173 180Z" fill="#2a1a10" filter="url(#tx-stone-fine)"/>
 <path d="M162 146L166 162L170 146Z" fill="#3a2616"/>
 <path d="M174 150L174 124" stroke="#2a1a10" stroke-width="1.4"/>
-<path d="M227 180L228 150L227 144L230 138L234 134L238 138L241 144L240 150L241 180Z" fill="#2a1a10"/>
+<path d="M227 180L228 150L227 144L230 138L234 134L238 138L241 144L240 150L241 180Z" fill="#2a1a10" filter="url(#tx-stone-fine)"/>
 <path d="M230 146L234 162L238 146Z" fill="#3a2616"/>
 <path d="M242 150L242 124" stroke="#2a1a10" stroke-width="1.4"/>
-<path d="M-10 -10L410 -10L410 40L405.5 45L402.5 74.6L399.6 45L391.3 43.1L388.8 64.2L386.3 43.1L378.1 38.5L375.2 61L372.2 38.5L364 42.1L361.5 57.7L359 42.1L349 42.2L344.9 76.6L340.8 42.2L330.8 34.3L328.3 59.5L325.7 34.3L316.5 36.7L312.8 56.9L309.2 36.7L297.2 47.7L292.9 60.4L288.5 47.7L277 24L273.7 45.6L270.3 24L262.2 18.1L260.1 38.7L258 18.1L250.7 14.9L248 23.3L245.2 14.9L237.2 20.2L234.6 26.1L231.9 20.2L222 20.8L218 47.3L214.1 20.8L205.2 15L203.3 27.9L201.4 15L195.3 23.9L193.1 42.5L190.8 23.9L185 20.8L183.3 36.6L181.6 20.8L175 20.3L172.3 28.7L169.6 20.3L162.7 24.4L160.8 44.4L158.9 24.4L151 29.3L147.7 43.5L144.3 29.3L135.3 20L132.7 29.9L130.1 20L119.9 26.2L115.7 35.1L111.6 26.2L99 21.4L94.8 44.9L90.6 21.4L79.9 43.4L77.1 67.3L74.2 43.4L64.1 41.7L60.3 57.8L56.4 41.7L45.1 35.3L41.4 53.5L37.8 35.3L26.3 38.6L22.4 68.6L18.4 38.6L8.1 36L5.1 54.8L2.1 36L-5.1 34.3L-7 58.4L-8.9 34.3L-10 40Z" fill="#0e0907"/>
+<path d="M-10 -10L410 -10L410 40L405.5 45L402.5 74.6L399.6 45L391.3 43.1L388.8 64.2L386.3 43.1L378.1 38.5L375.2 61L372.2 38.5L364 42.1L361.5 57.7L359 42.1L349 42.2L344.9 76.6L340.8 42.2L330.8 34.3L328.3 59.5L325.7 34.3L316.5 36.7L312.8 56.9L309.2 36.7L297.2 47.7L292.9 60.4L288.5 47.7L277 24L273.7 45.6L270.3 24L262.2 18.1L260.1 38.7L258 18.1L250.7 14.9L248 23.3L245.2 14.9L237.2 20.2L234.6 26.1L231.9 20.2L222 20.8L218 47.3L214.1 20.8L205.2 15L203.3 27.9L201.4 15L195.3 23.9L193.1 42.5L190.8 23.9L185 20.8L183.3 36.6L181.6 20.8L175 20.3L172.3 28.7L169.6 20.3L162.7 24.4L160.8 44.4L158.9 24.4L151 29.3L147.7 43.5L144.3 29.3L135.3 20L132.7 29.9L130.1 20L119.9 26.2L115.7 35.1L111.6 26.2L99 21.4L94.8 44.9L90.6 21.4L79.9 43.4L77.1 67.3L74.2 43.4L64.1 41.7L60.3 57.8L56.4 41.7L45.1 35.3L41.4 53.5L37.8 35.3L26.3 38.6L22.4 68.6L18.4 38.6L8.1 36L5.1 54.8L2.1 36L-5.1 34.3L-7 58.4L-8.9 34.3L-10 40Z" fill="#0e0907" filter="url(#tx-cliff)"/>
 <path d="M-10 -10L70 -10C60 30 90 60 80 100C72 140 100 170 90 210C86 230 96 245 100 260L-10 260Z" fill="url(#t-mines-rockL)"/>
 <path d="M410 -10L330 -10C340 30 312 60 322 100C330 140 300 170 312 210C316 230 304 245 300 260L410 260Z" fill="url(#t-mines-rockR)"/>
 <path d="M-10 225.2C20 228.9 50 226.3 62.7 226.2" stroke="#6a4a30" stroke-width="0.6" fill="none" opacity="0.5"/>
@@ -103,7 +103,7 @@
 <path d="M291.8 52L291.8 218" stroke="#1a100a" stroke-width="0.6" opacity="0.6"/>
 <path d="M-10 196C60 192 140 198 200 196C260 194 340 192 410 196L410 222C340 218 260 224 200 222C140 220 60 226 -10 222Z" fill="url(#t-mines-chasm)"/>
 <ellipse cx="200" cy="222" rx="200" ry="8" fill="#ff7a1a" opacity="0.4" filter="url(#t-mines-b6)"/>
-<path d="M-10 190C60 186 140 184 200 184C260 184 340 186 410 190L410 197C340 193 260 195 200 197C140 199 60 193 -10 197Z" fill="#3a2a1e"/>
+<path d="M-10 190C60 186 140 184 200 184C260 184 340 186 410 190L410 197C340 193 260 195 200 197C140 199 60 193 -10 197Z" fill="#3a2a1e" filter="url(#tx-ground-soft)"/>
 <path d="M168 196L232 196L240 222L160 222Z" fill="none"/>
 <path d="M170 198L161.0 240" stroke="#3a2412" stroke-width="1.6"/>
 <path d="M185 198L180.5 240" stroke="#3a2412" stroke-width="1.6"/>
@@ -111,14 +111,18 @@
 <path d="M215 198L219.5 240" stroke="#3a2412" stroke-width="1.6"/>
 <path d="M230 198L239.0 240" stroke="#3a2412" stroke-width="1.6"/>
 <path d="M170 205L230 218M230 205L170 218M172 222L228 232M228 222L172 232" stroke="#4a2e16" stroke-width="0.9"/>
-<path d="M164 196L236 196L240 200L160 200Z" fill="#5a3a1c"/>
+<path d="M164 196L236 196L240 200L160 200Z" fill="#5a3a1c" filter="url(#tx-wood-fine)"/>
 <path d="M-10 222C60 226 140 220 200 222C260 224 340 218 410 222L410 300L-10 300Z" fill="url(#t-mines-floor)"/>
 <path d="M-10 222C60 226 140 220 200 222C260 224 340 218 410 222" stroke="#ff8a30" stroke-width="1" fill="none" opacity="0.5"/>
 <ellipse cx="200" cy="250" rx="120" ry="22" fill="#ff9a40" opacity="0.18" filter="url(#t-mines-b6)"/>
-<path d="M140 300L192 196" stroke="#b0a090" stroke-width="2"/>
-<path d="M138.8 300L192 196" stroke="#4a3a2a" stroke-width="1"/>
-<path d="M260 300L208 196" stroke="#b0a090" stroke-width="2"/>
-<path d="M261.2 300L208 196" stroke="#4a3a2a" stroke-width="1"/>
+<!-- Gleis schmaler (Spurweite), damit die Lore mit den Raedern auf den Schienen steht statt zwischen ihnen -->
+<g transform="translate(200 0) scale(0.45 1) translate(-200 0)">
+<path d="M140 300L192 196" stroke="#b0a090" stroke-width="4"/>
+<path d="M137.6 300L192 196" stroke="#4a3a2a" stroke-width="2"/>
+<path d="M260 300L208 196" stroke="#b0a090" stroke-width="4"/>
+<path d="M262.4 300L208 196" stroke="#4a3a2a" stroke-width="2"/>
+<!-- Schwellen der Gleise -->
+<g filter="url(#tx-wood)">
 <path d="M125 300L275 300" stroke="#3a2412" stroke-width="3"/>
 <path d="M125.6 299L274.4 299" stroke="#3a2412" stroke-width="3"/>
 <path d="M127.2 296.4L272.8 296.4" stroke="#3a2412" stroke-width="2.9"/>
@@ -131,16 +135,18 @@
 <path d="M158.5 246.3L241.5 246.3" stroke="#3a2412" stroke-width="1.9"/>
 <path d="M165.5 235.1L234.5 235.1" stroke="#3a2412" stroke-width="1.6"/>
 <path d="M190 196L210 196" stroke="#3a2412" stroke-width="0.8"/>
+</g>
+</g>
 <path d="M40 300C60 270 80 250 96 236" stroke="#9a8a7a" stroke-width="1.5" fill="none"/><path d="M80 300C92 272 104 252 112 238" stroke="#9a8a7a" stroke-width="1.5" fill="none"/>
 <ellipse cx="200" cy="252.9" rx="26.1" ry="4.3" fill="#000" opacity="0.5"/>
-<path d="M176.8 226.8L223.2 226.8L217.4 247.1L182.6 247.1Z" fill="#4a3424"/>
+<path d="M176.8 226.8L223.2 226.8L217.4 247.1L182.6 247.1Z" fill="#4a3424" filter="url(#tx-wood-fine)"/>
 <path d="M176.8 226.8L223.2 226.8" stroke="#8a6a4a" stroke-width="2.2"/>
 <path d="M188.4 226.8L190.7 247.1" stroke="#2a1a10" stroke-width="1.2"/>
 <path d="M200 226.8L200 247.1" stroke="#2a1a10" stroke-width="1.2"/>
 <path d="M211.6 226.8L209.3 247.1" stroke="#2a1a10" stroke-width="1.2"/>
 <path d="M178.2 232.6L221.8 232.6M181.2 242.8L218.8 242.8" stroke="#6a6a70" stroke-width="1.7"/>
-<circle cx="188.4" cy="250" r="5.1" fill="#2a2a2e" stroke="#6a6a70" stroke-width="1.2"/>
-<circle cx="211.6" cy="250" r="5.1" fill="#2a2a2e" stroke="#6a6a70" stroke-width="1.2"/>
+<circle cx="183.1" cy="250" r="5.1" fill="#2a2a2e" stroke="#6a6a70" stroke-width="1.2"/>
+<circle cx="216.9" cy="250" r="5.1" fill="#2a2a2e" stroke="#6a6a70" stroke-width="1.2"/>
 <circle cx="184.2" cy="225.3" r="4.4" fill="#5a4030"/>
 <circle cx="204.1" cy="221" r="4.9" fill="#e8a830"/>
 <circle cx="207.3" cy="221.6" r="3.9" fill="#e8a830"/>
@@ -228,7 +234,7 @@
 <circle cx="157.5" cy="101" r="1.8" fill="#ffd070" filter="url(#t-mines-g2)"/>
 <circle cx="200" cy="111" r="1.8" fill="#ffd070" filter="url(#t-mines-g2)"/>
 <circle cx="242.5" cy="101" r="1.8" fill="#ffd070" filter="url(#t-mines-g2)"/>
-<path d="M300 262C310 250 330 248 350 256C360 262 356 268 340 270C320 272 304 270 300 262Z" fill="#2a1c12"/>
+<path d="M300 262C310 250 330 248 350 256C360 262 356 268 340 270C320 272 304 270 300 262Z" fill="#2a1c12" filter="url(#tx-ground-fine)"/>
 <circle cx="332.9" cy="253.6" r="2.9" fill="#e8a830"/>
 <circle cx="319.2" cy="258.2" r="3.3" fill="#e8a830"/>
 <circle cx="339" cy="260.4" r="3.3" fill="#3a2a20"/>

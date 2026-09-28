@@ -16,7 +16,7 @@
     <stop offset="0" stop-color="#1a0610" stop-opacity="0.9"/>
     <stop offset="1" stop-color="#6a1810" stop-opacity="0.5"/>
   </linearGradient>
-  <linearGradient id="c7a-mtn" x1="0" y1="0" x2="0" y2="1">
+  <linearGradient id="c7a-mtn" data-tx="cliff-fine" x1="0" y1="0" x2="0" y2="1">
     <stop offset="0" stop-color="#4a1420"/>
     <stop offset="1" stop-color="#a0381c"/>
   </linearGradient>
@@ -25,7 +25,7 @@
     <stop offset="0.7" stop-color="#2a0c16"/>
     <stop offset="1" stop-color="#6a2012"/>
   </linearGradient>
-  <linearGradient id="c7a-lava" x1="0" y1="0" x2="0" y2="1">
+  <linearGradient id="c7a-lava" data-tx="lava" x1="0" y1="0" x2="0" y2="1">
     <stop offset="0" stop-color="#fff0a0"/>
     <stop offset="0.25" stop-color="#ffb030"/>
     <stop offset="0.6" stop-color="#f05a10"/>
@@ -35,7 +35,7 @@
     <stop offset="0" stop-color="#3a1410"/>
     <stop offset="1" stop-color="#0c0406"/>
   </linearGradient>
-  <linearGradient id="c7a-skin" gradientUnits="userSpaceOnUse" x1="0" y1="30" x2="0" y2="260">
+  <linearGradient id="c7a-skin" data-tx="leather" gradientUnits="userSpaceOnUse" x1="0" y1="30" x2="0" y2="260">
     <stop offset="0" stop-color="#1c0618"/>
     <stop offset="0.35" stop-color="#43122e"/>
     <stop offset="0.7" stop-color="#762236"/>
@@ -45,7 +45,7 @@
     <stop offset="0" stop-color="#ff9a50" stop-opacity="0.75"/>
     <stop offset="1" stop-color="#ff7040" stop-opacity="0"/>
   </linearGradient>
-  <linearGradient id="c7a-iron" gradientUnits="userSpaceOnUse" x1="0" y1="40" x2="0" y2="260">
+  <linearGradient id="c7a-iron" data-tx="metal" gradientUnits="userSpaceOnUse" x1="0" y1="40" x2="0" y2="260">
     <stop offset="0" stop-color="#08070c"/>
     <stop offset="0.45" stop-color="#1e1a24"/>
     <stop offset="0.8" stop-color="#3c2a2c"/>
@@ -56,13 +56,13 @@
     <stop offset="0.4" stop-color="#2a2430" stop-opacity="0"/>
     <stop offset="1" stop-color="#ff7a30" stop-opacity="0.55"/>
   </linearGradient>
-  <linearGradient id="c7a-horn" x1="0" y1="0" x2="1" y2="1">
+  <linearGradient id="c7a-horn" data-tx="marble-fine" x1="0" y1="0" x2="1" y2="1">
     <stop offset="0" stop-color="#e8d8b8"/>
     <stop offset="0.35" stop-color="#8a7258"/>
     <stop offset="0.75" stop-color="#3a2a22"/>
     <stop offset="1" stop-color="#140c0c"/>
   </linearGradient>
-  <linearGradient id="c7a-tusk" x1="0" y1="1" x2="0" y2="0">
+  <linearGradient id="c7a-tusk" data-tx="marble-fine" x1="0" y1="1" x2="0" y2="0">
     <stop offset="0" stop-color="#6a5040"/>
     <stop offset="0.6" stop-color="#d8c8a8"/>
     <stop offset="1" stop-color="#fff4dc"/>
@@ -209,7 +209,7 @@
 <path d="M46 118 L52 134 L44 150 M290 128 L296 144 M322 120 L318 140" fill="none" stroke="#ff8a4a" stroke-width="0.8" opacity="0.4"/>
 
 <!-- ============ 3. HELL FORTRESS ============ -->
-<g fill="url(#c7a-fort)">
+<g fill="url(#c7a-fort)" filter="url(#tx-stone-fine)">
   <!-- left keep -->
   <path d="M14 200 L14 120 L10 116 L22 96 L20 88 L26 60 L32 88 L30 96 L42 116 L38 120 L38 150 L52 150 L52 110 L48 106 L58 88 L62 70 L66 88 L76 106 L72 110 L72 200 Z"/>
   <path d="M0 200 L0 160 L8 156 L8 140 L14 140 L14 200 Z"/>
@@ -244,7 +244,7 @@
 
 <!-- haze/ground smoke over background -->
 <ellipse cx="200" cy="206" rx="240" ry="30" fill="#ff7a30" opacity="0.35" filter="url(#c7a-haze)"/>
-<path d="M0 200 C60 190 120 204 200 196 C280 190 340 204 400 196 L400 230 L0 230 Z" fill="#3a0c10"/>
+<path d="M0 200 C60 190 120 204 200 196 C280 190 340 204 400 196 L400 230 L0 230 Z" fill="#3a0c10" filter="url(#tx-ground-soft)"/>
 
 <!-- ============ 4. THE PIT LORD ============ -->
 <!-- body backlight halo -->
@@ -266,7 +266,7 @@
 <path d="M160 116 C170 112 182 112 190 116" fill="none" stroke="#c06070" stroke-width="0.8" opacity="0.5"/>
 <path d="M240 116 C230 112 218 112 210 116" fill="none" stroke="#c06070" stroke-width="0.8" opacity="0.5"/>
 <!-- abs -->
-<g fill="#6a2034" stroke="#14040c" stroke-width="1.1">
+<g fill="#6a2034" stroke="#14040c" stroke-width="1.1" filter="url(#tx-leather)">
   <path d="M176 160 C184 157 194 158 198 162 L197 180 C190 182 182 181 176 178 C174 172 174 166 176 160 Z"/>
   <path d="M224 160 C216 157 206 158 202 162 L203 180 C210 182 218 181 224 178 C226 172 226 166 224 160 Z"/>
   <path d="M178 186 C186 184 194 185 198 188 L197 206 C190 208 183 207 178 204 C176 198 176 192 178 186 Z"/>
@@ -322,7 +322,7 @@
 <path d="M149 254 C170 248 230 248 251 254" fill="none" stroke="#ff9a40" stroke-width="1.2"/>
 <!-- belt buckle: horned skull plate -->
 <path d="M186 232 C190 226 210 226 214 232 L216 246 C212 256 188 256 184 246 Z" fill="url(#c7a-iron)" stroke="#050306" stroke-width="1"/>
-<path d="M186 232 C180 226 176 222 174 216 C180 220 184 224 190 228 Z M214 232 C220 226 224 222 226 216 C220 220 216 224 210 228 Z" fill="#2a2430" stroke="#050306" stroke-width="0.6"/>
+<path d="M186 232 C180 226 176 222 174 216 C180 220 184 224 190 228 Z M214 232 C220 226 224 222 226 216 C220 220 216 224 210 228 Z" fill="#2a2430" stroke="#050306" stroke-width="0.6" filter="url(#tx-metal-fine)"/>
 <path d="M190 238 L196 240 L192 243 Z M210 238 L204 240 L208 243 Z" fill="#8aff50" filter="url(#c7a-bloom)"/>
 <path d="M192 248 L194 252 L197 248 L200 252 L203 248 L206 252 L208 248" fill="none" stroke="#050306" stroke-width="1"/>
 <path d="M187 233 C192 229 208 229 213 233" fill="none" stroke="#8a7a80" stroke-width="0.6"/>
@@ -346,7 +346,7 @@
 <!-- temples shading -->
 <path d="M180 64 C176 72 174 80 176 88 C180 82 182 74 184 66 Z M220 64 C224 72 226 80 224 88 C220 82 218 74 216 66 Z" fill="#0c0208" opacity="0.6"/>
 <!-- heavy brow ridge -->
-<path d="M176 66 C184 60 194 63 200 70 C206 63 216 60 224 66 C225 72 218 72 210 76 C206 78 202 80 200 80 C198 80 194 78 190 76 C182 72 175 72 176 66 Z" fill="#2a0a1e" stroke="#0a0206" stroke-width="0.8"/>
+<path d="M176 66 C184 60 194 63 200 70 C206 63 216 60 224 66 C225 72 218 72 210 76 C206 78 202 80 200 80 C198 80 194 78 190 76 C182 72 175 72 176 66 Z" fill="#2a0a1e" stroke="#0a0206" stroke-width="0.8" filter="url(#tx-leather-fine)"/>
 <path d="M177 66 C185 61 194 64 200 70 C206 64 215 61 223 66" fill="none" stroke="#a04a4a" stroke-width="0.8" opacity="0.7"/>
 <!-- eye sockets -->
 <path d="M181 72 C186 71 192 73 196 77 C191 80 185 79 181 72 Z" fill="#050103"/>
@@ -359,7 +359,7 @@
 <circle cx="190" cy="75.5" r="0.9" fill="#fff"/>
 <circle cx="210" cy="75.5" r="0.9" fill="#fff"/>
 <!-- nose/snout -->
-<path d="M194 80 C196 84 194 88 192 91 C196 93 204 93 208 91 C206 88 204 84 206 80 C204 82 196 82 194 80 Z" fill="#6a2034" stroke="#0e0308" stroke-width="0.7"/>
+<path d="M194 80 C196 84 194 88 192 91 C196 93 204 93 208 91 C206 88 204 84 206 80 C204 82 196 82 194 80 Z" fill="#6a2034" stroke="#0e0308" stroke-width="0.7" filter="url(#tx-leather-fine)"/>
 <path d="M193 90 C195 89 197 90 197 91.5 C195 92 194 91.5 193 90 Z M207 90 C205 89 203 90 203 91.5 C205 92 206 91.5 207 90 Z" fill="#0a0206"/>
 <path d="M199 81 C200 84 200 87 199 90" stroke="#d07a60" stroke-width="0.7" fill="none" opacity="0.7"/>
 <!-- cheekbones and snarl lines -->
@@ -410,10 +410,10 @@
 <!-- ============ LAVA PIT (foreground) ============ -->
 <path d="M0 248 C40 240 90 250 140 256 C170 260 230 260 260 256 C310 250 360 240 400 246 L400 300 L0 300 Z" fill="url(#c7a-lava)"/>
 <ellipse cx="200" cy="258" rx="150" ry="10" fill="#fff4b0" opacity="0.6" filter="url(#c7a-glow)"/>
-<g fill="url(#c7a-crust)">
+<g fill="url(#c7a-crust)" filter="url(#tx-cliff)">
   <path d="M0 256 C18 250 40 252 56 258 C62 262 60 268 50 272 C60 276 70 280 80 278 C94 274 110 272 126 276 C132 280 128 286 118 290 C140 292 160 288 176 290 C192 292 214 290 228 286 C220 282 218 276 232 274 C250 270 270 272 286 276 C296 280 300 272 314 268 C326 262 340 258 356 256 C372 254 388 252 400 254 L400 300 L0 300 Z"/>
 </g>
-<g fill="#ff7a20" opacity="0.9">
+<g fill="#ff7a20" opacity="0.9" filter="url(#tx-lava-fine)">
   <path d="M20 270 C36 266 54 268 62 274 C54 278 34 280 20 276 Z"/>
   <path d="M136 272 C150 268 166 270 172 276 C162 280 146 280 136 276 Z"/>
   <path d="M244 280 C262 276 280 278 288 284 C276 288 256 288 244 284 Z"/>
