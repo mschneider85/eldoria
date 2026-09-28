@@ -117,7 +117,8 @@ button:disabled { cursor: var(--cur-default); }
   border: 2px solid var(--gold-dark);
 }
 .player-bar .pname { font-family: var(--display); font-weight: 800; font-size: 16px; }
-.player-bar .crown { font-size: 18px; filter: drop-shadow(0 0 6px rgba(255, 210, 80, .8)); }
+/* Die Krone ist höher als die Großbuchstaben – etwas anheben, damit sie nicht unter die Schriftlinie hängt */
+.player-bar .crown { font-size: 18px; filter: drop-shadow(0 0 6px rgba(255, 210, 80, .8)); position: relative; top: -.15em; }
 .player-bar .chip { font-size: 13px; color: var(--muted); display: flex; align-items: center; gap: 4px; }
 .player-bar .chip b { color: var(--ink); font-size: 15px; }
 .quartet-slots { display: flex; gap: 4px; }
@@ -482,6 +483,10 @@ button:disabled { cursor: var(--cur-default); }
 .topbar { position: absolute; top: 0; left: 0; right: 0; z-index: 3; padding: 10px 14px; pointer-events: none; align-items: flex-start; }
 .topbar > * { pointer-events: auto; }
 .player-bar { position: relative; z-index: 2; }
+/* Beide Leisten gleich breit – auch wenn die Krone wechselt oder ein Name länger ist */
+.player-bar { width: clamp(400px, calc(var(--qw) * 2.1), 600px); justify-content: flex-start; }
+/* Symbol und Name links, Karten, Quartette und Kriegshorn rechts */
+.player-bar .quartet-slots { margin-left: auto; }
 /* Die Arena: eine abgesetzte Spielfläche, auf der sich das Duell abspielt */
 .battlefield {
   align-self: stretch; margin: 0 auto; width: min(100% - 2 * var(--gap), calc(var(--qw) * 4.5 + 220px));
@@ -566,9 +571,10 @@ button:disabled { cursor: var(--cur-default); }
 @keyframes land { 0% { transform: scale(1); } 35% { transform: scale(1.06, .94) translateY(2px); } 100% { transform: none; } }
 
 /* =============================================================== Hand des Gegners */
-.opp-row { display: flex; justify-content: center; align-items: center; gap: calc(var(--gap) * 1.2); }
-.opp-row .player-bar { margin: 0; }
-.opp-hand { display: flex; align-items: center; justify-content: center; min-width: calc(var(--qw) * .55); height: calc(var(--qw) * .33); }
+/* Die Gegnerleiste steht mittig über der eigenen, die Gegnerhand hängt links daneben (rechts liegen die Knöpfe) */
+.opp-row { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; column-gap: calc(var(--gap) * 1.2); }
+.opp-row .player-bar { margin: 0; grid-column: 2; }
+.opp-hand { grid-column: 1; grid-row: 1; justify-self: end; display: flex; align-items: center; justify-content: center; min-width: calc(var(--qw) * .55); height: calc(var(--qw) * .33); }
 .opp-hand .ob {
   flex: none; width: calc(var(--qw) * .22); height: calc(var(--qw) * .33); border-radius: 6px;
   margin-left: calc(var(--qw) * -.07); transform: translateY(var(--y)) rotate(var(--r)); transform-origin: 50% 120%;
@@ -735,7 +741,10 @@ button:disabled { cursor: var(--cur-default); }
   .deck { display: none; }
   .player-bar .total-chip { display: flex; }
   /* Die Gegnerhand behält ihre Breite, schrumpfen darf nur die Leiste – sonst ragen die Rückseiten über den Rand */
-  .opp-row { gap: 8px; padding: 0 10px; }
+  .player-bar { width: auto; }
+  .player-bar .total-chip { margin-left: auto; }
+  .player-bar .quartet-slots { margin-left: 0; }
+  .opp-row { display: flex; justify-content: center; gap: 8px; padding: 0 10px; }
   .opp-row .player-bar { min-width: 0; }
   .opp-hand { min-width: 0; flex: none; }
   .hand-area { grid-template-columns: 1fr; row-gap: 8px; }
