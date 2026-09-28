@@ -173,10 +173,10 @@ button:disabled { cursor: var(--cur-default); }
 }
 .stat-choice button:hover { filter: brightness(1.2); border-color: var(--gold); }
 
-/* Schlachtfeld-Karte: gleiches Format und Pergament wie die Quartettkarten, Farbe je nach Art */
+/* Schlachtfeld-Karte: gleiches Format wie die Quartettkarten, aber dunkel eingefärbt (nur der Goldrahmen bleibt), Farbe je nach Art */
 .terrain {
   --fc: #5f7a44;
-  position: relative; width: var(--qw); height: calc(var(--qw) * 1.5); flex: none; color: #2a1a0a; text-align: center; overflow: hidden;
+  position: relative; width: var(--qw); height: calc(var(--qw) * 1.5); flex: none; color: #f0e2bd; text-align: center; overflow: hidden;
   padding: calc(var(--qw) * .028); border-radius: 14px;
   animation: terrain-in .5s ease;
 }
@@ -186,19 +186,21 @@ button:disabled { cursor: var(--cur-default); }
   height: 100%; border-radius: 10px; overflow: hidden; display: flex; flex-direction: column;
   background:
     var(--tex-paper),
-    radial-gradient(ellipse at 20% 10%, rgba(255, 255, 255, .55), transparent 50%),
-    radial-gradient(ellipse at 80% 95%, rgba(140, 95, 40, .28), transparent 60%),
-    linear-gradient(180deg, #f6ecd2, #e0cc9a);
-  box-shadow: inset 0 0 0 2px #3a2508, inset 0 0 0 3.5px var(--fc), inset 0 0 14px rgba(90, 60, 20, .35);
+    radial-gradient(ellipse at 20% 10%, rgba(255, 255, 255, .08), transparent 50%),
+    radial-gradient(ellipse at 80% 95%, color-mix(in srgb, var(--fc) 35%, transparent), transparent 60%),
+    linear-gradient(180deg, color-mix(in srgb, var(--fc) 22%, #2a1d10), color-mix(in srgb, var(--fc) 14%, #140d06));
+  background-blend-mode: soft-light, normal, normal, normal;
+  box-shadow: inset 0 0 0 2px #140c03, inset 0 0 0 3.5px var(--fc), inset 0 0 14px rgba(0, 0, 0, .6);
 }
 .terrain .head {
   /* so hoch wie die Kopfleiste der Quartettkarten: Code-Schild + Innenabstand oben/unten + 1px Kante (Werte siehe Containerabfragen) */
   display: flex; align-items: center; justify-content: center; padding: 3.5px 6px 0; flex: none; min-height: calc(var(--qw) * .137 + 1px);
   background:
     var(--tex-paper),
-    linear-gradient(180deg, color-mix(in srgb, var(--fc) 62%, #e8d8b0), color-mix(in srgb, var(--fc) 70%, #b89a64));
-  border-bottom: 1px solid color-mix(in srgb, var(--fc) 50%, #3a2508);
-  color: #fff; font-weight: 800; font-size: calc(var(--qw) * .061); text-shadow: 0 1px 1px rgba(0, 0, 0, .35);
+    linear-gradient(180deg, color-mix(in srgb, var(--fc) 55%, #1e140a), color-mix(in srgb, var(--fc) 40%, #0e0904));
+  background-blend-mode: soft-light, normal;
+  border-bottom: 1px solid color-mix(in srgb, var(--fc) 40%, #000);
+  color: #d9b86a; font-weight: 800; font-size: calc(var(--qw) * .061); text-shadow: 0 1px 1px rgba(0, 0, 0, .6);
 }
 /* Der Buchstabenabstand hängt auch hinter dem letzten Zeichen an – links gleich viel einrücken, damit der Text mittig sitzt */
 .terrain .kicker {
@@ -231,12 +233,12 @@ button:disabled { cursor: var(--cur-default); }
 .terrain .body { flex: 1; min-height: 0; display: flex; flex-direction: column; justify-content: center; gap: calc(var(--qw) * .04); padding: 4px 8px 8px; }
 .terrain .counts {
   padding: calc(var(--qw) * .025) 6px; border-radius: 6px;
-  background: var(--tex-paper), rgba(120, 85, 35, .12); border: 1px solid rgba(90, 60, 20, .35);
-  font-weight: 800; font-size: calc(var(--qw) * .08); color: #3a2508;
+  background: rgba(0, 0, 0, .3); border: 1px solid rgba(226, 184, 90, .35);
+  font-weight: 800; font-size: calc(var(--qw) * .08); color: #ffe6a8;
 }
 .terrain .ttext {
-  font-size: calc(var(--qw) * .064); font-weight: 700; color: #3a2508; line-height: 1.25;
-  padding-top: calc(var(--qw) * .035); border-top: 1px solid rgba(90, 60, 20, .3);
+  font-size: calc(var(--qw) * .064); font-weight: 700; color: #e8d8b0; line-height: 1.25;
+  padding-top: calc(var(--qw) * .035); border-top: 1px solid rgba(226, 184, 90, .25);
 }
 @keyframes terrain-in { from { transform: rotateY(90deg) scale(.8); opacity: 0; } }
 
