@@ -19,7 +19,7 @@ python3 -m http.server 8765   # dann http://localhost:8765
 - Jede Runde bestimmt ein **Schlachtfeld**, welcher Wert zählt (teils mit Völkerbonus, im Nebelsumpf gewinnt der niedrigste Wert,
   an der Kreuzung wählt der Anführer).
 - Beide wählen **verdeckt** eine Karte; der Sieger erobert beide. Gleichstand → Kriegsbeute für den nächsten Rundensieger.
-- Alle 4 Karten eines Volkes = **Quartett** (wird abgelegt und ist sicher). **2 Quartette gewinnen.**
+- Alle 4 Karten eines Volkes = **Quartett** (wird abgelegt und ist sicher). **3 Quartette gewinnen** (nach 40 Runden zählen Quartette, danach Karten).
 - Extras: 📯 Kriegshorn (+20, lädt sich danach in 4 Runden wieder auf). Die Drachenkönigin (6A) ist die stärkste Karte – aber ohne Sonderregel.
 - **Fähigkeiten:** Jede Karte hat eine von 13 Fähigkeiten, die beim Aufdecken wirken – z. B. Umlenken (andere Eigenschaft zählt),
   Verrat (niedrigster Wert gewinnt), Rückzug (Karte geht bei Niederlage nicht verloren), Plündern, Spion, Schwächen.

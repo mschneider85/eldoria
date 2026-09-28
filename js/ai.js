@@ -21,15 +21,31 @@
     return pool;
   }
 
+  /**
+   * Erwartete Zahl der Verbündeten: für die eigene Karte aus der echten Hand, für die des Gegners
+   * geschätzt – seine Hand ist unbekannt, nur welche Karten er besitzt und wie viele er hält.
+   */
+  function alliesEstimate(s, p) {
+    return (i, c) => {
+      const pl = s.players[i];
+      if (i === p) return pl.hand.filter((id) => id !== c.id && CARDS[id].faction === c.faction).length;
+      const others = Eng.owned(s, i).filter((id) => id !== c.id);
+      if (!others.length) return 0;
+      const same = others.filter((id) => CARDS[id].faction === c.faction).length;
+      return (same * Math.max(0, pl.hand.length - 1)) / others.length;
+    };
+  }
+
   function winChance(s, p, cardId, horn) {
     const pool = opponentPool(s, p);
     if (!pool.length) return 1;
+    const allies = alliesEstimate(s, p);
     let score = 0;
     let total = 0;
     for (const o of pool) {
       const mine = { card: cardId, horn };
       const theirs = { card: o.id, horn: false };
-      const r = Eng.duel(s, p === 0 ? [mine, theirs] : [theirs, mine]);
+      const r = Eng.duel(s, p === 0 ? [mine, theirs] : [theirs, mine], { allies });
       score += o.w * (r.winner === p ? 1 : r.winner === -1 ? 0.5 : 0);
       total += o.w;
     }

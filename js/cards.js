@@ -78,7 +78,7 @@
     plunder: { name: 'Plündern', icon: '🏴‍☠️', text: () => 'Gewinnst du, eroberst du zusätzlich die oberste Karte vom Stapel des Gegners.' },
     rage: { name: 'Wut', icon: '💢', text: () => '+20, wenn du die letzte Runde verloren hast.' },
     spy: { name: 'Spion', icon: '🕵️', text: () => '+10. In der nächsten Runde siehst du eine Handkarte des Gegners.' },
-    ambush: { name: 'Hinterhalt', icon: '🗡️', text: () => '+25, wenn die gegnerische Karte einen höheren Grundwert hat.' },
+    ambush: { name: 'Hinterhalt', icon: '🗡️', text: () => '+25, wenn die gegnerische Karte einen besseren Grundwert hat (bei „niedrigster gewinnt“ also einen kleineren).' },
     shift: { name: 'Gestaltwandel', icon: '🌀', text: () => 'Nutzt immer deinen besten Wert – egal, was zählt (bei „niedrigster gewinnt“ den kleinsten).' },
     runehorn: { name: 'Runenhorn', icon: '📯', text: () => '+10. Danach ist dein Kriegshorn sofort wieder bereit.' },
     treason: { name: 'Verrat', icon: '🎭', text: () => 'Dreht das Duell um: Der niedrigere Wert gewinnt.' },

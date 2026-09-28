@@ -10,7 +10,7 @@
   const HAND_SIZE = 3;
   const HORN_BONUS = 20;
   const HORN_RECHARGE = 4; // Runden, bis das Kriegshorn nach dem Einsatz wieder bereit ist
-  const DEFAULTS = { maxRounds: 25, targetQuartets: 2 };
+  const DEFAULTS = { maxRounds: 40, targetQuartets: 3 };
 
   const owned = (s, p) => [...s.players[p].hand, ...s.players[p].deck];
   const factionCount = (s, p, f) => owned(s, p).filter((id) => CARDS[id].faction === f).length;
@@ -27,6 +27,8 @@
    * Wertet ein Duell komplett aus – inklusive Fähigkeiten, Völkerbonus und Kriegshorn.
    * choices: [{ card, horn }, { card, horn }] für Spieler 0 und 1.
    * opts.chaosStat legt die Eigenschaft für „Chaos“ fest (sonst zufällig).
+   * opts.allies(i, card) ersetzt die Zahl der Verbündeten auf der Hand von Spieler i
+   * (für die KI, die die gegnerische Hand nicht kennen darf).
    * Rückgabe: { stat, low, values: [{ base, mods: [{ label, amount }], total }], winner, reason, notes }
    * winner: 0/1, -1 = Gleichstand. Die Beträge in mods sind so, wie sie den angezeigten Wert verändern.
    */
@@ -72,8 +74,9 @@
       const bonus = (s.terrain.bonus && s.terrain.bonus[c.faction]) || 0;
       if (bonus) adv[i].push(['Völkerbonus', bonus]);
       if (c.ability === 'allies') {
-        const hand = s.players[i].hand.filter((id) => id !== c.id);
-        const n = hand.filter((id) => CARDS[id].faction === c.faction).length;
+        const n = opts.allies
+          ? opts.allies(i, c)
+          : s.players[i].hand.filter((id) => id !== c.id && CARDS[id].faction === c.faction).length;
         if (n) adv[i].push(['Verbündete', 10 * n]);
       }
       if (c.ability === 'rage' && s.lastWinner === o) adv[i].push(['Wut', 20]);
