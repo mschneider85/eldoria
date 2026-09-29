@@ -14,7 +14,12 @@
   const SFX_VOL = 0.8;
   const MUSIC_VOL = 0.3;
 
-  let ctx = null;
+  // Zwei Kontexte: Effekte mit kleinstem Puffer (Klicks sofort hörbar), Musik mit großem Puffer –
+  // die vielen gleichzeitig klingenden Stimmen und Hallräume reißen sonst bei Lastspitzen kurz ab (Knistern).
+  let sfxCtx = null;
+  let musicCtx = null;
+  let ctx = null; // Kontext, in dem gerade Klänge entstehen: sfxCtx, innerhalb von inMusic() musicCtx
+  let musicMaster;
   let sfxBus;
   let dryBus; // Effekte ganz ohne Hall (Bedienklicks)
   let master;
@@ -27,22 +32,36 @@
   let noiseBuf;
 
   function init() {
-    if (ctx) return ctx;
+    if (sfxCtx) return sfxCtx;
     const AC = G.AudioContext || G.webkitAudioContext;
     if (!AC) return null;
-    // Etwas größerer Ausgabepuffer als der Standard ('interactive'): die vielen gleichzeitig
-    // klingenden Stimmen und zwei Hallräume reißen sonst bei Lastspitzen kurz ab (Knistern)
-    ctx = new AC({ latencyHint: 'balanced' });
+    sfxCtx = new AC({ latencyHint: 'interactive' });
+    // Als Zahl, denn 'balanced' ist in Chrome oft nicht größer als 'interactive' (~10 ms)
+    musicCtx = new AC({ latencyHint: 0.04 });
+    ctx = sfxCtx;
     buildGraph();
-    return ctx;
+    return sfxCtx;
   }
 
-  /** Signalweg: Effekte und Musik → Kompressor → Ausgang, jeweils mit Hallanteil. */
-  function buildGraph() {
+  /** Musikknoten entstehen im Musik-Kontext: fn läuft mit ctx = musicCtx. */
+  function inMusic(fn) {
+    const prev = ctx;
+    ctx = musicCtx;
+    try { return fn(); } finally { ctx = prev; }
+  }
+
+  /** Kompressor vor dem Ausgang des aktuellen Kontexts. */
+  function compressor() {
     const comp = ctx.createDynamicsCompressor();
     comp.threshold.value = -14;
     comp.ratio.value = 4;
     comp.connect(ctx.destination);
+    return comp;
+  }
+
+  /** Signalweg: Effekte und Musik → je ein Kompressor → Ausgang, jeweils mit Hallanteil. */
+  function buildGraph() {
+    const comp = compressor();
     master = comp;
 
     reverb = ctx.createConvolver();
@@ -60,12 +79,13 @@
     dryBus.connect(comp);
     // Hall-Anteil (hinter dem Bus, damit Stummschalten auch den Hall stumm schaltet)
     send(sfxBus, 0.22);
+    // AudioBuffer gehören keinem Kontext – Hall und Rauschen teilen sich beide
     hallBuf = impulse(6.5, 2.4, 0.12);
-    buildMusic();
-
     noiseBuf = ctx.createBuffer(1, ctx.sampleRate * 2, ctx.sampleRate);
     const d = noiseBuf.getChannelData(0);
     for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+
+    inMusic(() => { musicMaster = compressor(); buildMusic(); });
   }
 
   /**
@@ -75,7 +95,7 @@
   function buildMusic() {
     musicOut = ctx.createGain();
     musicOut.gain.value = settings.music ? MUSIC_VOL : 0;
-    musicOut.connect(master);
+    musicOut.connect(musicMaster);
     musicBus = ctx.createGain();
     musicChain(musicOut);
   }
@@ -190,6 +210,25 @@
     } else node.connect(bus);
   }
 
+  /** Filter mit optionaler Frequenzfahrt. f: { type, freq, to, time, q } */
+  function filterNode(t, f, dur) {
+    const n = ctx.createBiquadFilter();
+    n.type = f.type || 'lowpass';
+    n.frequency.setValueAtTime(f.freq, t);
+    if (f.to) n.frequency.exponentialRampToValueAtTime(f.to, t + (f.time || dur));
+    n.Q.value = f.q ?? 0.7;
+    return n;
+  }
+  /**
+   * Ein Filter für mehrere Stimmen mit derselben Filterfahrt (als bus an tone() übergeben): ein Filter
+   * mit laufender Frequenzfahrt ist teuer, ein gemeinsamer klingt gleich und spart viel Rechenzeit.
+   */
+  function sharedFilter(t, f, dur) {
+    const n = filterNode(t, f, dur);
+    n.connect(MB());
+    return n;
+  }
+
   /** Einzelner Ton. o: { t, freq, type, attack, hold, dur, peak, to (Zielfrequenz), bus, filter, detune, pan } */
   function tone(o) {
     const t = o.t ?? ctx.currentTime;
@@ -202,11 +241,7 @@
     envelope(g.gain, t, o.attack ?? 0.005, o.peak ?? 0.3, o.dur ?? 0.3, o.curve, o.hold);
     let node = osc;
     if (o.filter) {
-      const f = ctx.createBiquadFilter();
-      f.type = o.filter.type || 'lowpass';
-      f.frequency.setValueAtTime(o.filter.freq, t);
-      if (o.filter.to) f.frequency.exponentialRampToValueAtTime(o.filter.to, t + (o.filter.time || o.dur));
-      f.Q.value = o.filter.q ?? 0.7;
+      const f = filterNode(t, o.filter, o.dur);
       node.connect(f);
       node = f;
     }
@@ -257,12 +292,13 @@
       tone({ t, freq: 1250, type: 'triangle', dur: 0.05, peak: 0.22 });
       noise({ t, f0: 3000, type: 'highpass', dur: 0.03, peak: 0.2 });
     },
-    click() { tone({ freq: 660, type: 'sine', dur: 0.06, peak: 0.28, to: 520 }); },
-    // Dezenter Tipp für Nebenknöpfe: kurzes, dumpfes Klopfen, trocken ohne Hall
-    tap() {
+    // Klick für alle Knöpfe wie ein aufgeschlagenes Buch: dumpfer Klapp des Einbands, kurzer
+    // Papierhauch, kaum Ton – so klingt nichts nach
+    click() {
       const t = ctx.currentTime;
-      tone({ t, freq: 520, to: 340, type: 'sine', attack: 0.001, dur: 0.04, peak: 0.12, bus: dryBus });
-      noise({ t, f0: 700, type: 'lowpass', q: 0.7, attack: 0.001, dur: 0.02, peak: 0.08, bus: dryBus });
+      noise({ t, f0: 420, f1: 220, type: 'lowpass', q: 0.7, attack: 0.001, dur: 0.035, peak: 0.42, bus: dryBus });
+      tone({ t, freq: 100, to: 65, type: 'sine', attack: 0.001, dur: 0.02, peak: 0.2, bus: dryBus });
+      noise({ t: t + 0.004, f0: 1800, type: 'bandpass', q: 0.6, attack: 0.002, dur: 0.018, peak: 0.02, bus: dryBus });
     },
     flip() {
       const t = ctx.currentTime;
@@ -375,7 +411,7 @@
     // Friedhof: sehr langsam, Chor im Vordergrund, Totenglocke, kaum Harfe
     graveyard: {
       epic: 0.6, beat: 1.4, progs: [[[50, 53, 57], [43, 46, 50], [45, 49, 52], [50, 53, 57]], [[46, 50, 53], [43, 46, 50], [44, 47, 50], [45, 49, 52]]],
-      pad: { type: 'sawtooth', filter: 380, gain: 0.016 }, bass: 0.13, choir: 0.45, toll: 0.16,
+      pad: { type: 'sawtooth', filter: 380, gain: 0.016 }, bass: 0.13, choir: 0.45, toll: 0.16, timpaniPair: 0.35,
     },
     // Krieg (Steppe, Vulkan): schnell, treibendes Bass-Ostinato, laute Kriegstrommeln
     war: {
@@ -414,8 +450,10 @@
       pad: { type: 'triangle', filter: 900, gain: 0.045, wobble: 55 }, bass: 0.08, wind: 0.06, drips: 0.3,
     },
   };
+  // Blutige Steppe: wie Krieg, dazu ab und zu zwei laute Paukenschläge
+  MOODS.steppe = { ...MOODS.war, timpaniPair: 0.3, timpaniGain: 1.8 };
   const TERRAIN_MOODS = {
-    plain: 'field', steppe: 'war', volcano: 'war', fortress: 'regal', capital: 'regal', mines: 'mines',
+    plain: 'field', steppe: 'steppe', volcano: 'war', fortress: 'regal', capital: 'regal', mines: 'mines',
     nexus: 'arcane', graveyard: 'graveyard', storm: 'storm', forest: 'forest', moonwood: 'forest', swamp: 'swamp',
     crossroads: 'neutral', crossroads2: 'neutral',
   };
@@ -429,10 +467,10 @@
   /** Streicherfläche: drei verstimmte Stimmen pro Ton, breit im Stereobild, langsam ein- und ausblendend. */
   function padLayer(t, chord, len, o) {
     const voices = [[-12, -0.75], [0, 0], [12, 0.75]];
+    const bus = sharedFilter(t, o.sweep ? { freq: o.filter * 0.5, to: o.filter * 1.8, time: len, q: 1.5 } : { freq: o.filter * 0.7, to: o.filter * 1.15, time: len * 0.6, q: 0.4 });
     chord.forEach((n) => voices.forEach(([cents, pan]) => {
       const detune = cents + rnd(-3, 3) + (o.wobble ? rnd(-o.wobble, o.wobble) : 0);
-      const filter = o.sweep ? { freq: o.filter * 0.5, to: o.filter * 1.8, time: len, q: 1.5 } : { freq: o.filter * 0.7, to: o.filter * 1.15, time: len * 0.6, q: 0.4 };
-      tone({ t, freq: NOTE(n + 12), type: o.type, detune, attack: len * 0.35, hold: len * 0.65, dur: 3.5, peak: o.gain * 0.55, curve: 'lin', bus: MB(), filter, pan });
+      tone({ t, freq: NOTE(n + 12), type: o.type, detune, attack: len * 0.35, hold: len * 0.65, dur: 3.5, peak: o.gain * 0.55, curve: 'lin', bus, pan });
     }));
   }
 
@@ -444,9 +482,10 @@
 
   /** Chor: Sägezahn durch zwei Vokal-Formanten („ah“). */
   function choirLayer(t, chord, len, gain) {
+    const formants = [700, 1150].map((freq) => sharedFilter(t, { type: 'bandpass', freq, q: 7 }));
     chord.forEach((n, j) => {
-      [700, 1150].forEach((formant, i) => tone({ t, freq: NOTE(n + 12), type: 'sawtooth', detune: (i ? 6 : -6) + rnd(-3, 3), attack: len * 0.35, hold: len * 0.65, dur: 3.5,
-        peak: gain * (i ? 0.6 : 1), curve: 'lin', bus: MB(), filter: { type: 'bandpass', freq: formant, q: 7 }, pan: (j - 1) * 0.5 }));
+      formants.forEach((bus, i) => tone({ t, freq: NOTE(n + 12), type: 'sawtooth', detune: (i ? 6 : -6) + rnd(-3, 3), attack: len * 0.35, hold: len * 0.65, dur: 3.5,
+        peak: gain * (i ? 0.6 : 1), curve: 'lin', bus, pan: (j - 1) * 0.5 }));
     });
   }
 
@@ -455,7 +494,25 @@
    * leicht verschiedener Tonhöhe und Einsatz; der Sägezahn läuft parallel durch drei Vokal-Formanten, dazu leiser Atem.
    */
   const VOWELS = { a: [[800, 1], [1150, 0.5], [2900, 0.16]], o: [[450, 1], [800, 0.45], [2830, 0.1]] };
-  function singer(t, freq, len, peak, pan) {
+  /** Drei Vokal-Formanten, die von „ah“ zu „oh“ gleiten; die Sänger eines Akkordtons teilen sie sich. */
+  function vowelBank(t, len) {
+    const input = ctx.createGain();
+    VOWELS.a.forEach(([f, amp], k) => {
+      const bp = ctx.createBiquadFilter();
+      bp.type = 'bandpass';
+      bp.frequency.setValueAtTime(f * rnd(0.97, 1.03), t);
+      bp.frequency.linearRampToValueAtTime(VOWELS.o[k][0], t + len);
+      bp.Q.value = 3.5 + k * 2;
+      const fg = ctx.createGain();
+      fg.gain.setValueAtTime(amp, t);
+      fg.gain.linearRampToValueAtTime(VOWELS.o[k][1], t + len);
+      input.connect(bp);
+      bp.connect(fg);
+      fg.connect(MB());
+    });
+    return input;
+  }
+  function singer(t, freq, len, peak, pan, vowels) {
     const end = t + len + 3.6;
     const osc = ctx.createOscillator();
     osc.type = 'sawtooth';
@@ -478,25 +535,14 @@
     depth.connect(osc.detune);
     const g = ctx.createGain();
     envelope(g.gain, t, len * 0.35, peak, 3.5, 'lin', len * 0.65);
-    VOWELS.a.forEach(([f, amp], k) => {
-      const bp = ctx.createBiquadFilter();
-      bp.type = 'bandpass';
-      bp.frequency.setValueAtTime(f * rnd(0.97, 1.03), t);
-      bp.frequency.linearRampToValueAtTime(VOWELS.o[k][0], t + len);
-      bp.Q.value = 3.5 + k * 2;
-      const fg = ctx.createGain();
-      fg.gain.setValueAtTime(amp, t);
-      fg.gain.linearRampToValueAtTime(VOWELS.o[k][1], t + len);
-      osc.connect(bp);
-      bp.connect(fg);
-      fg.connect(g);
-    });
-    output(g, { bus: MB(), pan });
+    osc.connect(g);
+    output(g, { bus: vowels, pan });
     [osc, lfo].forEach((n) => { n.start(t); n.stop(end); });
   }
   function voiceChoirLayer(t, chord, len, gain) {
     chord.forEach((n, j) => {
-      for (let v = 0; v < 3; v++) singer(t + rnd(0, 0.25), NOTE(n + 12), len, gain / 3, (j - 1) * 0.55 + rnd(-0.2, 0.2));
+      const vowels = vowelBank(t, len);
+      for (let v = 0; v < 3; v++) singer(t + rnd(0, 0.25), NOTE(n + 12), len, gain / 3, (j - 1) * 0.55 + rnd(-0.2, 0.2), vowels);
     });
     noise({ t, f0: 1800, type: 'bandpass', q: 0.8, attack: len * 0.4, dur: len * 0.9, curve: 'lin', peak: gain * 0.05, bus: MB() });
   }
@@ -597,11 +643,31 @@
     }
   }
 
+  /**
+   * Zwei Paukenschläge (Grundton, dann Quarte darunter) auf Schlag 3 und 4 – nur ab und zu.
+   * Die Obertöne (1,5×, 2×, 2,5×) und der Schlägel-Anschlag machen sie auch auf kleinen Lautsprechern hörbar.
+   */
+  function timpaniPairLayer(t, chord, beat, prob, gain = 1) {
+    if (Math.random() >= prob) return;
+    [[2, chord[0] - 12, 1], [3, chord[0] - 17, 0.85]].forEach(([b, n, v]) => {
+      const at = human(t + beat * b, 0.02);
+      const f = NOTE(n);
+      const peak = 0.5 * v * gain;
+      tone({ t: at, freq: f * 1.08, to: f, glide: 0.15, dur: 2.4, peak, bus: MB() });
+      [[1.5, 0.6, 1.6], [2, 0.45, 1.1], [2.5, 0.3, 0.7]].forEach(([m, p, d]) =>
+        tone({ t: at, freq: f * m * 1.05, to: f * m, glide: 0.1, type: 'triangle', dur: d, peak: peak * p, bus: MB() }));
+      noise({ t: at, f0: 320, q: 1.2, attack: 0.003, dur: 0.25, peak: peak * 0.7, bus: MB() });
+      noise({ t: at, f0: 1400, q: 0.9, attack: 0.002, dur: 0.05, peak: peak * 0.2, bus: MB() });
+    });
+  }
+
   /** Hörner auf Schlag 1 und 3: langsam anschwellend, zwei leicht verstimmte Stimmen links und rechts. */
   function brassLayer(t, chord, beat, gain) {
-    [0, 2].forEach((b) => chord.forEach((n) => [-7, 7].forEach((cents, k) => tone({ t: human(t + b * beat, 0.03), freq: NOTE(n), type: 'sawtooth', detune: cents,
-      attack: 0.3, hold: beat * 0.9, dur: beat * 1.2, peak: gain * 0.55, curve: 'lin', bus: MB(), pan: k ? 0.35 : -0.35,
-      filter: { freq: 300, to: 1200, time: 0.5, q: 0.7 } }))));
+    [0, 2].forEach((b) => {
+      const bus = sharedFilter(t + b * beat, { freq: 300, to: 1200, time: 0.5, q: 0.7 });
+      chord.forEach((n) => [-7, 7].forEach((cents, k) => tone({ t: human(t + b * beat, 0.03), freq: NOTE(n), type: 'sawtooth', detune: cents,
+        attack: 0.3, hold: beat * 0.9, dur: beat * 1.2, peak: gain * 0.55, curve: 'lin', bus, pan: k ? 0.35 : -0.35 })));
+    });
   }
 
   function anvilLayer(t, beat, gain) {
@@ -790,16 +856,16 @@
 
   /** Celli und Kontrabässe: Grundton in zwei tiefen Oktaven, langsam anschwellend. */
   function lowStringsLayer(t, chord, len, e) {
+    const bus = sharedFilter(t, { freq: 260, to: 520, time: len * 0.4, q: 0.6 });
     [-12, -24].forEach((oct, k) => [-8, 8].forEach((cents) => tone({ t, freq: NOTE(chord[0] + oct), type: 'sawtooth', detune: cents + rnd(-3, 3),
-      attack: len * 0.3, hold: len * 0.6, dur: 3, peak: 0.044 * e * (k ? 1.2 : 1), curve: 'lin', bus: MB(), pan: cents < 0 ? -0.3 : 0.3,
-      filter: { freq: 260, to: 520, time: len * 0.4, q: 0.6 } })));
+      attack: len * 0.3, hold: len * 0.6, dur: 3, peak: 0.044 * e * (k ? 1.2 : 1), curve: 'lin', bus, pan: cents < 0 ? -0.3 : 0.3 })));
   }
 
   /** Hörner: voller Akkord in der Mittellage, schwillt über den ganzen Akkord an und öffnet sich dabei. */
   function hornSwellLayer(t, chord, len, e) {
+    const bus = sharedFilter(t, { freq: 280, to: 1100, time: len * 0.7, q: 0.8 });
     chord.forEach((n, j) => [-6, 6].forEach((cents) => tone({ t: t + j * 0.04, freq: NOTE(n), type: 'sawtooth', detune: cents + rnd(-2, 2),
-      attack: len * 0.55, hold: len * 0.3, dur: 2.5, peak: 0.028 * e, curve: 'lin', bus: MB(), pan: (j - 1) * 0.4,
-      filter: { freq: 280, to: 1100, time: len * 0.7, q: 0.8 } })));
+      attack: len * 0.55, hold: len * 0.3, dur: 2.5, peak: 0.028 * e, curve: 'lin', bus, pan: (j - 1) * 0.4 })));
   }
 
   /** Große Trommel auf dem Akkordwechsel: tiefer Schlag mit langem Nachhall im Raum. */
@@ -831,9 +897,10 @@
       const start = human(t + at * beat, 0.02);
       const dur = len * beat;
       const f = NOTE(tones[idx]);
+      const bus = sharedFilter(start, { freq: 500, to: 1500, time: Math.min(0.6, dur), q: 0.9 });
       [-5, 5].forEach((cents) => {
         const osc = tone({ t: start, freq: f, type: 'sawtooth', detune: cents, attack: Math.min(0.2, dur * 0.3), hold: dur * 0.6, dur: dur * 0.5 + 0.3,
-          peak: 0.04 * e, curve: 'lin', bus: MB(), pan: cents * 0.04, filter: { freq: 500, to: 1500, time: Math.min(0.6, dur), q: 0.9 } });
+          peak: 0.04 * e, curve: 'lin', bus, pan: cents * 0.04 });
         const lfo = ctx.createOscillator();
         const depth = ctx.createGain();
         lfo.frequency.value = 5;
@@ -882,6 +949,7 @@
     if (m.bells) bellLayer(t, chord, beat, m.bells);
     if (m.flute && (fresh || Math.random() < 0.4)) fluteLayer(t, chord, beat, m.flute);
     if (m.drums) drumLayer(t, beat, m.drums, m.drumGain);
+    if (m.timpaniPair) timpaniPairLayer(t, chord, beat, m.timpaniPair, m.timpaniGain);
     if (m.brass && fresh) brassLayer(t, chord, beat, m.brass);
     if (m.anvil) anvilLayer(t, beat, m.anvil);
     if (m.drips) dripLayer(t, beat, m.drips);
@@ -894,8 +962,8 @@
 
   function startMusic() {
     if (!settings.music || !init() || music) return;
-    music = { next: ctx.currentTime + 0.2, bar: 0, prog: 0, mood: pendingMood };
-    const tick = () => {
+    music = { next: musicCtx.currentTime + 0.2, bar: 0, prog: 0, mood: pendingMood };
+    const tick = () => inMusic(() => {
       while (music && music.next < ctx.currentTime + 1.5) {
         // Stimmungswechsel am Beginn einer Akkordfolge oder spätestens am nächsten Takt
         if (music.mood !== pendingMood) { music.mood = pendingMood; music.bar = 0; music.prog = 0; }
@@ -906,7 +974,7 @@
         music.bar++;
         if (music.bar % (4 * BARS_PER_CHORD) === 0 && progs.length > 1) music.prog = Math.random() < 0.6 ? music.prog + 1 : music.prog;
       }
-    };
+    });
     tick();
     music.timer = setInterval(tick, 400);
   }
@@ -926,26 +994,26 @@
   /* ------------------------------------------------------------ Steuerung */
   function unlock() {
     if (!init()) return;
-    if (ctx.state === 'suspended') ctx.resume();
+    [sfxCtx, musicCtx].forEach((c) => { if (c.state === 'suspended') c.resume(); });
     if (settings.music) startMusic();
   }
 
   function fade(bus, value) {
-    if (!ctx) return;
-    bus.gain.cancelScheduledValues(ctx.currentTime);
-    bus.gain.setTargetAtTime(value, ctx.currentTime, 0.15);
+    const t = bus.context.currentTime;
+    bus.gain.cancelScheduledValues(t);
+    bus.gain.setTargetAtTime(value, t, 0.15);
   }
 
   function setSfx(on) {
     settings.sfx = on;
     store.set('sfx', on);
-    if (ctx) { fade(sfxBus, on ? SFX_VOL : 0); fade(dryBus, on ? SFX_VOL : 0); }
+    if (sfxCtx) { fade(sfxBus, on ? SFX_VOL : 0); fade(dryBus, on ? SFX_VOL : 0); }
   }
 
   function setMusic(on) {
     settings.music = on;
     store.set('music', on);
-    if (!ctx) return;
+    if (!musicCtx) return;
     if (on) {
       fade(musicOut, MUSIC_VOL);
       startMusic();
@@ -954,12 +1022,12 @@
     // Sofort aus: 20 ms Blende gegen Knacken, dann die alte Kette samt Hall abhängen
     stopMusic();
     const old = musicOut;
-    const t = ctx.currentTime;
+    const t = musicCtx.currentTime;
     old.gain.cancelScheduledValues(t);
     old.gain.setValueAtTime(old.gain.value, t);
     old.gain.linearRampToValueAtTime(0, t + 0.02);
     setTimeout(() => old.disconnect(), 100);
-    buildMusic();
+    inMusic(buildMusic);
   }
 
   /**
@@ -967,41 +1035,44 @@
    * Rückgabe: { peak, rms } in dBFS.
    */
   async function measure(name, seconds = 3) {
-    const saved = { ctx, master, sfxBus, dryBus, musicBus, musicOut, hallBuf, ambBus, farBus, reverb, noiseBuf, sfx: settings.sfx, music: settings.music };
+    const saved = { ctx, sfxCtx, musicCtx, master, musicMaster, sfxBus, dryBus, musicBus, musicOut, hallBuf, ambBus, farBus, reverb, noiseBuf, sfx: settings.sfx, music: settings.music };
     const len = name.startsWith('music') ? 8 * 4 * 1.6 + 8 : seconds;
-    ctx = new OfflineAudioContext(2, Math.ceil(44100 * len), 44100);
+    const off = new OfflineAudioContext(2, Math.ceil(44100 * len), 44100);
+    ctx = sfxCtx = musicCtx = off;
     settings.sfx = true;
     settings.music = true;
-    buildGraph();
+    // Nur das Planen läuft mit dem Offline-Kontext; vor dem Rendern ist alles zurückgetauscht,
+    // sonst plante die laufende Musik ihre nächsten Takte in die Messung hinein
     try {
+      buildGraph();
       if (name.startsWith('music')) {
         const mood = name.split(':')[1] || 'neutral';
         let t = 0.05;
         for (let bar = 0; bar < 8; bar++) t += scheduleBar(t, MOODS[mood].progs[0][Math.floor(bar / BARS_PER_CHORD) % 4], mood, bar % BARS_PER_CHORD === 0);
       } else SOUNDS[name]();
-      const buf = await ctx.startRendering();
-      let peak = 0;
-      let sum = 0;
-      for (let c = 0; c < buf.numberOfChannels; c++) {
-        const d = buf.getChannelData(c);
-        for (let i = 0; i < d.length; i++) { const v = Math.abs(d[i]); if (v > peak) peak = v; sum += v * v; }
-      }
-      const db = (x) => Math.round(20 * Math.log10(Math.max(x, 1e-9)) * 10) / 10;
-      // Klangcharakter: Helligkeit (Nulldurchgänge pro Sekunde) und Rhythmik (Schwankung der Lautstärke in 50-ms-Fenstern)
-      const d0 = buf.getChannelData(0);
-      let zc = 0;
-      for (let i = 1; i < d0.length; i++) if ((d0[i - 1] < 0) !== (d0[i] < 0)) zc++;
-      const win = Math.floor(buf.sampleRate * 0.05);
-      const env = [];
-      for (let i = 0; i + win < d0.length; i += win) { let e = 0; for (let k = i; k < i + win; k++) e += d0[k] * d0[k]; env.push(Math.sqrt(e / win)); }
-      const mean = env.reduce((a, b) => a + b, 0) / env.length;
-      const sd = Math.sqrt(env.reduce((a, b) => a + (b - mean) ** 2, 0) / env.length);
-      return { peak: db(peak), rms: db(Math.sqrt(sum / (buf.length * buf.numberOfChannels))),
-        brightness: Math.round(zc / buf.duration), rhythm: Math.round((sd / mean) * 100) / 100 };
     } finally {
       Object.assign(settings, { sfx: saved.sfx, music: saved.music });
-      ({ ctx, master, sfxBus, dryBus, musicBus, musicOut, hallBuf, ambBus, farBus, reverb, noiseBuf } = saved);
+      ({ ctx, sfxCtx, musicCtx, master, musicMaster, sfxBus, dryBus, musicBus, musicOut, hallBuf, ambBus, farBus, reverb, noiseBuf } = saved);
     }
+    const buf = await off.startRendering();
+    let peak = 0;
+    let sum = 0;
+    for (let c = 0; c < buf.numberOfChannels; c++) {
+      const d = buf.getChannelData(c);
+      for (let i = 0; i < d.length; i++) { const v = Math.abs(d[i]); if (v > peak) peak = v; sum += v * v; }
+    }
+    const db = (x) => Math.round(20 * Math.log10(Math.max(x, 1e-9)) * 10) / 10;
+    // Klangcharakter: Helligkeit (Nulldurchgänge pro Sekunde) und Rhythmik (Schwankung der Lautstärke in 50-ms-Fenstern)
+    const d0 = buf.getChannelData(0);
+    let zc = 0;
+    for (let i = 1; i < d0.length; i++) if ((d0[i - 1] < 0) !== (d0[i] < 0)) zc++;
+    const win = Math.floor(buf.sampleRate * 0.05);
+    const env = [];
+    for (let i = 0; i + win < d0.length; i += win) { let e = 0; for (let k = i; k < i + win; k++) e += d0[k] * d0[k]; env.push(Math.sqrt(e / win)); }
+    const mean = env.reduce((a, b) => a + b, 0) / env.length;
+    const sd = Math.sqrt(env.reduce((a, b) => a + (b - mean) ** 2, 0) / env.length);
+    return { peak: db(peak), rms: db(Math.sqrt(sum / (buf.length * buf.numberOfChannels))),
+      brightness: Math.round(zc / buf.duration), rhythm: Math.round((sd / mean) * 100) / 100 };
   }
 
   CG.Audio = { unlock, play, setSfx, setMusic, setMood, settings, measure, sounds: () => Object.keys(SOUNDS), moods: () => Object.keys(MOODS), currentMood: () => (music ? music.mood : null), pendingMood: () => pendingMood };

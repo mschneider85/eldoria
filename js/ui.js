@@ -1118,11 +1118,11 @@
       b.addEventListener('click', () => { Snd.setSfx(!Snd.settings.sfx); updateAudioButtons(); Snd.play('click'); });
     });
     document.querySelectorAll('.music-toggle').forEach((b) => b.addEventListener('click', () => { Snd.setMusic(!Snd.settings.music); updateAudioButtons(); }));
-    // Klick-Geräusch: deutlich für die Hauptknöpfe, dezent für alle übrigen (der Effekte-Schalter klickt selbst)
+    // Einheitliches Klick-Geräusch für alle Knöpfe (der Effekte-Schalter klickt selbst)
     document.addEventListener('click', (e) => {
       const b = e.target.closest('button');
       if (!b || b.classList.contains('sfx-toggle')) return;
-      Snd.play(b.matches('.btn-primary, .stat-choice button, .horn-toggle') ? 'click' : 'tap');
+      Snd.play('click');
     });
     updateAudioButtons();
   }
