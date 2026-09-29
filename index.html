@@ -10,7 +10,7 @@
   <link rel="preload" href="art/fonts/cinzel-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="art/fonts/alegreya-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-  <link rel="stylesheet" href="css/style.css?v=166">
+  <link rel="stylesheet" href="css/style.css?v=168">
   <!-- Inhalt erst zeigen, wenn Cinzel/Alegreya geladen sind (kein kurzes Aufblitzen der Ersatzschrift) -->
   <style>html.fonts-loading body > * { visibility: hidden; }</style>
   <script>
@@ -72,6 +72,7 @@
           <div class="seg" id="difficulty-select">
             <button data-diff="easy">Leicht</button>
             <button data-diff="normal" class="active">Normal</button>
+            <button data-diff="hard">Schwer</button>
           </div>
         </div>
         <div class="menu-row names" id="names-row">
@@ -137,14 +138,14 @@
         <li><b>Nachziehstapel:</b> Nach jeder Runde füllst du deine Hand vom eigenen Stapel wieder auf 3 Karten auf. Eroberte Karten kommen <b>unter</b> den Stapel des Siegers – gezogen wird immer von oben.</li>
         <li><b>Gleichstand:</b> Beide Karten kommen in die Kriegsbeute. Wer die nächste Runde gewinnt, bekommt sie dazu.</li>
         <li><b>Tipp:</b> Rechtsklick (am Handy: lange drücken) auf eine Karte zeigt sie groß.</li>
-        <li><b>Tastatur:</b> <kbd>1</kbd>–<kbd>3</kbd> Karte wählen, <kbd>H</kbd> Kriegshorn, <kbd>Enter</kbd> ausspielen / weiter, <kbd>Esc</kbd> Fenster schließen.</li>
+        <li><b>Tastatur:</b> <kbd>1</kbd>–<kbd>3</kbd> Karte wählen, <kbd>H</kbd> Schlachtruf, <kbd>Enter</kbd> ausspielen / weiter, <kbd>Esc</kbd> Fenster schließen.</li>
         <li><b>Quartett:</b> Besitzt du alle 4 Karten eines Volkes, legst du sie automatisch als Quartett ab – sie sind dann sicher.</li>
       </ul>
       <h3>Besonderheiten</h3>
       <ul>
         <li>☁️ <b>Nebelsumpf:</b> Hier gewinnt der niedrigste Wert.</li>
         <li>🧭 <b>Kreuzung / Kriegsrat:</b> Der Anführer 👑 (Sieger der letzten Runde) wählt die Eigenschaft.</li>
-        <li>📯 <b>Kriegshorn:</b> +20 auf deine Karte. Danach lädt es sich wieder auf und ist nach 4 Runden erneut bereit (die Punkte am Horn zeigen den Ladestand).</li>
+        <li>📯 <b>Schlachtruf:</b> Keine passende Karte auf der Hand? Vor deiner Wahl mischst du alle Handkarten in deinen Stapel und ziehst neue. Danach lädt er sich wieder auf – aber nur in Runden, in denen du <b>zurückliegst</b> (weniger Karten, ein Quartett zählt wie 4). Nach 2 solchen Runden ist er wieder bereit.</li>
       </ul>
       <h3>Fähigkeiten</h3>
       <p class="rules-intro">Jede Karte hat eine Fähigkeit, die beim Aufdecken wirkt. Die höchste Karte ist also nicht automatisch die beste Wahl!</p>
@@ -158,11 +159,11 @@
     </div>
   </template>
 
-  <script src="js/cards.js?v=166"></script>
-  <script src="js/engine.js?v=166"></script>
-  <script src="js/ai.js?v=166"></script>
-  <script src="js/audio.js?v=166"></script>
-  <script src="js/ui.js?v=166"></script>
-  <script src="js/deer.js?v=166"></script>
+  <script src="js/cards.js?v=168"></script>
+  <script src="js/engine.js?v=168"></script>
+  <script src="js/ai.js?v=168"></script>
+  <script src="js/audio.js?v=168"></script>
+  <script src="js/ui.js?v=168"></script>
+  <script src="js/deer.js?v=168"></script>
 </body>
 </html>

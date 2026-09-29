@@ -496,7 +496,7 @@ button:disabled { cursor: var(--cur-default); }
 .player-bar { position: relative; z-index: 2; }
 /* Beide Leisten gleich breit – auch wenn die Krone wechselt oder ein Name länger ist */
 .player-bar { width: clamp(400px, calc(var(--qw) * 2.1), 600px); justify-content: flex-start; }
-/* Symbol und Name links, Karten, Quartette und Kriegshorn rechts */
+/* Symbol und Name links, Karten, Quartette und Schlachtruf rechts */
 .player-bar .quartet-slots { margin-left: auto; }
 /* Die Arena: eine abgesetzte Spielfläche, auf der sich das Duell abspielt */
 .battlefield {
@@ -762,7 +762,7 @@ button:disabled { cursor: var(--cur-default); }
   .hand-title, .hand, .hand-actions { grid-column: 1; justify-self: center; text-align: center; max-width: none; }
   .hand-title { grid-row: 1; } .hand { grid-row: 2; padding-top: 4px; } .hand-actions { grid-row: 3; flex-direction: row; min-width: 0; }
   .hand-title .result-line { text-align: center; }
-  /* Kriegshorn und Ausspielen teilen sich die Breite, statt über den Rand zu ragen */
+  /* Schlachtruf und Ausspielen teilen sich die Breite, statt über den Rand zu ragen */
   .hand-actions { width: 100%; }
   .hand-actions > button { flex: 1 1 auto; min-width: 0; padding: 10px 6px; }
   .horn-toggle { font-size: 12.5px; letter-spacing: 0; }
@@ -899,7 +899,7 @@ button[data-tip] { cursor: var(--cur-pointer); }
 .btn-secondary:active, .btn-small:active, .horn-toggle:not(:disabled):active, .stat-choice button:active, .seg button:active {
   transform: translateY(1px); box-shadow: inset 0 2px 5px rgba(0, 0, 0, .65), 0 1px 0 #0e0a05;
 }
-/* Gewählte Option / eingeschaltetes Horn: Messingbeschlag */
+/* Gewählte Option: Messingbeschlag */
 .seg button.active, .horn-toggle.on {
   background: var(--rivets), var(--tex-grunge), var(--tex-patina), linear-gradient(180deg, #caa252, #9a6d1f 60%, #6e4710);
   color: #2a1804; text-shadow: 0 1px 0 rgba(255, 236, 180, .5);

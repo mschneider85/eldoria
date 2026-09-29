@@ -8,11 +8,12 @@
   const { CARDS, TERRAINS, FACTIONS, STAT_IDS, ABILITIES, shuffle } = CG;
 
   const HAND_SIZE = 3;
-  const HORN_BONUS = 20;
-  const HORN_RECHARGE = 4; // Runden, bis das Kriegshorn nach dem Einsatz wieder bereit ist
+  const RALLY_RECHARGE = 2; // Runden im Rückstand, bis der Schlachtruf nach dem Einsatz wieder bereit ist
   const DEFAULTS = { maxRounds: 40, targetQuartets: 3 };
 
   const owned = (s, p) => [...s.players[p].hand, ...s.players[p].deck];
+  /** Stärke im Spiel: Karten im Besitz, ein abgelegtes Quartett zählt wie seine 4 Karten. */
+  const power = (s, p) => owned(s, p).length + 4 * s.players[p].quartets.length;
   const factionCount = (s, p, f) => owned(s, p).filter((id) => CARDS[id].faction === f).length;
 
   /** Verb passend zum Spieler („Du gewinnst“ / „Computer gewinnt“). */
@@ -24,9 +25,8 @@
   }
 
   /**
-   * Wertet ein Duell komplett aus – inklusive Fähigkeiten, Völkerbonus und Kriegshorn.
-   * choices: [{ card, horn }, { card, horn }] für Spieler 0 und 1.
-   * opts.chaosStat legt die Eigenschaft für „Chaos“ fest (sonst zufällig).
+   * Wertet ein Duell komplett aus – inklusive Fähigkeiten und Völkerbonus.
+   * choices: [{ card }, { card }] für Spieler 0 und 1.
    * opts.allies(i, card) ersetzt die Zahl der Verbündeten auf der Hand von Spieler i
    * (für die KI, die die gegnerische Hand nicht kennen darf).
    * Rückgabe: { stat, low, values: [{ base, mods: [{ label, amount }], total }], winner, reason, notes }
@@ -39,15 +39,13 @@
 
     // 1. Welche Eigenschaft zählt? Lenken beide um, heben sie sich auf.
     let stat = s.stat;
-    const switchers = [0, 1].filter((i) => cards[i].ability === 'redirect' || cards[i].ability === 'chaos');
+    const switchers = [0, 1].filter((i) => cards[i].ability === 'redirect');
     if (switchers.length === 2) {
       notes.push('🔀 Beide lenken um – die Effekte heben sich auf.');
     } else if (switchers.length === 1) {
       const c = cards[switchers[0]];
-      const others = STAT_IDS.filter((x) => x !== stat);
-      const next = c.ability === 'chaos' ? opts.chaosStat || others[Math.floor(Math.random() * others.length)] : c.stat;
-      if (next !== stat) {
-        stat = next;
+      if (c.stat !== stat) {
+        stat = c.stat;
         notes.push(`${ABILITIES[c.ability].icon} ${c.name}: Jetzt zählt ${CG.STATS[stat].icon} ${CG.STATS[stat].name}!`);
       }
     }
@@ -77,13 +75,11 @@
         const n = opts.allies
           ? opts.allies(i, c)
           : s.players[i].hand.filter((id) => id !== c.id && CARDS[id].faction === c.faction).length;
-        if (n) adv[i].push(['Verbündete', 10 * n]);
+        if (n) adv[i].push(['Verbündete', c.amount * n]);
       }
-      if (c.ability === 'rage' && s.lastWinner === o) adv[i].push(['Wut', 20]);
+      if (c.ability === 'rage' && s.lastWinner === o) adv[i].push(['Wut', c.amount]);
       if (c.ability === 'ambush' && dir * (base[o] - base[i]) > 0) adv[i].push(['Hinterhalt', 25]);
-      if (c.ability === 'runehorn') adv[i].push(['Runenhorn', 10]);
       if (c.ability === 'spy') adv[i].push(['Spion', 10]);
-      if (choices[i].horn) adv[i].push(['Kriegshorn', HORN_BONUS]);
       if (cards[o].ability === 'weaken') adv[i].push(['Geschwächt', -cards[o].amount]);
     }
     const values = [0, 1].map((i) => {
@@ -113,6 +109,7 @@
       pl.hand.push(id);
       drawn.push(id);
     }
+    s.known[p] = s.known[p].filter((id) => !drawn.includes(id));
     return drawn;
   }
 
@@ -124,6 +121,7 @@
       if (factionCount(s, p, f) === 4) {
         pl.hand = pl.hand.filter((id) => CARDS[id].faction !== f);
         pl.deck = pl.deck.filter((id) => CARDS[id].faction !== f);
+        s.known[p] = s.known[p].filter((id) => CARDS[id].faction !== f);
         pl.quartets.push(f);
         laid.push(f);
         log(s, `${pl.name} ${verb(pl, 'legt', 'legst')} das Quartett der ${FACTIONS[f].name} ab!`, 'quartet');
@@ -147,9 +145,11 @@
       round: 0, terrain: null, stat: null, phase: 'idle', leader: Math.random() < 0.5 ? 0 : 1,
       terrainDeck: [], pot: [], choices: [null, null], result: null, winner: null, log: [],
       lastWinner: -1, spy: [false, false], spyInfo: [null, null], retreatUsed: [],
+      // Karten, die offen unter einen Stapel gewandert und noch nicht wieder gezogen sind – das kann sich jeder merken
+      known: [[], []],
       players: cfg.players.map((o, i) => ({
         idx: i, name: o.name, isAI: !!o.isAI, difficulty: o.difficulty || 'normal',
-        deck: decks[i], hand: [], quartets: [], horn: true, hornCharge: 0, won: 0,
+        deck: decks[i], hand: [], quartets: [], rally: true, rallyCharge: 0, won: 0,
       })),
     };
     for (const p of [0, 1]) refill(s, p);
@@ -190,12 +190,33 @@
     return { ok: true };
   }
 
-  function choose(s, p, cardId, horn) {
+  /**
+   * Schlachtruf: Die Handkarten werden in den eigenen Stapel gemischt, dann werden neue gezogen.
+   * Nur vor der Kartenwahl. Danach lädt er sich in Runden auf, in denen man zurückliegt.
+   */
+  function rally(s, p) {
+    const pl = s.players[p];
+    if (s.phase !== 'cards' || s.choices[p]) return { ok: false, error: 'Jetzt nicht möglich.' };
+    if (!pl.rally) return { ok: false, error: 'Der Schlachtruf ist noch nicht bereit.' };
+    if (!pl.deck.length) return { ok: false, error: 'Dein Stapel ist leer.' };
+    const old = pl.hand.slice();
+    pl.deck.push(...pl.hand);
+    pl.hand = [];
+    shuffle(pl.deck);
+    s.known[p] = []; // nach dem Mischen weiß niemand mehr, wo welche Karte liegt
+    s.spyInfo[1 - p] = null; // die per Spion gesehene Karte ist vielleicht nicht mehr auf der Hand
+    pl.rally = false;
+    pl.rallyCharge = 0;
+    const drawn = refill(s, p);
+    log(s, `📯 ${pl.name} ${verb(pl, 'stößt', 'stößt')} den Schlachtruf aus und ${verb(pl, 'zieht', 'ziehst')} ${drawn.length} neue Karten!`, 'horn');
+    return { ok: true, old, drawn };
+  }
+
+  function choose(s, p, cardId) {
     const pl = s.players[p];
     if (s.phase !== 'cards' || s.choices[p]) return { ok: false, error: 'Jetzt nicht möglich.' };
     if (!pl.hand.includes(cardId)) return { ok: false, error: 'Karte nicht auf der Hand.' };
-    if (horn && !pl.horn) return { ok: false, error: 'Kriegshorn schon verbraucht.' };
-    s.choices[p] = { card: cardId, horn: !!horn };
+    s.choices[p] = { card: cardId };
     if (s.choices[0] && s.choices[1]) resolve(s);
     return { ok: true };
   }
@@ -206,7 +227,6 @@
     s.choices.forEach((c, p) => {
       const pl = s.players[p];
       pl.hand.splice(pl.hand.indexOf(c.card), 1);
-      if (c.horn) { pl.horn = false; pl.hornCharge = 0; log(s, `${pl.name} ${verb(pl, 'bläst', 'bläst')} das Kriegshorn (+${HORN_BONUS})!`, 'horn'); }
     });
     for (const n of d.notes) log(s, n, 'ability');
     const names = ids.map((id) => CARDS[id].name);
@@ -228,12 +248,14 @@
       if (lost.ability === 'retreat' && !s.retreatUsed.includes(lost.id)) {
         s.retreatUsed.push(lost.id);
         l.deck.unshift(lost.id); // unter den eigenen Stapel
+        s.known[li].push(lost.id);
         result.notes.push(`↩️ ${lost.name} zieht sich zurück und bleibt bei ${l.name === 'Du' ? 'dir' : l.name} (Rückzug verbraucht).`);
       } else {
         loot.push(lost.id);
       }
       if (CARDS[ids[wi]].ability === 'plunder' && l.deck.length) {
         const stolen = l.deck.pop(); // die oberste Karte des Gegners
+        s.known[li] = s.known[li].filter((id) => id !== stolen);
         loot.push(stolen);
         result.notes.push(`🏴‍☠️ Plündern: ${w.name} ${verb(w, 'erbeutet', 'erbeutest')} zusätzlich ${CARDS[stolen].name}.`);
       }
@@ -242,6 +264,7 @@
       s.pot = [];
       // Wie beim klassischen Quartett: Beute kommt unter den Stapel, gezogen wird von oben (Ende des Arrays).
       w.deck.unshift(...loot);
+      s.known[wi].push(...loot);
       w.won++;
       s.leader = wi;
       const why = d.reason === 'low' ? ' (niedrigster Wert)' : '';
@@ -253,15 +276,14 @@
     }
     s.choices.forEach((c, p) => {
       const card = CARDS[c.card];
-      if (card.ability === 'runehorn' && !s.players[p].horn) {
-        s.players[p].horn = true;
-        s.players[p].hornCharge = 0;
-        result.notes.push(`📯 ${s.players[p].name} ${verb(s.players[p], 'erhält', 'erhältst')} das Kriegshorn sofort zurück.`);
-      } else if (!s.players[p].horn) {
-        // Kriegshorn lädt sich jede Runde ein Stück auf
-        const pl = s.players[p];
-        pl.hornCharge++;
-        if (pl.hornCharge >= HORN_RECHARGE) { pl.horn = true; pl.hornCharge = 0; }
+      const pl = s.players[p];
+      if (card.ability === 'runehorn' && !pl.rally) {
+        pl.rally = true;
+        pl.rallyCharge = 0;
+        result.notes.push(`📯 Runenhorn: ${pl.name === 'Du' ? 'Dein Schlachtruf ist' : `Der Schlachtruf von ${pl.name} ist`} sofort wieder bereit.`);
+      } else if (!pl.rally && power(s, p) < power(s, 1 - p)) {
+        // Der Schlachtruf lädt sich nur auf, solange man zurückliegt
+        if (++pl.rallyCharge >= RALLY_RECHARGE) { pl.rally = true; pl.rallyCharge = 0; }
       }
       if (card.ability === 'spy') s.spy[p] = true;
     });
@@ -311,8 +333,8 @@
   }
 
   CG.Engine = {
-    HAND_SIZE, HORN_BONUS, HORN_RECHARGE,
-    newGame, chooseStat, choose, nextRound, duel, owned, factionCount,
+    HAND_SIZE, RALLY_RECHARGE,
+    newGame, chooseStat, choose, rally, nextRound, duel, owned, power, factionCount,
     clone: (s) => structuredClone(s),
   };
 })(globalThis);

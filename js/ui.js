@@ -19,7 +19,7 @@
   const ui = {
     chooser: null,     // Spieler, dessen Hand gerade offen liegt und der wählt
     selected: null,    // gewählte Handkarte
-    horn: false,       // Kriegshorn für diese Wahl aktiviert
+    rallying: false,   // Schlachtruf läuft gerade (Karten fliegen in den Stapel und zurück)
     revealed: false,   // Karten im Schlachtfeld aufgedeckt
     showResult: false, // Werte / Sieger anzeigen
     fly: null,         // Karten fliegen gerade zum Stapel
@@ -137,7 +137,7 @@
   }
 
   function resetRoundUI() {
-    Object.assign(ui, { chooser: null, selected: null, horn: false, revealed: false, showResult: false, fly: null, message: '' });
+    Object.assign(ui, { chooser: null, selected: null, rallying: false, revealed: false, showResult: false, fly: null, message: '' });
   }
 
   async function beginRound() {
@@ -195,10 +195,15 @@
       render();
       await sleep(700 + Math.random() * 900);
       if (!(await waitForOverlays(token))) return;
+      if (AI.shouldRally(s, 1)) {
+        await animateRally(1);
+        await sleep(900);
+        if (!(await waitForOverlays(token))) return;
+      }
       const c = AI.chooseCard(s, 1);
       await flyOppToSlot(c.card);
       if (token !== ui.token) return;
-      Engine.choose(s, 1, c.card, c.horn);
+      Engine.choose(s, 1, c.card);
       afterChoice();
       return;
     }
@@ -216,16 +221,15 @@
 
   async function confirmChoice() {
     const p = ui.chooser;
-    if (p === null || !ui.selected || s.phase !== 'cards' || s.choices[p] || ui.choosing) return;
+    if (p === null || !ui.selected || s.phase !== 'cards' || s.choices[p] || ui.choosing || ui.rallying) return;
     const token = ui.token;
     ui.choosing = ui.selected; // diese Karte ist unterwegs und wird nicht mehr in der Hand gezeigt
     await flyHandToSlot(p, ui.selected);
     ui.choosing = false;
     if (token !== ui.token) return;
-    const r = Engine.choose(s, p, ui.selected, ui.horn);
+    const r = Engine.choose(s, p, ui.selected);
     if (!r.ok) { toast(r.error); return; }
     ui.selected = null;
-    ui.horn = false;
     if (s.phase === 'cards' && !pvc()) {
       const next = 1 - p;
       ui.chooser = null;
@@ -255,7 +259,6 @@
     ui.revealed = true;
     Snd.play('reveal');
     const r0 = s.result;
-    if (r0.values.some((v) => v.mods.some((m) => m.label === 'Kriegshorn'))) setTimeout(() => Snd.play('horn'), 250);
     if (r0.notes.length) setTimeout(() => Snd.play('magic'), 500);
     await sleep(800);
     if (token !== ui.token) return;
@@ -515,6 +518,43 @@
     });
   }
 
+  /**
+   * Schlachtruf: Die Handkarten fliegen in den Stapel, er wird gemischt, dann werden neue gezogen.
+   * Offene Hand (unten) oder verdeckte Hand des Computers (oben).
+   */
+  async function animateRally(p) {
+    const token = ui.token;
+    ui.rallying = true;
+    ui.selected = null;
+    Snd.play('horn');
+    const open = ui.chooser === p;
+    const to = deckRect(p);
+    const els = open ? [...document.querySelectorAll('#hand [data-card]')] : [...document.querySelectorAll('#opp-hand .ob')];
+    await Promise.all(els.map((el, i) => {
+      const from = el.getBoundingClientRect();
+      const g = makeGhost(open ? cardHTML(el.dataset.card) : '', from);
+      el.style.visibility = 'hidden';
+      setTimeout(() => Snd.play('whoosh'), i * 120);
+      return fly(g, from, from, to, { ry0: open ? 0 : 180, ry1: 180, spin: 8, lift: from.height * 0.3, delay: i * 120, duration: 560 })
+        .then(() => g.remove());
+    }));
+    if (token !== ui.token) return;
+    const r = Engine.rally(s, p);
+    bumpDeck(p);
+    await sleep(250);
+    ui.rallying = false;
+    if (!r.ok) { render(); toast(r.error); return; }
+    if (open) {
+      ui.pendingDraw[p] = r.drawn;
+      render();
+    } else {
+      r.drawn.forEach((id) => ui.oppIncoming.add(id));
+      $('#opp-hand')._html = null;
+      render();
+      drawOpp(r.drawn);
+    }
+  }
+
   /** Der Computer legt eine verdeckte Karte aus seiner Hand auf sein Feld. */
   async function flyOppToSlot(id) {
     const el = document.querySelector(`#opp-hand [data-i="${ui.oppOrder.indexOf(id)}"]`);
@@ -630,7 +670,7 @@
   }
 
   /**
-   * Boni, die schon vor dem Aufdecken feststehen (Völkerbonus, Kriegshorn, Verbündete, Wut, Runenhorn).
+   * Boni, die schon vor dem Aufdecken feststehen (Völkerbonus, Verbündete, Wut, Spion).
    * Wo der niedrigere Wert gewinnt, sind Boni Abzüge – so wie die Engine sie verrechnet.
    */
   function knownMods(p, id) {
@@ -641,12 +681,10 @@
     if (terrain) out.push(['Völkerbonus', terrain]);
     if (c.ability === 'allies') {
       const n = s.players[p].hand.filter((h) => h !== id && CARDS[h].faction === c.faction).length;
-      if (n) out.push(['Verbündete', 10 * n]);
+      if (n) out.push(['Verbündete', c.amount * n]);
     }
-    if (c.ability === 'rage' && s.lastWinner === 1 - p) out.push(['Wut', 20]);
-    if (c.ability === 'runehorn') out.push(['Runenhorn', 10]);
+    if (c.ability === 'rage' && s.lastWinner === 1 - p) out.push(['Wut', c.amount]);
     if (c.ability === 'spy') out.push(['Spion', 10]);
-    if (ui.horn && p === ui.chooser) out.push(['Kriegshorn', Engine.HORN_BONUS]);
     return out.map(([label, a]) => ({ label, amount: dir * a }));
   }
 
@@ -714,16 +752,16 @@
       <span class="pname">${escapeHTML(pl.name)}</span>${s.leader === p ? '<span class="crown" data-tip="Anführer">👑</span>' : ''}
       <span class="chip total-chip" data-tip="Karten insgesamt (Hand + Stapel)">🂠 <b>${Engine.owned(s, p).length}</b> Karten</span>
       <span class="quartet-slots" data-tip="Quartette">${slots.join('')}</span>
-      ${hornHTML(pl)}
+      ${rallyHTML(pl)}
 `;
   }
 
-  /** Kriegshorn in der Spielerleiste: bereit, oder mit Ladepunkten. */
-  function hornHTML(pl) {
-    if (pl.horn) return '<span class="horn ready" data-tip="Kriegshorn bereit (+20)">📯</span>';
-    const pips = Array.from({ length: Engine.HORN_RECHARGE }, (_, i) => `<i class="${i < pl.hornCharge ? 'on' : ''}"></i>`).join('');
-    const wait = Engine.HORN_RECHARGE - pl.hornCharge;
-    return `<span class="horn charging" data-tip="Kriegshorn lädt: noch ${wait} Runde${wait === 1 ? '' : 'n'}">📯<span class="pips">${pips}</span></span>`;
+  /** Schlachtruf in der Spielerleiste: bereit, oder mit Ladepunkten. */
+  function rallyHTML(pl) {
+    if (pl.rally) return '<span class="horn ready" data-tip="Schlachtruf bereit: Handkarten in den Stapel mischen und neu ziehen">📯</span>';
+    const pips = Array.from({ length: Engine.RALLY_RECHARGE }, (_, i) => `<i class="${i < pl.rallyCharge ? 'on' : ''}"></i>`).join('');
+    const wait = Engine.RALLY_RECHARGE - pl.rallyCharge;
+    return `<span class="horn charging" data-tip="Schlachtruf lädt: noch ${wait} Runde${wait === 1 ? '' : 'n'} im Rückstand">📯<span class="pips">${pips}</span></span>`;
   }
 
   function slotHTML(p) {
@@ -802,7 +840,8 @@
     const cards = hand.map((id, i) => cardHTML(id, { selected: ui.selected === id, owner: p, attrs: `data-card="${id}" data-key="${i + 1}"` })).join('');
     let actions = '';
     if (canChoose) {
-      actions = `<button class="horn-toggle${ui.horn ? ' on' : ''}" id="horn-btn" ${pl.horn ? '' : 'disabled'} data-tip="+${Engine.HORN_BONUS} auf deine Karte; lädt sich danach in ${Engine.HORN_RECHARGE} Runden wieder auf">📯 Kriegshorn +${Engine.HORN_BONUS}</button>
+      const tip = pl.rally ? 'Handkarten in den Stapel mischen und neu ziehen' : 'Lädt sich auf, solange du zurückliegst';
+      actions = `<button class="horn-toggle" id="rally-btn" ${pl.rally && pl.deck.length && !ui.rallying ? '' : 'disabled'} data-tip="${tip}">📯 Schlachtruf</button>
         <button class="btn-primary" id="play-btn" ${ui.selected ? '' : 'disabled'}>Karte ausspielen</button>`;
     }
     return { title, cards, actions, locked: !canChoose };
@@ -875,9 +914,10 @@
     if (btn) btn.disabled = !ui.selected;
   }
 
-  function toggleHorn() {
-    ui.horn = !ui.horn;
-    render(); // Handkarten zeigen den Hornbonus direkt am Wert
+  function rallyNow() {
+    const p = ui.chooser;
+    if (p === null || s.phase !== 'cards' || s.choices[p] || ui.choosing || ui.rallying || !s.players[p].rally) return;
+    animateRally(p);
   }
 
   function initInput() {
@@ -887,7 +927,7 @@
       if (card) { selectCard(card.dataset.card); return; }
       const statBtn = e.target.closest('[data-stat]');
       if (statBtn) { onStatChosen(statBtn.dataset.stat); return; }
-      if (e.target.closest('#horn-btn')) { toggleHorn(); return; }
+      if (e.target.closest('#rally-btn')) { rallyNow(); return; }
       if (e.target.closest('#play-btn')) { confirmChoice(); return; }
       if (e.target.closest('#next-btn')) { nextStep(); return; }
     });
@@ -933,8 +973,8 @@
       if (['1', '2', '3'].includes(e.key)) {
         const el = document.querySelector(`#hand [data-key="${e.key}"]`);
         if (el) selectCard(el.dataset.card);
-      } else if (e.key.toLowerCase() === 'h' && $('#horn-btn') && !$('#horn-btn').disabled) {
-        toggleHorn();
+      } else if (e.key.toLowerCase() === 'h' && $('#rally-btn') && !$('#rally-btn').disabled) {
+        rallyNow();
       } else if (e.key === 'Enter') {
         if ($('#next-btn')) nextStep();
         else if ($('#play-btn') && !$('#play-btn').disabled) confirmChoice();

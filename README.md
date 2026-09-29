@@ -1,6 +1,6 @@
 # Eldoria
 
-Ein Fantasy-Quartett im Browser mit taktischem Kniff – gegen den Computer (Leicht/Normal)
+Ein Fantasy-Quartett im Browser mit taktischem Kniff – gegen den Computer (Leicht/Normal/Schwer)
 oder zu zweit an einem Gerät (Hot-Seat).
 
 ## Starten
@@ -20,12 +20,12 @@ python3 -m http.server 8765   # dann http://localhost:8765
   an der Kreuzung wählt der Anführer).
 - Beide wählen **verdeckt** eine Karte; der Sieger erobert beide. Gleichstand → Kriegsbeute für den nächsten Rundensieger.
 - Alle 4 Karten eines Volkes = **Quartett** (wird abgelegt und ist sicher). **3 Quartette gewinnen** (nach 40 Runden zählen Quartette, danach Karten).
-- Extras: 📯 Kriegshorn (+20, lädt sich danach in 4 Runden wieder auf). Die Drachenkönigin (6A) ist die stärkste Karte – aber ohne Sonderregel.
-- **Fähigkeiten:** Jede Karte hat eine von 13 Fähigkeiten, die beim Aufdecken wirken – z. B. Umlenken (andere Eigenschaft zählt),
+- Extras: 📯 Schlachtruf: vor der Wahl alle Handkarten in den eigenen Stapel mischen und neu ziehen. Lädt sich in 2 Runden wieder auf, in denen man zurückliegt – das hilft bei der Aufholjagd. Die Drachenkönigin (6A) ist die stärkste Karte – aber ohne Sonderregel.
+- **Fähigkeiten:** Jede Karte hat eine von 12 Fähigkeiten, die beim Aufdecken wirken – z. B. Umlenken (andere Eigenschaft zählt),
   Verrat (niedrigster Wert gewinnt), Rückzug (Karte geht bei Niederlage nicht verloren), Plündern, Spion, Schwächen.
   Starke Karten haben eher schwache Fähigkeiten und umgekehrt – die höchste Karte ist also nicht automatisch richtig.
   Beschreibung: Maus über die Karte, Rechtsklick für Großansicht, oder in den Spielregeln.
-- Tastatur: `1`–`3` Karte wählen, `H` Kriegshorn, `Enter` ausspielen/weiter, `Esc` Fenster schließen.
+- Tastatur: `1`–`3` Karte wählen, `H` Schlachtruf, `Enter` ausspielen/weiter, `Esc` Fenster schließen.
 - Rechtsklick (Handy: lange drücken) zeigt eine Karte groß; im Menü gibt es eine Kartengalerie.
 
 ## Aufbau
@@ -34,7 +34,7 @@ python3 -m http.server 8765   # dann http://localhost:8765
 |---|---|
 | `js/cards.js`  | Völker, Karten und Schlachtfelder (hier lässt sich alles balancen) |
 | `js/engine.js` | Regeln und Spielzustand, ohne DOM (läuft auch in Node) |
-| `js/ai.js`     | Computergegner: Siegchance × Wert der Beute gegen Verlustrisiko |
+| `js/ai.js`     | Computergegner: Siegchance × Wert der Beute gegen Verlustrisiko; „Schwer“ zählt Karten und rechnet mit der wahrscheinlichen Gegnerkarte |
 | `js/audio.js`  | Soundeffekte und Hintergrundmusik, live mit der Web-Audio-API erzeugt (keine Audiodateien) |
 | `js/ui.js`     | Menü, Rundenablauf, Hot-Seat-Übergaben, Animationen |
 | `art/src/**/*.svg` | Handgezeichnete SVG-Illustrationen (32 Helden, 14 Schlachtfelder, Kartenrückseite) – die Quellen |
@@ -43,4 +43,5 @@ python3 -m http.server 8765   # dann http://localhost:8765
 | `art/cursors/*.svg` | Eigene Mauszeiger (Pfeil, Panzerhandschuh, Lupe, Info) |
 | `tools/texturize.py` | Setzt die Material-Texturen in ein SVG ein (von `build-art.sh` und `render-svg.sh` aufgerufen) |
 | `tools/render-svg.sh` | Rendert ein SVG per Headless-Chromium als PNG (zum Prüfen von Illustrationen) |
-| `test/simulate.js` | KI-gegen-KI-Partien mit Statistik: `node test/simulate.js 500` |
+| `test/simulate.js` | KI-gegen-KI-Partien mit Invarianten-Prüfung: `node test/simulate.js 500` |
+| `test/balance.js` | Balance-Analyse (Karten, Fähigkeiten, Schlachtruf, Schwierigkeitsstufen): `node test/balance.js 3000` |

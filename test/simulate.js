@@ -16,8 +16,10 @@ function play(diffA, diffB) {
       if (!Engine.chooseStat(s, s.leader, AI.chooseStat(s, s.leader)).ok) throw new Error('Statwahl ungültig');
     }
     for (const p of [0, 1]) {
+      if (AI.shouldRally(s, p) && !Engine.rally(s, p).ok) throw new Error('Schlachtruf ungültig');
+      if (s.players[p].hand.length !== Math.min(Engine.HAND_SIZE, s.players[p].hand.length + s.players[p].deck.length)) throw new Error('Hand unvollständig');
       const c = AI.chooseCard(s, p);
-      const r = Engine.choose(s, p, c.card, c.horn);
+      const r = Engine.choose(s, p, c.card);
       if (!r.ok) throw new Error('Kartenwahl ungültig: ' + r.error);
     }
     const total = [0, 1].reduce((n, p) => n + Engine.owned(s, p).length + s.players[p].quartets.length * 4, 0) + s.pot.length;
@@ -42,3 +44,4 @@ function series(diffA, diffB) {
 
 series('normal', 'normal');
 series('normal', 'easy');
+series('hard', 'normal');
