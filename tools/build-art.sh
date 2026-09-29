@@ -36,3 +36,15 @@ for svg in art/src/cards/*.svg art/src/terrains/*.svg; do
   jobs+=("$svg art/$dir/$name.webp $size")
 done
 printf '%s\n' "${jobs[@]}" | xargs -P 6 -L 1 bash -c 'render "$0" "$1" "$2" "$3"'
+
+# Menü-Hintergrund: der Wald ohne Material-Texturen und groß gerendert – vollflächig
+# skaliert wirken die Texturen sonst grob
+if [ $# -eq 0 ] || [[ " $* " =~ " forest " ]]; then
+  tmp=$(mktemp -d)
+  printf '<html><body style="margin:0"><img src="file://%s" style="width:1920px;height:1440px;display:block"></body></html>' "$(realpath art/src/terrains/forest.svg)" > "$tmp/p.html"
+  timeout 90 "$CHROME" --headless=new --no-sandbox --disable-gpu --hide-scrollbars --allow-file-access-from-files \
+    --window-size=1920,1440 --screenshot="$tmp/o.png" "file://$tmp/p.html" >/dev/null 2>&1
+  convert "$tmp/o.png" -quality 82 -define webp:method=6 art/terrains/forest.menu.webp
+  rm -rf "$tmp"
+  echo "forest.menu.webp $(stat -c %s art/terrains/forest.menu.webp)"
+fi

@@ -911,6 +911,51 @@ button[data-tip] { cursor: var(--cur-pointer); }
     radial-gradient(ellipse at 50% 45%, transparent 0 35%, rgba(10, 6, 3, .75) 80%, rgba(5, 3, 1, .95) 100%),
     rgba(12, 8, 4, .58);
 }
+/* Wabernder Nebel: zwei nahtlose Schwaden-Kacheln ziehen gegeneinander und heben und senken sich */
+.menu-bg .fog {
+  position: absolute; left: 0; width: 200%; pointer-events: none; will-change: transform, opacity;
+  background: url(../art/textures/fog.webp) repeat-x 0 0 / 50% 100%;
+  -webkit-mask-image: linear-gradient(transparent, #000 30%, #000 65%, transparent);
+  mask-image: linear-gradient(transparent, #000 30%, #000 65%, transparent);
+}
+.menu-bg .fog.high { top: 30%; height: 50%; --fo: .32; animation: fog-drift 150s linear infinite, fog-heave 19s ease-in-out infinite alternate; }
+.menu-bg .fog.low {
+  top: 58%; height: 38%; --fo: .42; background-size: 25% 100%; /* 50 % Weg = zwei Kacheln, nahtlos */
+  animation: fog-drift 95s linear infinite reverse, fog-heave 13s ease-in-out -6s infinite alternate;
+}
+@keyframes fog-drift { from { translate: 0 0; } to { translate: -50% 0; } }
+@keyframes fog-heave {
+  from { transform: translateY(0) scaleY(1); opacity: var(--fo); }
+  to { transform: translateY(-4%) scaleY(1.18); opacity: calc(var(--fo) * 1.7); }
+}
+.overlay-open .menu-bg .fog { animation-play-state: paused; }
+/* Reh auf der Lichtung (js/deer.js) */
+.deer-layer { position: absolute; inset: 0; width: 100%; height: 100%; overflow: hidden; }
+/* auf schmalen Bildschirmen verdeckt das Menü den Waldboden */
+@media (max-width: 759px), (max-aspect-ratio: 1/1) { .deer-layer { display: none; } }
+.deer-layer g { transform-box: view-box; transform-origin: 0 0; }
+/* im dunklen Wald liegt auch das Reh im Schatten: deckend, aber dunkel */
+.deer-layer .coat { fill: url(#deer-coat); }
+.deer-legs.near path { fill: #2a1c12; }
+.deer-legs.far path, .deer-layer .ear-far { fill: #1a110b; }
+.deer-layer .hoof, .deer-layer .nose, .deer-layer .eye { fill: #0a0705 !important; }
+.deer-layer .rump, .deer-layer .chin { fill: #6e6250; }
+.deer-layer .ear-in { fill: #4a3526; }
+.deer-shadow { fill: url(#deer-shade); } /* weich auslaufend */
+/* ruhiges Atmen; das hintere Ohr dreht sich um seinen Ansatz */
+.deer-layer .torso { transform-box: fill-box; transform-origin: 50% 100%; animation: deer-breathe 3.7s ease-in-out infinite alternate; }
+.deer-layer .deer-ear2 { transform-box: fill-box; transform-origin: 40% 100%; }
+/* nie ganz regungslos: kaum merkliches Pendeln des Kopfes, überlagert jede andere Bewegung */
+.deer-layer .deer-sway { animation: deer-sway 5.3s ease-in-out infinite alternate; }
+@keyframes deer-sway { 0% { transform: rotate(-1.5deg); } 40% { transform: rotate(.8deg); } 100% { transform: rotate(2deg); } }
+@keyframes deer-breathe { from { transform: scaleY(1); } to { transform: scaleY(1.03); } }
+.deer-body.walking { animation: deer-bob calc(var(--deer-step) / 2) ease-in-out infinite alternate; }
+.deer-body.walking .deer-u { animation: deer-u var(--deer-step) linear infinite; animation-delay: calc(var(--deer-step) * var(--d)); }
+.deer-body.walking .deer-l { animation: deer-l var(--deer-step) linear infinite; animation-delay: calc(var(--deer-step) * var(--d)); }
+.deer-layer { --deer-step: 1.3s; } /* setzt js/deer.js je nach Gangart; --d ist die Versetzung der Beine */
+@keyframes deer-u { 0% { transform: rotate(-18deg); } 60% { transform: rotate(18deg); } 100% { transform: rotate(-18deg); } }
+@keyframes deer-l { 0%, 58% { transform: rotate(0deg); } 72% { transform: rotate(48deg); } 88% { transform: rotate(12deg); } 100% { transform: rotate(0deg); } }
+@keyframes deer-bob { from { transform: translateY(0); } to { transform: translateY(-1.2px); } }
 /* Liegt ein Fenster darüber (Galerie, Regeln …), ruhen Hintergrund und Glut – das spart viel Rechenzeit */
 .overlay-open .menu-bg, .overlay-open .embers i { animation-play-state: paused; }
 .overlay-open .embers { display: none; }

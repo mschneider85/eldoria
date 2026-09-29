@@ -1,4 +1,4 @@
-# Eldoria-Quartett
+# Eldoria
 
 Ein Fantasy-Quartett im Browser mit taktischem Kniff – gegen den Computer (Leicht/Normal)
 oder zu zweit an einem Gerät (Hot-Seat).

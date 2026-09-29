@@ -22,6 +22,7 @@
   let musicOut; // Lautstärke/Stummschaltung der Musik, hinter Hall und Echo
   let hallBuf;
   let ambBus; // Naturgeräusche: laufen am Tiefpass der Musik vorbei, damit Vögel hell bleiben
+  let farBus; // ferne Naturgeräusche (Waldkauz): wenig Direktschall, viel Hall
   let reverb;
   let noiseBuf;
 
@@ -29,7 +30,9 @@
     if (ctx) return ctx;
     const AC = G.AudioContext || G.webkitAudioContext;
     if (!AC) return null;
-    ctx = new AC();
+    // Etwas größerer Ausgabepuffer als der Standard ('interactive'): die vielen gleichzeitig
+    // klingenden Stimmen und zwei Hallräume reißen sonst bei Lastspitzen kurz ab (Knistern)
+    ctx = new AC({ latencyHint: 'balanced' });
     buildGraph();
     return ctx;
   }
@@ -107,6 +110,16 @@
     ambBus.connect(dest);
     ambBus.connect(ambHall);
     ambHall.connect(hall);
+    farBus = ctx.createGain();
+    farBus.gain.value = 1 / MUSIC_VOL;
+    const farDry = ctx.createGain();
+    farDry.gain.value = 0.5;
+    const farWet = ctx.createGain();
+    farWet.gain.value = 0.9;
+    farBus.connect(farDry);
+    farDry.connect(dest);
+    farBus.connect(farWet);
+    farWet.connect(hall);
 
     // Ping-Pong-Echo mit krummen Zeiten, jede Wiederholung dunkler
     const input = ctx.createGain();
@@ -346,58 +359,58 @@
   const MOODS = {
     // Grundmusik: Streicherfläche, zufällige Harfe, gelegentlich Pauke
     neutral: {
-      beat: 1, progs: [[[50, 53, 57], [46, 50, 53], [53, 57, 60], [48, 52, 55]], [[50, 53, 57], [43, 46, 50], [46, 50, 53], [45, 49, 52]]],
+      epic: 0.8, beat: 1, progs: [[[50, 53, 57], [46, 50, 53], [53, 57, 60], [48, 52, 55]], [[50, 53, 57], [43, 46, 50], [46, 50, 53], [45, 49, 52]]],
       pad: { type: 'sawtooth', filter: 750, gain: 0.028 }, bass: 0.12, harp: 0.42, timpani: 0.3,
     },
-    // Hauptmenü: Grundmusik etwas zurückgenommen, dazu Vogelzwitschern und Windrauschen
+    // Hauptmenü: Grundmusik etwas zurückgenommen, dazu Windrauschen, ab und zu ein Waldkauz und ein knarzender Baum
     menu: {
-      beat: 1, progs: [[[50, 53, 57], [46, 50, 53], [53, 57, 60], [48, 52, 55]], [[50, 53, 57], [43, 46, 50], [46, 50, 53], [45, 49, 52]]],
-      pad: { type: 'sawtooth', filter: 750, gain: 0.024 }, bass: 0.1, harp: 0.3, wind: 0.04, birds: 0.55,
+      epic: 0.55, beat: 1, progs: [[[50, 53, 57], [46, 50, 53], [53, 57, 60], [48, 52, 55]], [[50, 53, 57], [43, 46, 50], [46, 50, 53], [45, 49, 52]]],
+      pad: { type: 'sawtooth', filter: 750, gain: 0.024 }, bass: 0.1, harp: 0.3, wind: 0.04, owls: [[6, 12], [25, 50]], creaks: [[15, 25], [30, 60]], // erstes nach / Abstand in s
     },
     // Offene Ebene: hell (D-Mixolydisch), Marsch mit kleiner Trommel, auf- und absteigende Harfe
     field: {
-      beat: 0.85, progs: [[[50, 54, 57], [48, 52, 55], [43, 47, 50], [50, 54, 57]], [[50, 54, 57], [55, 59, 62], [48, 52, 55], [45, 49, 52]]],
+      epic: 0.8, beat: 0.85, progs: [[[50, 54, 57], [48, 52, 55], [43, 47, 50], [50, 54, 57]], [[50, 54, 57], [55, 59, 62], [48, 52, 55], [45, 49, 52]]],
       pad: { type: 'triangle', filter: 1500, gain: 0.03 }, bass: 0.1, harpPattern: 0.07, drums: 'march', drumGain: 0.3,
     },
     // Friedhof: sehr langsam, Chor im Vordergrund, Totenglocke, kaum Harfe
     graveyard: {
-      beat: 1.4, progs: [[[50, 53, 57], [43, 46, 50], [45, 49, 52], [50, 53, 57]], [[46, 50, 53], [43, 46, 50], [44, 47, 50], [45, 49, 52]]],
-      pad: { type: 'sawtooth', filter: 380, gain: 0.016 }, bass: 0.13, choir: 0.1, toll: 0.16,
+      epic: 0.6, beat: 1.4, progs: [[[50, 53, 57], [43, 46, 50], [45, 49, 52], [50, 53, 57]], [[46, 50, 53], [43, 46, 50], [44, 47, 50], [45, 49, 52]]],
+      pad: { type: 'sawtooth', filter: 380, gain: 0.016 }, bass: 0.13, choir: 0.45, toll: 0.16,
     },
     // Krieg (Steppe, Vulkan): schnell, treibendes Bass-Ostinato, laute Kriegstrommeln
     war: {
-      beat: 0.72, progs: [[[50, 53, 57], [48, 52, 55], [46, 50, 53], [48, 52, 55]], [[50, 53, 57], [46, 50, 53], [43, 46, 50], [45, 49, 52]]],
+      epic: 1, beat: 0.72, progs: [[[50, 53, 57], [48, 52, 55], [46, 50, 53], [48, 52, 55]], [[50, 53, 57], [46, 50, 53], [43, 46, 50], [45, 49, 52]]],
       pad: { type: 'sawtooth', filter: 520, gain: 0.016 }, bass: 0.06, ostinato: 0.13, drums: 'war', drumGain: 0.5,
     },
     // Wald: Flötenmelodie, sanfte Harfenmuster, Glöckchen – kein Sägezahn
     forest: {
-      beat: 1, progs: [[[50, 53, 57], [53, 57, 60], [48, 52, 55], [55, 59, 62]], [[50, 53, 57], [46, 50, 53], [53, 57, 60], [48, 52, 55]]],
+      epic: 0.5, beat: 1, progs: [[[50, 53, 57], [53, 57, 60], [48, 52, 55], [55, 59, 62]], [[50, 53, 57], [46, 50, 53], [53, 57, 60], [48, 52, 55]]],
       pad: { type: 'triangle', filter: 1600, gain: 0.03 }, bass: 0.08, harpPattern: 0.05, flute: 0.1, bells: { prob: 0.35, oct: 24 },
     },
     // Magie: schimmernde Sechzehntel-Arpeggien, auf- und zugehende Fläche, leiser Wind
     arcane: {
-      beat: 1, progs: [[[50, 53, 57], [46, 50, 53], [51, 55, 58], [49, 53, 56]], [[50, 53, 57], [44, 48, 51], [46, 50, 53], [45, 49, 52]]],
+      epic: 0.7, beat: 1, progs: [[[50, 53, 57], [46, 50, 53], [51, 55, 58], [49, 53, 56]], [[50, 53, 57], [44, 48, 51], [46, 50, 53], [45, 49, 52]]],
       pad: { type: 'sawtooth', filter: 700, gain: 0.02, sweep: true }, bass: 0.1, arp: 0.085, wind: 0.06,
     },
     // Sturm: Arpeggien + Ostinato + Trommeln, starker Wind, häufig Donner
     storm: {
-      beat: 0.8, progs: [[[50, 53, 57], [46, 50, 53], [51, 55, 58], [45, 49, 52]]],
+      epic: 1, beat: 0.8, progs: [[[50, 53, 57], [46, 50, 53], [51, 55, 58], [45, 49, 52]]],
       pad: { type: 'sawtooth', filter: 600, gain: 0.018, sweep: true }, bass: 0.06, ostinato: 0.1, arp: 0.05,
       drums: 'war', drumGain: 0.35, wind: 0.15, thunder: 0.6,
     },
     // Königsstadt/Festung: D-Dur, Bläserfanfaren, Pauken auf 1 und 3
     regal: {
-      beat: 0.9, progs: [[[50, 54, 57], [55, 59, 62], [57, 61, 64], [50, 54, 57]], [[50, 54, 57], [47, 50, 54], [55, 59, 62], [57, 61, 64]]],
+      epic: 1, beat: 0.9, progs: [[[50, 54, 57], [55, 59, 62], [57, 61, 64], [50, 54, 57]], [[50, 54, 57], [47, 50, 54], [55, 59, 62], [57, 61, 64]]],
       pad: { type: 'sawtooth', filter: 900, gain: 0.016 }, bass: 0.1, harp: 0.2, brass: 0.1, drums: 'timpani', drumGain: 0.32,
     },
     // Minen: tief, Amboss auf 2 und 4, Tropfen, dumpfer Bass
     mines: {
-      beat: 1.15, progs: [[[38, 41, 45], [34, 38, 41], [36, 40, 43], [33, 37, 40]]],
+      epic: 0.7, beat: 1.15, progs: [[[38, 41, 45], [34, 38, 41], [36, 40, 43], [33, 37, 40]]],
       pad: { type: 'sawtooth', filter: 380, gain: 0.026 }, bass: 0.13, anvil: 0.14, drips: 0.5,
     },
     // Sumpf: sehr langsam, schwebend und schräg, kein Rhythmus
     swamp: {
-      beat: 1.6, progs: [[[50, 53, 56], [49, 53, 56], [50, 53, 57], [47, 50, 53]]],
+      epic: 0.35, beat: 1.6, progs: [[[50, 53, 56], [49, 53, 56], [50, 53, 57], [47, 50, 53]]],
       pad: { type: 'triangle', filter: 900, gain: 0.045, wobble: 55 }, bass: 0.08, wind: 0.06, drips: 0.3,
     },
   };
@@ -419,7 +432,7 @@
     chord.forEach((n) => voices.forEach(([cents, pan]) => {
       const detune = cents + rnd(-3, 3) + (o.wobble ? rnd(-o.wobble, o.wobble) : 0);
       const filter = o.sweep ? { freq: o.filter * 0.5, to: o.filter * 1.8, time: len, q: 1.5 } : { freq: o.filter * 0.7, to: o.filter * 1.15, time: len * 0.6, q: 0.4 };
-      tone({ t, freq: NOTE(n + 12), type: o.type, detune, attack: len * 0.35, hold: len * 0.65, dur: 3.5, peak: o.gain * 0.72, curve: 'lin', bus: MB(), filter, pan });
+      tone({ t, freq: NOTE(n + 12), type: o.type, detune, attack: len * 0.35, hold: len * 0.65, dur: 3.5, peak: o.gain * 0.55, curve: 'lin', bus: MB(), filter, pan });
     }));
   }
 
@@ -435,6 +448,57 @@
       [700, 1150].forEach((formant, i) => tone({ t, freq: NOTE(n + 12), type: 'sawtooth', detune: (i ? 6 : -6) + rnd(-3, 3), attack: len * 0.35, hold: len * 0.65, dur: 3.5,
         peak: gain * (i ? 0.6 : 1), curve: 'lin', bus: MB(), filter: { type: 'bandpass', freq: formant, q: 7 }, pan: (j - 1) * 0.5 }));
     });
+  }
+
+  /**
+   * Gesungener Chor („ah“, gegen Ende zum „oh“ gleitend): je Akkordton drei Sänger mit eigenem Vibrato,
+   * leicht verschiedener Tonhöhe und Einsatz; der Sägezahn läuft parallel durch drei Vokal-Formanten, dazu leiser Atem.
+   */
+  const VOWELS = { a: [[800, 1], [1150, 0.5], [2900, 0.16]], o: [[450, 1], [800, 0.45], [2830, 0.1]] };
+  function singer(t, freq, len, peak, pan) {
+    const end = t + len + 3.6;
+    const osc = ctx.createOscillator();
+    osc.type = 'sawtooth';
+    osc.frequency.value = freq;
+    osc.detune.value = rnd(-9, 9);
+    // Meist gerader Ton mit leichtem, langsamem Schwanken; nur manche Sänger lassen den Ton
+    // zwischendurch kurz vibrieren und kehren dann zum geraden Ton zurück
+    const vib = Math.random() < 0.3;
+    const lfo = ctx.createOscillator();
+    lfo.frequency.value = vib ? rnd(4.8, 5.6) : rnd(0.15, 0.4);
+    const depth = ctx.createGain();
+    if (vib) {
+      const from = t + len * rnd(0.35, 0.6);
+      depth.gain.setValueAtTime(0, t); // bis zum Einsatz gerade
+      depth.gain.setValueAtTime(0, from);
+      depth.gain.linearRampToValueAtTime(rnd(7, 12), from + 1);
+      depth.gain.linearRampToValueAtTime(0, from + 1 + len * rnd(0.2, 0.35));
+    } else depth.gain.value = rnd(3, 6);
+    lfo.connect(depth);
+    depth.connect(osc.detune);
+    const g = ctx.createGain();
+    envelope(g.gain, t, len * 0.35, peak, 3.5, 'lin', len * 0.65);
+    VOWELS.a.forEach(([f, amp], k) => {
+      const bp = ctx.createBiquadFilter();
+      bp.type = 'bandpass';
+      bp.frequency.setValueAtTime(f * rnd(0.97, 1.03), t);
+      bp.frequency.linearRampToValueAtTime(VOWELS.o[k][0], t + len);
+      bp.Q.value = 3.5 + k * 2;
+      const fg = ctx.createGain();
+      fg.gain.setValueAtTime(amp, t);
+      fg.gain.linearRampToValueAtTime(VOWELS.o[k][1], t + len);
+      osc.connect(bp);
+      bp.connect(fg);
+      fg.connect(g);
+    });
+    output(g, { bus: MB(), pan });
+    [osc, lfo].forEach((n) => { n.start(t); n.stop(end); });
+  }
+  function voiceChoirLayer(t, chord, len, gain) {
+    chord.forEach((n, j) => {
+      for (let v = 0; v < 3; v++) singer(t + rnd(0, 0.25), NOTE(n + 12), len, gain / 3, (j - 1) * 0.55 + rnd(-0.2, 0.2));
+    });
+    noise({ t, f0: 1800, type: 'bandpass', q: 0.8, attack: len * 0.4, dur: len * 0.9, curve: 'lin', peak: gain * 0.05, bus: MB() });
   }
 
   /** Harfenton: Sägezahn durch einen schnell schließenden Tiefpass – weich wie eine gezupfte Saite. */
@@ -560,45 +624,148 @@
     noise({ t, f0: rnd(250, 400), f1: rnd(900, 1400), q: 0.7, attack: len * 0.5, dur: len * 0.9, peak: gain, curve: 'lin', bus: MB(), pan: rnd(-0.7, 0.7) });
   }
 
-  /** Vogelzwitschern: pro Takt mit Wahrscheinlichkeit prob ein Ruf, zufällig aus drei Arten und irgendwo im Raum. */
-  function birdLayer(t, beat, prob) {
-    const calls = [chirps, trill, whistle];
-    for (let i = 0; i < 2; i++) {
-      if (Math.random() < prob) calls[Math.floor(Math.random() * calls.length)](t + rnd(0, 4 * beat), rnd(-0.9, 0.9), rnd(0.5, 1));
+
+  /**
+   * Waldkauz in der Ferne: einzelner Hohlton – weicher Einsatz, leicht fallend, etwas Atem, dumpf
+   * wie durch den Wald gehört. vib: Tonhöhenzittern in Hz (für das lange, bebende Schluss-„huuu“).
+   */
+  function hoot(t, f, len, peak, pan, vib = 0) {
+    const osc = ctx.createOscillator();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(f * 1.03, t);
+    osc.frequency.linearRampToValueAtTime(f, t + Math.min(0.12, len * 0.3));
+    osc.frequency.exponentialRampToValueAtTime(f * 0.9, t + len);
+    const over = ctx.createOscillator(); // schwacher Oberton gibt dem Ruf etwas Hohles
+    over.type = 'sine';
+    over.frequency.setValueAtTime(f * 2.06, t);
+    over.frequency.exponentialRampToValueAtTime(f * 1.8, t + len);
+    const overGain = ctx.createGain();
+    overGain.gain.value = 0.12;
+    over.connect(overGain);
+    const stop = t + len + 0.1;
+    if (vib) {
+      const lfo = ctx.createOscillator();
+      lfo.frequency.value = rnd(5.5, 7);
+      const depth = ctx.createGain();
+      depth.gain.setValueAtTime(0, t);
+      depth.gain.linearRampToValueAtTime(vib, t + len * 0.5);
+      lfo.connect(depth);
+      depth.connect(osc.frequency);
+      lfo.start(t); lfo.stop(stop);
     }
+    const lp = ctx.createBiquadFilter();
+    lp.type = 'lowpass';
+    lp.frequency.value = 850;
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.linearRampToValueAtTime(peak, t + Math.min(0.09, len * 0.35));
+    g.gain.setValueAtTime(peak * 0.85, t + len * 0.55);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + len);
+    osc.connect(lp); overGain.connect(lp);
+    lp.connect(g);
+    output(g, { bus: farBus, pan });
+    osc.start(t); over.start(t);
+    osc.stop(stop); over.stop(stop);
+    noise({ t, f0: f * 1.6, q: 2, attack: 0.05, dur: len * 0.8, peak: peak * 0.18, bus: farBus, pan }); // Atem
   }
 
-  const ab = () => ambBus;
-  /** Kurzer Vogelton: Sinus mit schnellem Tonhöhenbogen. */
-  function chirp(at, f0, f1, dur, peak, pan) {
-    tone({ t: at, freq: f0, to: f1, glide: dur, type: 'sine', attack: 0.006, dur, peak, bus: ab(), pan });
-  }
-
-  /** Meise o. Ä.: 3–6 kurze, abfallende Pfiffe. */
-  function chirps(t, pan, v) {
-    const n = 3 + Math.floor(Math.random() * 4);
-    const f = rnd(3600, 5200);
-    const gap = rnd(0.09, 0.15);
-    for (let i = 0; i < n; i++) chirp(t + i * gap, f * rnd(1.05, 1.15), f * rnd(0.7, 0.8), rnd(0.05, 0.08), 0.03 * v, pan);
-  }
-
-  /** Triller: sehr schnelle Tonwiederholung, am Ende leiser. */
-  function trill(t, pan, v) {
-    const n = 8 + Math.floor(Math.random() * 10);
-    const f = rnd(5200, 6800);
-    for (let i = 0; i < n; i++) chirp(t + i * 0.035, f * 1.08, f, 0.022, 0.022 * v * (1 - i / (n * 1.4)), pan);
-  }
-
-  /** Amsel-artiger Pfiff: zwei, drei gebogene, längere Töne. */
-  function whistle(t, pan, v) {
-    let at = t;
-    const n = 2 + Math.floor(Math.random() * 2);
+  /** Männchen: langes „huuu“ – Pause – kurzes „hu“ – bebendes „hu-hu-hu-huuuu“. */
+  function tawnyOwl(t, pan, v) {
+    const f = rnd(500, 580);
+    const peak = 0.055 * v; // das „huuu“ liegt im Tonbereich der Musik und muss sich gegen sie durchsetzen
+    hoot(t, f, rnd(0.8, 1.05), peak, pan);
+    let at = t + rnd(2.6, 4.2);
+    hoot(at, f * 0.97, 0.2, peak * 0.7, pan);
+    at += rnd(0.45, 0.7);
+    const n = 3 + Math.floor(Math.random() * 3);
     for (let i = 0; i < n; i++) {
-      const f = rnd(1900, 3200);
-      const dur = rnd(0.14, 0.3);
-      chirp(at, f, f * rnd(0.8, 1.3), dur, 0.028 * v, pan);
-      at += dur + rnd(0.06, 0.14);
+      hoot(at, f * (0.94 + i * 0.02), 0.1, peak * (0.55 + i * 0.1), pan);
+      at += rnd(0.11, 0.14);
     }
+    hoot(at + 0.04, f * 1.02, rnd(1.1, 1.5), peak, pan, f * 0.012);
+  }
+
+  /** Weibchen: helles, heiseres „ku-witt“. */
+  function tawnyKewick(t, pan, v) {
+    const f = rnd(1250, 1450);
+    const peak = 0.017 * v;
+    tone({ t, freq: f * 0.8, to: f, glide: 0.05, type: 'sine', attack: 0.01, dur: 0.12, peak: peak * 0.5, bus: farBus, pan, filter: { freq: 1500 } });
+    tone({ t: t + 0.13, freq: f * 1.25, to: f * 0.85, glide: 0.3, type: 'triangle', attack: 0.015, hold: 0.08, dur: 0.25, peak, bus: farBus, pan, filter: { freq: 1600 } });
+    noise({ t: t + 0.13, f0: f * 1.3, q: 3, attack: 0.02, dur: 0.3, peak: peak * 0.3, bus: farBus, pan });
+  }
+
+  /**
+   * Eulenrufe weit weg und seitlich im Wald: das „huuu“ des Männchens, manchmal antwortet das Weibchen.
+   * Fester Abstand statt Würfeln je Takt – der erste Ruf kommt bald nach dem Öffnen des Menüs.
+   */
+  /**
+   * Seltene Geräusche in festem Abstand statt Würfeln je Takt: liefert den Startzeitpunkt, wenn im
+   * Takt ab t eines fällig ist, sonst null. Das erste kommt bald nach dem Öffnen des Menüs.
+   */
+  const due = {};
+  function dueIn(key, t, beat, [first, gap]) {
+    if (due[key] == null || t - due[key] > gap[1] * 2) due[key] = t + rnd(...first); // (wieder) im Menü
+    if (t + 4 * beat < due[key]) return null;
+    const at = Math.max(t, due[key]);
+    due[key] = at + rnd(...gap);
+    return at;
+  }
+
+  function owlLayer(t, beat, timing) {
+    const at = dueIn('owl', t, beat, timing);
+    if (at === null) return;
+    const pan = (Math.random() < 0.5 ? -1 : 1) * rnd(0.45, 0.85);
+    tawnyOwl(at, pan, rnd(0.8, 1));
+    if (Math.random() < 0.3) tawnyKewick(at + rnd(8, 10), -pan * rnd(0.6, 1), rnd(0.6, 0.9));
+  }
+
+  /**
+   * Knarzender Baum: Holz reibt an Holz und haftet und rutscht dabei ruckweise – eine schnelle Folge
+   * kleiner Stöße (Sägezahn), deren Rate beim Schwanken unregelmäßig steigt und fällt. Resonanzfilter
+   * geben den hohlen Holzklang. Manchmal schwankt der Baum zurück und knarzt ein zweites Mal.
+   */
+  function creak(t, pan, v, len = rnd(3.5, 6.5)) {
+    const osc = ctx.createOscillator();
+    osc.type = 'sawtooth';
+    const steps = 48;
+    const curve = new Float32Array(steps);
+    let rate = rnd(7, 12); // langsame Stöße: tiefes Ächzen statt hellem Knarren
+    const top = rnd(20, 34);
+    for (let i = 0; i < steps; i++) { // erst schneller, dann wieder langsamer, mit Zittern
+      const arc = Math.sin(Math.PI * i / (steps - 1));
+      rate += rnd(-1, 1) * 2.5;
+      curve[i] = Math.max(5, rate + arc * (top - rate) * 0.8);
+    }
+    osc.frequency.setValueCurveAtTime(curve, t, len);
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.linearRampToValueAtTime(0.12 * v, t + len * 0.25); // die schmalen Resonanzen lassen nur wenig durch
+    g.gain.setValueAtTime(0.12 * v * rnd(0.7, 1), t + len * 0.7);
+    g.gain.linearRampToValueAtTime(0.0001, t + len);
+    const wood = rnd(0.85, 1.2); // jeder Baum klingt etwas anders
+    [[150, 6, 1], [280, 8, 0.75], [520, 9, 0.35]].forEach(([f, q, amp]) => {
+      const bp = ctx.createBiquadFilter();
+      bp.type = 'bandpass';
+      bp.frequency.value = f * wood;
+      bp.Q.value = q;
+      const fg = ctx.createGain();
+      fg.gain.value = amp;
+      osc.connect(bp);
+      bp.connect(fg);
+      fg.connect(g);
+    });
+    output(g, { bus: ambBus, pan });
+    osc.start(t);
+    osc.stop(t + len + 0.05);
+    return len;
+  }
+  function creakLayer(t, beat, timing) {
+    const at = dueIn('creak', t, beat, timing);
+    if (at === null) return;
+    const pan = rnd(-0.8, 0.8);
+    const v = rnd(0.6, 1);
+    const len = creak(at, pan, v);
+    if (Math.random() < 0.45) creak(at + len + rnd(0.8, 2), pan + rnd(-0.1, 0.1), v * rnd(0.6, 0.9), rnd(2.5, 4.5)); // zurückschwanken
   }
 
   /** Harfe in festen Mustern (auf und ab) statt zufällig. */
@@ -619,6 +786,67 @@
     [1, 2.0, 2.76, 5.4].forEach((m, k) => tone({ t, freq: NOTE(chord[0] - 12) * m, type: 'sine', attack: 0.004, dur: 5.5 / (k + 1), peak: gain / (k + 1), bus: MB(), pan: k % 2 ? 0.3 : -0.3 }));
   }
 
+  /* ---------- Orchesterschicht („episch“): liegt über jeder Stimmung, Stärke je Stimmung über m.epic */
+
+  /** Celli und Kontrabässe: Grundton in zwei tiefen Oktaven, langsam anschwellend. */
+  function lowStringsLayer(t, chord, len, e) {
+    [-12, -24].forEach((oct, k) => [-8, 8].forEach((cents) => tone({ t, freq: NOTE(chord[0] + oct), type: 'sawtooth', detune: cents + rnd(-3, 3),
+      attack: len * 0.3, hold: len * 0.6, dur: 3, peak: 0.044 * e * (k ? 1.2 : 1), curve: 'lin', bus: MB(), pan: cents < 0 ? -0.3 : 0.3,
+      filter: { freq: 260, to: 520, time: len * 0.4, q: 0.6 } })));
+  }
+
+  /** Hörner: voller Akkord in der Mittellage, schwillt über den ganzen Akkord an und öffnet sich dabei. */
+  function hornSwellLayer(t, chord, len, e) {
+    chord.forEach((n, j) => [-6, 6].forEach((cents) => tone({ t: t + j * 0.04, freq: NOTE(n), type: 'sawtooth', detune: cents + rnd(-2, 2),
+      attack: len * 0.55, hold: len * 0.3, dur: 2.5, peak: 0.028 * e, curve: 'lin', bus: MB(), pan: (j - 1) * 0.4,
+      filter: { freq: 280, to: 1100, time: len * 0.7, q: 0.8 } })));
+  }
+
+  /** Große Trommel auf dem Akkordwechsel: tiefer Schlag mit langem Nachhall im Raum. */
+  function boomLayer(t, e) {
+    tone({ t, freq: 70, to: 38, glide: 0.4, dur: 2, peak: 0.5 * e, bus: MB() });
+    noise({ t, f0: 160, type: 'lowpass', attack: 0.004, dur: 0.6, peak: 0.2 * e, bus: MB() });
+  }
+
+  /** Becken-Crescendo, das in den nächsten Akkord hineinführt. */
+  function swellLayer(t, beat, e) {
+    noise({ t, f0: 4000, f1: 8000, type: 'highpass', attack: beat * 1.6, dur: 0.35, peak: 0.05 * e, curve: 'lin', bus: MB(), pan: rnd(-0.3, 0.3) });
+  }
+
+  /**
+   * Heroisches Hornthema über zwei Takte: lange Töne aus dem Akkord, gelegentlich ein Sprung zur Oktave.
+   * Zwei verstimmte Sägezähne durch einen Tiefpass, mit verzögertem Vibrato.
+   */
+  const HERO_RHYTHMS = [
+    [[0, 1.5], [1.5, 0.5], [2, 2], [4, 3], [7, 1]],
+    [[0, 3], [3, 1], [4, 4]],
+    [[0, 1], [1, 1], [2, 2], [4, 1.5], [5.5, 0.5], [6, 2]],
+  ];
+  function heroLayer(t, chord, beat, e) {
+    const tones = [chord[0], chord[1], chord[2], chord[0] + 12].map((n) => n + 12);
+    const rhythm = HERO_RHYTHMS[Math.floor(Math.random() * HERO_RHYTHMS.length)];
+    let idx = Math.floor(Math.random() * 3);
+    rhythm.forEach(([at, len], i) => {
+      if (i) idx = Math.max(0, Math.min(tones.length - 1, idx + (Math.random() < 0.5 ? -1 : 1) * (Math.random() < 0.25 ? 2 : 1)));
+      const start = human(t + at * beat, 0.02);
+      const dur = len * beat;
+      const f = NOTE(tones[idx]);
+      [-5, 5].forEach((cents) => {
+        const osc = tone({ t: start, freq: f, type: 'sawtooth', detune: cents, attack: Math.min(0.2, dur * 0.3), hold: dur * 0.6, dur: dur * 0.5 + 0.3,
+          peak: 0.04 * e, curve: 'lin', bus: MB(), pan: cents * 0.04, filter: { freq: 500, to: 1500, time: Math.min(0.6, dur), q: 0.9 } });
+        const lfo = ctx.createOscillator();
+        const depth = ctx.createGain();
+        lfo.frequency.value = 5;
+        depth.gain.setValueAtTime(0, start);
+        depth.gain.linearRampToValueAtTime(f * 0.005, start + Math.min(0.7, dur));
+        lfo.connect(depth);
+        depth.connect(osc.frequency);
+        lfo.start(start);
+        lfo.stop(start + dur * 1.1 + 0.4);
+      });
+    });
+  }
+
   /** Jeder Akkord klingt zwei Takte lang. */
   const BARS_PER_CHORD = 2;
 
@@ -634,9 +862,18 @@
       const chordLen = len * BARS_PER_CHORD;
       padLayer(t, chord, chordLen, m.pad);
       bassLayer(t, chord, chordLen, m.bass);
-      if (m.choir) choirLayer(t, chord, chordLen, m.choir);
+      if (m.choir) voiceChoirLayer(t, chord, chordLen, m.choir);
       if (m.toll) tollLayer(t, chord, m.toll);
       windLayer(t, chordLen, m.wind || 0.015); // leiser Luftzug in jeder Stimmung
+      const e = m.epic || 0;
+      if (e) {
+        lowStringsLayer(t, chord, chordLen, e);
+        hornSwellLayer(t, chord, chordLen, e);
+        if (!m.choir) choirLayer(t, chord, chordLen, 0.06 * e);
+        if (Math.random() < 0.3 + 0.6 * e) boomLayer(t, e);
+        if (e >= 0.6) swellLayer(t + chordLen - beat * 1.6, beat, e);
+        if (Math.random() < e * 0.6) heroLayer(t, chord, beat, e);
+      }
     }
     if (m.harp) harpLayer(t, chord, beat, m.harp);
     if (m.harpPattern) harpPatternLayer(t, chord, beat, m.harpPattern);
@@ -648,7 +885,8 @@
     if (m.brass && fresh) brassLayer(t, chord, beat, m.brass);
     if (m.anvil) anvilLayer(t, beat, m.anvil);
     if (m.drips) dripLayer(t, beat, m.drips);
-    if (m.birds) birdLayer(t, beat, m.birds);
+    if (m.owls) owlLayer(t, beat, m.owls);
+    if (m.creaks) creakLayer(t, beat, m.creaks);
     if (m.thunder && Math.random() < m.thunder) noise({ t: t + Math.random() * beat * 2, f0: 180, type: 'lowpass', attack: 0.05, dur: 3, peak: 0.3, bus: MB(), pan: rnd(-0.6, 0.6) });
     if (m.timpani && fresh && Math.random() < m.timpani * 1.5) tone({ t, freq: NOTE(chord[0] - 24) * 2, to: NOTE(chord[0] - 24), dur: 1.6, peak: 0.22, bus: MB() });
     return len;
@@ -729,7 +967,7 @@
    * Rückgabe: { peak, rms } in dBFS.
    */
   async function measure(name, seconds = 3) {
-    const saved = { ctx, master, sfxBus, dryBus, musicBus, musicOut, hallBuf, ambBus, reverb, noiseBuf, sfx: settings.sfx, music: settings.music };
+    const saved = { ctx, master, sfxBus, dryBus, musicBus, musicOut, hallBuf, ambBus, farBus, reverb, noiseBuf, sfx: settings.sfx, music: settings.music };
     const len = name.startsWith('music') ? 8 * 4 * 1.6 + 8 : seconds;
     ctx = new OfflineAudioContext(2, Math.ceil(44100 * len), 44100);
     settings.sfx = true;
@@ -762,9 +1000,9 @@
         brightness: Math.round(zc / buf.duration), rhythm: Math.round((sd / mean) * 100) / 100 };
     } finally {
       Object.assign(settings, { sfx: saved.sfx, music: saved.music });
-      ({ ctx, master, sfxBus, dryBus, musicBus, musicOut, hallBuf, ambBus, reverb, noiseBuf } = saved);
+      ({ ctx, master, sfxBus, dryBus, musicBus, musicOut, hallBuf, ambBus, farBus, reverb, noiseBuf } = saved);
     }
   }
 
-  CG.Audio = { unlock, play, setSfx, setMusic, setMood, settings, measure, sounds: () => Object.keys(SOUNDS), moods: () => Object.keys(MOODS), currentMood: () => (music ? music.mood : null) };
+  CG.Audio = { unlock, play, setSfx, setMusic, setMood, settings, measure, sounds: () => Object.keys(SOUNDS), moods: () => Object.keys(MOODS), currentMood: () => (music ? music.mood : null), pendingMood: () => pendingMood };
 })(globalThis);

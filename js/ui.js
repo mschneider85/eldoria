@@ -48,13 +48,16 @@
   /** Menü-Schaufenster: der Dunkelwald als fester Hintergrund, bei jedem Besuch drei andere Karten. */
   function renderMenuShowcase() {
     const pick = (arr, n) => CG_shuffle(arr.slice()).slice(0, n);
-    $('#menu-bg').style.backgroundImage = 'url(art/terrains/forest.webp)';
+    $('#menu-bg').style.backgroundImage = 'url(art/terrains/forest.menu.webp)';
     const ids = pick(Object.keys(CARDS), 3);
     $('#menu-cards').innerHTML = ids.map((id) => cardHTML(id, { neutral: true, thumb: true })).join('');
   }
   const CG_shuffle = window.CG.shuffle;
 
-  /** Glühwürmchen im Menü: jedes mit eigener Größe, Flugbahn, Geschwindigkeit und eigenem Leuchtrhythmus. */
+  /**
+   * Glühwürmchen im Menü: jedes mit eigener Größe, Flugbahn, Geschwindigkeit und eigenem Leuchtrhythmus.
+   * Nur im oberen Teil – unten auf der Lichtung grast das Reh (js/deer.js).
+   */
   function createFireflies(count = 60) {
     const box = $('#fireflies');
     if (!box || box.childElementCount) return;
@@ -63,7 +66,7 @@
     for (let i = 0; i < count; i++) {
       const near = Math.random() < 0.18; // einige wirken näher: größer und unscharf
       const size = near ? r(12, 18) : r(3.5, 7);
-      html.push(`<span class="fly${near ? ' near' : ''}" style="--x:${r(2, 98).toFixed(1)}%; --y:${r(8, 96).toFixed(1)}%; --s:${size.toFixed(1)}px;
+      html.push(`<span class="fly${near ? ' near' : ''}" style="--x:${r(2, 98).toFixed(1)}%; --y:${r(6, 66).toFixed(1)}%; --s:${size.toFixed(1)}px;
         --dx1:${r(-90, 90).toFixed(0)}px; --dy1:${r(-70, 50).toFixed(0)}px; --dx2:${r(-90, 90).toFixed(0)}px; --dy2:${r(-90, 40).toFixed(0)}px;
         --move:${r(14, 26).toFixed(1)}s; --glow:${r(2.2, 4.8).toFixed(1)}s; --delay:${r(-26, 0).toFixed(1)}s"></span>`);
     }
@@ -947,6 +950,7 @@
   /* =============================================================== Overlays & Effekte */
   // Nur ein Overlay gleichzeitig; Regeln/Übersicht über einer Übergabe stellen diese danach wieder her.
   let overlayStack = [];
+  let moodBeforeZoom = null; // Musik vor der Großansicht eines Schlachtfelds
   function openOverlay(html, opts = {}) {
     const o = $('#overlay');
     if (!o.classList.contains('hidden')) overlayStack.push(Array.from(o.childNodes));
@@ -958,6 +962,7 @@
     o.querySelectorAll('[data-close]').forEach((b) => b.addEventListener('click', closeOverlay));
   }
   function closeOverlay() {
+    if (moodBeforeZoom) { Snd.setMood(moodBeforeZoom); moodBeforeZoom = null; }
     const o = $('#overlay');
     const prev = overlayStack.pop();
     if (prev) { o.replaceChildren(...prev); return; }
@@ -966,7 +971,7 @@
     o.innerHTML = '';
     document.body.classList.remove('overlay-open');
   }
-  function closeAllOverlays() { overlayStack = []; closeOverlay(); }
+  function closeAllOverlays() { overlayStack = []; moodBeforeZoom = null; closeOverlay(); }
   function showRules() {
     openOverlay($('#rules-tpl').innerHTML);
     const list = $('#overlay .ability-list');
@@ -997,8 +1002,11 @@
     showZoom(cardHTML(id, { neutral: true }) + text);
   }
 
+  /** Großansicht eines Schlachtfelds spielt dessen Musik; beim Schließen kehrt die vorherige zurück. */
   function zoomTerrain(tid) {
     showZoom(terrainHTML(TERRAINS.find((t) => t.id === tid), false));
+    moodBeforeZoom = Snd.pendingMood();
+    Snd.setMood(tid);
   }
 
   function showGallery(tab) {

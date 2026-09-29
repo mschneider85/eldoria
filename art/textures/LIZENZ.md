@@ -11,3 +11,5 @@ Sie wurden für das Spiel verkleinert, eingefärbt bzw. als Detail-Ebene (nur St
 | `wood.webp`    | Wood 028 – https://ambientcg.com/view?id=Wood028 |
 | `paper.webp`   | Paper 003 – https://ambientcg.com/view?id=Paper003 |
 | `metal.webp`   | Metal 048 B – https://ambientcg.com/view?id=Metal048B |
+
+`fog.webp` (Menü-Nebel) ist selbst erzeugt – gerendert aus `art/src/textures/fog.svg` (SVG-Rauschfilter), ebenfalls frei nutzbar.
