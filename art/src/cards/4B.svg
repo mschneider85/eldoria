@@ -199,8 +199,6 @@
 <path d="M152,90 C150,74 162,60 180,59 C198,58 210,72 208,86 C198,76 170,72 152,90 Z" fill="#3a1a10" opacity="0.4" filter="url(#c4b-blur)"/>
 <path d="M186,60 C198,62 206,70 208,82" stroke="#8ae0ff" stroke-width="1.6" fill="none" opacity="0.7" stroke-linecap="round"/>
 <path d="M153,100 C149,80 158,64 174,60" stroke="#ff9a50" stroke-width="1.8" fill="none" opacity="0.75" stroke-linecap="round"/>
-<path d="M176,63 L180,72 L185,63 M180,72 L180,82 M170,70 C175,68 186,68 191,70 M174,78 L186,78" stroke="#1e8ae0" stroke-width="1.3" fill="none" opacity="0.7"/>
-<path d="M176,63 L180,72 L185,63 M180,72 L180,82" stroke="#8ae0ff" stroke-width="0.5" fill="none" opacity="0.6"/>
 <path d="M170,86 C178,84 190,84 200,86 M174,90 C182,88 190,88 198,90" stroke="#6a2a18" stroke-width="0.6" fill="none" opacity="0.55"/>
 <path d="M152,84 C146,92 146,104 150,114 C152,118 156,120 160,118 C156,110 156,98 158,88 Z" fill="#1e1612" filter="url(#tx-hair)"/>
 <path d="M150,90 C148,98 148,106 151,113 M153,88 C151,96 152,106 155,114" stroke="#8a8078" stroke-width="0.5" fill="none" opacity="0.8"/>
