@@ -456,9 +456,27 @@ button:disabled { cursor: var(--cur-default); }
 .zoom .qcard { animation: none; }
 .zoom-hint { color: var(--muted); font-size: 13px; margin: 0; }
 .zoom-note { color: var(--gold); font-weight: 700; max-width: 420px; text-align: center; margin: 0; }
-.modal.gallery { width: min(1200px, 100%); }
-.gallery-tabs { margin-bottom: 14px; }
-.gallery-grid { --qw: 150px; display: grid; grid-template-columns: repeat(auto-fill, minmax(calc(var(--qw) * 1.22), 1fr)); gap: 16px; justify-items: center; }
+.modal.gallery { width: min(1200px, 100%); height: calc(100vh - 32px); height: calc(100dvh - 32px); max-height: none; overflow: hidden; display: flex; flex-direction: column; }
+.gallery-tabs { margin-bottom: 6px; align-self: center; }
+/* Feste Höhe, kein Scrollen: die Galerie rechnet aus, wie viele Karten pro Seite hineinpassen */
+.gallery-grid {
+  --qw: 150px; flex: 1; min-height: 0; padding: 10px 0; display: grid; align-content: center;
+  grid-template-columns: repeat(auto-fill, calc(var(--qw) * 1.22)); justify-content: center; gap: 16px; justify-items: center;
+}
+.gallery-pager { display: flex; align-items: center; justify-content: center; gap: 22px; margin-top: 4px; }
+.gallery-pager.single { visibility: hidden; }
+.pager-info { font-family: var(--display); color: var(--gold); font-size: 17px; letter-spacing: .06em; min-width: 9em; text-shadow: 0 1px 0 #000; }
+.pager-info::before, .pager-info::after { content: '❦'; color: var(--gold-dark); margin: 0 .5em; }
+.pager-info::before { display: inline-block; transform: scaleX(-1); }
+.pager-arrow {
+  width: 56px; height: 56px; padding: 0; border: 0; background: none; border-radius: 50%; cursor: var(--cur-pointer);
+  filter: drop-shadow(0 3px 5px rgba(0, 0, 0, .7)); transition: transform .15s, filter .15s;
+}
+.pager-arrow svg { display: block; width: 100%; height: 100%; }
+.pager-arrow.prev svg { transform: scaleX(-1); }
+.pager-arrow:not(:disabled):hover { transform: scale(1.08); filter: drop-shadow(0 0 8px rgba(242, 210, 122, .55)) drop-shadow(0 3px 5px rgba(0, 0, 0, .7)); }
+.pager-arrow:not(:disabled):active { transform: scale(.96); }
+.pager-arrow:disabled { opacity: .35; filter: grayscale(.7); cursor: var(--cur-default); }
 .gallery-grid .qcard, .gallery-grid .terrain { cursor: var(--cur-zoom-in); transition: transform .15s; animation: none; }
 .gallery-grid .qcard:hover, .gallery-grid .terrain:hover { transform: translateY(-4px) scale(1.03); }
 @media (max-width: 640px) { .gallery-grid { --qw: 128px; } }
@@ -1090,12 +1108,7 @@ button[data-tip] { cursor: var(--cur-pointer); }
 }
 @media (max-width: 480px) { .mode-tiles { grid-template-columns: 1fr; } }
 
-/* Galerie: Karten außerhalb des sichtbaren Bereichs werden gar nicht erst gezeichnet */
-/* Bei den Schlachtfeldern auf die Karte selbst, nicht den Wrapper – dessen Beschnitt würde sonst die Hover-Vergrößerung abschneiden */
-.gallery-grid > .qcard, .gallery-grid > [data-zoom-terrain] > .terrain { content-visibility: auto; contain-intrinsic-size: calc(var(--qw) * 1.2) calc(var(--qw) * 1.5); }
-
 .overlay.solid { background: radial-gradient(ellipse at 50% 40%, #2a1c10, #0c0805 75%); }
-.gallery-grid { will-change: transform; } /* eigene Ebene: beim Scrollen nur verschieben statt neu zeichnen */
 /* In der kleinen Galerie-Ansicht: Glasspiegelung und Innenschatten der Bilder weglassen (kaum sichtbar, aber teuer) */
 .gallery-grid .qcard .art::before, .gallery-grid .qcard .art::after,
 .gallery-grid .terrain .art::before, .gallery-grid .terrain .art::after { display: none; }

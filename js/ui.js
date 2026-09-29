@@ -969,6 +969,12 @@
         if (!$('#overlay').classList.contains('hidden') && !$('#ready-btn') && !$('#go-again')) closeOverlay();
         return;
       }
+      const pager = document.querySelector('#overlay .gallery-pager');
+      if (pager && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')) {
+        const b = pager.querySelector(e.key === 'ArrowLeft' ? '.prev' : '.next');
+        if (!b.disabled) b.click();
+        return;
+      }
       if (!s || overlayOpen() || e.target.tagName === 'INPUT') return;
       if (['1', '2', '3'].includes(e.key)) {
         const el = document.querySelector(`#hand [data-key="${e.key}"]`);
@@ -999,7 +1005,7 @@
   function openOverlay(html, opts = {}) {
     const o = $('#overlay');
     if (!o.classList.contains('hidden')) overlayStack.push(Array.from(o.childNodes));
-    // Große, scrollende Fenster (Galerie) bekommen einen deckenden Hintergrund – durchscheinend wäre jedes Scrollen teuer
+    // Große Fenster (Galerie) bekommen einen deckenden Hintergrund – durchscheinend wäre jedes Neuzeichnen teuer
     if (opts.solid) o.classList.add('solid');
     o.innerHTML = html;
     o.classList.remove('hidden');
@@ -1054,19 +1060,88 @@
     Snd.setMood(tid);
   }
 
+  /** Goldener Pfeil im Medaillon mit Perlrand; zeigt nach rechts, der linke wird per CSS gespiegelt. */
+  function pagerArrowSVG() {
+    const beads = Array.from({ length: 16 }, (_, i) => {
+      const a = (i / 16) * Math.PI * 2;
+      return `<circle cx="${(32 + Math.cos(a) * 27.5).toFixed(2)}" cy="${(32 + Math.sin(a) * 27.5).toFixed(2)}" r="1.3"/>`;
+    }).join('');
+    return `<svg viewBox="0 0 64 64" aria-hidden="true">
+      <defs>
+        <linearGradient id="pg-gold" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#fff0b8"/><stop offset=".3" stop-color="#e2b85a"/><stop offset=".55" stop-color="#8a5d17"/>
+          <stop offset=".8" stop-color="#f2d27a"/><stop offset="1" stop-color="#6e4a12"/></linearGradient>
+        <radialGradient id="pg-core" cx=".4" cy=".35" r=".75"><stop offset="0" stop-color="#4a3018"/><stop offset="1" stop-color="#140c05"/></radialGradient>
+      </defs>
+      <circle cx="32" cy="32" r="30.5" fill="url(#pg-gold)" stroke="#3a2608" stroke-width="1.2"/>
+      <g fill="#fff3c8" opacity=".75">${beads}</g>
+      <circle cx="32" cy="32" r="24" fill="url(#pg-core)" stroke="#3a2608" stroke-width="1.5"/>
+      <circle cx="32" cy="32" r="21.5" fill="none" stroke="#e2b85a" stroke-width=".7" opacity=".6"/>
+      <g fill="url(#pg-gold)" stroke="#3a2608" stroke-width="1" stroke-linejoin="round">
+        <path d="M13.5 32 l4 -3.2 l4 3.2 l-4 3.2 z"/>
+        <path d="M21 30.4 h11 v3.2 h-11 z"/>
+        <path d="M27 18.5 Q35 25 47 32 Q35 39 27 45.5 Q31.5 39 31.5 32 Q31.5 25 27 18.5 z"/>
+        <path d="M31 24 q-4 -1 -5.5 -4.5 q3.5 .5 5.5 4.5 z M31 40 q-4 1 -5.5 4.5 q3.5 -.5 5.5 -4.5 z"/>
+      </g>
+    </svg>`;
+  }
+
+  /** Galerie in Seiten: So viele Karten, wie ins Fenster passen; unten blättern goldene Pfeile (auch ← / →). */
   function showGallery(tab) {
-    const cards = Object.keys(CARDS).map((id) => cardHTML(id, { neutral: true, thumb: true, attrs: `data-zoom-card="${id}"` })).join('');
-    const terrains = TERRAINS.map((t) => `<div data-zoom-terrain="${t.id}">${terrainHTML(t, false, true)}</div>`).join('');
+    const items = tab === 'cards'
+      ? Object.keys(CARDS).map((id) => cardHTML(id, { neutral: true, thumb: true, attrs: `data-zoom-card="${id}"` }))
+      : TERRAINS.map((t) => `<div data-zoom-terrain="${t.id}">${terrainHTML(t, false, true)}</div>`);
+    const arrow = pagerArrowSVG();
     openOverlay(`<div class="modal gallery">
       <h2>Kartengalerie</h2>
       <div class="seg gallery-tabs"><button data-tab="cards" class="${tab === 'cards' ? 'active' : ''}">Helden (32)</button>
         <button data-tab="terrains" class="${tab === 'terrains' ? 'active' : ''}">Schlachtfelder (${TERRAINS.length})</button></div>
-      <div class="gallery-grid">${tab === 'cards' ? cards : terrains}</div>
+      <div class="gallery-grid"></div>
+      <nav class="gallery-pager">
+        <button class="pager-arrow prev" aria-label="Vorherige Seite">${arrow}</button>
+        <span class="pager-info"></span>
+        <button class="pager-arrow next" aria-label="Nächste Seite">${arrow}</button>
+      </nav>
       <div class="buttons"><button class="btn-primary" data-close>Schließen</button></div></div>`, { solid: true });
     const o = $('#overlay');
+    const grid = o.querySelector('.gallery-grid');
+    const pager = o.querySelector('.gallery-pager');
+    const prev = pager.querySelector('.prev'), next = pager.querySelector('.next');
+    let perPage = 0, first = 0; // „first“ = erste sichtbare Karte, damit man beim Umbrechen an derselben Stelle bleibt
+
+    function render() {
+      const pages = Math.ceil(items.length / perPage);
+      const page = Math.floor(first / perPage);
+      first = page * perPage;
+      grid.innerHTML = items.slice(first, first + perPage).join('');
+      pager.querySelector('.pager-info').textContent = `Seite ${page + 1} von ${pages}`;
+      prev.disabled = page === 0;
+      next.disabled = page >= pages - 1;
+      pager.classList.toggle('single', pages <= 1);
+    }
+    function layout() {
+      const w = grid.clientWidth, h = grid.clientHeight;
+      if (!w || !h) return; // gerade von der Großansicht verdeckt
+      const cs = getComputedStyle(grid);
+      const qw = parseFloat(cs.getPropertyValue('--qw'));
+      const gap = parseFloat(cs.columnGap) || 0;
+      const padY = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
+      const cols = Math.max(1, Math.floor((w + gap) / (qw * 1.22 + gap)));
+      const rows = Math.max(1, Math.floor((h - padY + gap) / (qw * 1.5 + gap)));
+      if (cols * rows === perPage) return;
+      perPage = cols * rows;
+      render();
+    }
+    prev.addEventListener('click', () => { first = Math.max(0, first - perPage); render(); });
+    next.addEventListener('click', () => { if (first + perPage < items.length) { first += perPage; render(); } });
+    new ResizeObserver(layout).observe(grid);
+    layout();
     o.querySelectorAll('[data-tab]').forEach((b) => b.addEventListener('click', () => { closeOverlay(); showGallery(b.dataset.tab); }));
-    o.querySelectorAll('[data-zoom-card]').forEach((el) => el.addEventListener('click', () => zoomCard(el.dataset.zoomCard)));
-    o.querySelectorAll('[data-zoom-terrain]').forEach((el) => el.addEventListener('click', () => zoomTerrain(el.dataset.zoomTerrain)));
+    grid.addEventListener('click', (e) => {
+      const card = e.target.closest('[data-zoom-card]'), terrain = e.target.closest('[data-zoom-terrain]');
+      if (card) zoomCard(card.dataset.zoomCard);
+      else if (terrain) zoomTerrain(terrain.dataset.zoomTerrain);
+    });
   }
 
   /** Quartett-Präsentation: abgedunkeltes Spielfeld, Tafel mit Titel und den vier aufgefächerten Karten. */
