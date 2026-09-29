@@ -86,12 +86,18 @@
   new MutationObserver(sync).observe(menu, { attributes: true, attributeFilter: ['class'] });
   document.addEventListener('visibilitychange', sync);
 
-  /** Web-Animation abspielen und den Endzustand übernehmen; pausiert mit dem Rest. */
+  /**
+   * Web-Animation abspielen und den Endzustand übernehmen; pausiert mit dem Rest.
+   * Kein commitStyles(): das wirft, sobald das Reh gerade nicht dargestellt wird (Menü ausgeblendet,
+   * schmales Fenster) – und damit stünde es danach für immer still.
+   */
   async function play(el, frames, duration, easing = 'ease-in-out', delay = 0) {
     const a = el.animate(frames, { duration, easing, delay, fill: 'both' });
     if (!active()) a.pause();
-    await a.finished;
-    a.commitStyles(); a.cancel();
+    try { await a.finished; } catch { /* abgebrochen: trotzdem den Endzustand setzen */ }
+    const { offset, ...end } = frames[frames.length - 1];
+    Object.assign(el.style, end);
+    a.cancel();
   }
   const wait = (ms) => play(timer, [{ opacity: 1 }, { opacity: 1 }], ms, 'linear');
   const chance = (p) => Math.random() < p;

@@ -5,10 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Eldoria</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='12' y='6' width='40' height='52' rx='6' fill='%238a2a1a' stroke='%23e2b85a' stroke-width='4'/><path d='M32 18l4 9 10 1-8 6 3 10-9-6-9 6 3-10-8-6 10-1z' fill='%23e2b85a'/></svg>">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800;900&family=Alegreya:wght@500;700;800&family=Noto+Color+Emoji&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=154">
+  <!-- Cinzel/Alegreya liegen im Projekt (@font-face in style.css); von Google nur noch die Emoji-Schrift
+       als Rückfall, falls das System keine Emojis hat -->
+  <link rel="preload" href="art/fonts/cinzel-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="art/fonts/alegreya-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="css/style.css?v=156">
   <!-- Inhalt erst zeigen, wenn Cinzel/Alegreya geladen sind (kein kurzes Aufblitzen der Ersatzschrift) -->
   <style>html.fonts-loading body > * { visibility: hidden; }</style>
   <script>
@@ -27,9 +29,15 @@
 </head>
 <body>
   <!-- Hauptmenü -->
-  <section id="menu" class="screen">
+  <section id="menu" class="screen intro-open">
     <div class="menu-bg" id="menu-bg" aria-hidden="true"><div class="fog high"></div><div class="fog low"></div></div>
     <div class="embers" id="fireflies" aria-hidden="true"></div>
+    <!-- Startbildschirm: der Klick darauf gibt zugleich den Ton frei (Browser erlauben ihn erst nach einer Nutzeraktion) -->
+    <div class="intro" id="intro">
+      <p class="title">Eldoria</p>
+      <p class="subtitle">Das Quartett der Völker</p>
+      <button class="btn-primary" id="intro-btn" autofocus>Spiel betreten</button>
+    </div>
     <div class="menu-audio">
       <button class="btn-small sfx-toggle" data-tip="Soundeffekte an/aus">🔊</button>
       <button class="btn-small music-toggle" data-tip="Musik an/aus">🎵</button>
@@ -150,11 +158,11 @@
     </div>
   </template>
 
-  <script src="js/cards.js?v=154"></script>
-  <script src="js/engine.js?v=154"></script>
-  <script src="js/ai.js?v=154"></script>
-  <script src="js/audio.js?v=154"></script>
-  <script src="js/ui.js?v=154"></script>
-  <script src="js/deer.js?v=154"></script>
+  <script src="js/cards.js?v=156"></script>
+  <script src="js/engine.js?v=156"></script>
+  <script src="js/ai.js?v=156"></script>
+  <script src="js/audio.js?v=156"></script>
+  <script src="js/ui.js?v=156"></script>
+  <script src="js/deer.js?v=156"></script>
 </body>
 </html>

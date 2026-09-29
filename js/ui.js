@@ -82,6 +82,11 @@
       const b = e.target.closest('button'); if (!b) return;
       settings.difficulty = b.dataset.diff; store.set('difficulty', settings.difficulty); renderMenu();
     });
+    $('#intro-btn').addEventListener('click', () => {
+      Snd.unlock();
+      $('#menu').classList.remove('intro-open');
+      setTimeout(() => $('#intro').remove(), 700); // nach dem Ausblenden
+    });
     $('#start-btn').addEventListener('click', startGame);
     $('#rules-btn').addEventListener('click', showRules);
     $('#gallery-btn').addEventListener('click', () => showGallery('cards'));
@@ -1101,8 +1106,9 @@
     document.querySelectorAll('.music-toggle').forEach((b) => b.classList.toggle('off', !Snd.settings.music));
   }
   function initAudio() {
-    // Browser erlauben Ton erst nach einer Nutzeraktion
+    // Browser erlauben Ton erst nach einer Nutzeraktion – bei Touch zählt erst das Loslassen (pointerup)
     document.addEventListener('pointerdown', () => Snd.unlock(), true);
+    document.addEventListener('pointerup', () => Snd.unlock(), true);
     document.addEventListener('keydown', () => Snd.unlock(), true);
     document.querySelectorAll('.sfx-toggle').forEach((b) => {
       // Emoji als eigener Textknoten, damit der Rest der Beschriftung erhalten bleibt
