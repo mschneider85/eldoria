@@ -44,5 +44,3 @@ python3 -m http.server 8765   # dann http://localhost:8765
 | `tools/texturize.py` | Setzt die Material-Texturen in ein SVG ein (von `build-art.sh` und `render-svg.sh` aufgerufen) |
 | `tools/render-svg.sh` | Rendert ein SVG per Headless-Chromium als PNG (zum Prüfen von Illustrationen) |
 | `test/simulate.js` | KI-gegen-KI-Partien mit Statistik: `node test/simulate.js 500` |
-
-Die frühere Hearthstone-artige Version liegt unter `archive/arena/`.
