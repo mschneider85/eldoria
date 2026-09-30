@@ -1,7 +1,7 @@
 # Eldoria
 
 Ein Fantasy-Quartett im Browser mit taktischem Kniff – gegen den Computer (Leicht/Normal/Schwer)
-oder zu zweit an einem Gerät (Hot-Seat).
+oder zu zweit – an einem Gerät (Hot-Seat) oder online an zwei Geräten.
 
 ## Starten
 
@@ -10,6 +10,24 @@ Keine Installation nötig – `index.html` im Browser öffnen, oder:
 ```bash
 python3 -m http.server 8765   # dann http://localhost:8765
 ```
+
+## Online spielen
+
+Direkt von Browser zu Browser (WebRTC), ohne eigenen Server. Wer „Spiel eröffnen“ wählt, bekommt einen
+**Einladungslink**, einen **QR-Code** und einen kurzen **Raumcode** (z. B. `K7M-Q2P`). Der Mitspieler tippt
+auf den Link, scannt den QR-Code mit der Handykamera oder gibt den Code unter „Beitreten“ ein – fertig.
+
+Zusammengeführt werden die beiden über öffentliche Nostr-Relays (Bibliothek [Trystero](https://github.com/dmotz/trystero),
+lokal in `js/vendor/`). Die Relays sehen nur verschlüsselte Verbindungsdaten, das Spiel selbst läuft direkt
+zwischen den Geräten; ein öffentlicher STUN-Server hilft beim Finden der Adressen. Die Seite muss über HTTPS
+oder `localhost` laufen (z. B. GitHub Pages). In sehr strengen Netzen (manche Mobilfunkanbieter) kommt keine
+Direktverbindung zustande – dann hilft ein WLAN.
+
+Notlösung ohne Relays: „Klappt nicht? Ohne Vermittlung verbinden“ – dann tauschen die Spieler zwei lange Codes
+von Hand aus.
+
+Beide Geräte rechnen dieselbe Partie mit demselben Startwert (der Gast spiegelverkehrt), übers Netz gehen
+nur die Züge. Beide müssen dieselbe Spielversion geladen haben.
 
 ## Spielprinzip
 
@@ -34,6 +52,8 @@ python3 -m http.server 8765   # dann http://localhost:8765
 |---|---|
 | `js/cards.js`  | Völker, Karten und Schlachtfelder (hier lässt sich alles balancen) |
 | `js/engine.js` | Regeln und Spielzustand, ohne DOM (läuft auch in Node) |
+| `js/net.js`    | Online-Verbindung: Raum über Nostr-Relays (Link, QR, Raumcode) oder Codes von Hand, WebRTC-Datenkanal |
+| `js/vendor/`   | Trystero und QR-Code-Generator (MIT, siehe `LIZENZ.md`), werden erst in der Online-Lobby geladen |
 | `js/ai.js`     | Computergegner: Siegchance × Wert der Beute gegen Verlustrisiko; „Schwer“ zählt Karten und rechnet mit der wahrscheinlichen Gegnerkarte |
 | `js/audio.js`  | Soundeffekte und Hintergrundmusik, live mit der Web-Audio-API erzeugt (keine Audiodateien) |
 | `js/ui.js`     | Menü, Rundenablauf, Hot-Seat-Übergaben, Animationen; `ART_FX` legt die bewegten Bildeffekte je Karte fest (Glut, Funken, Leuchten, Nebel …) |
@@ -44,4 +64,5 @@ python3 -m http.server 8765   # dann http://localhost:8765
 | `tools/texturize.py` | Setzt die Material-Texturen in ein SVG ein (von `build-art.sh` und `render-svg.sh` aufgerufen) |
 | `tools/render-svg.sh` | Rendert ein SVG per Headless-Chromium als PNG (zum Prüfen von Illustrationen) |
 | `test/simulate.js` | KI-gegen-KI-Partien mit Invarianten-Prüfung: `node test/simulate.js 500` |
+| `test/online.js` | Online-Partien im Gleichschritt: Host und Gast müssen bei jeder Zugreihenfolge gleich rechnen: `node test/online.js 500` |
 | `test/balance.js` | Balance-Analyse (Karten, Fähigkeiten, Schlachtruf, Schwierigkeitsstufen): `node test/balance.js 3000` |

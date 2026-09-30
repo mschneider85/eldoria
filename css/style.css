@@ -1244,7 +1244,7 @@ button[data-tip] { cursor: var(--cur-pointer); }
   font-size: 22px; color: var(--gold); letter-spacing: 2px; text-transform: uppercase;
 }
 .menu-heading::before, .menu-heading::after { content: ''; flex: 1; height: 1.5px; background: linear-gradient(90deg, transparent, var(--gold-dark), transparent); }
-.mode-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.mode-tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
 .mode-tile {
   display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 14px 10px 12px; border-radius: 12px;
   background: var(--tex-wood), linear-gradient(180deg, #4a3220, #2a1b0c);
@@ -1485,3 +1485,37 @@ button { white-space: nowrap; }
   -webkit-mask: radial-gradient(circle at 0 50%, transparent 0 calc(var(--qw) * .042), #000 calc(var(--qw) * .042 + .5px));
   mask: radial-gradient(circle at 0 50%, transparent 0 calc(var(--qw) * .042), #000 calc(var(--qw) * .042 + .5px));
 }
+
+/* Online-Lobby: Codes zum Austauschen */
+.lobby { text-align: left; }
+.lobby h2, .lobby .big-emoji { text-align: center; }
+.lobby .net-step { margin: 14px 0 6px; }
+.net-code {
+  width: 100%; box-sizing: border-box; resize: vertical; font: 12px/1.35 ui-monospace, Menlo, Consolas, monospace; word-break: break-all;
+  background: linear-gradient(180deg, #f3e6c4, #dcc998); color: #2a1804; border: 1.5px solid #6e4a10; border-radius: 8px; padding: 8px 10px;
+  box-shadow: inset 0 2px 4px rgba(90, 60, 20, .35);
+}
+.net-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 8px; flex-wrap: wrap; }
+.net-status { color: var(--muted); font-style: italic; min-height: 1.5em; text-align: center; }
+.net-status.error { color: #ffb3a8; font-style: normal; }
+
+.net-invite { display: flex; gap: 18px; align-items: center; justify-content: center; flex-wrap: wrap; margin: 10px 0 4px; }
+.net-qr { width: 190px; height: 190px; padding: 8px; background: #fff8e6; border-radius: 12px; border: 2px solid var(--gold-dark); box-shadow: 0 6px 18px rgba(0, 0, 0, .5); }
+.net-qr svg { display: block; width: 100%; height: 100%; }
+.net-qr svg path, .net-qr svg rect[fill="black"] { fill: #1e140b; }
+.net-room { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.net-label { font-size: 12px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
+.net-roomcode { font-family: var(--display); font-size: 34px; letter-spacing: 3px; color: var(--gold); text-shadow: 0 2px 0 #000; }
+.net-room .net-actions { flex-direction: column; align-items: stretch; justify-content: center; }
+.net-actions.center { justify-content: center; }
+.net-form { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 8px; }
+.net-form label { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--muted); }
+.net-form input {
+  width: 170px; padding: 9px 12px; border-radius: 8px; font-family: inherit; font-size: 17px; font-weight: 700;
+  background: linear-gradient(180deg, #f3e6c4, #dcc998); color: #2a1804; border: 1.5px solid #6e4a10; box-shadow: inset 0 2px 4px rgba(90, 60, 20, .35);
+}
+#room-code { font-family: var(--display); letter-spacing: 2px; text-transform: uppercase; }
+.net-alt { text-align: center; margin: 14px 0 0; }
+.link-btn { background: none; border: 0; padding: 4px; color: var(--muted); font-size: 13px; text-decoration: underline; cursor: pointer; box-shadow: none; }
+.link-btn:hover { color: var(--gold); }
+.net-warn { background: rgba(120, 40, 20, .35); border: 1px solid #a0522d; border-radius: 10px; padding: 10px 14px; font-size: 14px; line-height: 1.45; }

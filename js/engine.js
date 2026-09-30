@@ -19,6 +19,24 @@
   /** Verb passend zum Spieler („Du gewinnst“ / „Computer gewinnt“). */
   const verb = (pl, third, second) => (pl.name === 'Du' ? second : third);
 
+  /*
+   * Zufall mit Startwert: In einer Online-Partie rechnen beide Geräte dieselbe Partie und tauschen nur
+   * die Züge aus. Dafür muss jeder Zufall auf beiden Seiten gleich ausfallen – auch wenn die Züge in
+   * anderer Reihenfolge ankommen. Deshalb getrennte Ströme: 'shared' für alles, was beide gleichzeitig
+   * erleben (Austeilen, Schlachtfeld, Los), und je einer pro Sitzplatz (Schlachtruf, Spion).
+   * Der Gast sitzt spiegelverkehrt (flip): Er ist bei sich Spieler 0, auf dem Sitzplatz des Hosts aber 1.
+   */
+  const seat = (s, p) => (s.flip ? 1 - p : p);
+  function rand(s, stream) {
+    // mulberry32 – der Zustand liegt als Zahl im Spielzustand, damit clone() ihn mitnimmt
+    let a = (s.rng[stream] = (s.rng[stream] + 0x6d2b79f5) | 0);
+    a = Math.imul(a ^ (a >>> 15), a | 1);
+    a ^= a + Math.imul(a ^ (a >>> 7), a | 61);
+    return ((a ^ (a >>> 14)) >>> 0) / 4294967296;
+  }
+  const rng = (s, stream) => () => rand(s, stream);
+  const seatRng = (s, p) => rng(s, `seat${seat(s, p)}`);
+
   function log(s, text, kind = 'info') {
     s.log.push({ text, kind, round: s.round });
     if (s.log.length > 200) s.log.shift();
@@ -132,16 +150,18 @@
 
   function newGame(opts) {
     const cfg = Object.assign({}, DEFAULTS, opts);
+    const seed = cfg.seed === undefined ? Math.floor(Math.random() * 2 ** 32) : cfg.seed;
+    const s0 = { flip: !!cfg.flip, rng: { shared: seed | 0, seat0: (seed ^ 0x5bd1e995) | 0, seat1: (seed ^ 0x1b873593) | 0 } };
     let decks;
     // So lange mischen, bis niemand schon beim Austeilen ein komplettes Quartett hat.
     for (;;) {
-      const all = shuffle(Object.keys(CARDS));
-      decks = [all.slice(0, 16), all.slice(16)];
+      const all = shuffle(Object.keys(CARDS), rng(s0, 'shared'));
+      decks = s0.flip ? [all.slice(16), all.slice(0, 16)] : [all.slice(0, 16), all.slice(16)];
       const full = decks.some((d) => Object.keys(FACTIONS).some((f) => d.filter((id) => CARDS[id].faction === Number(f)).length === 4));
       if (!full) break;
     }
     const s = {
-      mode: cfg.mode, maxRounds: cfg.maxRounds, targetQuartets: cfg.targetQuartets,
+      ...s0, mode: cfg.mode, maxRounds: cfg.maxRounds, targetQuartets: cfg.targetQuartets,
       // picker: wer auf einem Wahlfeld die Eigenschaft bestimmt – wird dort jedes Mal ausgelost
       round: 0, terrain: null, stat: null, phase: 'idle', picker: null,
       terrainDeck: [], pot: [], choices: [null, null], result: null, winner: null, log: [],
@@ -161,7 +181,7 @@
 
   function startRound(s) {
     s.round++;
-    if (!s.terrainDeck.length) s.terrainDeck = shuffle(TERRAINS.map((t) => t.id));
+    if (!s.terrainDeck.length) s.terrainDeck = shuffle(TERRAINS.map((t) => t.id), rng(s, 'shared'));
     const next = s.terrainDeck.pop();
     s.terrain = TERRAINS.find((t) => t.id === next);
     s.choices = [null, null];
@@ -169,7 +189,7 @@
     log(s, `— Runde ${s.round}: ${s.terrain.name} —`, 'round');
     if (s.terrain.stat === 'choice') {
       s.stat = null;
-      s.picker = Math.random() < 0.5 ? 0 : 1;
+      s.picker = seat(s, rand(s, 'shared') < 0.5 ? 0 : 1);
       s.phase = 'stat';
       const pl = s.players[s.picker];
       log(s, `🪙 Das Los fällt auf ${pl.name === 'Du' ? 'dich' : pl.name}.`);
@@ -185,7 +205,7 @@
     const hand = s.players[1 - p].hand;
     const fresh = hand.filter((id) => id !== s.spyInfo[p]);
     const pool = fresh.length ? fresh : hand;
-    return pool.length ? pool[Math.floor(Math.random() * pool.length)] : null;
+    return pool.length ? pool[Math.floor(seatRng(s, p)() * pool.length)] : null;
   }
 
   function chooseStat(s, p, stat) {
@@ -208,7 +228,7 @@
     const old = pl.hand.slice();
     pl.deck.push(...pl.hand);
     pl.hand = [];
-    shuffle(pl.deck);
+    shuffle(pl.deck, seatRng(s, p));
     s.known[p] = []; // nach dem Mischen weiß niemand mehr, wo welche Karte liegt
     s.spyInfo[1 - p] = null; // die per Spion gesehene Karte ist vielleicht nicht mehr auf der Hand
     pl.rally = false;
@@ -241,7 +261,7 @@
     const result = { ids, values: d.values, stat: d.stat, low: d.low, winner: d.winner, reason: d.reason,
       notes: d.notes.slice(), potTaken: 0, loot: 0, quartets: [[], []] };
     if (d.winner === -1) {
-      s.pot.push(...ids);
+      s.pot.push(...(s.flip ? ids.slice().reverse() : ids)); // in Sitzplatz-Reihenfolge, damit Host und Gast gleich stapeln
       log(s, `Gleichstand! Beide Karten wandern in die Kriegsbeute (${s.pot.length}).`, 'tie');
     } else {
       const wi = d.winner;
