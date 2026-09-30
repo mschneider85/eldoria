@@ -13,7 +13,7 @@ function play(diffA, diffB) {
   for (let guard = 0; s.phase !== 'over'; guard++) {
     if (guard > 200) throw new Error('Partie endet nicht');
     if (s.phase === 'stat') {
-      if (!Engine.chooseStat(s, s.leader, AI.chooseStat(s, s.leader)).ok) throw new Error('Statwahl ungültig');
+      if (!Engine.chooseStat(s, s.picker, AI.chooseStat(s, s.picker)).ok) throw new Error('Statwahl ungültig');
     }
     for (const p of [0, 1]) {
       if (AI.shouldRally(s, p) && !Engine.rally(s, p).ok) throw new Error('Schlachtruf ungültig');

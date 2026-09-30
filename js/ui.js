@@ -30,6 +30,7 @@
     oppIncoming: new Set(), // Gegnerkarten, die noch vom Stapel unterwegs sind
     potShown: null,    // angezeigte Kriegsbeute während der Animationen
     choosing: false,   // eigene Karte fliegt gerade aufs Spielfeld
+    tossing: false,    // Münzwurf auf einem Wahlfeld läuft noch
     message: '',
     token: 0,          // bricht laufende Abläufe ab, wenn ein neues Spiel startet
   };
@@ -122,7 +123,7 @@
 
   /** Laufende Flüge und Einblendungen beenden (beim Verlassen oder Neustart einer Partie). */
   function clearEffects() {
-    document.querySelectorAll('.ghost, .quartet-show, .banner, .toast').forEach((el) => el.remove());
+    document.querySelectorAll('.ghost, .quartet-show, .coin-toss, .banner, .toast').forEach((el) => el.remove());
   }
 
   function toMenu() {
@@ -137,7 +138,7 @@
   }
 
   function resetRoundUI() {
-    Object.assign(ui, { chooser: null, selected: null, rallying: false, revealed: false, showResult: false, fly: null, message: '' });
+    Object.assign(ui, { chooser: null, selected: null, rallying: false, revealed: false, showResult: false, fly: null, tossing: false, message: '' });
   }
 
   async function beginRound() {
@@ -158,20 +159,25 @@
       drawOpp(ids);
     }
     if (s.phase === 'stat') {
-      const leader = s.leader;
-      if (isAI(leader)) {
-        ui.message = `${s.players[leader].name} überlegt…`;
-        if (pvc()) ui.chooser = 0; // eigene Hand schon zeigen (gesperrt)
+      const picker = s.picker;
+      ui.tossing = true;
+      if (pvc()) ui.chooser = 0; // eigene Hand schon zeigen (gesperrt)
+      render();
+      await tossCoin(picker);
+      if (token !== ui.token) return;
+      ui.tossing = false;
+      if (isAI(picker)) {
+        ui.message = `${s.players[picker].name} überlegt…`;
         render();
         await sleep(1100);
         if (!(await waitForOverlays(token))) return;
-        Engine.chooseStat(s, leader, AI.chooseStat(s, leader));
-        ui.message = `${s.players[leader].name} wählt ${statLabel(s.stat)}.`;
+        Engine.chooseStat(s, picker, AI.chooseStat(s, picker));
+        ui.message = `${s.players[picker].name} wählt ${statLabel(s.stat)}.`;
         cardPhase(null);
       } else {
-        if (!pvc()) await handover(leader, 'wählt als Anführer die Eigenschaft');
+        if (!pvc()) await handover(picker, 'wählt die Eigenschaft');
         if (token !== ui.token) return;
-        ui.chooser = leader;
+        ui.chooser = picker;
         ui.message = '';
         render();
       }
@@ -181,13 +187,13 @@
   }
 
   function onStatChosen(stat) {
-    const leader = s.leader;
-    if (!Engine.chooseStat(s, leader, stat).ok) return;
-    ui.message = `${s.players[leader].name === 'Du' ? 'Du wählst' : s.players[leader].name + ' wählt'} ${statLabel(stat)}.`;
-    cardPhase(leader);
+    const picker = s.picker;
+    if (!Engine.chooseStat(s, picker, stat).ok) return;
+    ui.message = `${s.players[picker].name === 'Du' ? 'Du wählst' : s.players[picker].name + ' wählt'} ${statLabel(stat)}.`;
+    cardPhase(picker);
   }
 
-  /** Kartenwahl. alreadyOpen = Spieler, dessen Hand schon offen ist (Anführer nach Statwahl). */
+  /** Kartenwahl. alreadyOpen = Spieler, dessen Hand schon offen ist (nach der Statwahl). */
   async function cardPhase(alreadyOpen) {
     const token = ui.token;
     if (pvc()) {
@@ -207,8 +213,8 @@
       afterChoice();
       return;
     }
-    // Hot-Seat: erst der Anführer, dann der andere.
-    const first = s.leader;
+    // Hot-Seat: erst wer die Eigenschaft gewählt hat, sonst abwechselnd.
+    const first = s.picker !== null ? s.picker : (s.round + 1) % 2;
     if (alreadyOpen !== first) {
       ui.chooser = null;
       render();
@@ -1051,7 +1057,7 @@
 
   function terrainHTML(t = s.terrain, live = true, thumb = false) {
     const counts = t.stat === 'choice'
-      ? (live && s.stat ? statLabel(s.stat) : 'Anführer 👑 wählt…')
+      ? (live && s.stat ? statLabel(s.stat) : live && s.picker !== null && !ui.tossing ? `${pickerName()} die Eigenschaft…` : '🪙 Das Los entscheidet…')
       : `${statLabel(t.stat)}${t.lowWins ? ' ↓' : ''}`;
     return `<div class="terrain${t.lowWins ? ' low' : ''}${t.stat === 'choice' ? ' choice' : ''}"><div class="frame">
       <div class="head"><span class="kicker">Schlachtfeld</span></div>
@@ -1064,9 +1070,17 @@
     </div></div>`;
   }
 
+  const avatarOf = (p) => (pvc() ? (s.players[p].isAI ? '🤖' : '🧑') : p === 0 ? '🦁' : '🐲');
+  /** „Du wählst“ / „Der Computer wählt“ / „Anna wählt“ für den ausgelosten Spieler. */
+  function pickerName() {
+    const p = s.picker;
+    if (pvc()) return p === 0 ? 'Du wählst' : 'Der Computer wählt';
+    return `${escapeHTML(s.players[p].name)} wählt`;
+  }
+
   function playerBarHTML(p) {
     const pl = s.players[p];
-    const avatar = pvc() ? (pl.isAI ? '🤖' : '🧑') : p === 0 ? '🦁' : '🐲';
+    const avatar = avatarOf(p);
     const slots = [];
     for (let i = 0; i < s.targetQuartets; i++) {
       const f = pl.quartets[i];
@@ -1075,7 +1089,7 @@
     // Zusätzliche Quartette über dem Ziel (kann bei Rundenlimit-Wertung nicht passieren, schadet aber nicht)
     for (let i = s.targetQuartets; i < pl.quartets.length; i++) slots.push(`<span class="qslot filled">${FACTIONS[pl.quartets[i]].icon}</span>`);
     return `<span class="avatar" style="--pc:var(--p${p})">${avatar}</span>
-      <span class="pname">${escapeHTML(pl.name)}</span>${s.leader === p ? '<span class="crown" data-tip="Anführer">👑</span>' : ''}
+      <span class="pname">${escapeHTML(pl.name)}</span>${s.picker === p && !ui.tossing ? '<span class="pick-mark" data-tip="Per Los bestimmt: wählt auf diesem Schlachtfeld die Eigenschaft">🪙</span>' : ''}
       <span class="chip total-chip" data-tip="Karten insgesamt (Hand + Stapel)">🂠 <b>${Engine.owned(s, p).length}</b> Karten</span>
       <span class="quartet-slots" data-tip="Quartette">${slots.join('')}</span>
       ${rallyHTML(pl)}
@@ -1146,7 +1160,7 @@
     }
     if (p === null) return { title: '', cards: '', actions: '' };
     const pl = s.players[p];
-    if (s.phase === 'stat' && p === s.leader && !isAI(p)) {
+    if (s.phase === 'stat' && p === s.picker && !ui.tossing && !isAI(p)) {
       return { title: 'Wähle die Eigenschaft', locked: true,
         cards: pl.hand.map((id) => cardHTML(id)).join(''),
         actions: `<div class="stat-choice">${STAT_IDS.map((st) => `<button data-stat="${st}">${statLabel(st)}</button>`).join('')}</div>` };
@@ -1496,6 +1510,41 @@
       };
       el.addEventListener('click', close);
       setTimeout(close, 5500);
+    });
+  }
+
+  /**
+   * Münzwurf auf einem Wahlfeld: Die Münze mit beiden Spielern wirbelt hoch und landet auf dem
+   * Gesicht dessen, der die Eigenschaft wählt. Klicken überspringt.
+   */
+  function tossCoin(p) {
+    return new Promise((resolve) => {
+      const spins = reducedMotion ? 0 : 6;
+      const who = pvc() ? (p === 0 ? 'Du wählst die Eigenschaft!' : 'Der Computer wählt die Eigenschaft.') : `${escapeHTML(s.players[p].name)} wählt die Eigenschaft!`;
+      const face = (i) => `<div class="coin-face side-${i}" style="--pc:var(--p${i})"><span>${avatarOf(i)}</span></div>`;
+      const el = document.createElement('div');
+      el.className = `coin-toss${reducedMotion ? ' landed' : ''}`;
+      el.style.setProperty('--win', `var(--p${p})`);
+      el.innerHTML = `<div class="coin-kicker">${escapeHTML(s.terrain.name)}</div>
+        <div class="coin-air"><div class="coin" style="--end:${spins * 360 + (p ? 180 : 0)}deg">${face(0)}${face(1)}</div></div>
+        <div class="coin-result">${who}</div>`;
+      document.body.appendChild(el);
+      const timers = [];
+      let done = false;
+      const close = () => {
+        if (done) return;
+        done = true;
+        timers.forEach(clearTimeout);
+        el.classList.add('leaving');
+        setTimeout(() => { el.remove(); resolve(); }, 350);
+      };
+      const land = () => { el.classList.add('landed'); Snd.play('coin'); };
+      if (reducedMotion) { Snd.play('coin'); timers.push(setTimeout(close, 2400)); }
+      else {
+        Snd.play('whoosh');
+        timers.push(setTimeout(land, 1450), setTimeout(close, 3600));
+      }
+      el.addEventListener('click', () => { if (!el.classList.contains('landed')) land(); close(); });
     });
   }
 

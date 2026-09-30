@@ -86,7 +86,7 @@
   };
 
   /*
-   * Schlachtfelder: stat = entscheidende Eigenschaft ('choice' = der Anführer wählt),
+   * Schlachtfelder: stat = entscheidende Eigenschaft ('choice' = ein Münzwurf bestimmt, wer wählt),
    * bonus = { Volk: Punkte }, lowWins = niedrigster Wert gewinnt.
    */
   const TERRAINS = [

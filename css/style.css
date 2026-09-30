@@ -128,8 +128,8 @@ button:disabled { cursor: var(--cur-default); }
   border: 2px solid var(--gold-dark);
 }
 .player-bar .pname { font-family: var(--display); font-weight: 800; font-size: 16px; }
-/* Die Krone ist höher als die Großbuchstaben – etwas anheben, damit sie nicht unter die Schriftlinie hängt */
-.player-bar .crown { font-size: 18px; filter: drop-shadow(0 0 6px rgba(255, 210, 80, .8)); position: relative; top: -.15em; }
+.player-bar .pick-mark { font-size: 18px; filter: drop-shadow(0 0 6px rgba(255, 210, 80, .8)); animation: pick-mark .5s ease; }
+@keyframes pick-mark { from { transform: scale(0) rotateY(540deg); } }
 .player-bar .chip { font-size: 13px; color: var(--muted); display: flex; align-items: center; gap: 4px; }
 .player-bar .chip b { color: var(--ink); font-size: 15px; }
 .quartet-slots { display: flex; gap: 4px; }
@@ -515,6 +515,40 @@ button:disabled { cursor: var(--cur-default); }
 }
 .banner small { display: block; font-size: .4em; letter-spacing: 2px; color: var(--gold); }
 @keyframes banner { 0% { opacity: 0; transform: translate(-50%, -50%) scale(.6); } 18%, 78% { opacity: 1; transform: translate(-50%, -50%) scale(1); } 100% { opacity: 0; } }
+/* Münzwurf auf Wahlfeldern: wer die Eigenschaft wählt */
+.coin-toss {
+  position: fixed; inset: 0; z-index: 85; display: grid; place-content: center; justify-items: center; gap: 22px; cursor: pointer;
+  background: radial-gradient(circle, rgba(8, 5, 3, .92), rgba(8, 5, 3, .7) 50%, rgba(8, 5, 3, .45) 100%); animation: coin-in .3s ease;
+}
+.coin-toss.leaving { animation: coin-out .35s ease forwards; }
+@keyframes coin-in { from { opacity: 0; } }
+@keyframes coin-out { to { opacity: 0; } }
+.coin-kicker { font-family: var(--display); font-weight: 900; color: var(--gold); letter-spacing: 3px; font-size: clamp(24px, 3.6vw, 44px); text-align: center; text-shadow: 0 2px 4px #000; padding: 0 16px; }
+.coin-air { --size: clamp(140px, 20vw, 230px); perspective: 900px; animation: coin-air 1.45s cubic-bezier(.3, 0, .3, 1) both; transition: filter .3s ease; }
+@keyframes coin-air {
+  0% { transform: translateY(50px) scale(.6); }
+  45% { transform: translateY(-80px) scale(1.15); }
+  86% { transform: translateY(0) scale(1); }
+  93% { transform: translateY(-12px) scale(1); }
+  100% { transform: translateY(0) scale(1); }
+}
+.coin { width: var(--size); height: var(--size); position: relative; transform-style: preserve-3d; transform: rotateY(var(--end)); animation: coin-spin 1.45s cubic-bezier(.2, .55, .35, 1) both; }
+@keyframes coin-spin { from { transform: rotateY(0deg); } to { transform: rotateY(var(--end)); } }
+.coin-face {
+  position: absolute; inset: 0; border-radius: 50%; display: grid; place-items: center; backface-visibility: hidden;
+  font-size: calc(var(--size) * .48); line-height: 1;
+  background: radial-gradient(circle at 35% 30%, #fff3c4, #e2b85a 42%, #8a6a2a 100%);
+  box-shadow: inset 0 0 0 calc(var(--size) * .045) #b58a3a, inset 0 0 0 calc(var(--size) * .085) var(--pc), inset 0 0 0 calc(var(--size) * .1) #6a4a1a, 0 12px 30px rgba(0, 0, 0, .6);
+}
+.coin-face.side-1 { transform: rotateY(180deg); }
+.coin-face span { filter: drop-shadow(0 2px 2px rgba(0, 0, 0, .5)); }
+.coin-toss.landed .coin-air { filter: drop-shadow(0 0 22px var(--win)); }
+.coin-result {
+  font-family: var(--display); font-weight: 900; font-size: clamp(26px, 4.2vw, 48px); color: #fff2c4; text-align: center; padding: 0 16px;
+  text-shadow: 0 3px 0 #3a2204, 0 0 20px rgba(226, 184, 90, .6); opacity: 0; transform: translateY(8px);
+}
+.coin-toss.landed .coin-result { opacity: 1; transform: none; transition: opacity .35s ease, transform .35s ease; }
+@media (prefers-reduced-motion: reduce) { .coin-air, .coin, .player-bar .pick-mark { animation: none; } }
 .toast {
   position: fixed; left: 50%; top: 18px; transform: translateX(-50%); z-index: 90; pointer-events: none;
   background: rgba(20, 12, 6, .95); border: 1px solid #ff5a4a; color: #ffd0c8; padding: 10px 18px; border-radius: 10px; font-weight: 600;
@@ -586,7 +620,7 @@ button:disabled { cursor: var(--cur-default); }
 .player-bar { gap: clamp(18px, calc(var(--qw) * 0.0947), 27px); padding: clamp(6px, calc(var(--qw) * 0.0316), 9px) clamp(16px, calc(var(--qw) * 0.0842), 24px); }
 .player-bar .avatar { width: clamp(42px, calc(var(--qw) * 0.2211), 63px); height: clamp(42px, calc(var(--qw) * 0.2211), 63px); font-size: clamp(22px, calc(var(--qw) * 0.1158), 33px); }
 .player-bar .pname { font-size: clamp(16px, calc(var(--qw) * 0.0842), 24px); }
-.player-bar .crown, .horn { font-size: clamp(19px, calc(var(--qw) * 0.1000), 28.5px); }
+.player-bar .pick-mark, .horn { font-size: clamp(19px, calc(var(--qw) * 0.1000), 28.5px); }
 .player-bar .chip { font-size: clamp(13px, calc(var(--qw) * 0.0684), 19.5px); }
 .player-bar .chip b { font-size: clamp(15px, calc(var(--qw) * 0.0789), 22.5px); }
 .qslot { width: clamp(30px, calc(var(--qw) * 0.1579), 45px); height: clamp(30px, calc(var(--qw) * 0.1579), 45px); font-size: clamp(15px, calc(var(--qw) * 0.0789), 22.5px); }

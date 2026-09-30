@@ -30,9 +30,9 @@ function play(strategies, hooks = {}) {
   const s = Engine.newGame({ mode: 'pvc', players: [{ name: 'A', isAI: true }, { name: 'B', isAI: true }] });
   hooks.start && hooks.start(s);
   while (s.phase !== 'over') {
-    if (s.phase === 'stat') Engine.chooseStat(s, s.leader, AI.chooseStat(s, s.leader));
+    if (s.phase === 'stat') Engine.chooseStat(s, s.picker, AI.chooseStat(s, s.picker));
     for (const p of [0, 1]) if (s.players[p].rally) hooks.rallyReady && hooks.rallyReady();
-    const before = { terrain: s.terrain.id, stat: s.stat, owned: [0, 1].map((p) => Engine.owned(s, p).length), quartets: s.players.map((pl) => pl.quartets.length) };
+    const before = { terrain: s.terrain.id, stat: s.stat, picker: s.picker, owned: [0, 1].map((p) => Engine.owned(s, p).length), quartets: s.players.map((pl) => pl.quartets.length) };
     for (const p of [0, 1]) {
       const ready = s.players[p].rally;
       const c = strategies[p](s, p);
@@ -48,7 +48,7 @@ function play(strategies, hooks = {}) {
 
 // ---------------------------------------------------------------- Datensammlung (Normal gegen Normal)
 const st = {
-  wins: [0, 0, 0], firstLeaderWins: 0, rounds: [], reasons: {},
+  wins: [0, 0, 0], picker: { duels: 0, won: 0 }, rounds: [], reasons: {},
   card: {}, ability: {}, terrainFaction: {}, faction: {}, rally: { used: 0, won: 0, ready: 0, pending: [false, false] },
   startSets: {}, comeback: { behind: 0, behindWon: 0 }, quartetFaction: {},
 };
@@ -56,18 +56,17 @@ for (const id of Object.keys(CARDS)) st.card[id] = { played: 0, won: 0, startOwn
 for (const f of Object.keys(FACTIONS)) st.quartetFaction[f] = 0;
 
 for (let g = 0; g < GAMES; g++) {
-  let startLeader;
   let startOwn;
   let snapshot8 = null;
   const s = play([smart, smart], {
     rallyReady() { st.rally.ready++; },
     rallied(s, p) { st.rally.used++; st.rally.pending[p] = true; },
     start(s) {
-      startLeader = s.leader;
       startOwn = [0, 1].map((p) => Engine.owned(s, p).slice());
     },
     round(s, before) {
       const r = s.result;
+      if (before.picker !== null) { st.picker.duels++; if (r.winner === before.picker) st.picker.won++; }
       r.ids.forEach((id, p) => {
         const c = st.card[id];
         c.played++;
@@ -91,7 +90,6 @@ for (let g = 0; g < GAMES; g++) {
     },
   });
   st.wins[s.winner === -1 ? 2 : s.winner]++;
-  if (s.winner === startLeader) st.firstLeaderWins++;
   st.rounds.push(s.round);
   st.reasons[s.endReason.replace(/^(A|B) /, '')] = (st.reasons[s.endReason.replace(/^(A|B) /, '')] || 0) + 1;
   // Startglück: Wie viele „fast fertige“ Völker (3 von 4) hatte jeder zu Beginn?
@@ -126,7 +124,7 @@ function levels(a, b, n) {
   for (let i = 0; i < n; i++) {
     const s = Engine.newGame({ mode: 'pvc', players: [{ name: 'A', isAI: true, difficulty: a }, { name: 'B', isAI: true, difficulty: b }] });
     while (s.phase !== 'over') {
-      if (s.phase === 'stat') Engine.chooseStat(s, s.leader, AI.chooseStat(s, s.leader));
+      if (s.phase === 'stat') Engine.chooseStat(s, s.picker, AI.chooseStat(s, s.picker));
       for (const p of [0, 1]) { if (AI.shouldRally(s, p)) Engine.rally(s, p); Engine.choose(s, p, AI.chooseCard(s, p).card); }
       if (s.phase === 'result') Engine.nextRound(s);
     }
@@ -142,7 +140,7 @@ const sorted = st.rounds.slice().sort((a, b) => a - b);
 
 line(`Grunddaten (${GAMES} Partien, Normal gegen Normal)`);
 console.log(`Spieler A ${pct(st.wins[0], GAMES)} · Spieler B ${pct(st.wins[1], GAMES)} · Remis ${pct(st.wins[2], GAMES)}`);
-console.log(`Anführer der 1. Runde gewinnt: ${pct(st.firstLeaderWins, GAMES)}`);
+console.log(`Wahlfeld: Wer die Eigenschaft wählt, gewinnt das Duell: ${pct(st.picker.won, st.picker.duels)}`);
 console.log(`Runden: Ø ${avg.toFixed(1)}, Median ${sorted[Math.floor(sorted.length / 2)]}, 10–90 %: ${sorted[Math.floor(sorted.length * 0.1)]}–${sorted[Math.floor(sorted.length * 0.9)]}`);
 Object.entries(st.reasons).sort((a, b) => b[1] - a[1]).forEach(([r, n]) => console.log(`  Ende: ${r.padEnd(34)} ${pct(n, GAMES)}`));
 

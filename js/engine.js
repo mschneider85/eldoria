@@ -142,7 +142,8 @@
     }
     const s = {
       mode: cfg.mode, maxRounds: cfg.maxRounds, targetQuartets: cfg.targetQuartets,
-      round: 0, terrain: null, stat: null, phase: 'idle', leader: Math.random() < 0.5 ? 0 : 1,
+      // picker: wer auf einem Wahlfeld die Eigenschaft bestimmt – wird dort jedes Mal ausgelost
+      round: 0, terrain: null, stat: null, phase: 'idle', picker: null,
       terrainDeck: [], pot: [], choices: [null, null], result: null, winner: null, log: [],
       lastWinner: -1, spy: [false, false], spyInfo: [null, null], retreatUsed: [],
       // Karten, die offen unter einen Stapel gewandert und noch nicht wieder gezogen sind – das kann sich jeder merken
@@ -153,7 +154,6 @@
       })),
     };
     for (const p of [0, 1]) refill(s, p);
-    log(s, `${s.players[s.leader].name} ${verb(s.players[s.leader], 'ist', 'bist')} Anführer der ersten Runde.`, 'round');
     startRound(s);
     return s;
   }
@@ -175,15 +175,19 @@
     log(s, `— Runde ${s.round}: ${s.terrain.name} —`, 'round');
     if (s.terrain.stat === 'choice') {
       s.stat = null;
+      s.picker = Math.random() < 0.5 ? 0 : 1;
       s.phase = 'stat';
+      const pl = s.players[s.picker];
+      log(s, `🪙 Das Los fällt auf ${pl.name === 'Du' ? 'dich' : pl.name}.`);
     } else {
+      s.picker = null;
       s.stat = s.terrain.stat;
       s.phase = 'cards';
     }
   }
 
   function chooseStat(s, p, stat) {
-    if (s.phase !== 'stat' || p !== s.leader || !STAT_IDS.includes(stat)) return { ok: false, error: 'Ungültige Wahl.' };
+    if (s.phase !== 'stat' || p !== s.picker || !STAT_IDS.includes(stat)) return { ok: false, error: 'Ungültige Wahl.' };
     s.stat = stat;
     s.phase = 'cards';
     log(s, `${s.players[p].name} ${verb(s.players[p], 'wählt', 'wählst')} ${CG.STATS[stat].name}.`);
@@ -266,7 +270,6 @@
       w.deck.unshift(...loot);
       s.known[wi].push(...loot);
       w.won++;
-      s.leader = wi;
       const why = d.reason === 'low' ? ' (niedrigster Wert)' : '';
       log(s, `${w.name} ${verb(w, 'gewinnt', 'gewinnst')}${why} und ${verb(w, 'erobert', 'eroberst')} ${loot.length} Karte${loot.length === 1 ? '' : 'n'}.`, 'win');
       for (const n of result.notes.slice(d.notes.length)) log(s, n, 'ability');

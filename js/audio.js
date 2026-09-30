@@ -305,6 +305,13 @@
       noise({ t, f0: 1400, f1: 4800, q: 1.4, dur: 0.12, peak: 0.35 });
       noise({ t: t + 0.1, f0: 5000, type: 'highpass', dur: 0.02, peak: 0.12 });
     },
+    // Münze landet: heller Metallklang mit kurzem Nachhüpfen
+    coin() {
+      const t = ctx.currentTime;
+      tone({ t, freq: 2350, type: 'sine', attack: 0.001, dur: 0.35, peak: 0.16 });
+      tone({ t, freq: 3520, type: 'sine', attack: 0.001, dur: 0.22, peak: 0.08 });
+      tone({ t: t + 0.11, freq: 2350, type: 'sine', attack: 0.001, dur: 0.18, peak: 0.07 });
+    },
     whoosh() { noise({ f0: 350, f1: 1900, q: 0.9, attack: 0.08, dur: 0.32, peak: 0.28, curve: 'lin' }); },
     place() {
       const t = ctx.currentTime;

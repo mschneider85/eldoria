@@ -17,7 +17,7 @@ python3 -m http.server 8765   # dann http://localhost:8765
 - Jeder hat 16 Karten: 3 auf der Hand, der Rest liegt als eigener Nachziehstapel neben dem Spielfeld.
   Nach jeder Runde wird auf 3 aufgefüllt; eroberte Karten kommen unter den Stapel des Siegers (gezogen wird von oben).
 - Jede Runde bestimmt ein **Schlachtfeld**, welcher Wert zählt (teils mit Völkerbonus, im Nebelsumpf gewinnt der niedrigste Wert,
-  an der Kreuzung wählt der Anführer).
+  an der Kreuzung und im Kriegsrat entscheidet ein Münzwurf, wer die Eigenschaft wählt).
 - Beide wählen **verdeckt** eine Karte; der Sieger erobert beide. Gleichstand → Kriegsbeute für den nächsten Rundensieger.
 - Alle 4 Karten eines Volkes = **Quartett** (wird abgelegt und ist sicher). **3 Quartette gewinnen** (nach 40 Runden zählen Quartette, danach Karten).
 - Extras: 📯 Schlachtruf: vor der Wahl alle Handkarten in den eigenen Stapel mischen und neu ziehen. Lädt sich in 2 Runden wieder auf, in denen man zurückliegt – das hilft bei der Aufholjagd. Die Drachenkönigin (6A) ist die stärkste Karte – aber ohne Sonderregel.
