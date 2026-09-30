@@ -77,7 +77,7 @@
     weaken: { name: 'Schwächen', icon: '🎯', text: (c) => `Die gegnerische Karte bekommt −${c.amount}.` },
     plunder: { name: 'Plündern', icon: '🏴‍☠️', text: () => 'Gewinnst du, eroberst du zusätzlich die oberste Karte vom Stapel des Gegners.' },
     rage: { name: 'Wut', icon: '💢', text: (c) => `+${c.amount}, wenn du die letzte Runde verloren hast.` },
-    spy: { name: 'Spion', icon: '🕵️', text: () => '+10. In der nächsten Runde siehst du eine Handkarte des Gegners.' },
+    spy: { name: 'Spion', icon: '🕵️', text: () => '+10. Beim Aufdecken siehst du eine Handkarte des Gegners, bis er sie ausspielt.' },
     ambush: { name: 'Hinterhalt', icon: '🗡️', text: () => '+25, wenn die gegnerische Karte einen besseren Grundwert hat (bei „niedrigster gewinnt“ also einen kleineren).' },
     shift: { name: 'Gestaltwandel', icon: '🌀', text: () => 'Nutzt immer deinen besten Wert – egal, was zählt (bei „niedrigster gewinnt“ den kleinsten).' },
     runehorn: { name: 'Runenhorn', icon: '📯', text: () => 'Danach ist dein 📯 Schlachtruf sofort wieder bereit.' },

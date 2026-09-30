@@ -145,7 +145,8 @@
       // picker: wer auf einem Wahlfeld die Eigenschaft bestimmt – wird dort jedes Mal ausgelost
       round: 0, terrain: null, stat: null, phase: 'idle', picker: null,
       terrainDeck: [], pot: [], choices: [null, null], result: null, winner: null, log: [],
-      lastWinner: -1, spy: [false, false], spyInfo: [null, null], retreatUsed: [],
+      // spyInfo[p]: eine Handkarte des Gegners, die p per Spion kennt – gilt, bis sie die Hand verlässt
+      lastWinner: -1, spyInfo: [null, null], retreatUsed: [],
       // Karten, die offen unter einen Stapel gewandert und noch nicht wieder gezogen sind – das kann sich jeder merken
       known: [[], []],
       players: cfg.players.map((o, i) => ({
@@ -165,13 +166,6 @@
     s.terrain = TERRAINS.find((t) => t.id === next);
     s.choices = [null, null];
     s.result = null;
-    // Spion: eine zufällige Handkarte des Gegners wird für diese Runde sichtbar.
-    s.spyInfo = [0, 1].map((p) => {
-      if (!s.spy[p] || !s.players[1 - p].hand.length) return null;
-      const hand = s.players[1 - p].hand;
-      return hand[Math.floor(Math.random() * hand.length)];
-    });
-    s.spy = [false, false];
     log(s, `— Runde ${s.round}: ${s.terrain.name} —`, 'round');
     if (s.terrain.stat === 'choice') {
       s.stat = null;
@@ -184,6 +178,14 @@
       s.stat = s.terrain.stat;
       s.phase = 'cards';
     }
+  }
+
+  /** Spion: eine zufällige Handkarte des Gegners, bevorzugt eine, die p noch nicht kennt. */
+  function spyOn(s, p) {
+    const hand = s.players[1 - p].hand;
+    const fresh = hand.filter((id) => id !== s.spyInfo[p]);
+    const pool = fresh.length ? fresh : hand;
+    return pool.length ? pool[Math.floor(Math.random() * pool.length)] : null;
   }
 
   function chooseStat(s, p, stat) {
@@ -288,8 +290,22 @@
         // Der Schlachtruf lädt sich nur auf, solange man zurückliegt
         if (++pl.rallyCharge >= RALLY_RECHARGE) { pl.rally = true; pl.rallyCharge = 0; }
       }
-      if (card.ability === 'spy') s.spy[p] = true;
     });
+    // Spion: Beim Aufdecken wird eine der verbliebenen Handkarten des Gegners ausgespäht (vor dem Nachziehen).
+    // Bekanntes Wissen verfällt, sobald die Karte die Hand verlassen hat.
+    result.spied = [false, false];
+    for (const p of [0, 1]) {
+      if (s.spyInfo[p] && !s.players[1 - p].hand.includes(s.spyInfo[p])) s.spyInfo[p] = null;
+      if (CARDS[ids[p]].ability !== 'spy') continue;
+      const seen = spyOn(s, p);
+      if (!seen) continue;
+      s.spyInfo[p] = seen;
+      result.spied[p] = true;
+      const pl = s.players[p];
+      const note = `🕵️ Spion: ${pl.name} ${verb(pl, 'späht', 'spähst')} ${CARDS[seen].name} aus.`;
+      result.notes.push(note);
+      log(s, note, 'ability');
+    }
     s.lastWinner = d.winner;
     result.drawn = [0, 1].map((p) => refill(s, p));
     s.result = result;

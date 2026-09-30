@@ -420,6 +420,15 @@ button:disabled { cursor: var(--cur-default); }
 .qcard:hover .ability .atext { opacity: 1; transform: none; }
 .zoom .qcard .ability .atext, .gallery-grid .qcard .ability .atext, .menu-cards .qcard .ability .atext { display: none; }
 .spy-line { color: #bfe3ff; font-weight: 700; margin-bottom: 2px; }
+.spy-line.exposed { color: #ffc2a8; }
+/* Eigene Karte, die der Gegner per Spion kennt: kleines Späher-Siegel in der Ecke */
+.qcard.exposed { box-shadow: 0 0 0 1.5px #2a1804, 0 0 14px rgba(255, 150, 110, .55); }
+.exposed-mark {
+  position: absolute; top: calc(var(--qw) * .15); right: calc(var(--qw) * .06); z-index: 6; width: 26px; height: 26px; border-radius: 50%;
+  display: grid; place-items: center; font-size: 14px; line-height: 1;
+  background: radial-gradient(circle at 38% 32%, #c4735d, #6e2a1a 60%, #3a1208);
+  box-shadow: 0 0 0 1.5px #2a0c04, 0 0 0 3px rgba(255, 190, 160, .45), 0 2px 6px rgba(0, 0, 0, .6);
+}
 .hand-title .notes { color: #ffd76a; font-weight: 700; font-size: .95em; margin-bottom: 2px; }
 .rules-intro { font-size: 14px; margin: 0 0 6px; }
 .ab-cards { color: var(--muted); font-size: 12px; }
@@ -980,18 +989,47 @@ button:disabled { cursor: var(--cur-default); }
 [data-tip] { cursor: var(--cur-help); }
 button[data-tip] { cursor: var(--cur-pointer); }
 
-/* Per Spion gesehene Karte: verdeckt, die Vorderseite schimmert gespiegelt durch die Rückseite */
-.see-through { position: relative; overflow: hidden; }
-.xray {
-  position: absolute; inset: 0; pointer-events: none; transform: scaleX(-1);
-  opacity: .62; mix-blend-mode: screen; filter: saturate(.55) brightness(1.15) contrast(.9);
+/* Per Spion ausgespähte Karte: verdeckt mit Späher-Siegel und kühlem Schimmer, beim Überfahren dreht sie sich um */
+.spied { position: absolute; inset: 0; perspective: 900px; }
+.spied .flipper { transition: transform .5s cubic-bezier(.3, 1.3, .5, 1); }
+.spied:hover .flipper { transform: rotateY(180deg); }
+/* die Fähigkeitsbeschreibung erscheint wie bei offenen Karten – erst, wenn die Karte umgedreht ist */
+.spied:hover .ability .atext { opacity: 1; transform: none; transition-delay: .3s; }
+/* nur die ruhende Hülle fängt die Maus – die drehende Karte würde sie beim Wenden verlieren */
+.spied .flipper { pointer-events: none; }
+.spied .back .card-back {
+  overflow: hidden;
+  box-shadow: 0 0 0 1.5px #2a1804, 0 0 0 3px #7fb4e0 inset, 0 0 16px rgba(120, 190, 255, .6), 0 8px 18px rgba(0, 0, 0, .6);
 }
-.xray .qcard { box-shadow: none; }
-.xray .qcard::before { display: none; }
-/* In der Gegnerhand: die gespiegelte Karte in der Größe der kleinen Handkarte */
-.opp-hand { --ob: calc(var(--qw) * .22); }
-.xray.mini { --qw: var(--ob); mix-blend-mode: normal; opacity: .5; filter: saturate(.7); }
-.see-through { box-shadow: 0 0 0 1px #2a1804, 0 0 14px rgba(140, 200, 255, .55); }
+/* ein Lichtstreif wandert über die Rückseite – wie durch ein Fernrohr beobachtet */
+.spied .back .card-back::before {
+  content: ''; position: absolute; inset: -20% -60%; pointer-events: none;
+  background: linear-gradient(105deg, transparent 40%, rgba(170, 215, 255, .35) 50%, transparent 60%);
+  animation: spy-scan 3.2s ease-in-out infinite;
+}
+@keyframes spy-scan { 0%, 30% { transform: translateX(-45%); } 70%, 100% { transform: translateX(45%); } }
+/* Siegel: Wachs mit Späher darauf */
+.spy-seal {
+  position: absolute; left: 50%; top: 50%; width: 34%; aspect-ratio: 1; transform: translate(-50%, -50%) rotate(-12deg);
+  display: grid; place-items: center; font-size: calc(var(--qw) * .16); line-height: 1; border-radius: 50%;
+  background: radial-gradient(circle at 38% 32%, #5d8fc4, #23446e 55%, #10223c);
+  box-shadow: 0 0 0 2px #0c1a2e, 0 0 0 4px rgba(170, 215, 255, .5), 0 3px 8px rgba(0, 0, 0, .6), inset 0 -3px 6px rgba(0, 0, 0, .45);
+  filter: drop-shadow(0 0 6px rgba(120, 190, 255, .5));
+}
+/* In der Gegnerhand: eine lesbar große Karte, verkleinert auf Handkartengröße – beim Überfahren dreht sie sich groß nach unten */
+.opp-hand { --ob: calc(var(--qw) * .22); --peek: 4; }
+.opp-hand .ob.spied { position: relative; inset: auto; box-shadow: none; }
+.opp-hand .ob.spied:hover { z-index: 20; }
+.opp-hand .spied .flipper {
+  inset: 0 auto auto 50%; width: calc(var(--ob) * var(--peek)); height: calc(var(--ob) * var(--peek) * 1.5);
+  margin-left: calc(var(--ob) * var(--peek) / -2); transform-origin: 50% 0; transform: scale(calc(1 / var(--peek)));
+}
+.opp-hand .spied .face { --qw: calc(var(--ob) * var(--peek)); }
+.opp-hand .spied .card-back { width: 100%; height: 100%; }
+.opp-hand .spied:hover .flipper {
+  transform: translateY(calc(var(--ob) * .4)) rotate(calc(var(--r) * -1)) rotateY(180deg);
+  pointer-events: auto; /* die große Karte hält den Hover, solange die Maus auf ihr bleibt */
+}
 
 /* =============================================================== Knöpfe: gealtert */
 /* Nieten links und rechts als eigene Hintergrundebenen */

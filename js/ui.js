@@ -138,7 +138,7 @@
   }
 
   function resetRoundUI() {
-    Object.assign(ui, { chooser: null, selected: null, rallying: false, revealed: false, showResult: false, fly: null, tossing: false, message: '' });
+    Object.assign(ui, { chooser: null, selected: null, rallying: false, revealed: false, showResult: false, fly: null, tossing: false, message: '', aiWaiting: false });
   }
 
   async function beginRound() {
@@ -206,11 +206,14 @@
         await sleep(900);
         if (!(await waitForOverlays(token))) return;
       }
-      const c = AI.chooseCard(s, 1);
-      await flyOppToSlot(c.card);
-      if (token !== ui.token) return;
-      Engine.choose(s, 1, c.card);
-      afterChoice();
+      // Kennt der Computer per Spion eine deiner Karten, legt er erst nach dir – so bleibt Zeit für den Schlachtruf als Konter
+      if (s.spyInfo[1] && !s.choices[0]) {
+        ui.aiWaiting = true;
+        ui.message = 'Der Computer lauert…';
+        render();
+        return;
+      }
+      if (await aiPlays(token)) afterChoice();
       return;
     }
     // Hot-Seat: erst wer die Eigenschaft gewählt hat, sonst abwechselnd.
@@ -225,6 +228,26 @@
     render();
   }
 
+  /** Der Computer wählt und legt seine Karte. false, wenn die Partie inzwischen verlassen wurde. */
+  async function aiPlays(token) {
+    ui.aiWaiting = false;
+    const c = AI.chooseCard(s, 1);
+    await flyOppToSlot(c.card);
+    if (token !== ui.token) return false;
+    Engine.choose(s, 1, c.card);
+    return true;
+  }
+
+  /** Der lauernde Computer ist dran, nachdem du gespielt oder den Schlachtruf ausgestoßen hast. */
+  async function aiAfterWaiting(token) {
+    ui.aiWaiting = false; // nur einmal – Schlachtruf und Ausspielen können kurz nacheinander kommen
+    ui.message = '';
+    render();
+    await sleep(500 + Math.random() * 500);
+    if (token !== ui.token || !(await waitForOverlays(token))) return false;
+    return aiPlays(token);
+  }
+
   async function confirmChoice() {
     const p = ui.chooser;
     if (p === null || !ui.selected || s.phase !== 'cards' || s.choices[p] || ui.choosing || ui.rallying) return;
@@ -236,6 +259,7 @@
     const r = Engine.choose(s, p, ui.selected);
     if (!r.ok) { toast(r.error); return; }
     ui.selected = null;
+    if (pvc() && ui.aiWaiting && !(await aiAfterWaiting(token))) return;
     if (s.phase === 'cards' && !pvc()) {
       const next = 1 - p;
       ui.chooser = null;
@@ -600,15 +624,16 @@
     if (s.result) ids = ids.filter((id) => !s.result.drawn[p].includes(id));
     else if (s.choices[p]) ids = ids.filter((id) => id !== s.choices[p].card);
     ui.oppOrder = ids;
-    const seen = s.phase === 'cards' && (pvc() || ui.chooser === 0) ? s.spyInfo && s.spyInfo[0] : null;
+    // Die ausgespähte Karte bleibt markiert, bis sie die Hand verlässt – frisch ausgespäht erst, wenn der Spion aufgedeckt ist
+    const seen = s.result && s.result.spied[0] && !ui.revealed ? null : s.spyInfo[0];
     const n = ids.length;
     return ids.map((id, i) => {
       const off = i - (n - 1) / 2;
       const style = `--r:${off * 7}deg; --y:${Math.abs(off) * 3}px`;
       const incoming = ui.oppIncoming.has(id) ? ' incoming' : '';
       if (id === seen) {
-        return `<div class="ob card-back see-through${incoming}" data-i="${i}" style="${style}" data-tip="Per Spion gesehen: ${escapeHTML(CARDS[id].name)}">
-          <div class="xray mini">${cardHTML(id, { neutral: true, thumb: true, attrs: `data-zoom="${id}"` })}</div></div>`;
+        return `<div class="ob spied${incoming}" data-i="${i}" style="${style}">
+          ${spiedHTML(id, true)}</div>`;
       }
       return `<div class="ob card-back${incoming}" data-i="${i}" style="${style}"></div>`;
     }).join('');
@@ -1044,7 +1069,8 @@
     const abText = ab ? `${ab.name}: ${ab.text(c)}${used ? ' (bereits verbraucht)' : ''}` : '';
     const abHTML = ab ? `<div class="ability${used ? ' used' : ''}"><b>${ab.icon} ${ab.name}${used ? ' (verbraucht)' : ''}</b><span class="atext">${ab.text(c)}</span></div>` : '';
     const fx = reducedMotion ? '' : fxHTML(c.id, opt.thumb);
-    return `<div class="qcard${opt.selected ? ' selected' : ''}" ${opt.attrs || ''} style="--fc:${f.color}">
+    return `<div class="qcard${opt.selected ? ' selected' : ''}${opt.exposed ? ' exposed' : ''}" ${opt.attrs || ''} style="--fc:${f.color}">
+      ${opt.exposed ? '<span class="exposed-mark" data-tip="Der Gegner kennt diese Karte (Spion)">🕵️</span>' : ''}
       <div class="frame">
         <div class="head"><span class="code">${c.id}</span><span>${f.icon} ${f.one}</span></div>
         <div class="art">${artImg(`art/cards/${c.id}${opt.thumb ? '.thumb' : ''}.webp`, c.art)}${fx}</div>
@@ -1121,12 +1147,17 @@
       const spyViewer = pvc() ? (p === 1 ? 0 : null) : ui.chooser === 1 - p ? 1 - p : null;
       const id = s.choices[p].card;
       if (spyViewer !== null && s.spyInfo && s.spyInfo[spyViewer] === id) {
-        return `${who}<div class="flipper"><div class="face back see-through" data-tip="Per Spion gesehen · Rechtsklick: groß anzeigen">
-          <div class="card-back"></div><div class="xray">${cardHTML(id, { neutral: true, attrs: `data-zoom="${id}"` })}</div></div></div>`;
+        return `${who}<div class="spied">${spiedHTML(id)}</div>`;
       }
       return `${who}<div class="flipper"><div class="face back"><div class="card-back"></div></div></div>`;
     }
     return `${who}<div class="placeholder"></div>`;
+  }
+
+  /** Per Spion ausgespähte Karte: verdeckt mit Späher-Siegel, beim Überfahren dreht sie sich um (ohne Tooltip – sie zeigt ja selbst, was sie ist). */
+  function spiedHTML(id, mini) {
+    return `<div class="flipper"><div class="face back"><div class="card-back"><span class="spy-seal">🕵️</span></div></div>
+      <div class="face front">${cardHTML(id, { neutral: true, thumb: mini, attrs: `data-zoom="${id}"` })}</div></div>`;
   }
 
   function slotClass(p) {
@@ -1169,15 +1200,19 @@
     const seen = s.spyInfo && s.spyInfo[p];
     const seenPlayed = seen && s.choices[1 - p] && s.choices[1 - p].card === seen;
     // Sobald der Gegner die Karte gespielt hat, liegt sie offen auf seinem Feld – dann braucht es keinen Hinweis mehr
-    const spy = canChoose && seen && !seenPlayed
-      ? `<div class="spy-line">🕵️ Spion: Der Gegner hat <b>${CARDS[seen].id} ${CARDS[seen].name}</b> auf der Hand.</div>` : '';
+    // Umgekehrt: Welche eigene Karte kennt der Gegner? (Konter: Schlachtruf mischt sie weg)
+    const exposed = s.result && s.result.spied[1 - p] && !ui.revealed ? null : s.spyInfo[1 - p];
+    const spy = (canChoose && seen && !seenPlayed
+      ? `<div class="spy-line">🕵️ Spion: Der Gegner hat <b>${CARDS[seen].id} ${CARDS[seen].name}</b> auf der Hand.</div>` : '')
+      + (canChoose && exposed
+        ? `<div class="spy-line exposed">🕵️ Der Gegner kennt deine <b>${CARDS[exposed].id} ${CARDS[exposed].name}</b>.</div>` : '');
     const title = canChoose
       ? spy + (pvc() ? 'Wähle deine Karte' : `${escapeHTML(pl.name)}: Wähle deine Karte`)
       : s.phase === 'cards' ? 'Warte auf den Gegner…' : pvc() ? '' : `Hand von ${escapeHTML(pl.name)}`;
     // Ausgespielte Karte liegt auf dem Feld; frisch gezogene erscheinen erst nach „Weiter“
     const played = s.choices[p] ? s.choices[p].card : ui.choosing;
     const hand = s.result ? pl.hand.filter((id) => !s.result.drawn[p].includes(id)) : pl.hand.filter((id) => id !== played);
-    const cards = hand.map((id, i) => cardHTML(id, { selected: ui.selected === id, owner: p, attrs: `data-card="${id}" data-key="${i + 1}"` })).join('');
+    const cards = hand.map((id, i) => cardHTML(id, { selected: ui.selected === id, owner: p, exposed: id === exposed, attrs: `data-card="${id}" data-key="${i + 1}"` })).join('');
     let actions = '';
     if (canChoose) {
       const tip = pl.rally ? 'Handkarten in den Stapel mischen und neu ziehen' : 'Lädt sich auf, solange du zurückliegst';
@@ -1254,10 +1289,13 @@
     if (btn) btn.disabled = !ui.selected;
   }
 
-  function rallyNow() {
+  async function rallyNow() {
     const p = ui.chooser;
     if (p === null || s.phase !== 'cards' || s.choices[p] || ui.choosing || ui.rallying || !s.players[p].rally) return;
-    animateRally(p);
+    const token = ui.token;
+    await animateRally(p);
+    // Der Konter hat gegriffen: Der Computer weiß nichts mehr über deine Hand und legt jetzt
+    if (token === ui.token && pvc() && ui.aiWaiting && !s.spyInfo[1] && (await aiAfterWaiting(token))) afterChoice();
   }
 
   function initInput() {
@@ -1288,9 +1326,9 @@
     // Rechtsklick (oder langes Drücken auf dem Handy) zeigt eine Karte groß.
     $('#game').addEventListener('contextmenu', (e) => {
       if (!s) return;
-      // Durchleuchtete (per Spion gesehene) Karten: die gespiegelte Karte darin reagiert selbst nicht auf die Maus
-      const seeThrough = e.target.closest('.see-through');
-      const el = seeThrough ? seeThrough.querySelector('[data-zoom]') : e.target.closest('.qcard, .terrain');
+      // Ausgespähte Karten: auch auf der Rückseite zeigt Rechtsklick die Karte groß
+      const spied = e.target.closest('.spied');
+      const el = spied ? spied.querySelector('[data-zoom]') : e.target.closest('.qcard, .terrain');
       if (!el) return;
       e.preventDefault();
       if (el.classList.contains('terrain')) { zoomTerrain(s.terrain.id); return; }
