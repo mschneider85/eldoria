@@ -22,6 +22,24 @@ function view(s, flip) {
   });
 }
 
+/**
+ * Ungültige Züge (wie sie ein kaputter oder veränderter Mitspieler schicken könnte) werden abgelehnt
+ * und ändern nichts am Spielstand; eine echte Änderung ändert die Prüfsumme.
+ */
+function fuzz(s) {
+  const before = Engine.digest(s);
+  const bad = [
+    () => Engine.choose(s, 1, 'XX'), () => Engine.choose(s, 1, undefined), () => Engine.choose(s, 1, s.players[0].hand[0]),
+    () => Engine.chooseStat(s, 1, 'hp'), () => Engine.chooseStat(s, 0, { toString: () => 'str' }), () => Engine.rally(s, 1),
+  ];
+  for (const f of bad) if (f().ok) throw new Error('Ungültiger Zug wurde angenommen');
+  if (Engine.digest(s) !== before) throw new Error('Ungültiger Zug hat den Spielstand verändert');
+  const c = Engine.clone(s);
+  const moved = c.players[1].hand.splice(0, 1); // eine Karte wandert falsch
+  if (moved.length) c.players[0].deck.unshift(...moved); else c.pot.push('1A');
+  if (Engine.digest(c) === before) throw new Error('Prüfsumme bemerkt eine Abweichung nicht');
+}
+
 let failed = 0;
 for (let g = 0; g < games; g++) {
   const seed = (Math.random() * 2 ** 32) >>> 0;
@@ -55,6 +73,9 @@ for (let g = 0; g < games; g++) {
           } else if (!fn(s, lp).ok) throw new Error('Schlachtruf ungültig');
         }
       }
+      // Die Prüfsumme, die beide Geräte nach jedem Duell austauschen, muss gleich sein
+      if (Engine.digest(host) !== Engine.digest(guest)) throw new Error(`Runde ${host.round}: Prüfsummen weichen ab`);
+      fuzz(host);
       if (host.phase === 'result') { Engine.nextRound(host); Engine.nextRound(guest); }
     }
     if (view(host, false) !== view(guest, true)) throw new Error('Endstand weicht ab');

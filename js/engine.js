@@ -16,8 +16,8 @@
   const power = (s, p) => owned(s, p).length + 4 * s.players[p].quartets.length;
   const factionCount = (s, p, f) => owned(s, p).filter((id) => CARDS[id].faction === f).length;
 
-  /** Verb passend zum Spieler („Du gewinnst“ / „Computer gewinnt“). */
-  const verb = (pl, third, second) => (pl.name === 'Du' ? second : third);
+  /** Verb passend zum Spieler („Du gewinnst“ / „Computer gewinnt“). you = der Spieler an diesem Gerät. */
+  const verb = (pl, third, second) => (pl.you ? second : third);
 
   /*
    * Zufall mit Startwert: In einer Online-Partie rechnen beide Geräte dieselbe Partie und tauschen nur
@@ -170,7 +170,7 @@
       // Karten, die offen unter einen Stapel gewandert und noch nicht wieder gezogen sind – das kann sich jeder merken
       known: [[], []],
       players: cfg.players.map((o, i) => ({
-        idx: i, name: o.name, isAI: !!o.isAI, difficulty: o.difficulty || 'normal',
+        idx: i, name: o.name, you: !!o.you, isAI: !!o.isAI, difficulty: o.difficulty || 'normal',
         deck: decks[i], hand: [], quartets: [], rally: true, rallyCharge: 0, won: 0,
       })),
     };
@@ -192,7 +192,7 @@
       s.picker = seat(s, rand(s, 'shared') < 0.5 ? 0 : 1);
       s.phase = 'stat';
       const pl = s.players[s.picker];
-      log(s, `🪙 Das Los fällt auf ${pl.name === 'Du' ? 'dich' : pl.name}.`);
+      log(s, `🪙 Das Los fällt auf ${pl.you ? 'dich' : pl.name}.`);
     } else {
       s.picker = null;
       s.stat = s.terrain.stat;
@@ -282,7 +282,7 @@
         s.retreatUsed.push(lost.id);
         l.deck.unshift(lost.id); // unter den eigenen Stapel
         s.known[li].push(lost.id);
-        result.notes.push(`↩️ ${lost.name} zieht sich zurück und bleibt bei ${l.name === 'Du' ? 'dir' : l.name} (Rückzug verbraucht).`);
+        result.notes.push(`↩️ ${lost.name} zieht sich zurück und bleibt bei ${l.you ? 'dir' : l.name} (Rückzug verbraucht).`);
       } else {
         loot.splice(1 + s.pot.length, 0, lost.id); // Reihenfolge wie bisher: eigene Karte, Kriegsbeute, Verlierer, Geplündertes
       }
@@ -306,7 +306,7 @@
       if (card.ability === 'runehorn' && !pl.rally) {
         pl.rally = true;
         pl.rallyCharge = 0;
-        result.notes.push(`📯 Runenhorn: ${pl.name === 'Du' ? 'Dein Schlachtruf ist' : `Der Schlachtruf von ${pl.name} ist`} sofort wieder bereit.`);
+        result.notes.push(`📯 Runenhorn: ${pl.you ? 'Dein Schlachtruf ist' : `Der Schlachtruf von ${pl.name} ist`} sofort wieder bereit.`);
       } else if (!pl.rally && power(s, p) < power(s, 1 - p)) {
         // Der Schlachtruf lädt sich nur auf, solange man zurückliegt
         if (++pl.rallyCharge >= RALLY_RECHARGE) { pl.rally = true; pl.rallyCharge = 0; }
@@ -345,7 +345,7 @@
     } else if (!a.hand.length || !b.hand.length) {
       winner = !a.hand.length && !b.hand.length ? score(s) : a.hand.length ? 0 : 1;
       const out = !a.hand.length ? a : b;
-      reason = `${out.name} ${out.name === 'Du' ? 'hast' : 'hat'} keine Karten mehr`;
+      reason = `${out.name} ${out.you ? 'hast' : 'hat'} keine Karten mehr`;
     } else if (s.round >= s.maxRounds) {
       winner = score(s);
       reason = 'Rundenlimit erreicht';
@@ -367,6 +367,23 @@
     return -1;
   }
 
+  /**
+   * Prüfsumme des Spielstands in Sitzplatz-Reihenfolge: Host und Gast müssen nach jedem Duell dieselbe haben
+   * (Online-Partien vergleichen sie, damit unterschiedliche Spielversionen auffallen).
+   */
+  function digest(s) {
+    const seats = [0, 1].map((k) => seat(s, k));
+    const w = (i) => (i < 0 ? i : seat(s, i));
+    const str = JSON.stringify([
+      s.round, s.phase, s.terrain && s.terrain.id, s.stat, s.picker === null ? null : w(s.picker), s.pot, s.retreatUsed, w(s.lastWinner), s.winner === null ? null : w(s.winner),
+      seats.map((p) => { const pl = s.players[p]; return [pl.hand, pl.deck, pl.quartets, pl.rally, pl.rallyCharge, s.spyInfo[p], s.known[p]]; }),
+      s.rng,
+    ]);
+    let h = 0x811c9dc5;
+    for (let i = 0; i < str.length; i++) h = Math.imul(h ^ str.charCodeAt(i), 0x01000193);
+    return h >>> 0;
+  }
+
   function nextRound(s) {
     if (s.phase !== 'result') return;
     startRound(s);
@@ -374,7 +391,7 @@
 
   CG.Engine = {
     HAND_SIZE, RALLY_RECHARGE,
-    newGame, chooseStat, choose, rally, nextRound, duel, owned, power, factionCount,
+    newGame, chooseStat, choose, rally, nextRound, duel, owned, power, factionCount, digest,
     clone: (s) => structuredClone(s),
   };
 })(globalThis);

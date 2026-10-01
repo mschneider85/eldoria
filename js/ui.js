@@ -1,5 +1,5 @@
 /*
- * Oberfläche und Spielablauf-Steuerung (Menü, Runden, Übergaben, Animationen).
+ * Oberfläche und Spielablauf-Steuerung (Menü, Runden, Online-Lobby, Animationen).
  */
 (function () {
   'use strict';
@@ -16,8 +16,9 @@
   const settings = { mode: store.get('mode', 'pvc') === 'online' ? 'online' : 'pvc', difficulty: store.get('difficulty', 'normal') };
   const reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   let s = null;
+  let pendingInvite = null; // Einladungslink, der während einer Partie kam – öffnet sich im Menü
   const ui = {
-    chooser: null,     // Spieler, dessen Hand gerade offen liegt und der wählt
+    chooser: null,     // 0, sobald deine Hand offen liegt und du wählen kannst (null: noch nicht/gerade nicht)
     selected: null,    // gewählte Handkarte
     rallying: false,   // Schlachtruf läuft gerade (Karten fliegen in den Stapel und zurück)
     revealed: false,   // Karten im Schlachtfeld aufgedeckt
@@ -34,6 +35,7 @@
     presenting: false, // Ergebnis wird noch vorgeführt (Quartett-Tafeln) – „Weiter“ wartet
     hoverHold: false,  // Maus liegt auf dem Schlachtfeld oder dem Ergebnis – der Countdown wartet
     stall: null,       // online: so viele Sekunden lässt der Gegner schon auf seinen Zug warten (ab dem Hinweis)
+    silent: null,      // online: so viele Sekunden ist die Verbindung schon gestört (nichts kommt an, in eine der Richtungen)
     message: '',
     token: 0,          // bricht laufende Abläufe ab, wenn ein neues Spiel startet
   };
@@ -110,7 +112,12 @@
       if (!code) return;
       clearLink();
       if ($('#intro')) { invite = code; return; }
-      if (s) return; // mitten in einer Partie nicht einfach wechseln
+      if (s) {
+        // Mitten in einer Partie nicht einfach wechseln – die Einladung gilt, sobald man im Menü ist
+        pendingInvite = code;
+        toast('Einladung erhalten – sie öffnet sich, sobald du im Hauptmenü bist.');
+        return;
+      }
       settings.mode = 'online';
       renderMenu();
       openLobby(code);
@@ -120,8 +127,8 @@
     $('#gallery-btn').addEventListener('click', () => showGallery('cards'));
     renderMenuShowcase();
     createFireflies();
-    const names = store.get('names', null);
-    if (names) $('#name1').value = names[0];
+    const name = store.get('name', null) || (store.get('names', null) || [])[0]; // 'names': früher eine Liste (zwei Spieler an einem Gerät)
+    if (name) $('#name1').value = name;
     // Alle Bilder im Hintergrund vorladen, damit beim ersten Aufdecken nichts nachlädt
     setTimeout(() => {
       [...Object.keys(CARDS).flatMap((id) => [`art/cards/${id}.webp`, `art/cards/${id}.thumb.webp`]),
@@ -133,8 +140,8 @@
 
   /* =============================================================== Ablauf */
   function startGame() {
-    if (settings.mode === 'online') { store.set('names', [$('#name1').value.trim()]); openLobby(); return; }
-    launch({ mode: 'pvc', players: [{ name: 'Du' }, { name: 'Computer', isAI: true, difficulty: settings.difficulty }] });
+    if (settings.mode === 'online') { store.set('name', $('#name1').value.trim()); openLobby(); return; }
+    launch({ mode: 'pvc', players: [{ name: 'Du', you: true }, { name: 'Computer', isAI: true, difficulty: settings.difficulty }] });
   }
 
   function launch(opts) {
@@ -154,11 +161,11 @@
 
   /** Laufende Flüge und Einblendungen beenden (beim Verlassen oder Neustart einer Partie). */
   function clearEffects() {
-    document.querySelectorAll('.ghost, .quartet-show, .coin-toss, .banner, .toast').forEach((el) => el.remove());
+    document.querySelectorAll('.ghost, .quartet-show, .coin-toss, .toast').forEach((el) => el.remove());
   }
 
   function toMenu() {
-    if (s && online()) { Net.send({ t: 'bye' }); Net.close(); }
+    if (s && online()) Net.bye({ t: 'bye' });
     ui.token++;
     wakeRemote();
     clearEffects();
@@ -168,10 +175,17 @@
     closeAllOverlays();
     $('#game').classList.add('hidden');
     $('#menu').classList.remove('hidden');
+    if (pendingInvite) {
+      const code = pendingInvite;
+      pendingInvite = null;
+      settings.mode = 'online';
+      renderMenu();
+      openLobby(code);
+    }
   }
 
   function resetRoundUI() {
-    Object.assign(ui, { chooser: null, selected: null, rallying: false, revealed: false, showResult: false, presenting: false, fly: null, tossing: false, message: '', aiWaiting: false, stall: null });
+    Object.assign(ui, { chooser: null, selected: null, rallying: false, revealed: false, showResult: false, presenting: false, fly: null, tossing: false, message: '', aiWaiting: false, stall: null, silent: null });
   }
 
   async function beginRound() {
@@ -200,12 +214,12 @@
       if (token !== ui.token) return;
       ui.tossing = false;
       if (isAI(picker)) {
-        ui.message = `${s.players[picker].name} überlegt…`;
+        ui.message = 'Der Computer überlegt…';
         render();
         await sleep(1100);
         if (!(await waitForOverlays(token))) return;
         Engine.chooseStat(s, picker, AI.chooseStat(s, picker));
-        ui.message = `${s.players[picker].name} wählt ${statLabel(s.stat)}.`;
+        ui.message = `Der Computer wählt ${statLabel(s.stat)}.`;
         cardPhase();
       } else if (isRemote(picker)) {
         ui.message = `${oppName()} überlegt…`;
@@ -227,8 +241,8 @@
   function onStatChosen(stat) {
     const picker = s.picker;
     if (!Engine.chooseStat(s, picker, stat).ok) return;
-    if (online()) Net.send({ t: 'stat', r: s.round, stat });
-    ui.message = `${s.players[picker].name === 'Du' ? 'Du wählst' : s.players[picker].name + ' wählt'} ${statLabel(stat)}.`;
+    if (online()) sendMove({ t: 'stat', r: s.round, stat });
+    ui.message = `Du wählst ${statLabel(stat)}.`; // wählen kann hier nur, wer an diesem Gerät sitzt
     cardPhase();
   }
 
@@ -305,13 +319,14 @@
     ui.selected = null;
     const r = Engine.choose(s, p, id);
     if (!r.ok) { render(); toast(r.error); return; }
-    if (online()) Net.send({ t: 'choose', r: s.round, card: id });
+    if (online()) sendMove({ t: 'choose', r: s.round, card: id });
     if (pvc() && ui.aiWaiting && !(await aiAfterWaiting(token))) return;
     afterChoice();
   }
 
   function afterChoice() {
     if (s.phase === 'cards') { render(); return; }
+    if (online()) sendSum();
     reveal();
   }
 
@@ -636,7 +651,7 @@
     }));
     if (token !== ui.token) return false;
     const r = Engine.rally(s, p);
-    if (r.ok && open && online()) Net.send({ t: 'rally', r: s.round });
+    if (r.ok && open && online()) sendMove({ t: 'rally', r: s.round });
     bumpDeck(p);
     await sleep(250);
     if (open) ui.rallying = false;
@@ -748,7 +763,6 @@
   function statLabel(stat) { return `${STATS[stat].icon} ${STATS[stat].name}`; }
   function escapeHTML(t) { return String(t).replace(/[&<>"]/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch])); }
 
-  /** Illustration mit Emoji als Rückfall, falls die Bilddatei fehlt. */
   /**
    * Bewegte Effekte über den Kartenbildern. Koordinaten in % des Bildes (4:3), Größen und
    * Wege in % der Bildbreite bzw. -höhe – so sitzen sie auf jeder Kartengröße.
@@ -1074,6 +1088,7 @@
     return `<div class="fx" aria-hidden="true">${out.join('')}</div>`;
   }
 
+  /** Illustration mit Emoji als Rückfall, falls die Bilddatei fehlt. */
   function artImg(src, emoji) {
     return `<span class="fallback">${emoji}</span><img src="${src}" alt="" draggable="false" decoding="async" onerror="this.remove()">`;
   }
@@ -1150,7 +1165,7 @@
   }
 
   const avatarOf = (p) => (s.players[p].isAI ? '🤖' : p === 0 ? '🧑' : '🧙');
-  /** „Du wählst“ / „Der Computer wählt“ / „Anna wählt“ für den ausgelosten Spieler. */
+  /** „Du wählst“ / „Der Computer wählt“ / „Anna wählt“ (online) für den ausgelosten Spieler. */
   function pickerName() {
     return s.picker === 0 ? 'Du wählst' : `${oppName()} wählt`;
   }
@@ -1194,10 +1209,9 @@
         <div class="face front">${cardHTML(id, { attrs: `data-zoom="${id}"`, stat: ui.showResult ? s.result.stat : null })}</div></div>${value}`;
     }
     if (s.phase === 'cards' && s.choices[p]) {
-      // Eine per Spion bekannte Karte liegt offen – wer gespäht hat, weiß ja, welche es ist
-      const spyViewer = p === 1 ? 0 : null;
+      // Eine per Spion bekannte Gegnerkarte liegt offen – du hast sie ja schon gesehen
       const id = s.choices[p].card;
-      if (spyViewer !== null && s.spyInfo && s.spyInfo[spyViewer] === id) {
+      if (p === 1 && s.spyInfo[0] === id) {
         return `${who}<div class="spied">${spiedHTML(id)}</div>`;
       }
       return `${who}<div class="flipper"><div class="face back"><div class="card-back"></div></div></div>`;
@@ -1233,10 +1247,21 @@
 
   /** Online: Der Gegner lässt auf sich warten – Zähler, nach einer Weile mit Ausweg. */
   function stallHTML() {
+    if (net.drop && s && online()) {
+      const secs = Math.floor((Date.now() - net.drop.since) / 1000);
+      return `<div class="stall">🔌 Verbindung zu ${oppName()} unterbrochen – warte… <b aria-hidden="true">${Math.max(0, DROP_WAIT_S - secs)} s</b>
+        <button class="btn-small" id="stall-leave">Partie verlassen</button></div>`;
+    }
+    const leaveBtn = '<button class="btn-small" id="stall-leave">Partie verlassen</button>';
+    if (ui.silent !== null && s && online()) {
+      const secs = ui.silent;
+      return `<div class="stall">🔌 Verbindung zu ${oppName()} gestört – warte… <b aria-hidden="true">${secs} s</b>${secs >= 30 ? leaveBtn : ''}</div>`;
+    }
     if (ui.stall === null) return '';
     const time = `${Math.floor(ui.stall / 60)}:${String(ui.stall % 60).padStart(2, '0')}`;
-    const leave = ui.stall >= STALL_LEAVE_S ? '<button class="btn-small" id="stall-leave">Partie verlassen</button>' : '';
-    return `<div class="stall">⏳ ${oppName()} lässt sich Zeit… <b>${time}</b>${leave}</div>`;
+    const leave = ui.stall >= STALL_LEAVE_S ? leaveBtn : '';
+    const why = net.away ? 'hat das Spiel gerade im Hintergrund…' : 'lässt sich Zeit…';
+    return `<div class="stall">${net.away ? '💤' : '⏳'} ${oppName()} ${why} <b aria-hidden="true">${time}</b>${leave}</div>`;
   }
 
   /** Hand plus Titel- und Aktionszeile darunter (Ergebnis, Weiter, Statwahl, Ausspielen). */
@@ -1271,7 +1296,7 @@
     // Ausgespielte Karte liegt auf dem Feld; frisch gezogene erscheinen erst nach „Weiter“
     const played = s.choices[p] ? s.choices[p].card : ui.choosing;
     const hand = s.result ? pl.hand.filter((id) => !s.result.drawn[p].includes(id)) : pl.hand.filter((id) => id !== played);
-    const cards = hand.map((id, i) => cardHTML(id, { selected: ui.selected === id, owner: p, exposed: id === exposed, attrs: `data-card="${id}" data-key="${i + 1}"` })).join('');
+    const cards = hand.map((id, i) => cardHTML(id, { selected: ui.selected === id, owner: p, exposed: id === exposed, attrs: `data-card="${id}" data-key="${i + 1}" tabindex="0" role="button" aria-pressed="${ui.selected === id}" aria-label="${escapeHTML(CARDS[id].name)} (Taste ${i + 1})"` })).join('');
     let actions = '';
     if (canChoose) {
       const tip = pl.rally ? 'Handkarten in den Stapel mischen und neu ziehen' : 'Lädt sich auf, solange du zurückliegst';
@@ -1343,7 +1368,10 @@
     ui.selected = ui.selected === id ? null : id;
     Snd.play('select');
     // Nur Klassen umschalten statt die Hand neu aufzubauen.
-    document.querySelectorAll('#hand [data-card]').forEach((el) => el.classList.toggle('selected', el.dataset.card === ui.selected));
+    document.querySelectorAll('#hand [data-card]').forEach((el) => {
+      el.classList.toggle('selected', el.dataset.card === ui.selected);
+      el.setAttribute('aria-pressed', el.dataset.card === ui.selected);
+    });
     const btn = $('#play-btn');
     if (btn) btn.disabled = !ui.selected;
   }
@@ -1447,8 +1475,17 @@
         if (!b.disabled) b.click();
         return;
       }
-      if (!s || overlayOpen() || e.target.tagName === 'INPUT') return;
-      if (['1', '2', '3'].includes(e.key)) {
+      if (!s || overlayOpen() || e.target.closest('input, textarea, [contenteditable]')) return;
+      if (e.ctrlKey || e.metaKey || e.altKey) return; // Strg+1 (Tab wechseln) usw. gehören dem Browser
+      const focused = e.target.closest && e.target.closest('#hand [data-card]');
+      if (e.key === ' ' && focused) {
+        e.preventDefault();
+        selectCard(focused.dataset.card);
+      } else if (e.key.toLowerCase() === 'z') {
+        // Großansicht: gewählte oder fokussierte Karte, sonst das Schlachtfeld
+        const id = ui.selected || (focused && focused.dataset.card);
+        if (id) zoomCard(id); else if (s.terrain) zoomTerrain(s.terrain.id);
+      } else if (['1', '2', '3'].includes(e.key)) {
         const el = document.querySelector(`#hand [data-key="${e.key}"]`);
         if (el) selectCard(el.dataset.card);
       } else if (e.key.toLowerCase() === 'h' && $('#rally-btn') && !$('#rally-btn').disabled) {
@@ -1473,28 +1510,56 @@
   }
 
   /* =============================================================== Overlays & Effekte */
-  // Nur ein Overlay gleichzeitig; Regeln/Übersicht über einer Übergabe stellen diese danach wieder her.
+  // Nur ein Overlay sichtbar; eines über einem anderen (z. B. Regeln über dem Spielende) stellt dieses danach wieder her.
   let overlayStack = [];
+  let focusBefore = null; // Fokus vor dem Öffnen – kommt beim Schließen zurück
+  let galleryRO = null;   // passt die Galerie an die Fenstergröße an, solange sie offen ist
   let moodBeforeZoom = null; // Musik vor der Großansicht eines Schlachtfelds
   function openOverlay(html, opts = {}) {
     const o = $('#overlay');
     if (!o.classList.contains('hidden')) overlayStack.push(Array.from(o.childNodes));
     // Große Fenster (Galerie) bekommen einen deckenden Hintergrund – durchscheinend wäre jedes Neuzeichnen teuer
     if (opts.solid) o.classList.add('solid');
+    if (o.classList.contains('hidden')) focusBefore = document.activeElement;
     o.innerHTML = html;
     o.classList.remove('hidden');
     document.body.classList.add('overlay-open'); // Menü-Hintergrund pausiert, solange etwas darüber liegt
+    // Dahinter ist nichts erreichbar (Tab, Vorlesen, Enter auf einem Knopf öffnet es nicht noch einmal)
+    ['#game', '#menu'].forEach((sel) => { $(sel).inert = true; });
     o.querySelectorAll('[data-close]').forEach((b) => b.addEventListener('click', closeOverlay));
+    focusOverlay();
+  }
+  /** Fokus auf den Hauptknopf des Fensters (sonst den ersten), damit Tastatur und Vorlesen dort weitermachen. */
+  function focusOverlay() {
+    const o = $('#overlay');
+    const modal = o.querySelector('.modal, .zoom');
+    if (modal) {
+      modal.setAttribute('role', 'dialog');
+      modal.setAttribute('aria-modal', 'true');
+      const h = modal.querySelector('h2');
+      if (h) { h.id = h.id || 'overlay-title'; modal.setAttribute('aria-labelledby', h.id); }
+    }
+    // Zuerst der harmlose Ausweg (Schließen, Weiterspielen), sonst der Hauptknopf
+    const target = o.querySelector('[data-close]') || o.querySelector('.btn-primary:not(:disabled)') || o.querySelector('button:not(:disabled), [tabindex]') || modal;
+    if (target) {
+      if (!target.matches('button, [tabindex]')) target.tabIndex = -1;
+      target.focus({ preventScroll: true });
+    }
   }
   function closeOverlay() {
     if (moodBeforeZoom) { Snd.setMood(moodBeforeZoom); moodBeforeZoom = null; }
     const o = $('#overlay');
     const prev = overlayStack.pop();
-    if (prev) { o.replaceChildren(...prev); return; }
+    if (prev) { o.replaceChildren(...prev); focusOverlay(); return; }
     o.classList.add('hidden');
     o.classList.remove('solid');
     o.innerHTML = '';
     document.body.classList.remove('overlay-open');
+    ['#game', '#menu'].forEach((sel) => { $(sel).inert = false; });
+    if (galleryRO) { galleryRO.disconnect(); galleryRO = null; }
+    const f = focusBefore;
+    focusBefore = null;
+    if (f && f.isConnected && !f.closest('[inert], .hidden')) f.focus({ preventScroll: true });
   }
   function closeAllOverlays() { overlayStack = []; moodBeforeZoom = null; closeOverlay(); }
   function showRules() {
@@ -1608,7 +1673,9 @@
     }
     prev.addEventListener('click', () => { first = Math.max(0, first - perPage); render(); });
     next.addEventListener('click', () => { if (first + perPage < items.length) { first += perPage; render(); } });
-    new ResizeObserver(layout).observe(grid);
+    if (galleryRO) galleryRO.disconnect(); // das alte Raster (anderer Reiter) ist schon ersetzt
+    galleryRO = new ResizeObserver(layout);
+    galleryRO.observe(grid);
     layout();
     o.querySelectorAll('[data-tab]').forEach((b) => b.addEventListener('click', () => { closeOverlay(); showGallery(b.dataset.tab); }));
     grid.addEventListener('click', (e) => {
@@ -1682,14 +1749,6 @@
     });
   }
 
-  function banner(text, sub) {
-    const b = document.createElement('div');
-    b.className = 'banner';
-    b.innerHTML = `${text}${sub ? `<small>${escapeHTML(sub)}</small>` : ''}`;
-    document.body.appendChild(b);
-    setTimeout(() => b.remove(), 1850);
-  }
-
   function toast(text) {
     document.querySelectorAll('.toast').forEach((t) => t.remove());
     const t = document.createElement('div');
@@ -1718,6 +1777,11 @@
       <div class="buttons"><button class="btn-secondary" id="go-menu">Hauptmenü</button><button class="btn-primary" id="go-again">Revanche</button></div></div>`);
     $('#go-menu').addEventListener('click', toMenu);
     $('#go-again').addEventListener('click', () => (online() ? askRematch() : startGame()));
+    if (online()) {
+      // Was der Gegner schon gesagt hat, während das letzte Ergebnis noch zu sehen war
+      if (net.gone) goneNote();
+      else if (net.rematch[1]) rematchNote(`${net.oppName} möchte eine Revanche!`);
+    }
   }
 
   /* =============================================================== Online (Gleichschritt) */
@@ -1728,10 +1792,25 @@
    * wartet er in der Schlange, bis das Gerät so weit ist.
    */
   const Net = window.CG.Net;
-  const net = { host: false, oppName: '', rematch: [false, false], queue: [], wake: null };
-  // Beide Geräte brauchen dieselben Karten und Regeln – sonst laufen die Partien auseinander
+  /*
+   * Online-Zustand. Züge (stat/choose/rally) tragen eine laufende Nummer: Nach einem Verbindungsabriss
+   * schickt jede Seite alle Züge nach der zuletzt empfangenen Nummer noch einmal (out), doppelte fallen weg (inSeq).
+   * sums: Prüfsummen nach jedem Duell, [eigene, empfangene] je Runde.
+   */
+  const net = {
+    host: false, oppName: '', rematch: [false, false], queue: [], wake: null,
+    seed: null, out: [], inSeq: 0, sums: {}, held: false, drop: null, gone: null,
+    heard: 0, away: false, // wann zuletzt etwas vom Gegner kam; hat er das Spiel gerade im Hintergrund?
+    behind: null,          // seit wann seine Lebenszeichen zeigen, dass ihm Züge von mir fehlen
+  };
+  const PING_MS = 4000;     // Lebenszeichen während der Partie (mit der Zahl der empfangenen Züge)
+  const SILENT_MS = 15000;  // so lange nichts gehört: Verbindung gestört (statt „lässt sich Zeit“)
+  const MOVES = ['stat', 'choose', 'rally'];
+  const QUEUE_MAX = 16;
+  const DROP_WAIT_S = 60; // so lange wird nach einem Abriss auf den Mitspieler gewartet
+  // Beide Geräte brauchen dieselben Karten, Regeln und Spielversion – sonst laufen die Partien auseinander
   const fingerprint = (() => {
-    const str = JSON.stringify([CARDS, TERRAINS, Engine.HAND_SIZE, Engine.RALLY_RECHARGE]);
+    const str = JSON.stringify([Net.BUILD, CARDS, TERRAINS, Engine.HAND_SIZE, Engine.RALLY_RECHARGE]);
     let h = 0;
     for (let i = 0; i < str.length; i++) h = (Math.imul(h, 31) + str.charCodeAt(i)) | 0;
     return h;
@@ -1746,29 +1825,61 @@
 
   /** Nächster Zug des Gegners in dieser Runde (einer der Typen). null, wenn die Partie inzwischen vorbei ist. */
   async function nextRemote(token, types) {
+    net.held = false;
     for (;;) {
       if (token !== ui.token) return null;
       net.queue = net.queue.filter((m) => m.r >= s.round);
       const i = net.queue.findIndex((m) => m.r === s.round && types.includes(m.t));
-      if (i >= 0) return net.queue.splice(i, 1)[0];
+      // held: Der Zug ist da und wartet nur noch auf ein offenes Fenster – der Gegner lässt sich nicht Zeit
+      if (i >= 0) { net.held = true; return net.queue.splice(i, 1)[0]; }
       await new Promise((resolve) => { net.wake = resolve; });
     }
   }
 
+  /** Eigener Zug an den Gegner – nummeriert und gemerkt, um ihn nach einem Abriss erneut zu schicken. */
+  function sendMove(m) {
+    m.seq = net.out.length + 1;
+    net.out.push(m);
+    Net.send(m);
+  }
+
+  const inGame = () => !!s && online() && s.phase !== 'over';
+
   function onNetMessage(m) {
-    if (!m || typeof m !== 'object') return;
-    // Anfang einer Partie nur, wenn keine läuft (Revanche erst nach dem Spielende)
-    if ((m.t === 'hello' || m.t === 'start') && s && s.phase !== 'over') return;
+    if (!m || typeof m !== 'object' || typeof m.t !== 'string') return;
+    net.heard = Date.now();
+    if (m.t === 'ping' || m.t === 'away' || m.t === 'back') {
+      if (m.t !== 'ping') net.away = m.t === 'away';
+      // Fehlen dem Gegner Züge (unterwegs verloren), gleich noch einmal schicken – sonst warten beide aufeinander
+      if (!s || !online() || !Number.isInteger(m.seq)) return;
+      const missing = net.out.filter((x) => x.seq > m.seq);
+      missing.forEach((x) => Net.send(x));
+      // Bleibt das so, kommen meine Nachrichten bei ihm nicht an – dann liegt es an der Verbindung, nicht an ihm
+      net.behind = missing.length ? net.behind || Date.now() : null;
+      return;
+    }
     if (m.t === 'hello') {
       // beim Gastgeber: der Gast ist da – Partie auslosen und starten
       if (!net.host) return;
+      // Mitten in der Partie meldet sich der Gast neu an: Er hat die Seite neu geladen, sein Spielstand ist weg
+      if (inGame()) { Net.send({ t: 'bye' }); Net.close(); connectionLost(`${oppName()} hat die Seite neu geladen – die Partie lässt sich nicht fortsetzen.`); return; }
+      if (s && online()) return; // Revanche läuft über 'again'
       if (m.fp !== fingerprint) { Net.send({ t: 'version' }); versionMismatch(); return; }
       net.oppName = String(m.name || 'Gast').slice(0, 14);
       startOnline();
     } else if (m.t === 'start') {
-      if (net.host) return;
+      if (net.host || inGame()) return; // Anfang einer Partie nur, wenn keine läuft (Revanche erst nach dem Spielende)
       net.oppName = String(m.name || 'Gastgeber').slice(0, 14);
-      launchOnline(m.seed);
+      launchOnline(Number(m.seed) >>> 0);
+    } else if (m.t === 'resume') {
+      // Nach einem Abriss wieder da: alles noch einmal schicken, was der Gegner nicht bekommen hat
+      if (!s || !online() || m.seed !== net.seed) { Net.send({ t: 'bye' }); Net.close(); connectionLost('Die Partie ließ sich nach dem Verbindungsabriss nicht fortsetzen.'); return; }
+      const seen = Number.isInteger(m.seq) ? m.seq : 0;
+      net.out.filter((x) => x.seq > seen).forEach((x) => Net.send(x));
+    } else if (m.t === 'sum') {
+      if (!s || !online() || !Number.isInteger(m.r) || m.r < s.round - 1 || m.r > s.round + 1) return;
+      (net.sums[m.r] = net.sums[m.r] || [null, null])[1] = m.h;
+      checkSum(m.r);
     } else if (m.t === 'version') {
       versionMismatch();
     } else if (m.t === 'again') {
@@ -1778,10 +1889,70 @@
     } else if (m.t === 'bye') {
       Net.close();
       connectionLost(`${net.oppName || 'Der Gegner'} hat das Spiel verlassen.`);
-    } else if (typeof m.r === 'number') {
+    } else if (MOVES.includes(m.t)) {
+      if (!s || !online() || !Number.isInteger(m.r) || !Number.isInteger(m.seq)) return;
+      // Der Reihe nach: Doppelte (nach einem Abriss erneut geschickt) fallen weg, Lücken füllt das erneute Schicken
+      if (m.seq !== net.inSeq + 1) return;
+      // Der Gegner ist höchstens eine Runde voraus (er braucht für die nächste ja meinen Zug)
+      if (m.r < s.round || m.r > s.round + 1 || net.queue.length >= QUEUE_MAX) { outOfSync(); return; }
+      net.inSeq = m.seq;
       net.queue.push(m);
       wakeRemote();
     }
+  }
+
+  /** Nach jedem Duell: eigene Prüfsumme schicken und mit der des Gegners vergleichen. */
+  function sendSum() {
+    const h = Engine.digest(s);
+    (net.sums[s.round] = net.sums[s.round] || [null, null])[0] = h;
+    Net.send({ t: 'sum', r: s.round, h });
+    checkSum(s.round);
+  }
+
+  function checkSum(r) {
+    const [mine, theirs] = net.sums[r] || [];
+    if (mine == null || theirs == null) return;
+    delete net.sums[r];
+    if (mine !== theirs) outOfSync();
+  }
+
+  /**
+   * Verbindung mitten in der Partie abgerissen (Raum): eine Weile warten und den Raum ab und zu neu betreten,
+   * damit beide sich wiederfinden. Gelingt es, holt 'resume' die verpassten Züge nach.
+   */
+  function onDrop() {
+    if (!inGame()) return false;
+    const token = ui.token;
+    const drop = (net.drop = { since: Date.now() });
+    render();
+    (async () => {
+      for (let tries = 0; ; ) {
+        await sleep(1000);
+        if (token !== ui.token || net.drop !== drop) return;
+        const secs = Math.floor((Date.now() - drop.since) / 1000);
+        if (secs >= DROP_WAIT_S) {
+          Net.close();
+          connectionLost(`Die Verbindung zu ${net.oppName || 'deinem Mitspieler'} ist abgerissen und kam nicht wieder zustande.`);
+          return;
+        }
+        // Gastgeber und Gast versetzt, damit sie sich nicht ständig verpassen
+        if (secs >= (net.host ? 6 : 12) + tries * 15) { tries++; Net.rejoin(); }
+        render();
+      }
+    })();
+    return true;
+  }
+
+  /** Der Mitspieler ist nach einem Abriss wieder da. */
+  // Dem Gegner sagen, wenn das Spiel hier im Hintergrund liegt – dann wartet er nicht ratlos
+  document.addEventListener('visibilitychange', () => {
+    if (s && online() && s.phase !== 'over') Net.send({ t: document.hidden ? 'away' : 'back', seq: net.inSeq });
+  });
+
+  function onRejoin() {
+    net.drop = null;
+    Net.send({ t: 'resume', seed: net.seed, seq: net.inSeq });
+    render();
   }
 
   /** Gastgeber: neuen Startwert auslosen, dem Gast schicken und selbst loslegen. */
@@ -1792,9 +1963,8 @@
   }
 
   function launchOnline(seed) {
-    net.rematch = [false, false];
-    net.queue = [];
-    launch({ mode: 'online', seed, flip: !net.host, players: [{ name: 'Du' }, { name: net.oppName }] });
+    Object.assign(net, { rematch: [false, false], queue: [], seed, out: [], inSeq: 0, sums: {}, held: false, drop: null, gone: null, heard: Date.now(), away: false, behind: null });
+    launch({ mode: 'online', seed, flip: !net.host, players: [{ name: 'Du', you: true }, { name: net.oppName }] });
   }
 
   const STALL_HINT_S = 30;  // ab dann zeigt ein Zähler, dass der Gegner auf sich warten lässt
@@ -1805,11 +1975,22 @@
    * Gezogen wird nie für ihn – das könnte sich mit seinem echten Zug überkreuzen. Man sieht nur, wie lange es dauert.
    */
   async function watchStall(token) {
-    let key = null, since = 0;
+    let key = null, since = 0, pinged = 0;
     for (;;) {
       await sleep(1000);
       if (token !== ui.token) return;
-      const waiting = !net.queue.some((m) => m.r === s.round)
+      if (s.phase !== 'over' && Date.now() - pinged >= PING_MS) {
+        pinged = Date.now();
+        Net.send({ t: 'ping', seq: net.inSeq });
+      }
+      // Kommt gar nichts mehr an, liegt es an der Verbindung – nicht am Gegner
+      const now = Date.now();
+      const deaf = now - net.heard > SILENT_MS;                      // von ihm kommt nichts an
+      const mute = net.behind !== null && now - net.behind > SILENT_MS; // von mir kommt bei ihm nichts an
+      const brokenSince = deaf ? net.heard : mute ? net.behind : null;
+      const silent = !net.drop && !(deaf && net.away) && s.phase !== 'over' && brokenSince !== null ? Math.floor((now - brokenSince) / 1000) : null;
+      if (silent !== ui.silent) { ui.silent = silent; render(); }
+      const waiting = !net.held && !net.drop && !net.queue.some((m) => m.r === s.round)
         && (s.phase === 'stat' ? s.picker === 1 && !ui.tossing : s.phase === 'cards' && !!s.choices[0] && !s.choices[1]);
       const k = waiting ? `${s.round}-${s.phase}` : null;
       if (k !== key) { key = k; since = Date.now(); }
@@ -1828,6 +2009,14 @@
     el.textContent = text;
   }
 
+  function goneNote() {
+    const b = $('#go-again');
+    if (!b || !net.gone) return;
+    b.disabled = true;
+    b.textContent = 'Revanche';
+    rematchNote(`🔌 ${net.gone}`);
+  }
+
   function askRematch() {
     net.rematch[0] = true;
     const b = $('#go-again');
@@ -1838,8 +2027,13 @@
   }
 
   function connectionLost(text) {
-    const inGame = s && online();
-    if (!inGame && !$('#lobby')) return;
+    if (!(s && online()) && !$('#lobby')) return;
+    // Nach dem Spielende bleibt das Ergebnis stehen – nur keine Revanche mehr
+    if (s && online() && s.phase === 'over') {
+      net.gone = text;
+      goneNote();
+      return;
+    }
     ui.token++;
     wakeRemote();
     closeAllOverlays();
@@ -1855,8 +2049,7 @@
 
   /** Sollte nie passieren: Die beiden Geräte sind sich über den Spielstand nicht mehr einig. */
   function outOfSync() {
-    Net.send({ t: 'bye' });
-    Net.close();
+    Net.bye({ t: 'bye' });
     connectionLost('Die Spielstände der beiden Geräte passen nicht mehr zusammen – die Partie wurde abgebrochen.');
   }
 
@@ -1900,6 +2093,7 @@
     Net.close();
     Net.on('message', onNetMessage);
     Net.on('open', () => {
+      if (s && online()) { onRejoin(); return; }
       const st = $('#lobby .net-status');
       if (st) { st.classList.remove('error'); st.textContent = 'Verbunden! Die Partie beginnt…'; }
       if (!net.host) Net.send({ t: 'hello', name: myName(), fp: fingerprint });
@@ -1909,6 +2103,7 @@
       else lobbyError(new Error('Die Verbindung kam nicht zustande. Seid ihr beide online? In manchen Mobilfunknetzen klappt es nicht – dann hilft ein WLAN.'));
     });
     Net.on('error', (text) => lobbyError(new Error(text)));
+    Net.on('drop', onDrop);
     if (code) { roomJoin(code); return; }
     setLobby(`<p>Lade jemanden zu einer Partie ein – per Link, QR-Code oder Raumcode.</p>
       <div class="buttons"><button class="btn-primary" id="lobby-host">🏰 Spiel eröffnen</button><button class="btn-primary" id="lobby-join">🗝️ Beitreten</button></div>
@@ -1953,7 +2148,7 @@
   function roomJoin(code) {
     net.host = false;
     setLobby(`<div class="net-form">
-        <label>Raumcode <input id="room-code" maxlength="9" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="ABC-DEF" value="${code ? Net.prettyCode(code) : ''}"></label>
+        <label>Raumcode <input id="room-code" maxlength="9" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="ABCD-EFGH" value="${code ? Net.prettyCode(code) : ''}"></label>
         <label>Dein Name <input id="join-name" maxlength="14" value="${escapeHTML(myName())}"></label>
       </div>
       <div class="net-actions center"><button class="btn-primary" id="join-room">Beitreten</button></div>
@@ -1963,9 +2158,9 @@
     input.select();
     const go = async () => {
       const c = Net.cleanCode($('#room-code').value);
-      if (!c) { lobbyError(new Error('Der Raumcode hat 6 Zeichen, z. B. K7M‑Q2P.')); return; }
+      if (!c) { lobbyError(new Error('Der Raumcode hat 8 Zeichen, z. B. K7MQ‑2PXA.')); return; }
       $('#name1').value = $('#join-name').value.trim().slice(0, 14) || 'Spieler';
-      store.set('names', [$('#name1').value]);
+      store.set('name', $('#name1').value);
       const st = $('#lobby .net-status');
       st.classList.remove('error');
       st.textContent = '🔎 Suche das Spiel…';

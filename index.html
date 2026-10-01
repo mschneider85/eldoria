@@ -10,7 +10,7 @@
   <link rel="preload" href="art/fonts/cinzel-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="art/fonts/alegreya-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-  <link rel="stylesheet" href="css/style.css?v=193">
+  <link rel="stylesheet" href="css/style.css?v=195">
   <!-- Inhalt erst zeigen, wenn Cinzel/Alegreya geladen sind (kein kurzes Aufblitzen der Ersatzschrift) -->
   <style>html.fonts-loading body > * { visibility: hidden; }</style>
   <script>
@@ -39,8 +39,8 @@
       <button class="btn-primary" id="intro-btn" autofocus>Spiel betreten</button>
     </div>
     <div class="menu-audio">
-      <button class="btn-small sfx-toggle" data-tip="Soundeffekte an/aus">🔊</button>
-      <button class="btn-small music-toggle" data-tip="Musik an/aus">🎵</button>
+      <button class="btn-small sfx-toggle" data-tip="Soundeffekte an/aus" aria-label="Soundeffekte an/aus">🔊</button>
+      <button class="btn-small music-toggle" data-tip="Musik an/aus" aria-label="Musik an/aus">🎵</button>
     </div>
 
     <div class="menu-layout">
@@ -93,8 +93,8 @@
       <header class="topbar">
         <div id="round-info" class="round-info"></div>
         <div class="top-buttons">
-          <button class="btn-small sfx-toggle" data-tip="Soundeffekte an/aus">🔊</button>
-          <button class="btn-small music-toggle" data-tip="Musik an/aus">🎵</button>
+          <button class="btn-small sfx-toggle" data-tip="Soundeffekte an/aus" aria-label="Soundeffekte an/aus">🔊</button>
+          <button class="btn-small music-toggle" data-tip="Musik an/aus" aria-label="Musik an/aus">🎵</button>
           <button id="overview-btn" class="btn-small only-narrow">📋 Übersicht</button>
           <button id="help-btn" class="btn-small">📜 Regeln</button>
           <button id="menu-btn" class="btn-small">☰ Menü</button>
@@ -104,13 +104,13 @@
       <div class="battlefield" id="battlefield">
         <div class="deck" id="deck-0"></div>
         <div class="slot" id="slot-0"></div>
-        <div class="center" id="center"><div id="terrain-box"></div><div class="pot" id="pot"></div><div class="center-rest" id="center-rest"></div></div>
+        <div class="center" id="center"><div id="terrain-box"></div><div class="pot" id="pot"></div><div class="center-rest" id="center-rest" aria-live="polite"></div></div>
         <div class="slot" id="slot-1"></div>
         <div class="deck" id="deck-1"></div>
       </div>
       <div class="player-bar me" id="bar-0"></div>
       <div class="hand-area" id="hand-area">
-        <div class="hand-title" id="hand-title"></div>
+        <div class="hand-title" id="hand-title" aria-live="polite"></div>
         <div class="hand" id="hand"></div>
         <div class="hand-actions" id="hand-actions"></div>
       </div>
@@ -137,7 +137,7 @@
         <li><b>Nachziehstapel:</b> Nach jeder Runde füllst du deine Hand vom eigenen Stapel wieder auf 3 Karten auf. Eroberte Karten kommen <b>unter</b> den Stapel des Siegers – gezogen wird immer von oben.</li>
         <li><b>Gleichstand:</b> Beide Karten kommen in die Kriegsbeute. Wer die nächste Runde gewinnt, bekommt sie dazu.</li>
         <li><b>Tipp:</b> Rechtsklick (am Handy: lange drücken) auf eine Karte zeigt sie groß.</li>
-        <li><b>Tastatur:</b> <kbd>1</kbd>–<kbd>3</kbd> Karte wählen, <kbd>H</kbd> Schlachtruf, <kbd>Enter</kbd> ausspielen / weiter, <kbd>Esc</kbd> Fenster schließen.</li>
+        <li><b>Tastatur:</b> <kbd>1</kbd>–<kbd>3</kbd> Karte wählen, <kbd>H</kbd> Schlachtruf, <kbd>Enter</kbd> ausspielen / weiter, <kbd>Z</kbd> Karte groß zeigen, <kbd>Esc</kbd> Fenster schließen. Mit <kbd>Tab</kbd> lassen sich die Handkarten ansteuern, <kbd>Leertaste</kbd> wählt.</li>
         <li><b>Weiter:</b> Nach dem Duell geht es nach ein paar Sekunden von selbst weiter – solange die Maus auf dem Schlachtfeld liegt, wartet der Zähler.</li>
         <li><b>Quartett:</b> Besitzt du alle 4 Karten eines Volkes, legst du sie automatisch als Quartett ab – sie sind dann sicher.</li>
       </ul>
@@ -159,12 +159,12 @@
     </div>
   </template>
 
-  <script src="js/cards.js?v=193"></script>
-  <script src="js/engine.js?v=193"></script>
-  <script src="js/ai.js?v=193"></script>
-  <script src="js/net.js?v=193"></script>
-  <script src="js/audio.js?v=193"></script>
-  <script src="js/ui.js?v=193"></script>
-  <script src="js/deer.js?v=193"></script>
+  <script src="js/cards.js?v=195"></script>
+  <script src="js/engine.js?v=195"></script>
+  <script src="js/ai.js?v=195"></script>
+  <script src="js/net.js?v=195"></script>
+  <script src="js/audio.js?v=195"></script>
+  <script src="js/ui.js?v=195"></script>
+  <script src="js/deer.js?v=195"></script>
 </body>
 </html>

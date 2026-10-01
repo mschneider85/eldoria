@@ -25,6 +25,7 @@
   let master;
   let musicBus;
   let musicOut; // Lautstärke/Stummschaltung der Musik, hinter Hall und Echo
+  let musicNodes = []; // alle Knoten der aktuellen Musikkette – beim Ausschalten werden sie abgehängt
   let hallBuf;
   let ambBus; // Naturgeräusche: laufen am Tiefpass der Musik vorbei, damit Vögel hell bleiben
   let farBus; // ferne Naturgeräusche (Waldkauz): wenig Direktschall, viel Hall
@@ -97,7 +98,7 @@
     musicOut.gain.value = settings.music ? MUSIC_VOL : 0;
     musicOut.connect(musicMaster);
     musicBus = ctx.createGain();
-    musicChain(musicOut);
+    musicNodes = [musicOut, musicBus, ...musicChain(musicOut)];
   }
 
   /**
@@ -165,6 +166,7 @@
     l.connect(merge, 0, 0);
     r.connect(merge, 0, 1);
     merge.connect(dest);
+    return [warm, dry, hall, hallWet, ambBus, ambHall, farBus, farDry, farWet, input, l, r, damp, fbL, fbR, merge];
   }
 
   function send(bus, amount) {
@@ -971,6 +973,8 @@
     if (!settings.music || !init() || music) return;
     music = { next: musicCtx.currentTime + 0.2, bar: 0, prog: 0, mood: pendingMood };
     const tick = () => inMusic(() => {
+      // Hing der Takt hinterher (Tab gedrosselt, Kontext angehalten): nicht alles Verpasste auf einmal nachspielen
+      if (music && music.next < ctx.currentTime) music.next = ctx.currentTime + 0.05;
       while (music && music.next < ctx.currentTime + 1.5) {
         // Stimmungswechsel am Beginn einer Akkordfolge oder spätestens am nächsten Takt
         if (music.mood !== pendingMood) { music.mood = pendingMood; music.bar = 0; music.prog = 0; }
@@ -1001,8 +1005,18 @@
   /* ------------------------------------------------------------ Steuerung */
   function unlock() {
     if (!init()) return;
-    [sfxCtx, musicCtx].forEach((c) => { if (c.state === 'suspended') c.resume(); });
+    // iOS meldet nach einem Anruf oder Siri 'interrupted' statt 'suspended'
+    if (!document.hidden) [sfxCtx, musicCtx].forEach((c) => { if (c.state !== 'running' && c.state !== 'closed') c.resume().catch(() => {}); });
     if (settings.music) startMusic();
+  }
+
+  // Im Hintergrund-Tab schweigen (spart Akku): anhalten und beim Zurückkehren weitermachen
+  if (G.document) {
+    document.addEventListener('visibilitychange', () => {
+      if (!sfxCtx) return;
+      if (document.hidden) [sfxCtx, musicCtx].forEach((c) => { if (c.state === 'running') c.suspend().catch(() => {}); });
+      else unlock();
+    });
   }
 
   function fade(bus, value) {
@@ -1033,7 +1047,8 @@
     old.gain.cancelScheduledValues(t);
     old.gain.setValueAtTime(old.gain.value, t);
     old.gain.linearRampToValueAtTime(0, t + 0.02);
-    setTimeout(() => old.disconnect(), 100);
+    const oldNodes = musicNodes;
+    setTimeout(() => oldNodes.forEach((n) => n.disconnect()), 100); // samt Hall und Echo-Rückkopplung
     inMusic(buildMusic);
   }
 
@@ -1042,7 +1057,7 @@
    * Rückgabe: { peak, rms } in dBFS.
    */
   async function measure(name, seconds = 3) {
-    const saved = { ctx, sfxCtx, musicCtx, master, musicMaster, sfxBus, dryBus, musicBus, musicOut, hallBuf, ambBus, farBus, reverb, noiseBuf, sfx: settings.sfx, music: settings.music };
+    const saved = { ctx, sfxCtx, musicCtx, master, musicMaster, sfxBus, dryBus, musicBus, musicOut, musicNodes, hallBuf, ambBus, farBus, reverb, noiseBuf, sfx: settings.sfx, music: settings.music };
     const len = name.startsWith('music') ? 8 * 4 * 1.6 + 8 : seconds;
     const off = new OfflineAudioContext(2, Math.ceil(44100 * len), 44100);
     ctx = sfxCtx = musicCtx = off;
@@ -1059,7 +1074,7 @@
       } else SOUNDS[name]();
     } finally {
       Object.assign(settings, { sfx: saved.sfx, music: saved.music });
-      ({ ctx, sfxCtx, musicCtx, master, musicMaster, sfxBus, dryBus, musicBus, musicOut, hallBuf, ambBus, farBus, reverb, noiseBuf } = saved);
+      ({ ctx, sfxCtx, musicCtx, master, musicMaster, sfxBus, dryBus, musicBus, musicOut, musicNodes, hallBuf, ambBus, farBus, reverb, noiseBuf } = saved);
     }
     const buf = await off.startRendering();
     let peak = 0;

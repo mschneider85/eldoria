@@ -7,6 +7,7 @@ require('../js/ai.js');
 const { Engine, AI, CARDS, FACTIONS, ABILITIES, TERRAINS } = globalThis.CG;
 
 const GAMES = Number(process.argv[2] || 3000);
+const START_BUCKETS = [-400, -150, 150, 400, Infinity]; // Grenzen für den Vorsprung der Startkarten (Summe aller Werte)
 const pct = (a, b) => (b ? `${((100 * a) / b).toFixed(0)}%` : '–');
 const bar = (x) => '█'.repeat(Math.round(x * 20)).padEnd(20, '·');
 
@@ -92,14 +93,15 @@ for (let g = 0; g < GAMES; g++) {
   st.wins[s.winner === -1 ? 2 : s.winner]++;
   st.rounds.push(s.round);
   st.reasons[s.endReason.replace(/^(A|B) /, '')] = (st.reasons[s.endReason.replace(/^(A|B) /, '')] || 0) + 1;
-  // Startglück: Wie viele „fast fertige“ Völker (3 von 4) hatte jeder zu Beginn?
+  // Startglück: Wie viel stärker waren die eigenen 16 Karten (Summe aller Werte) als die des Gegners?
+  // (Fast fertige Völker taugen dafür nicht: Wer 3 von 4 hat, lässt dem Gegner 1 – beide haben stets gleich viele.)
+  const sum = (ids) => ids.reduce((n, id) => n + Object.values(CARDS[id].stats).reduce((a, b) => a + b, 0), 0);
   for (const p of [0, 1]) {
-    const counts = {};
-    startOwn[p].forEach((id) => { const f = CARDS[id].faction; counts[f] = (counts[f] || 0) + 1; });
-    const threes = Object.values(counts).filter((n) => n === 3).length;
-    st.startSets[threes] = st.startSets[threes] || { games: 0, won: 0 };
-    st.startSets[threes].games++;
-    if (s.winner === p) st.startSets[threes].won++;
+    const diff = sum(startOwn[p]) - sum(startOwn[1 - p]);
+    const k = START_BUCKETS.findIndex((b) => diff < b);
+    st.startSets[k] = st.startSets[k] || { games: 0, won: 0 };
+    st.startSets[k].games++;
+    if (s.winner === p) st.startSets[k].won++;
     startOwn[p].forEach((id) => { st.card[id].startOwned++; if (s.winner === p) st.card[id].startOwnerWins++; });
   }
   if (snapshot8 && snapshot8[0] !== snapshot8[1] && s.winner !== -1) {
@@ -144,8 +146,12 @@ console.log(`Wahlfeld: Wer die Eigenschaft wählt, gewinnt das Duell: ${pct(st.p
 console.log(`Runden: Ø ${avg.toFixed(1)}, Median ${sorted[Math.floor(sorted.length / 2)]}, 10–90 %: ${sorted[Math.floor(sorted.length * 0.1)]}–${sorted[Math.floor(sorted.length * 0.9)]}`);
 Object.entries(st.reasons).sort((a, b) => b[1] - a[1]).forEach(([r, n]) => console.log(`  Ende: ${r.padEnd(34)} ${pct(n, GAMES)}`));
 
-line('Startglück: fast fertige Völker (3 von 4) zu Beginn');
-Object.entries(st.startSets).sort().forEach(([k, v]) => console.log(`  ${k} Völker mit 3/4: ${pct(v.won, v.games).padStart(4)} Siege  (${v.games} Fälle)`));
+line('Startglück: Wertesumme der eigenen Startkarten gegenüber dem Gegner');
+const bucketName = (k) => (k === 0 ? `unter ${START_BUCKETS[0]}` : k === START_BUCKETS.length - 1 ? `über +${START_BUCKETS[k - 1]}` : `${START_BUCKETS[k - 1]} bis ${START_BUCKETS[k]}`);
+Object.keys(st.startSets).map(Number).sort((a, b) => a - b).forEach((k) => {
+  const v = st.startSets[k];
+  console.log(`  ${bucketName(k).padEnd(14)} ${pct(v.won, v.games).padStart(4)} Siege  (${v.games} Fälle)`);
+});
 
 line('Aufholjagd');
 console.log(`Wer nach Runde 8 zurückliegt, gewinnt noch: ${pct(st.comeback.behindWon, st.comeback.behind)} (${st.comeback.behind} Partien)`);

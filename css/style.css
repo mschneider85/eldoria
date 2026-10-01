@@ -80,14 +80,12 @@ button:disabled { cursor: var(--cur-default); }
   filter: drop-shadow(0 3px 0 rgba(0, 0, 0, .6));
 }
 .subtitle { margin: 4px 0 14px; color: var(--muted); font-family: var(--display); letter-spacing: 3px; font-size: 14px; }
-.pitch { color: var(--ink); line-height: 1.5; max-width: 480px; margin: 0 auto 18px; font-size: 15px; }
-.pitch b { color: var(--gold); }
 .menu-row { display: flex; gap: 12px; justify-content: center; align-items: center; flex-wrap: wrap; margin: 14px 0; }
 .label { color: var(--muted); font-size: 14px; }
 .names label { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--muted); text-align: left; }
 .names input {
   background: rgba(0, 0, 0, .4); border: 1px solid var(--gold-dark); border-radius: 8px; color: var(--ink);
-  padding: 8px 10px; font: inherit; font-size: 15px; width: 160px;
+  padding: 8px 10px; font: inherit; font-size: 16px; width: 160px; /* unter 16px zoomt iOS beim Antippen hinein */
 }
 .seg { display: inline-flex; border: 1px solid var(--gold-dark); border-radius: 10px; overflow: hidden; }
 .seg button { background: rgba(0, 0, 0, .3); color: var(--muted); border: 0; padding: 10px 16px; font-size: 14px; font-weight: 600; }
@@ -178,7 +176,6 @@ button:disabled { cursor: var(--cur-default); }
 
 .center { display: flex; flex-direction: column; align-items: center; gap: 10px; min-width: calc(var(--qw) * 1.15); }
 .center-rest { display: flex; flex-direction: column; align-items: center; gap: 10px; }
-.vs { font-family: var(--display); font-weight: 900; color: var(--gold); font-size: 22px; text-shadow: 0 2px 0 #000; }
 .center .message { text-align: center; font-weight: 700; font-size: 14px; min-height: 20px; max-width: 260px; line-height: 1.35; }
 .center .message.big { font-family: var(--display); font-size: 18px; color: #fff2c4; }
 .stat-choice { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
@@ -474,6 +471,7 @@ button:disabled { cursor: var(--cur-default); }
 .hand { display: flex; gap: clamp(8px, 1.6vw, 20px); justify-content: center; min-height: calc(var(--qw) * 1.5); }
 .hand .qcard { cursor: var(--cur-pointer); transition: transform .15s, box-shadow .15s; }
 .hand .qcard:hover { transform: translateY(-8px); }
+.hand .qcard:focus-visible { outline: 3px solid #ffd84d; outline-offset: 3px; }
 .hand .qcard.selected { transform: translateY(-14px); box-shadow: 0 0 0 3px #ffd84d, 0 0 26px rgba(255, 216, 77, .8), 0 10px 20px rgba(0, 0, 0, .6); }
 .hand.locked .qcard { cursor: var(--cur-default); }
 .hand.locked .qcard:hover { transform: none; }
@@ -518,17 +516,6 @@ button:disabled { cursor: var(--cur-default); }
 .log .log-horn { color: #ffd76a; }
 
 /* =============================================================== Effekte & Overlays */
-.banner {
-  position: fixed; left: 50%; top: 42%; transform: translate(-50%, -50%); z-index: 80; pointer-events: none; text-align: center;
-  font-family: var(--display); font-weight: 900; font-size: clamp(28px, 4.5vw, 52px); color: #fff2c4; white-space: nowrap;
-  text-shadow: 0 3px 0 #3a2204, 0 0 24px rgba(226, 184, 90, .6);
-  padding: 16px 48px; border-radius: 16px; border: 2px solid var(--gold);
-  background: var(--tex-leather), linear-gradient(180deg, #4a3018, #24160a);
-  box-shadow: 0 0 0 4px rgba(0, 0, 0, .4), 0 20px 60px rgba(0, 0, 0, .8), inset 0 1px 0 rgba(255, 230, 170, .3);
-  animation: banner 1.8s ease forwards;
-}
-.banner small { display: block; font-size: .4em; letter-spacing: 2px; color: var(--gold); }
-@keyframes banner { 0% { opacity: 0; transform: translate(-50%, -50%) scale(.6); } 18%, 78% { opacity: 1; transform: translate(-50%, -50%) scale(1); } 100% { opacity: 0; } }
 /* Münzwurf auf Wahlfeldern: wer die Eigenschaft wählt */
 .coin-toss {
   position: fixed; inset: 0; z-index: 85; display: grid; place-content: center; justify-items: center; gap: 22px; cursor: pointer;
@@ -713,6 +700,8 @@ button:disabled { cursor: var(--cur-default); }
 .final-score .fs-line { color: var(--muted); font-size: 13px; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+  /* Hinweise blenden sonst sofort wieder aus (Animation endet unsichtbar) – sie verschwinden per Skript */
+  .toast { animation: none !important; }
 }
 
 /* =============================================================== Nachziehstapel */
@@ -761,15 +750,6 @@ button:disabled { cursor: var(--cur-default); }
 /* Gesamtzahl nur auf dem Handy – sonst sieht man Stapel und Hand direkt */
 .player-bar .total-chip { display: none; }
 .opp-hand .ob.incoming { visibility: hidden; }
-.opp-hand .mini-front {
-  position: relative; background-size: cover; background-position: center; border: 2px solid var(--gold); cursor: var(--cur-zoom-in);
-  box-shadow: 0 0 0 1px #2a1804, 0 0 12px rgba(120, 190, 255, .7);
-}
-.opp-hand .mini-front .mcode {
-  position: absolute; left: 50%; bottom: 2px; transform: translateX(-50%); font-size: 10px; font-weight: 900;
-  background: rgba(20, 12, 4, .85); color: #fff2c4; border-radius: 4px; padding: 0 4px;
-}
-.opp-hand .mini-front .mspy { position: absolute; top: -8px; right: -8px; font-size: 14px; }
 
 /* Innenabstände wachsen mit der Kartengröße (statt fester Pixel), damit alles bei jeder Größe passt */
 .qcard .head { padding: calc(var(--qw) * .016) calc(var(--qw) * .032) calc(var(--qw) * .016) calc(var(--qw) * .02); }
@@ -800,7 +780,6 @@ button:disabled { cursor: var(--cur-default); }
 }
 
 .btn-small.off { opacity: .45; text-decoration: line-through; }
-.audio-row { margin-top: -4px; }
 
 /* =============================================================== Materialien */
 /* Holztisch */
@@ -1047,7 +1026,7 @@ button[data-tip] { cursor: var(--cur-pointer); }
     radial-gradient(circle at calc(100% - 8px) 50%, #c9ccd0 0 .8px, #6a6e74 1.4px, #1c1e21 2.5px, transparent 3px);
 }
 /* Hauptknöpfe: abgegriffenes Messing mit Patina */
-.btn-primary:not(:disabled), .end-turn:not(:disabled) {
+.btn-primary:not(:disabled) {
   background:
     var(--rivets),
     var(--tex-grunge),

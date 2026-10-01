@@ -14,7 +14,7 @@ python3 -m http.server 8765   # dann http://localhost:8765
 ## Online spielen
 
 Direkt von Browser zu Browser (WebRTC), ohne eigenen Server. Wer „Spiel eröffnen“ wählt, bekommt einen
-**Einladungslink**, einen **QR-Code** und einen kurzen **Raumcode** (z. B. `K7M-Q2P`). Der Mitspieler tippt
+**Einladungslink**, einen **QR-Code** und einen kurzen **Raumcode** (z. B. `K7MQ-2PXA`). Der Mitspieler tippt
 auf den Link, scannt den QR-Code mit der Handykamera oder gibt den Code unter „Beitreten“ ein – fertig.
 
 Zusammengeführt werden die beiden über öffentliche Nostr-Relays (Bibliothek [Trystero](https://github.com/dmotz/trystero),
@@ -27,7 +27,12 @@ Notlösung ohne Relays: „Klappt nicht? Ohne Vermittlung verbinden“ – dann 
 von Hand aus.
 
 Beide Geräte rechnen dieselbe Partie mit demselben Startwert (der Gast spiegelverkehrt), übers Netz gehen
-nur die Züge. Beide müssen dieselbe Spielversion geladen haben.
+nur die Züge. Beide müssen dieselbe Spielversion geladen haben (geprüft wird die Cache-Version aus `index.html`);
+nach jedem Duell vergleichen beide eine Prüfsumme des Spielstands, damit Abweichungen sofort auffallen.
+Reißt die Verbindung mitten in der Partie ab (Handy gesperrt, kurz kein Netz), warten beide eine Minute und
+suchen sich über den Raum neu; die verpassten Züge werden dann nachgeschickt. Bei den Codes von Hand geht das nicht.
+Gedacht ist der Online-Modus für Partien unter Freunden: Beide Geräte kennen den ganzen Spielstand, ein
+veränderter Browser könnte also die gegnerische Hand auslesen.
 Lässt der Gegner länger als 30 Sekunden auf seinen Zug warten, zeigt ein Zähler das an; nach zwei Minuten
 kann man die Partie dort direkt verlassen. Gezogen wird nie für ihn.
 
@@ -45,7 +50,8 @@ kann man die Partie dort direkt verlassen. Gezogen wird nie für ihn.
   Verrat (niedrigster Wert gewinnt), Rückzug (Karte geht bei Niederlage nicht verloren), Plündern, Spion, Schwächen.
   Starke Karten haben eher schwache Fähigkeiten und umgekehrt – die höchste Karte ist also nicht automatisch richtig.
   Beschreibung: Maus über die Karte, Rechtsklick für Großansicht, oder in den Spielregeln.
-- Tastatur: `1`–`3` Karte wählen, `H` Schlachtruf, `Enter` ausspielen/weiter, `Esc` Fenster schließen.
+- Tastatur: `1`–`3` Karte wählen, `H` Schlachtruf, `Enter` ausspielen/weiter, `Z` Karte groß zeigen, `Esc` Fenster schließen;
+  mit `Tab` lassen sich die Handkarten ansteuern, `Leertaste` wählt.
 - Nach dem Duell geht es nach ein paar Sekunden von selbst weiter (Balken im „Weiter“-Knopf); Maus auf dem Schlachtfeld hält ihn an.
 - Rechtsklick (Handy: lange drücken) zeigt eine Karte groß; im Menü gibt es eine Kartengalerie.
 
@@ -67,5 +73,5 @@ kann man die Partie dort direkt verlassen. Gezogen wird nie für ihn.
 | `tools/texturize.py` | Setzt die Material-Texturen in ein SVG ein (von `build-art.sh` und `render-svg.sh` aufgerufen) |
 | `tools/render-svg.sh` | Rendert ein SVG per Headless-Chromium als PNG (zum Prüfen von Illustrationen) |
 | `test/simulate.js` | KI-gegen-KI-Partien mit Invarianten-Prüfung: `node test/simulate.js 500` |
-| `test/online.js` | Online-Partien im Gleichschritt: Host und Gast müssen bei jeder Zugreihenfolge gleich rechnen: `node test/online.js 500` |
+| `test/online.js` | Online-Partien im Gleichschritt: Host und Gast müssen bei jeder Zugreihenfolge gleich rechnen (inkl. Prüfsumme und ungültiger Züge): `node test/online.js 500` |
 | `test/balance.js` | Balance-Analyse (Karten, Fähigkeiten, Schlachtruf, Schwierigkeitsstufen): `node test/balance.js 3000` |

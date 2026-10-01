@@ -19,7 +19,9 @@
 
   const APP_ID = 'eldoria-quartett';
   const CODE_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // ohne 0/O und 1/I – leicht abzutippen
-  const CODE_LEN = 6;
+  const CODE_LEN = 8; // 32^8 ≈ 10^12 Codes – auch ein öffentlich geteilter Link lässt sich nicht erraten
+  // Spielversion (Cache-Version aus index.html): Beide Geräte müssen dieselbe haben
+  const BUILD = (G.document && document.currentScript && new URL(document.currentScript.src).searchParams.get('v')) || 'dev';
 
   let pc = null;
   let dc = null;
@@ -27,7 +29,11 @@
   let peer = null; // Mitspieler im Raum
   let roomSend = null;
   let opened = false;
-  const handlers = { message: () => {}, open: () => {}, close: () => {}, error: () => {} };
+  let code = null; // Raumcode, um nach einem Abriss wieder beizutreten
+  // Verlassen dauert einen Moment – bis dahin gäbe Trystero beim Beitreten denselben (sterbenden) Raum zurück
+  let leaving = Promise.resolve();
+  // drop: Mitspieler im Raum weg – true zurückgeben, um auf ihn zu warten (statt close)
+  const handlers = { message: () => {}, open: () => {}, close: () => {}, error: () => {}, drop: () => false };
 
   /* ------------------------------------------------------------ Codes */
   const toB64 = (bytes) => btoa(String.fromCharCode(...bytes)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
@@ -62,8 +68,8 @@
   function close() {
     enterRoom.token = null; // ein Beitritt, der noch lädt, läuft danach ins Leere
     const r = room;
-    room = peer = roomSend = null;
-    if (r) r.leave().catch(() => {});
+    room = peer = roomSend = code = null;
+    if (r) leaving = r.leave().catch(() => {});
     const was = pc;
     pc = null;
     if (dc) { dc.onclose = dc.onmessage = dc.onopen = null; try { dc.close(); } catch (e) { /* schon zu */ } }
@@ -167,7 +173,7 @@
     return c.length === CODE_LEN && [...c].every((ch) => CODE_CHARS.includes(ch)) ? c : null;
   }
 
-  const prettyCode = (c) => `${c.slice(0, 3)}-${c.slice(3)}`;
+  const prettyCode = (c) => `${c.slice(0, CODE_LEN / 2)}-${c.slice(CODE_LEN / 2)}`;
 
   /** Einladungslink: öffnet das Spiel und tritt dem Raum direkt bei. */
   const link = (c) => `${location.origin}${location.pathname}#spiel=${c}`;
@@ -189,46 +195,84 @@
   }
 
   /** Dem Raum beitreten; 'open' kommt, sobald der Mitspieler da ist. */
-  async function enterRoom(code) {
+  async function enterRoom(c) {
     close();
     const token = {};
     enterRoom.token = token;
-    await loadScript('js/vendor/trystero.js?v=1');
+    await loadScript(`js/vendor/trystero.js?v=${BUILD}`);
+    await leaving;
     if (enterRoom.token !== token) throw new Error('Abgebrochen.');
     const r = G.TrysteroLib.joinRoom({
-      appId: APP_ID, password: code, rtcConfig: { iceServers: ICE },
+      appId: APP_ID, password: c, rtcConfig: { iceServers: ICE },
       relayConfig: { warnOnRelayFailure: false }, // einzelne Relays fallen immer mal aus – es sind genug andere da
-    }, code, {
+    }, c, {
       onJoinError: () => { if (room === r) handlers.error('Die Verbindung zum Mitspieler wurde abgelehnt.'); },
     });
     room = r;
+    code = c;
     const act = r.makeAction('m');
     act.onMessage = (data, ctx) => { if (room === r && ctx.peerId === peer) handlers.message(data); };
     roomSend = (m) => act.send(m, { target: peer }).catch(() => {});
     r.onPeerJoin = (id) => {
-      if (room !== r || peer) return; // ein dritter Besucher wird ignoriert
+      // Ein dritter Besucher wird ignoriert; meldet sich der Mitspieler neu an (Abriss nur bei ihm), geht es weiter
+      if (room !== r || (peer && peer !== id)) return;
       peer = id;
       opened = true;
       handlers.open();
     };
-    r.onPeerLeave = (id) => { if (room === r && id === peer) lost(); };
+    r.onPeerLeave = (id) => {
+      if (room !== r || id !== peer) return;
+      // Mitten in der Partie (Handy gesperrt, kurz kein Netz): im Raum bleiben und auf die Rückkehr warten
+      if (handlers.drop()) { peer = null; opened = false; } else lost();
+    };
+  }
+
+  /**
+   * Nach einem Abriss: den Raum frisch betreten, damit beide sich über die Relays neu finden.
+   * Die Handler bleiben; 'open' kommt, sobald der Mitspieler wieder da ist.
+   */
+  async function rejoin() {
+    if (!room || peer) return;
+    const c = code;
+    try { await enterRoom(c); } catch (e) { /* nächster Versuch folgt */ }
   }
 
   async function qrSVG(text) {
-    await loadScript('js/vendor/qrcode.js?v=1');
+    await loadScript(`js/vendor/qrcode.js?v=${BUILD}`);
     const qr = G.qrcode(0, 'M');
     qr.addData(text);
     qr.make();
     return qr.createSvgTag({ cellSize: 4, margin: 2, scalable: true });
   }
 
+  /** Schickt eine Nachricht; das Versprechen erfüllt sich, wenn sie unterwegs ist (oder es nicht geht). */
   function send(m) {
-    if (roomSend) roomSend(m);
-    else if (dc && dc.readyState === 'open') dc.send(JSON.stringify(m));
+    if (roomSend) return peer ? roomSend(m) : Promise.resolve();
+    if (dc && dc.readyState === 'open') {
+      dc.send(JSON.stringify(m));
+      const d = dc;
+      return new Promise((resolve) => {
+        const t0 = Date.now();
+        const check = () => (!d.bufferedAmount || d.readyState !== 'open' || Date.now() - t0 > 1000 ? resolve() : setTimeout(check, 30));
+        check();
+      });
+    }
+    return Promise.resolve();
+  }
+
+  /**
+   * Letzte Nachricht (Abschied) und dann trennen – erst, wenn sie unterwegs ist, sonst geht sie beim
+   * Schließen verloren. Bis dahin meldet die alte Verbindung nichts mehr; eine inzwischen neue bleibt unberührt.
+   */
+  function bye(m) {
+    const was = { room, dc, pc };
+    Object.assign(handlers, { message: () => {}, open: () => {}, close: () => {}, error: () => {}, drop: () => false });
+    const sent = Promise.race([send(m), new Promise((resolve) => setTimeout(resolve, 600))]);
+    return sent.then(() => { if (room === was.room && dc === was.dc && pc === was.pc) close(); });
   }
 
   CG.Net = {
-    host, accept, join, send, close,
+    BUILD, host, accept, join, send, bye, close, rejoin,
     newCode, cleanCode, prettyCode, link, linkUsable, codeFromLink, enterRoom, qrSVG,
     get connected() { return opened; },
     on(event, fn) { handlers[event] = fn; },
