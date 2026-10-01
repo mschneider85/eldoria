@@ -1643,3 +1643,20 @@ button { white-space: nowrap; }
   :is(.screen, .overlay, .quartet-show, .coin-toss, .embers, .intro), #menu::before { bottom: auto; height: 100lvh; }
   .modal.gallery { height: calc(100lvh - max(16px, env(safe-area-inset-top, 0px)) - max(16px, env(safe-area-inset-bottom, 0px))); }
 }
+
+/* =============================================================== Handy: gewählte Handkarte groß */
+/* Antippen wählt die Karte und hebt sie vergrößert an – ohne Fenster davor, Schlachtfeld und
+   „Karte ausspielen“ bleiben sichtbar. Sie wächst von unten nach oben über Titel und eigene Leiste. */
+@media (hover: none) and (max-width: 640px) {
+  .hand .qcard { transform-origin: 50% 100%; transition: transform .2s ease-out, box-shadow .2s; }
+  .hand-area { position: relative; z-index: 3; } /* über der eigenen Leiste */
+  .hand .qcard.selected { z-index: 5; transform: translateY(-10px) scale(1.5); }
+  /* Außenkarten wachsen nach innen, damit sie nicht über den Bildschirmrand ragen */
+  .hand .qcard:first-child:not(:only-child) { transform-origin: 12% 100%; }
+  .hand .qcard:last-child:not(:only-child) { transform-origin: 88% 100%; }
+  /* Fähigkeit klein am unteren Bildrand, damit das Bild sichtbar bleibt */
+  .hand .qcard.selected .ability .atext {
+    top: auto; bottom: calc(var(--qw) * .76); left: 5%; right: 5%;
+    font-size: calc(var(--qw) * .052); line-height: 1.25; padding: 3px 5px; border-radius: 5px;
+  }
+}

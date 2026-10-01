@@ -1480,10 +1480,6 @@
     document.addEventListener('click', (e) => {
       if (pressed) { e.stopPropagation(); e.preventDefault(); pressed = false; }
     }, true);
-    $('#game').addEventListener('dblclick', (e) => {
-      const card = e.target.closest('#hand [data-card]');
-      if (card && s && ui.chooser !== null && s.phase === 'cards' && !ui.choosing && !ui.rallying) { ui.selected = card.dataset.card; confirmChoice(); }
-    });
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         const q = document.querySelector('.quartet-show');
