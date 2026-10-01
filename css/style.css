@@ -1624,3 +1624,7 @@ button { white-space: nowrap; }
    (eigene scale-Eigenschaft, damit Anheben und Neigen der Handkarte erhalten bleiben) */
 .pressing { scale: 1.08; filter: brightness(1.12); transition: scale .35s ease-out, filter .35s ease-out; z-index: 30; }
 @media (prefers-reduced-motion: reduce) { .pressing { scale: 1; } }
+
+/* iPhone-App vom Homescreen: volle Bildschirmhöhe statt der um die Statusleiste zu kurzen Seite (Script in index.html) */
+html.full-h, html.full-h body { height: var(--app-h); }
+html.full-h :is(.screen, .overlay, .quartet-show, .coin-toss, .embers, .intro), html.full-h #menu::before { bottom: auto; height: var(--app-h); }
