@@ -1368,7 +1368,17 @@ button { white-space: nowrap; }
 .menu-links .btn-secondary { font-size: 14px; padding-left: 14px; padding-right: 14px; min-width: 0; }
 .mode-tile, .mode-tile * { white-space: normal; }
 @media (max-width: 640px) {
-  #menu .menu-box { padding: 20px 16px 18px; }
+  /* Luft statt Enge: Inhalt mit Abstand zur Ziernaht (inset 8px) und zwischen den Blöcken */
+  #menu .menu-box { padding: 26px 22px 24px; }
+  .menu-heading { margin-bottom: 22px; }
+  .mode-tiles { gap: 16px; }
+  .mode-tile { padding: 16px 12px 14px; gap: 6px; }
+  #menu .menu-row { margin: 24px 0; }
+  #difficulty-row { gap: 10px; }
+  #difficulty-select { display: flex; width: 100%; }
+  #difficulty-select button { flex: 1; min-width: 0; padding-left: 8px; padding-right: 8px; }
+  .start-big { margin-top: 2px; }
+  .menu-cards { margin-bottom: 16px !important; }
   .start-big { font-size: 18px; }
   .menu-links .btn-secondary { font-size: 12px; padding-left: 10px; padding-right: 10px; }
   .top-buttons .btn-small { padding: 6px 9px; font-size: 11px; }
@@ -1595,7 +1605,7 @@ button { white-space: nowrap; }
   .game-menu .off { opacity: .5; }
   /* Menü: die Ton-Knöpfe scrollen mit, statt über Karten und Titel zu liegen */
   .menu-audio { position: absolute; }
-  #menu { padding-top: max(64px, calc(env(safe-area-inset-top, 0px) + 52px)); }
+  #menu { padding-top: max(84px, calc(env(safe-area-inset-top, 0px) + 72px)); }
   /* Quartett: vier Karten passen nebeneinander, stärker aufgefächert */
   .q-plaque { --qw: min(96px, (100vw - 110px) / 3.1); padding-left: 12px; padding-right: 12px; }
   .q-card { margin: 0 calc(var(--qw) * -.11); }
