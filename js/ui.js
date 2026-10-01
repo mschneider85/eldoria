@@ -1397,25 +1397,6 @@
   }
 
   function initInput() {
-    // VORÜBERGEHEND: dreimal auf die Rundenanzeige tippen zeigt Höhenwerte (iPhone-App-Streifen untersuchen)
-    let diagTaps = [];
-    $('#round-info').addEventListener('click', () => {
-      const now = Date.now();
-      diagTaps = diagTaps.filter((t) => now - t < 800).concat(now);
-      if (diagTaps.length < 3) return;
-      diagTaps = [];
-      const px = (css) => { const d = document.createElement('div'); d.style.cssText = `position:fixed;top:0;left:0;width:1px;${css}`; document.body.appendChild(d); const h = Math.round(d.getBoundingClientRect().height); d.remove(); return h; };
-      const env = (side) => px(`height:env(safe-area-inset-${side},0px)`);
-      const v = document.querySelector('link[rel=stylesheet]').href.split('v=')[1];
-      const rows = [
-        ['Version', v], ['standalone', String(!!navigator.standalone)], ['display-mode', matchMedia('(display-mode: standalone), (display-mode: fullscreen)').matches ? 'App' : 'Browser'],
-        ['screen', `${screen.width}×${screen.height}`], ['innerHeight', innerHeight], ['clientHeight', document.documentElement.clientHeight],
-        ['100%', px('height:100%')], ['100vh', px('height:100vh')], ['100svh', px('height:100svh')], ['100lvh', px('height:100lvh')], ['100dvh', px('height:100dvh')],
-        ['safe oben/unten', `${env('top')} / ${env('bottom')}`], ['#game', Math.round($('#game').getBoundingClientRect().height)],
-      ];
-      openOverlay(`<div class="modal"><h2>Messwerte</h2><table style="margin:0 auto;text-align:left">${rows.map(([k, x]) => `<tr><td>${k}</td><td><b>${x}</b></td></tr>`).join('')}</table>
-        <div class="buttons"><button class="btn-primary" data-close>Schließen</button></div></div>`);
-    });
     const zoomTarget = (target) => {
       // Ausgespähte Karten: auch auf der Rückseite zeigt sich die Karte groß
       const spied = target.closest('.spied');
