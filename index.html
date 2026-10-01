@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
   <meta name="theme-color" content="#120d09">
   <link rel="manifest" href="manifest.webmanifest">
   <!-- Zum Homescreen hinzufügen auf iPhone/iPad -->
@@ -16,7 +16,7 @@
   <!-- Alle Schriften liegen im Projekt (@font-face in style.css), es wird nichts von fremden Servern geladen -->
   <link rel="preload" href="art/fonts/cinzel-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="art/fonts/alegreya-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="css/style.css?v=212">
+  <link rel="stylesheet" href="css/style.css?v=213">
   <!-- Inhalt erst zeigen, wenn Cinzel/Alegreya geladen sind (kein kurzes Aufblitzen der Ersatzschrift) -->
   <style>html.fonts-loading body > * { visibility: hidden; }</style>
   <script>
@@ -151,19 +151,22 @@
     </div>
   </template>
 
-  <script src="js/cards.js?v=212"></script>
-  <script src="js/engine.js?v=212"></script>
-  <script src="js/ai.js?v=212"></script>
-  <script src="js/net.js?v=212"></script>
-  <script src="js/audio.js?v=212"></script>
-  <script src="js/ui.js?v=212"></script>
-  <script src="js/deer.js?v=212"></script>
+  <script src="js/cards.js?v=213"></script>
+  <script src="js/engine.js?v=213"></script>
+  <script src="js/ai.js?v=213"></script>
+  <script src="js/net.js?v=213"></script>
+  <script src="js/audio.js?v=213"></script>
+  <script src="js/ui.js?v=213"></script>
+  <script src="js/deer.js?v=213"></script>
   <script>
+    // Kein Zoom: iOS ignoriert user-scalable=no, daher Pinch-Gesten hier abfangen (Doppeltipp verhindert touch-action im CSS)
+    ['gesturestart', 'gesturechange'].forEach((t) => document.addEventListener(t, (e) => e.preventDefault(), { passive: false }));
+    document.addEventListener('touchmove', (e) => { if (e.touches.length > 1) e.preventDefault(); }, { passive: false });
     // Offline-Fähigkeit (sw.js). Nicht beim direkten Öffnen der Datei; auf localhost nur mit ?sw, damit beim
     // Entwickeln keine alten Skripte aus dem Cache kommen
     if ('serviceWorker' in navigator && location.protocol !== 'file:'
       && (!/^(localhost|127\.0\.0\.1)$/.test(location.hostname) || /[?&]sw\b/.test(location.search))) {
-      navigator.serviceWorker.register('sw.js?v=212');
+      navigator.serviceWorker.register('sw.js?v=213');
     }
   </script>
 </body>

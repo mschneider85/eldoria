@@ -54,6 +54,7 @@ body {
   background: radial-gradient(ellipse at 50% 35%, #2e1f13 0%, var(--bg) 75%);
   color: var(--ink); font-family: var(--sans); overflow: hidden;
   user-select: none; -webkit-user-select: none;
+  touch-action: manipulation; /* kein Zoom per Doppeltipp */
 }
 input, textarea { user-select: text; -webkit-user-select: text; } /* Codes markieren und einfügen (iOS) */
 .qcard, .terrain, .spied { -webkit-touch-callout: none; } /* langes Drücken zeigt die Großansicht statt des Bild-Menüs */
