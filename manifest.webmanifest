@@ -1,0 +1,17 @@
+{
+  "name": "Eldoria – Das Quartett der Völker",
+  "short_name": "Eldoria",
+  "description": "Fantasy-Quartett mit taktischem Kniff – gegen den Computer oder zu zweit online.",
+  "lang": "de",
+  "start_url": "./",
+  "scope": "./",
+  "display": "fullscreen",
+  "orientation": "any",
+  "background_color": "#120d09",
+  "theme_color": "#120d09",
+  "icons": [
+    { "src": "art/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "art/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "art/icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

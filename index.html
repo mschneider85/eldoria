@@ -3,6 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#120d09">
+  <link rel="manifest" href="manifest.webmanifest">
+  <!-- Zum Homescreen hinzufügen auf iPhone/iPad -->
+  <link rel="apple-touch-icon" href="art/icons/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Eldoria">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Eldoria</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect x='12' y='6' width='40' height='52' rx='6' fill='%238a2a1a' stroke='%23e2b85a' stroke-width='4'/><path d='M32 18l4 9 10 1-8 6 3 10-9-6-9 6 3-10-8-6 10-1z' fill='%23e2b85a'/></svg>">
   <!-- Alle Schriften liegen im Projekt (@font-face in style.css), es wird nichts von fremden Servern geladen -->
@@ -149,5 +157,13 @@
   <script src="js/audio.js?v=200"></script>
   <script src="js/ui.js?v=200"></script>
   <script src="js/deer.js?v=200"></script>
+  <script>
+    // Offline-Fähigkeit (sw.js). Nicht beim direkten Öffnen der Datei; auf localhost nur mit ?sw, damit beim
+    // Entwickeln keine alten Skripte aus dem Cache kommen
+    if ('serviceWorker' in navigator && location.protocol !== 'file:'
+      && (!/^(localhost|127\.0\.0\.1)$/.test(location.hostname) || /[?&]sw\b/.test(location.search))) {
+      navigator.serviceWorker.register('sw.js?v=200');
+    }
+  </script>
 </body>
 </html>

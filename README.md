@@ -11,6 +11,13 @@ Keine Installation nötig – `index.html` im Browser öffnen, oder:
 python3 -m http.server 8765   # dann http://localhost:8765
 ```
 
+**Als App und offline:** Über HTTPS (z. B. GitHub Pages) lässt sich das Spiel auf den Homescreen legen
+(Android/Chrome: „App installieren“, iPhone: Teilen → „Zum Home-Bildschirm“). Nach dem ersten Besuch hält ein
+Service Worker (`sw.js`) alle Dateien bereit – das Spiel startet dann sofort und läuft auch ohne Netz, nur der
+Online-Modus braucht natürlich eine Verbindung. Die Cache-Version aus `index.html` gilt auch für den Service Worker:
+Hochzählen genügt, dann lädt er beim nächsten Besuch alles neu. Auf `localhost` ist er nur mit `?sw` in der Adresse
+aktiv, damit beim Entwickeln keine alten Dateien aus dem Cache kommen.
+
 ## Online spielen
 
 Direkt von Browser zu Browser (WebRTC), ohne eigenen Server. Wer „Spiel eröffnen“ wählt, bekommt einen
@@ -59,6 +66,7 @@ kann man die Partie dort direkt verlassen. Gezogen wird nie für ihn.
 
 | Datei | Inhalt |
 |---|---|
+| `sw.js`, `manifest.webmanifest` | Service Worker (offline, schneller Start) und App-Beschreibung zum Installieren; Icons in `art/icons/` (aus dem Wappen der Kartenrückseite) |
 | `js/cards.js`  | Völker, Karten und Schlachtfelder (hier lässt sich alles balancen) |
 | `js/engine.js` | Regeln und Spielzustand, ohne DOM (läuft auch in Node) |
 | `js/net.js`    | Online-Verbindung: Raum über Nostr-Relays (Link, QR, Raumcode) oder Codes von Hand, WebRTC-Datenkanal |
