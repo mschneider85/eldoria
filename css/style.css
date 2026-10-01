@@ -1122,6 +1122,8 @@ button[data-tip] { cursor: var(--cur-pointer); }
   top: 58%; height: 38%; --fo: .42; background-size: 25% 100%; /* 50 % Weg = zwei Kacheln, nahtlos */
   animation: fog-drift 95s linear infinite reverse, fog-heave 13s ease-in-out -6s infinite alternate;
 }
+/* Langsames Gerät (Stufe aus watchFrames in ui.js): Nebel steht still */
+[data-fx="2"] .menu-bg .fog { animation-play-state: paused; }
 @keyframes fog-drift { from { translate: 0 0; } to { translate: -50% 0; } }
 @keyframes fog-heave {
   from { transform: translateY(0) scaleY(1); opacity: var(--fo); }
@@ -1292,6 +1294,8 @@ button[data-tip] { cursor: var(--cur-pointer); }
   animation: fly-path var(--move) ease-in-out var(--delay) infinite alternate, fly-glow var(--glow) ease-in-out var(--delay) infinite;
   will-change: transform, opacity;
 }
+/* Langsames Gerät (Stufe aus watchFrames in ui.js): erst die Hälfte, dann ein Viertel der Glühwürmchen */
+[data-fx="1"] .embers .fly:nth-child(2n), [data-fx="2"] .embers .fly:not(:nth-child(4n)) { display: none; }
 /* nahe Glühwürmchen: weich und unscharf wirkend – per Verlauf statt teurem Unschärfefilter */
 .embers .fly.near {
   background: radial-gradient(circle, rgba(255, 255, 230, .9) 0 10%, rgba(235, 255, 150, .6) 30%, rgba(200, 255, 100, .22) 55%, transparent 70%);

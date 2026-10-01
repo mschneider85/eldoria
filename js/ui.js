@@ -178,6 +178,9 @@
     closeAllOverlays();
     $('#game').classList.add('hidden');
     $('#menu').classList.remove('hidden');
+    // Glühwürmchen neu anlegen: Ihre Animationen blieben nach dem ausgeblendeten Menü teils stehen (Safari)
+    $('#fireflies').replaceChildren();
+    createFireflies();
     if (pendingInvite) {
       const code = pendingInvite;
       pendingInvite = null;
@@ -2293,6 +2296,7 @@
   /* =============================================================== Kartenanimationen */
   /** Nach einem Wechsel der Stufe: Effekte sofort entfernen bzw. die Karten neu zeichnen */
   function applyFx() {
+    document.documentElement.dataset.fx = fxLevel(); // weniger Glühwürmchen, stiller Nebel (style.css)
     if (fxLevel() === 2) document.querySelectorAll('.qcard .fx').forEach((el) => el.remove());
     if (s) render();
   }
@@ -2325,6 +2329,7 @@
       applyFx();
     };
     settle = performance.now() + 3000; // die ersten Sekunden lädt noch alles
+    document.documentElement.dataset.fx = fxLevel();
     requestAnimationFrame(tick);
   }
 
