@@ -19,7 +19,7 @@
 
   const APP_ID = 'eldoria-quartett';
   const CODE_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // ohne 0/O und 1/I – leicht abzutippen
-  const CODE_LEN = 8; // 32^8 ≈ 10^12 Codes – auch ein öffentlich geteilter Link lässt sich nicht erraten
+  const CODE_LEN = 6; // 32^6 ≈ 10^9 Codes – bei den wenigen gleichzeitig offenen Räumen nicht zu erraten
   // Spielversion (Cache-Version aus index.html): Beide Geräte müssen dieselbe haben
   const BUILD = (G.document && document.currentScript && new URL(document.currentScript.src).searchParams.get('v')) || 'dev';
 

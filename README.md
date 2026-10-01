@@ -14,7 +14,7 @@ python3 -m http.server 8765   # dann http://localhost:8765
 ## Online spielen
 
 Direkt von Browser zu Browser (WebRTC), ohne eigenen Server. Wer „Spiel eröffnen“ wählt, bekommt einen
-**Einladungslink**, einen **QR-Code** und einen kurzen **Raumcode** (z. B. `K7MQ-2PXA`). Der Mitspieler tippt
+**Einladungslink**, einen **QR-Code** und einen kurzen **Raumcode** (z. B. `K7M-Q2P`). Der Mitspieler tippt
 auf den Link, scannt den QR-Code mit der Handykamera oder gibt den Code unter „Beitreten“ ein – fertig.
 
 Zusammengeführt werden die beiden über öffentliche Nostr-Relays (Bibliothek [Trystero](https://github.com/dmotz/trystero),

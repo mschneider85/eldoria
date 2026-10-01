@@ -2148,7 +2148,7 @@
   function roomJoin(code) {
     net.host = false;
     setLobby(`<div class="net-form">
-        <label>Raumcode <input id="room-code" maxlength="9" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="ABCD-EFGH" value="${code ? Net.prettyCode(code) : ''}"></label>
+        <label>Raumcode <input id="room-code" maxlength="9" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="ABC-DEF" value="${code ? Net.prettyCode(code) : ''}"></label>
         <label>Dein Name <input id="join-name" maxlength="14" value="${escapeHTML(myName())}"></label>
       </div>
       <div class="net-actions center"><button class="btn-primary" id="join-room">Beitreten</button></div>
@@ -2158,7 +2158,7 @@
     input.select();
     const go = async () => {
       const c = Net.cleanCode($('#room-code').value);
-      if (!c) { lobbyError(new Error('Der Raumcode hat 8 Zeichen, z. B. K7MQ‑2PXA.')); return; }
+      if (!c) { lobbyError(new Error('Der Raumcode hat 6 Zeichen, z. B. K7M‑Q2P.')); return; }
       $('#name1').value = $('#join-name').value.trim().slice(0, 14) || 'Spieler';
       store.set('name', $('#name1').value);
       const st = $('#lobby .net-status');
