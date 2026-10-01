@@ -118,6 +118,8 @@ button:disabled { cursor: var(--cur-default); }
 .round-info .pot { color: var(--ink); font-family: var(--sans); font-size: 13px; background: rgba(0, 0, 0, .35); border-radius: 20px; padding: 2px 10px; }
 .top-buttons { display: flex; gap: 6px; }
 .only-narrow { display: none; }
+.fs-toggle { display: inline-flex; align-items: center; justify-content: center; line-height: 1; }
+.fs-toggle[hidden] { display: none; }
 
 /* Spielerleiste */
 .player-bar {
@@ -1360,6 +1362,7 @@ button { white-space: nowrap; }
   .start-big { font-size: 18px; }
   .menu-links .btn-secondary { font-size: 12px; padding-left: 10px; padding-right: 10px; }
   .top-buttons .btn-small { padding: 6px 9px; font-size: 11px; }
+  .top-buttons :is(.sfx-toggle, .music-toggle, .fs-toggle) { padding-left: 6px; padding-right: 6px; }
   .top-buttons { gap: 4px; flex-wrap: wrap; justify-content: flex-end; }
 }
 

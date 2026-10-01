@@ -2240,6 +2240,38 @@
     updateAudioButtons();
   }
 
+  /* =============================================================== Vollbild */
+  // iPhone-Safari kennt keine Vollbild-API für Seiten – dort bleibt der Knopf versteckt
+  function initFullscreen() {
+    const root = document.documentElement;
+    const request = root.requestFullscreen || root.webkitRequestFullscreen;
+    const exit = document.exitFullscreen || document.webkitExitFullscreen;
+    if (!request || !exit || document.fullscreenEnabled === false || document.webkitFullscreenEnabled === false) return;
+    const current = () => document.fullscreenElement || document.webkitFullscreenElement;
+    const icon = (on) => `<svg viewBox="0 0 24 24" width="1.25em" height="1.25em" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="${on
+      ? 'M9 3v6H3M15 3v6h6M9 21v-6H3M15 21v-6h6'
+      : 'M3 9V3h6M21 9V3h-6M3 15v6h6M21 15v6h-6'}"/></svg>`;
+    const update = () => document.querySelectorAll('.fs-toggle').forEach((b) => {
+      b.innerHTML = icon(!!current());
+      b.setAttribute('aria-pressed', current() ? 'true' : 'false');
+    });
+    const toggle = () => {
+      try {
+        const p = current() ? exit.call(document) : request.call(root);
+        if (p && p.catch) p.catch(() => {});
+      } catch (e) { /* vom Browser abgelehnt */ }
+    };
+    document.querySelectorAll('.fs-toggle').forEach((b) => { b.hidden = false; b.addEventListener('click', toggle); });
+    document.addEventListener('fullscreenchange', update);
+    document.addEventListener('webkitfullscreenchange', update);
+    document.addEventListener('keydown', (e) => {
+      if (e.key.toLowerCase() !== 'f' || e.ctrlKey || e.metaKey || e.altKey || e.repeat) return;
+      if (e.target.closest && e.target.closest('input, textarea, [contenteditable]')) return;
+      toggle();
+    });
+    update();
+  }
+
   /* =============================================================== Tooltips */
   // Eigene Tooltips statt der nativen: Elemente mit data-tip="…" (Teile mit „ · “ werden zu Zeilen).
   function initTooltips() {
@@ -2292,5 +2324,6 @@
   initMenu();
   initInput();
   initAudio();
+  initFullscreen();
   initTooltips();
 })();
