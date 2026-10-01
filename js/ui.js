@@ -1369,8 +1369,10 @@
     const p = ui.chooser;
     return p !== null && s.phase === 'cards' && !s.choices[p] && !ui.choosing && !ui.rallying && s.players[p].hand.includes(id);
   }
-  function selectCard(id) {
+  /** Wählt die Karte aus; erneutes Wählen hebt die Auswahl auf, außer mit keep (Großansicht per langem Drücken). */
+  function selectCard(id, keep = false) {
     if (!canSelect(id)) return;
+    if (keep && ui.selected === id) return;
     ui.selected = ui.selected === id ? null : id;
     Snd.play('select');
     // Einmalig auf Touch: wie man eine Handkarte groß sieht (Antippen wählt sie ja aus)
@@ -1404,6 +1406,8 @@
     };
     const zoomEl = (el) => {
       if (el.classList.contains('terrain')) { zoomTerrain(s.terrain.id); return; }
+      // Lange gedrückte Handkarte ist nach dem Schließen der Großansicht ausgewählt und kann gleich ausgespielt werden
+      if (el.dataset.card) selectCard(el.dataset.card, true);
       const id = el.dataset.card || el.dataset.zoom;
       if (id) zoomCard(id);
     };
@@ -1420,7 +1424,9 @@
       if (e.target.closest('#stall-leave')) { confirmLeave(); return; }
       // Antippen einer Karte auf dem Schlachtfeld (Gelände, Duellkarten, ausgespähte Karten) zeigt sie groß
       const zoom = zoomTarget(e.target);
-      if (zoom) zoomEl(zoom);
+      if (zoom) { zoomEl(zoom); return; }
+      // Antippen einer freien Stelle hebt die Auswahl wieder auf
+      if (ui.selected && !e.target.closest('button')) selectCard(ui.selected);
     });
     // Wer mit der Maus auf dem Schlachtfeld oder dem Ergebnis verweilt, liest noch – der Countdown wartet
     $('#game').addEventListener('pointerover', (e) => {
