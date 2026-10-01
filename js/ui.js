@@ -1036,6 +1036,7 @@
   }
 
   /** Effektebene für ein Kartenbild; kleine Darstellungen (Galerie, Menü) bekommen weniger Teilchen */
+  const phoneFx = window.matchMedia('(max-width: 760px), (max-height: 520px)');
   function fxHTML(id, small) {
     const fx = ART_FX[id];
     if (!fx) return '';
@@ -1043,7 +1044,9 @@
     const r = (a, b) => (a + rnd() * (b - a)).toFixed(2);
     const rr = (range) => r(range[0], range[1]);
     const el = (cls, vars, dur, delay) => `<i class="${cls}" style="${Object.entries(vars).map(([k, v]) => `--${k}:${v}`).join(';')};animation-duration:${dur}s;animation-delay:${delay}s"></i>`;
-    const count = (n) => Array.from({ length: small ? Math.ceil(n / 2) : n });
+    // Auf Handys nur halb so viele Teilchen: Jedes kostet bei jedem Neuzeichnen Rechenzeit (dort ruckelte es im Duell)
+    const share = (small ? 2 : 1) * (phoneFx.matches ? 2 : 1);
+    const count = (n) => Array.from({ length: Math.ceil(n / share) });
     const out = fx.map((f) => {
       const c = f.c || FIRE;
       switch (f.type) {
