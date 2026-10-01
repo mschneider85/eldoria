@@ -1618,3 +1618,9 @@ button { white-space: nowrap; }
   .player-bar .pname { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .player-bar .qslot { width: 22px; height: 22px; }
 }
+
+/* =============================================================== Großansicht per Touch */
+/* Gedrückt halten: die Karte wächst sichtbar an, bis sich nach 0,35 s die Großansicht öffnet
+   (eigene scale-Eigenschaft, damit Anheben und Neigen der Handkarte erhalten bleiben) */
+.pressing { scale: 1.08; filter: brightness(1.12); transition: scale .35s ease-out, filter .35s ease-out; z-index: 30; }
+@media (prefers-reduced-motion: reduce) { .pressing { scale: 1; } }

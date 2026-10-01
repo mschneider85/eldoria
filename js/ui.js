@@ -1365,11 +1365,19 @@
   }
 
   /* =============================================================== Eingabe */
-  function selectCard(id) {
+  function canSelect(id) {
     const p = ui.chooser;
-    if (p === null || s.phase !== 'cards' || s.choices[p] || ui.choosing || ui.rallying || !s.players[p].hand.includes(id)) return;
+    return p !== null && s.phase === 'cards' && !s.choices[p] && !ui.choosing && !ui.rallying && s.players[p].hand.includes(id);
+  }
+  function selectCard(id) {
+    if (!canSelect(id)) return;
     ui.selected = ui.selected === id ? null : id;
     Snd.play('select');
+    // Einmalig auf Touch: wie man eine Handkarte groß sieht (Antippen wählt sie ja aus)
+    if (ui.selected && ui.lastPointer === 'touch' && !store.get('zoom-tip', false)) {
+      store.set('zoom-tip', true);
+      toast('Tipp: Karte gedrückt halten zeigt sie groß');
+    }
     // Nur Klassen umschalten statt die Hand neu aufzubauen.
     document.querySelectorAll('#hand [data-card]').forEach((el) => {
       el.classList.toggle('selected', el.dataset.card === ui.selected);
@@ -1389,16 +1397,30 @@
   }
 
   function initInput() {
+    const zoomTarget = (target) => {
+      // Ausgespähte Karten: auch auf der Rückseite zeigt sich die Karte groß
+      const spied = target.closest('.spied');
+      return spied ? spied.querySelector('[data-zoom]') : target.closest('.qcard, .terrain');
+    };
+    const zoomEl = (el) => {
+      if (el.classList.contains('terrain')) { zoomTerrain(s.terrain.id); return; }
+      const id = el.dataset.card || el.dataset.zoom;
+      if (id) zoomCard(id);
+    };
     $('#game').addEventListener('click', (e) => {
       if (!s) return;
       const card = e.target.closest('#hand [data-card]');
-      if (card) { selectCard(card.dataset.card); return; }
+      // Handkarten wählt man aus; gerade nicht wählbare zeigen sich groß wie alle anderen Karten
+      if (card) { if (canSelect(card.dataset.card)) selectCard(card.dataset.card); else zoomEl(card); return; }
       const statBtn = e.target.closest('[data-stat]');
       if (statBtn) { onStatChosen(statBtn.dataset.stat); return; }
       if (e.target.closest('#rally-btn')) { rallyNow(); return; }
       if (e.target.closest('#play-btn')) { confirmChoice(); return; }
       if (e.target.closest('#next-btn')) { nextStep(); return; }
       if (e.target.closest('#stall-leave')) { confirmLeave(); return; }
+      // Antippen einer Karte auf dem Schlachtfeld (Gelände, Duellkarten, ausgespähte Karten) zeigt sie groß
+      const zoom = zoomTarget(e.target);
+      if (zoom) zoomEl(zoom);
     });
     // Wer mit der Maus auf dem Schlachtfeld oder dem Ergebnis verweilt, liest noch – der Countdown wartet
     $('#game').addEventListener('pointerover', (e) => {
@@ -1420,16 +1442,6 @@
     };
     document.addEventListener('pointermove', tilt, { passive: true });
     // Rechtsklick (oder langes Drücken auf dem Handy) zeigt eine Karte groß.
-    const zoomTarget = (target) => {
-      // Ausgespähte Karten: auch auf der Rückseite zeigt Rechtsklick die Karte groß
-      const spied = target.closest('.spied');
-      return spied ? spied.querySelector('[data-zoom]') : target.closest('.qcard, .terrain');
-    };
-    const zoomEl = (el) => {
-      if (el.classList.contains('terrain')) { zoomTerrain(s.terrain.id); return; }
-      const id = el.dataset.card || el.dataset.zoom;
-      if (id) zoomCard(id);
-    };
     let pressed = false; // diese Berührung hat schon die Großansicht geöffnet
     $('#game').addEventListener('contextmenu', (e) => {
       if (!s) return;
@@ -1442,15 +1454,23 @@
       zoomEl(el);
     });
     // iOS Safari kennt kein contextmenu beim langen Drücken – dafür ein eigener Zeitgeber
+    // Beim Drücken wächst die Karte sichtbar an, bis sich die Großansicht öffnet
     let press = null;
-    const endPress = () => { if (press) clearTimeout(press.timer); press = null; };
-    document.addEventListener('pointerdown', () => { pressed = false; }, true);
+    const endPress = () => {
+      if (!press) return;
+      clearTimeout(press.timer);
+      press.shown.classList.remove('pressing');
+      press = null;
+    };
+    document.addEventListener('pointerdown', (e) => { pressed = false; ui.lastPointer = e.pointerType; }, true);
     $('#game').addEventListener('pointerdown', (e) => {
       endPress();
       if (!s || e.pointerType !== 'touch') return;
       const el = zoomTarget(e.target);
       if (!el) return;
-      press = { x: e.clientX, y: e.clientY, timer: setTimeout(() => { press = null; pressed = true; zoomEl(el); }, 500) };
+      const shown = el.closest('.spied') || el;
+      shown.classList.add('pressing');
+      press = { x: e.clientX, y: e.clientY, shown, timer: setTimeout(() => { endPress(); pressed = true; store.set('zoom-tip', true); zoomEl(el); }, 350) };
     });
     $('#game').addEventListener('pointermove', (e) => {
       if (press && Math.hypot(e.clientX - press.x, e.clientY - press.y) > 10) endPress();
@@ -1590,7 +1610,7 @@
 
   /* =============================================================== Zoom & Galerie */
   function showZoom(html) {
-    openOverlay(`<div class="zoom" data-close>${html}<p class="zoom-hint">Klicken zum Schließen</p></div>`);
+    openOverlay(`<div class="zoom" data-close>${html}<p class="zoom-hint">${tapWord()} zum Schließen</p></div>`);
   }
 
   function zoomCard(id) {
@@ -1707,7 +1727,7 @@
           <div class="q-title">${fac.icon} Quartett der ${fac.name}</div>
           <div class="q-cards">${ids.map((id, i) => `<div class="q-card" style="--i:${i}">${cardHTML(id, { neutral: true, thumb: true })}</div>`).join('')}</div>
           <div class="q-sub">${count} von ${s.targetQuartets} Quartetten${count >= s.targetQuartets ? ' – Sieg!' : ''}</div>
-          <div class="q-hint">Klicken zum Fortfahren</div>
+          <div class="q-hint">${tapWord()} zum Fortfahren</div>
         </div>`;
       document.body.appendChild(el);
       let done = false;
@@ -1756,6 +1776,9 @@
       el.addEventListener('click', () => { if (!el.classList.contains('landed')) land(); close(); });
     });
   }
+
+  /** Auf Touch-Geräten wird getippt, nicht geklickt. */
+  const tapWord = () => (window.matchMedia && window.matchMedia('(hover: none)').matches ? 'Tippen' : 'Klicken');
 
   function toast(text) {
     document.querySelectorAll('.toast').forEach((t) => t.remove());
