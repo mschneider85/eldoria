@@ -1244,7 +1244,7 @@ button[data-tip] { cursor: var(--cur-pointer); }
   font-size: 22px; color: var(--gold); letter-spacing: 2px; text-transform: uppercase;
 }
 .menu-heading::before, .menu-heading::after { content: ''; flex: 1; height: 1.5px; background: linear-gradient(90deg, transparent, var(--gold-dark), transparent); }
-.mode-tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.mode-tiles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
 .mode-tile {
   display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 14px 10px 12px; border-radius: 12px;
   background: var(--tex-wood), linear-gradient(180deg, #4a3220, #2a1b0c);

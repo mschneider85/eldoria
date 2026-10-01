@@ -13,7 +13,7 @@
     get(k, d) { try { const v = localStorage.getItem(`eq-${k}`); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
     set(k, v) { try { localStorage.setItem(`eq-${k}`, JSON.stringify(v)); } catch (e) { /* ohne Speicher weiter */ } },
   };
-  const settings = { mode: store.get('mode', 'pvc'), difficulty: store.get('difficulty', 'normal') };
+  const settings = { mode: store.get('mode', 'pvc') === 'online' ? 'online' : 'pvc', difficulty: store.get('difficulty', 'normal') };
   const reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   let s = null;
   const ui = {
@@ -39,8 +39,6 @@
 
   const pvc = () => s.mode === 'pvc';
   const online = () => s.mode === 'online';
-  /** Nur ein Mensch an diesem Gerät (gegen Computer oder online) – er sitzt immer unten als Spieler 0. */
-  const solo = () => s.mode !== 'pvp';
   const isAI = (p) => s.players[p].isAI;
   const isRemote = (p) => online() && p === 1;
   /** „Der Computer“ oder der Name des Online-Gegners. */
@@ -51,9 +49,7 @@
     document.querySelectorAll('#mode-select button').forEach((b) => b.classList.toggle('active', b.dataset.mode === settings.mode));
     document.querySelectorAll('#difficulty-select button').forEach((b) => b.classList.toggle('active', b.dataset.diff === settings.difficulty));
     $('#difficulty-row').classList.toggle('hidden', settings.mode !== 'pvc');
-    $('#names-row').classList.toggle('hidden', settings.mode === 'pvc');
-    $('#name2-label').classList.toggle('hidden', settings.mode === 'online');
-    $('#name1-caption').textContent = settings.mode === 'online' ? 'Dein Name' : 'Spieler 1';
+    $('#names-row').classList.toggle('hidden', settings.mode !== 'online');
   }
 
   /** Menü-Schaufenster: der Dunkelwald als fester Hintergrund, bei jedem Besuch drei andere Karten. */
@@ -124,7 +120,7 @@
     renderMenuShowcase();
     createFireflies();
     const names = store.get('names', null);
-    if (names) { $('#name1').value = names[0]; $('#name2').value = names[1]; }
+    if (names) $('#name1').value = names[0];
     // Alle Bilder im Hintergrund vorladen, damit beim ersten Aufdecken nichts nachlädt
     setTimeout(() => {
       [...Object.keys(CARDS).flatMap((id) => [`art/cards/${id}.webp`, `art/cards/${id}.thumb.webp`]),
@@ -136,13 +132,8 @@
 
   /* =============================================================== Ablauf */
   function startGame() {
-    const names = [$('#name1').value.trim() || 'Spieler 1', $('#name2').value.trim() || 'Spieler 2'];
-    store.set('names', names);
-    if (settings.mode === 'online') { openLobby(); return; }
-    const players = settings.mode === 'pvc'
-      ? [{ name: 'Du' }, { name: 'Computer', isAI: true, difficulty: settings.difficulty }]
-      : [{ name: names[0] }, { name: names[1] }];
-    launch({ mode: settings.mode, players });
+    if (settings.mode === 'online') { store.set('names', [$('#name1').value.trim()]); openLobby(); return; }
+    launch({ mode: 'pvc', players: [{ name: 'Du' }, { name: 'Computer', isAI: true, difficulty: settings.difficulty }] });
   }
 
   function launch(opts) {
@@ -189,9 +180,9 @@
     render();
     Snd.play('terrain');
     Snd.setMood(s.terrain.id);
-    if (ui.pendingDraw[1].length && (solo() || ui.chooser !== 1)) {
+    if (ui.pendingDraw[1].length) {
       const ids = ui.pendingDraw[1];
-      ui.pendingDraw[1] = solo() ? [] : ids; // im Hot-Seat sieht Spieler 2 seine Karten später selbst ankommen
+      ui.pendingDraw[1] = [];
       ids.forEach((id) => ui.oppIncoming.add(id));
       $('#opp-hand')._html = null;
       render();
@@ -200,7 +191,7 @@
     if (s.phase === 'stat') {
       const picker = s.picker;
       ui.tossing = true;
-      if (solo()) ui.chooser = 0; // eigene Hand schon zeigen (gesperrt)
+      ui.chooser = 0; // eigene Hand schon zeigen (gesperrt)
       render();
       await tossCoin(picker);
       if (token !== ui.token) return;
@@ -212,7 +203,7 @@
         if (!(await waitForOverlays(token))) return;
         Engine.chooseStat(s, picker, AI.chooseStat(s, picker));
         ui.message = `${s.players[picker].name} wählt ${statLabel(s.stat)}.`;
-        cardPhase(null);
+        cardPhase();
       } else if (isRemote(picker)) {
         ui.message = `${oppName()} überlegt…`;
         render();
@@ -220,16 +211,13 @@
         if (!m || !(await waitForOverlays(token))) return;
         if (!Engine.chooseStat(s, picker, m.stat).ok) { outOfSync(); return; }
         ui.message = `${oppName()} wählt ${statLabel(s.stat)}.`;
-        cardPhase(null);
+        cardPhase();
       } else {
-        if (!solo()) await handover(picker, 'wählt die Eigenschaft');
-        if (token !== ui.token) return;
-        ui.chooser = picker;
         ui.message = '';
         render();
       }
     } else {
-      cardPhase(null);
+      cardPhase();
     }
   }
 
@@ -238,48 +226,30 @@
     if (!Engine.chooseStat(s, picker, stat).ok) return;
     if (online()) Net.send({ t: 'stat', r: s.round, stat });
     ui.message = `${s.players[picker].name === 'Du' ? 'Du wählst' : s.players[picker].name + ' wählt'} ${statLabel(stat)}.`;
-    cardPhase(picker);
+    cardPhase();
   }
 
-  /** Kartenwahl. alreadyOpen = Spieler, dessen Hand schon offen ist (nach der Statwahl). */
-  async function cardPhase(alreadyOpen) {
+  /** Kartenwahl: Du wählst unten, der Gegner (Computer oder online) legt verdeckt. */
+  async function cardPhase() {
     const token = ui.token;
-    if (online()) {
-      ui.chooser = 0;
-      render();
-      remotePlays(token);
-      return;
-    }
-    if (pvc()) {
-      ui.chooser = 0;
-      render();
-      await sleep(700 + Math.random() * 900);
-      if (!(await waitForOverlays(token))) return;
-      if (AI.shouldRally(s, 1)) {
-        await animateRally(1);
-        await sleep(900);
-        if (!(await waitForOverlays(token))) return;
-      }
-      // Kennt der Computer per Spion eine deiner Karten, legt er erst nach dir – so bleibt Zeit für den Schlachtruf als Konter
-      if (s.spyInfo[1] && !s.choices[0]) {
-        ui.aiWaiting = true;
-        ui.message = 'Der Computer lauert…';
-        render();
-        return;
-      }
-      if (await aiPlays(token)) afterChoice();
-      return;
-    }
-    // Hot-Seat: erst wer die Eigenschaft gewählt hat, sonst abwechselnd.
-    const first = s.picker !== null ? s.picker : (s.round + 1) % 2;
-    if (alreadyOpen !== first) {
-      ui.chooser = null;
-      render();
-      await handover(first, 'wählt eine Karte');
-      if (token !== ui.token) return;
-    }
-    ui.chooser = first;
+    ui.chooser = 0;
     render();
+    if (online()) { remotePlays(token); return; }
+    await sleep(700 + Math.random() * 900);
+    if (!(await waitForOverlays(token))) return;
+    if (AI.shouldRally(s, 1)) {
+      await animateRally(1);
+      await sleep(900);
+      if (!(await waitForOverlays(token))) return;
+    }
+    // Kennt der Computer per Spion eine deiner Karten, legt er erst nach dir – so bleibt Zeit für den Schlachtruf als Konter
+    if (s.spyInfo[1] && !s.choices[0]) {
+      ui.aiWaiting = true;
+      ui.message = 'Der Computer lauert…';
+      render();
+      return;
+    }
+    if (await aiPlays(token)) afterChoice();
   }
 
   /** Der Computer wählt und legt seine Karte. false, wenn die Partie inzwischen verlassen wurde. */
@@ -333,16 +303,6 @@
     if (online()) Net.send({ t: 'choose', r: s.round, card: ui.selected });
     ui.selected = null;
     if (pvc() && ui.aiWaiting && !(await aiAfterWaiting(token))) return;
-    if (s.phase === 'cards' && !solo()) {
-      const next = 1 - p;
-      ui.chooser = null;
-      render();
-      await handover(next, 'wählt eine Karte');
-      if (token !== ui.token) return;
-      ui.chooser = next;
-      render();
-      return;
-    }
     afterChoice();
   }
 
@@ -353,7 +313,7 @@
 
   async function reveal() {
     const token = ui.token;
-    ui.chooser = solo() ? 0 : null;
+    ui.chooser = 0;
     ui.message = 'Aufdecken!';
     render();
     await sleep(350);
@@ -370,7 +330,7 @@
     render();
     const r = s.result;
     if (r.winner === -1) Snd.play('tie');
-    else Snd.play(solo() && r.winner === 1 ? 'lose' : 'win');
+    else Snd.play(r.winner === 1 ? 'lose' : 'win');
     for (const p of [0, 1]) {
       for (const f of r.quartets[p]) {
         await sleep(400);
@@ -719,7 +679,6 @@
   /** Verdeckte Hand des Gegners (oben neben seiner Leiste). Die per Spion gesehene Karte liegt offen. */
   function oppHandHTML() {
     const p = 1;
-    if (!solo() && ui.chooser === 1) return ''; // seine Hand liegt gerade offen unten
     let ids = s.players[p].hand.slice();
     if (s.result) ids = ids.filter((id) => !s.result.drawn[p].includes(id));
     else if (s.choices[p]) ids = ids.filter((id) => id !== s.choices[p].card);
@@ -744,14 +703,13 @@
     const cards = r.ids.map((id) => CARDS[id]);
     const notes = r.notes.length ? `<div class="notes">${r.notes.map(escapeHTML).join(' · ')}</div>` : '';
     if (r.winner === -1) return `${notes}⚖️ Gleichstand – beide Karten wandern in die Kriegsbeute!`;
-    const w = s.players[r.winner];
     const why = {
       low: s.terrain.lowWins && !r.notes.some((n) => n.startsWith('🎭')) ? '☁️ Im Nebel gewinnt der niedrigere Wert.' : '',
     }[r.reason] || '';
-    const who = solo() ? (r.winner === 0 ? 'Du eroberst' : `${oppName()} erobert`) : `${w.name} erobert`;
+    const who = r.winner === 0 ? 'Du eroberst' : `${oppName()} erobert`;
     const own = r.loot - 1; // die eigene Karte kommt zurück, der Rest ist Beute
     if (own <= 0) {
-      const text = solo() && r.winner === 0 ? 'Du gewinnst das Duell, erbeutest aber nichts.' : `${solo() ? oppName() : w.name} gewinnt das Duell, erbeutet aber nichts.`;
+      const text = r.winner === 0 ? 'Du gewinnst das Duell, erbeutest aber nichts.' : `${oppName()} gewinnt das Duell, erbeutet aber nichts.`;
       return `${notes}${why ? why + ' ' : ''}<span class="big">${text}</span>`;
     }
     const what = own === 1 && r.potTaken === 0 ? cards[1 - r.winner].name : `${own} Karten`;
@@ -776,19 +734,6 @@
     }
     await sleep(700 + Math.random() * 500);
     return token === ui.token;
-  }
-
-  /* =============================================================== Übergabe (Hot-Seat) */
-  function handover(p, what) {
-    return new Promise((resolve) => {
-      const pl = s.players[p];
-      openOverlay(`<div class="modal">
-        <div class="big-emoji">${p === 0 ? '🦁' : '🐲'}</div>
-        <h2>${escapeHTML(pl.name)} ${what}</h2>
-        <p style="color:var(--muted)">Gib das Gerät weiter – der andere schaut bitte weg.</p>
-        <div class="buttons"><button class="btn-primary" id="ready-btn">Bereit</button></div></div>`);
-      $('#ready-btn').addEventListener('click', () => { closeOverlay(); resolve(); });
-    });
   }
 
   /* =============================================================== Rendering */
@@ -1196,12 +1141,10 @@
     </div></div>`;
   }
 
-  const avatarOf = (p) => (solo() ? (s.players[p].isAI ? '🤖' : p === 0 ? '🧑' : '🧙') : p === 0 ? '🦁' : '🐲');
+  const avatarOf = (p) => (s.players[p].isAI ? '🤖' : p === 0 ? '🧑' : '🧙');
   /** „Du wählst“ / „Der Computer wählt“ / „Anna wählt“ für den ausgelosten Spieler. */
   function pickerName() {
-    const p = s.picker;
-    if (solo()) return p === 0 ? 'Du wählst' : `${oppName()} wählt`;
-    return `${escapeHTML(s.players[p].name)} wählt`;
+    return s.picker === 0 ? 'Du wählst' : `${oppName()} wählt`;
   }
 
   function playerBarHTML(p) {
@@ -1244,7 +1187,7 @@
     }
     if (s.phase === 'cards' && s.choices[p]) {
       // Eine per Spion bekannte Karte liegt offen – wer gespäht hat, weiß ja, welche es ist
-      const spyViewer = solo() ? (p === 1 ? 0 : null) : ui.chooser === 1 - p ? 1 - p : null;
+      const spyViewer = p === 1 ? 0 : null;
       const id = s.choices[p].card;
       if (spyViewer !== null && s.spyInfo && s.spyInfo[spyViewer] === id) {
         return `${who}<div class="spied">${spiedHTML(id)}</div>`;
@@ -1315,8 +1258,8 @@
       + (canChoose && exposed
         ? `<div class="spy-line exposed">🕵️ Der Gegner kennt deine <b>${CARDS[exposed].id} ${CARDS[exposed].name}</b>.</div>` : '');
     const title = canChoose
-      ? spy + (solo() ? 'Wähle deine Karte' : `${escapeHTML(pl.name)}: Wähle deine Karte`)
-      : s.phase === 'cards' ? 'Warte auf den Gegner…' : solo() ? '' : `Hand von ${escapeHTML(pl.name)}`;
+      ? spy + 'Wähle deine Karte'
+      : s.phase === 'cards' ? 'Warte auf den Gegner…' : '';
     // Ausgespielte Karte liegt auf dem Feld; frisch gezogene erscheinen erst nach „Weiter“
     const played = s.choices[p] ? s.choices[p].card : ui.choosing;
     const hand = s.result ? pl.hand.filter((id) => !s.result.drawn[p].includes(id)) : pl.hand.filter((id) => id !== played);
@@ -1457,8 +1400,8 @@
       if (e.key === 'Escape') {
         const q = document.querySelector('.quartet-show');
         if (q) { q.click(); return; }
-        // Übergabe (Hot-Seat) und Spielende nicht per Esc überspringen
-        if (!$('#overlay').classList.contains('hidden') && !$('#ready-btn') && !$('#go-again') && !$('#lobby') && !$('#lost-ok')) closeOverlay();
+        // Spielende, Lobby und Verbindungsabbruch nicht per Esc überspringen
+        if (!$('#overlay').classList.contains('hidden') && !$('#go-again') && !$('#lobby') && !$('#lost-ok')) closeOverlay();
         return;
       }
       const pager = document.querySelector('#overlay .gallery-pager');
@@ -1643,7 +1586,7 @@
     return new Promise((resolve) => {
       const fac = FACTIONS[f];
       const ids = Object.keys(CARDS).filter((id) => CARDS[id].faction === f);
-      const who = solo() ? (p === 0 ? 'Du legst ein Quartett ab!' : `${oppName()} legt ein Quartett ab!`) : `${escapeHTML(s.players[p].name)} legt ein Quartett ab!`;
+      const who = p === 0 ? 'Du legst ein Quartett ab!' : `${oppName()} legt ein Quartett ab!`;
       const count = s.players[p].quartets.length;
       const el = document.createElement('div');
       el.className = 'quartet-show';
@@ -1674,7 +1617,7 @@
   function tossCoin(p) {
     return new Promise((resolve) => {
       const spins = reducedMotion ? 0 : 6;
-      const who = solo() ? (p === 0 ? 'Du wählst die Eigenschaft!' : `${oppName()} wählt die Eigenschaft.`) : `${escapeHTML(s.players[p].name)} wählt die Eigenschaft!`;
+      const who = p === 0 ? 'Du wählst die Eigenschaft!' : `${oppName()} wählt die Eigenschaft.`;
       const face = (i) => `<div class="coin-face side-${i}" style="--pc:var(--p${i})"><span>${avatarOf(i)}</span></div>`;
       const el = document.createElement('div');
       el.className = `coin-toss${reducedMotion ? ' landed' : ''}`;
@@ -1721,11 +1664,10 @@
 
   function showGameOver() {
     const w = s.winner;
-    Snd.play(w === -1 ? 'tie' : solo() && w === 1 ? 'defeat' : 'victory');
+    Snd.play(w === -1 ? 'tie' : w === 1 ? 'defeat' : 'victory');
     let title, emoji;
     if (w === -1) { title = 'Unentschieden'; emoji = '⚖️'; }
-    else if (solo()) { title = w === 0 ? 'Sieg!' : 'Niederlage'; emoji = w === 0 ? '🏆' : '🏳️'; }
-    else { title = `${escapeHTML(s.players[w].name)} gewinnt!`; emoji = '🏆'; }
+    else { title = w === 0 ? 'Sieg!' : 'Niederlage'; emoji = w === 0 ? '🏆' : '🏳️'; }
     const score = [0, 1].map((p) => {
       const pl = s.players[p];
       const q = pl.quartets.map((f) => `<span data-tip="${FACTIONS[f].name}">${FACTIONS[f].icon}</span>`).join('') || '–';
@@ -1880,7 +1822,7 @@
 
   /* ---------------------------------------------------------------- Lobby */
   function lobbyHTML(body) {
-    return `<div class="modal lobby" id="lobby"><div class="big-emoji">🕊️</div><h2>Online spielen</h2>${body}
+    return `<div class="modal lobby" id="lobby"><div class="big-emoji">👥</div><h2>Online spielen</h2>${body}
       <div class="buttons"><button class="btn-secondary" id="lobby-cancel">Abbrechen</button></div></div>`;
   }
 
@@ -1983,7 +1925,7 @@
       const c = Net.cleanCode($('#room-code').value);
       if (!c) { lobbyError(new Error('Der Raumcode hat 6 Zeichen, z. B. K7M‑Q2P.')); return; }
       $('#name1').value = $('#join-name').value.trim().slice(0, 14) || 'Spieler';
-      store.set('names', [$('#name1').value, $('#name2').value]);
+      store.set('names', [$('#name1').value]);
       const st = $('#lobby .net-status');
       st.classList.remove('error');
       st.textContent = '🔎 Suche das Spiel…';

@@ -10,7 +10,7 @@
   <link rel="preload" href="art/fonts/cinzel-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="art/fonts/alegreya-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-  <link rel="stylesheet" href="css/style.css?v=190">
+  <link rel="stylesheet" href="css/style.css?v=192">
   <!-- Inhalt erst zeigen, wenn Cinzel/Alegreya geladen sind (kein kurzes Aufblitzen der Ersatzschrift) -->
   <style>html.fonts-loading body > * { visibility: hidden; }</style>
   <script>
@@ -60,15 +60,11 @@
         <div class="mode-tiles" id="mode-select">
           <button data-mode="pvc" class="mode-tile active">
             <span class="mode-icon">🤖</span><span class="mode-name">Gegen den Computer</span>
-            <span class="mode-desc">Miss dich mit einem listigen Gegner</span>
-          </button>
-          <button data-mode="pvp" class="mode-tile">
-            <span class="mode-icon">👥</span><span class="mode-name">Zwei Spieler</span>
-            <span class="mode-desc">Abwechselnd an einem Gerät</span>
+            <span class="mode-desc">Allein spielen, sofort loslegen</span>
           </button>
           <button data-mode="online" class="mode-tile">
-            <span class="mode-icon">🕊️</span><span class="mode-name">Online</span>
-            <span class="mode-desc">Zu zweit an zwei Geräten</span>
+            <span class="mode-icon">👥</span><span class="mode-name">Online</span>
+            <span class="mode-desc">Freunde per Link oder Raumcode einladen</span>
           </button>
         </div>
         <div class="menu-row" id="difficulty-row">
@@ -80,8 +76,7 @@
           </div>
         </div>
         <div class="menu-row names" id="names-row">
-          <label><span id="name1-caption">Spieler 1</span> <input id="name1" maxlength="14" value="Spieler 1"></label>
-          <label id="name2-label">Spieler 2 <input id="name2" maxlength="14" value="Spieler 2"></label>
+          <label>Dein Name <input id="name1" maxlength="14" placeholder="Spieler"></label>
         </div>
         <button id="start-btn" class="btn-primary start-big">Spiel starten</button>
         <div class="menu-row menu-links">
@@ -164,12 +159,12 @@
     </div>
   </template>
 
-  <script src="js/cards.js?v=190"></script>
-  <script src="js/engine.js?v=190"></script>
-  <script src="js/ai.js?v=190"></script>
-  <script src="js/net.js?v=190"></script>
-  <script src="js/audio.js?v=190"></script>
-  <script src="js/ui.js?v=190"></script>
-  <script src="js/deer.js?v=190"></script>
+  <script src="js/cards.js?v=192"></script>
+  <script src="js/engine.js?v=192"></script>
+  <script src="js/ai.js?v=192"></script>
+  <script src="js/net.js?v=192"></script>
+  <script src="js/audio.js?v=192"></script>
+  <script src="js/ui.js?v=192"></script>
+  <script src="js/deer.js?v=192"></script>
 </body>
 </html>
