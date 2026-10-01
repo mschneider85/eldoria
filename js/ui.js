@@ -1185,7 +1185,7 @@
     for (let i = s.targetQuartets; i < pl.quartets.length; i++) slots.push(`<span class="qslot filled">${FACTIONS[pl.quartets[i]].icon}</span>`);
     return `<span class="avatar" style="--pc:var(--p${p})">${avatar}</span>
       <span class="pname">${escapeHTML(pl.name)}</span>${s.picker === p && !ui.tossing ? '<span class="pick-mark" data-tip="Per Los bestimmt: wählt auf diesem Schlachtfeld die Eigenschaft">🪙</span>' : ''}
-      <span class="chip total-chip" data-tip="Karten insgesamt (Hand + Stapel)">🂠 <b>${Engine.owned(s, p).length}</b> Karten</span>
+      <span class="chip total-chip" data-tip="Karten insgesamt (Hand + Stapel)">🂠 <b>${Engine.owned(s, p).length}</b><span class="unit"> Karten</span></span>
       <span class="quartet-slots" data-tip="Quartette">${slots.join('')}</span>
       ${rallyHTML(pl)}
 `;
@@ -1507,9 +1507,28 @@
   }
 
   function confirmLeave() {
-    openOverlay(`<div class="modal"><h2>Spiel verlassen?</h2><p>Die aktuelle Partie geht verloren.</p>
+    // Handy hochkant: Ton, Musik, Vollbild und Regeln stehen nicht in der Kopfleiste, sondern hier
+    const inMenu = [...document.querySelectorAll('.top-buttons .in-menu')].filter((b) => !b.hidden);
+    const moved = inMenu.length && getComputedStyle(inMenu[0]).display === 'none';
+    // Beschriftung wie das Original, bei den Symbolknöpfen ergänzt um ihren Namen
+    const label = (b) => `${b.innerHTML}${b.dataset.label ? ` ${b.dataset.label}` : ''}`;
+    const head = moved ? `<h2>Menü</h2><div class="game-menu">${inMenu.map((b, i) =>
+      `<button class="btn-secondary${b.classList.contains('off') ? ' off' : ''}" data-proxy="${i}">${label(b)}</button>`).join('')}</div>
+      <p>Zurück zum Hauptmenü? Die aktuelle Partie geht dabei verloren.</p>`
+      : '<h2>Spiel verlassen?</h2><p>Die aktuelle Partie geht verloren.</p>';
+    openOverlay(`<div class="modal">${head}
       <div class="buttons"><button class="btn-secondary" data-close>Weiterspielen</button><button class="btn-primary" id="leave-btn">Zum Menü</button></div></div>`);
     $('#leave-btn').addEventListener('click', toMenu);
+    document.querySelectorAll('#overlay [data-proxy]').forEach((b) => {
+      const orig = inMenu[+b.dataset.proxy];
+      const sync = () => { b.innerHTML = label(orig); b.classList.toggle('off', orig.classList.contains('off')); };
+      b.addEventListener('click', (e) => {
+        e.stopPropagation(); // kein zweites Klick-Geräusch – das Original klickt selbst
+        orig.click();
+        sync();
+        setTimeout(sync, 200); // das Vollbild-Symbol wechselt erst nach dem Umschalten
+      });
+    });
   }
 
   /* =============================================================== Overlays & Effekte */

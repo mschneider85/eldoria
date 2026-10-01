@@ -99,12 +99,12 @@ button:disabled { cursor: var(--cur-default); }
   padding: 12px 28px; font-size: 17px; font-weight: 800; font-family: var(--display);
   box-shadow: 0 4px 0 #6e4a10, 0 8px 20px rgba(0, 0, 0, .5);
 }
-.btn-primary:hover:not(:disabled) { filter: brightness(1.08); }
+@media (hover: hover) { .btn-primary:hover:not(:disabled) { filter: brightness(1.08); } }
 .btn-primary:active:not(:disabled) { transform: translateY(2px); box-shadow: 0 2px 0 #6e4a10; }
 .btn-primary:disabled { background: linear-gradient(180deg, #6a6258, #3e3830); color: #bdb4a6; border-color: #2a2622; box-shadow: none; }
 .btn-secondary { background: rgba(0, 0, 0, .35); color: var(--ink); border: 1px solid var(--gold-dark); border-radius: 10px; padding: 12px 20px; font-size: 15px; font-weight: 700; }
 .btn-small { background: rgba(0, 0, 0, .35); color: var(--muted); border: 1px solid #4a3a24; border-radius: 8px; padding: 6px 10px; font-size: 12px; font-weight: 700; }
-.btn-small:hover, .btn-secondary:hover { color: var(--ink); border-color: var(--gold-dark); }
+@media (hover: hover) { .btn-small:hover, .btn-secondary:hover { color: var(--ink); border-color: var(--gold-dark); } }
 
 /* =============================================================== Spiel-Layout */
 #game { display: grid; grid-template-columns: 1fr var(--side); }
@@ -190,7 +190,7 @@ button:disabled { cursor: var(--cur-default); }
   background: linear-gradient(180deg, #7a5424, #4a3014); color: #fff2c4; border: 2px solid var(--gold-dark); border-radius: 10px;
   padding: 8px 10px; font-weight: 800; font-size: 14px;
 }
-.stat-choice button:hover { filter: brightness(1.2); border-color: var(--gold); }
+@media (hover: hover) { .stat-choice button:hover { filter: brightness(1.2); border-color: var(--gold); } }
 
 /* Schlachtfeld-Karte: gleiches Format wie die Quartettkarten, aber dunkel eingefärbt (nur der Goldrahmen bleibt), Farbe je nach Art */
 .terrain {
@@ -424,7 +424,9 @@ button:disabled { cursor: var(--cur-default); }
   background: rgba(20, 12, 4, .9); border: 1px solid var(--gold-dark); border-radius: 8px; padding: 6px 8px;
   opacity: 0; transform: translateY(4px); transition: opacity .15s, transform .15s;
 }
-.qcard:hover .ability .atext { opacity: 1; transform: none; }
+@media (hover: hover) { .qcard:hover .ability .atext { opacity: 1; transform: none; } }
+/* Touch: die Beschreibung erscheint auf der ausgewählten Handkarte */
+@media (hover: none) { .hand .qcard.selected .ability .atext { opacity: 1; transform: none; } }
 .zoom .qcard .ability .atext, .gallery-grid .qcard .ability .atext, .menu-cards .qcard .ability .atext { display: none; }
 .spy-line { color: #bfe3ff; font-weight: 700; margin-bottom: 2px; }
 .spy-line.exposed { color: #ffc2a8; }
@@ -473,11 +475,11 @@ button:disabled { cursor: var(--cur-default); }
 .hand-title { font-size: 13px; font-weight: 700; color: var(--muted); min-height: 18px; }
 .hand { display: flex; gap: clamp(8px, 1.6vw, 20px); justify-content: center; min-height: calc(var(--qw) * 1.5); }
 .hand .qcard { cursor: var(--cur-pointer); transition: transform .15s, box-shadow .15s; }
-.hand .qcard:hover { transform: translateY(-8px); }
+@media (hover: hover) { .hand .qcard:hover { transform: translateY(-8px); } }
 .hand .qcard:focus-visible { outline: 3px solid #ffd84d; outline-offset: 3px; }
 .hand .qcard.selected { transform: translateY(-14px); box-shadow: 0 0 0 3px #ffd84d, 0 0 26px rgba(255, 216, 77, .8), 0 10px 20px rgba(0, 0, 0, .6); }
 .hand.locked .qcard { cursor: var(--cur-default); }
-.hand.locked .qcard:hover { transform: none; }
+@media (hover: hover) { .hand.locked .qcard:hover { transform: none; } }
 .hand .card-back { width: calc(var(--qw) * .6); height: calc(var(--qw) * .9); }
 .hand-actions { display: flex; gap: 10px; align-items: center; min-height: 48px; }
 .horn-toggle {
@@ -615,11 +617,11 @@ button:disabled { cursor: var(--cur-default); }
 }
 .pager-arrow svg { display: block; width: 100%; height: 100%; }
 .pager-arrow.prev svg { transform: scaleX(-1); }
-.pager-arrow:not(:disabled):hover { transform: scale(1.08); filter: drop-shadow(0 0 8px rgba(242, 210, 122, .55)) drop-shadow(0 3px 5px rgba(0, 0, 0, .7)); }
+@media (hover: hover) { .pager-arrow:not(:disabled):hover { transform: scale(1.08); filter: drop-shadow(0 0 8px rgba(242, 210, 122, .55)) drop-shadow(0 3px 5px rgba(0, 0, 0, .7)); } }
 .pager-arrow:not(:disabled):active { transform: scale(.96); }
 .pager-arrow:disabled { opacity: .35; filter: grayscale(.7); cursor: var(--cur-default); }
 .gallery-grid .qcard, .gallery-grid .terrain { cursor: var(--cur-zoom-in); transition: transform .15s; animation: none; }
-.gallery-grid .qcard:hover, .gallery-grid .terrain:hover { transform: translateY(-4px) scale(1.03); }
+@media (hover: hover) { .gallery-grid .qcard:hover, .gallery-grid .terrain:hover { transform: translateY(-4px) scale(1.03); } }
 @media (max-width: 640px) { .gallery-grid { --qw: 128px; } }
 
 /* =============================================================== Mitwachsende Bedienelemente */
@@ -858,11 +860,13 @@ button:disabled { cursor: var(--cur-default); }
   background: radial-gradient(circle at var(--mx, 30%) var(--my, 20%), rgba(255, 248, 225, .17), rgba(255, 248, 225, .05) 28%, transparent 55%);
   opacity: 0; transition: opacity .25s;
 }
-.hand .qcard:hover::before, .zoom .qcard::before, .gallery-grid .qcard:hover::before { mix-blend-mode: screen; }
-.hand .qcard:hover::before, .zoom .qcard::before, .gallery-grid .qcard:hover::before { opacity: 1; }
+.zoom .qcard::before { mix-blend-mode: screen; }
+@media (hover: hover) { .hand .qcard:hover::before, .gallery-grid .qcard:hover::before { mix-blend-mode: screen; } }
+.zoom .qcard::before { opacity: 1; }
+@media (hover: hover) { .hand .qcard:hover::before, .gallery-grid .qcard:hover::before { opacity: 1; } }
 /* Neigen zur Maus */
 .hand { perspective: 1100px; }
-.hand .qcard:hover { transform: translateY(-8px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); }
+@media (hover: hover) { .hand .qcard:hover { transform: translateY(-8px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); } }
 .hand .qcard.selected { transform: translateY(-14px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); }
 .zoom .qcard { transform: perspective(1200px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform .12s; }
 /* Kartenrücken und Stapel: Glanz und Kanten */
@@ -982,6 +986,7 @@ button[data-tip] { cursor: var(--cur-pointer); }
 /* Per Spion ausgespähte Karte: verdeckt mit Späher-Siegel und kühlem Schimmer, beim Überfahren dreht sie sich um */
 .spied { position: absolute; inset: 0; perspective: 900px; }
 .spied .flipper { transition: transform .5s cubic-bezier(.3, 1.3, .5, 1); }
+/* bleibt auch auf Touch: Antippen dreht die Karte um, Tippen daneben wieder zurück */
 .spied:hover .flipper { transform: rotateY(180deg); }
 /* die Fähigkeitsbeschreibung erscheint wie bei offenen Karten – erst, wenn die Karte umgedreht ist */
 .spied:hover .ability .atext { opacity: 1; transform: none; transition-delay: .3s; }
@@ -1048,7 +1053,7 @@ button[data-tip] { cursor: var(--cur-pointer); }
   letter-spacing: 1px; padding-left: 30px; padding-right: 30px;
   transition: filter .12s, transform .08s, box-shadow .08s;
 }
-.btn-primary:not(:disabled):hover { filter: brightness(1.08) saturate(1.05); }
+@media (hover: hover) { .btn-primary:not(:disabled):hover { filter: brightness(1.08) saturate(1.05); } }
 .btn-primary:not(:disabled):active {
   transform: translateY(2px);
   box-shadow: inset 0 2px 6px rgba(40, 20, 0, .6), inset 0 0 14px rgba(40, 20, 0, .45), 0 1px 0 #2a1804, 0 2px 6px rgba(0, 0, 0, .5);
@@ -1075,7 +1080,7 @@ button[data-tip] { cursor: var(--cur-pointer); }
 .seg { border: 1.5px solid #15100a; border-radius: 9px; box-shadow: 0 2px 0 #0e0a05, 0 4px 10px rgba(0, 0, 0, .45); }
 .seg button { border: 0; box-shadow: inset 0 1px 0 rgba(255, 220, 160, .12), inset 0 -2px 4px rgba(0, 0, 0, .5); }
 .seg button + button { border-left: 1.5px solid #15100a; }
-.btn-secondary:hover, .btn-small:hover, .horn-toggle:not(:disabled):hover, .stat-choice button:hover, .seg button:hover { filter: brightness(1.18); color: #fff2c4; }
+@media (hover: hover) { .btn-secondary:hover, .btn-small:hover, .horn-toggle:not(:disabled):hover, .stat-choice button:hover, .seg button:hover { filter: brightness(1.18); color: #fff2c4; } }
 .btn-secondary:active, .btn-small:active, .horn-toggle:not(:disabled):active, .stat-choice button:active, .seg button:active {
   transform: translateY(1px); box-shadow: inset 0 2px 5px rgba(0, 0, 0, .65), 0 1px 0 #0e0a05;
 }
@@ -1242,7 +1247,7 @@ button[data-tip] { cursor: var(--cur-pointer); }
   box-shadow: inset 0 1px 0 rgba(255, 220, 160, .14), inset 0 -3px 6px rgba(0, 0, 0, .5), 0 3px 0 #0e0a05, 0 6px 14px rgba(0, 0, 0, .45);
   transition: filter .12s, transform .12s;
 }
-.mode-tile:hover { filter: brightness(1.15); transform: translateY(-2px); }
+@media (hover: hover) { .mode-tile:hover { filter: brightness(1.15); transform: translateY(-2px); } }
 .mode-tile.active {
   background: var(--tex-grunge), var(--tex-patina), linear-gradient(180deg, #d0a855, #9a6d1f 60%, #6e4710);
   color: #2a1804; text-shadow: 0 1px 0 rgba(255, 236, 180, .5); border-color: #3a2508;
@@ -1333,7 +1338,7 @@ button[data-tip] { cursor: var(--cur-pointer); }
     inset 0 0 0 1px rgba(160, 175, 190, .18), inset 0 0 16px rgba(0, 0, 0, .45),
     0 3px 0 #0c0d0f, 0 6px 14px rgba(0, 0, 0, .6);
 }
-.btn-primary:not(:disabled):hover { filter: brightness(1.15); }
+@media (hover: hover) { .btn-primary:not(:disabled):hover { filter: brightness(1.15); } }
 .btn-primary:not(:disabled):active {
   transform: translateY(2px);
   box-shadow: inset 0 2px 6px rgba(0, 0, 0, .7), inset 0 0 16px rgba(0, 0, 0, .45), 0 1px 0 #0c0d0f, 0 2px 6px rgba(0, 0, 0, .5);
@@ -1379,7 +1384,7 @@ button { white-space: nowrap; }
     0 0 0 1px rgba(255, 220, 120, .35), 0 0 18px rgba(255, 200, 60, .3),
     0 3px 0 #5a3a06, 0 6px 14px rgba(0, 0, 0, .55);
 }
-.btn-primary:not(:disabled):hover { filter: brightness(1.07) saturate(1.05); }
+@media (hover: hover) { .btn-primary:not(:disabled):hover { filter: brightness(1.07) saturate(1.05); } }
 .btn-primary:not(:disabled):active {
   transform: translateY(2px);
   box-shadow: inset 0 2px 6px rgba(120, 70, 0, .55), 0 0 12px rgba(255, 200, 60, .25), 0 1px 0 #5a3a06, 0 2px 6px rgba(0, 0, 0, .5);
@@ -1508,7 +1513,7 @@ button { white-space: nowrap; }
 #room-code { font-family: var(--display); letter-spacing: 2px; text-transform: uppercase; }
 .net-alt { text-align: center; margin: 14px 0 0; }
 .link-btn { background: none; border: 0; padding: 4px; color: var(--muted); font-size: 13px; text-decoration: underline; cursor: pointer; box-shadow: none; }
-.link-btn:hover { color: var(--gold); }
+@media (hover: hover) { .link-btn:hover { color: var(--gold); } }
 .net-warn { background: rgba(120, 40, 20, .35); border: 1px solid #a0522d; border-radius: 10px; padding: 10px 14px; font-size: 14px; line-height: 1.45; }
 
 /* =============================================================== Automatisch weiter */
@@ -1548,4 +1553,66 @@ button { white-space: nowrap; }
   .hand-actions > button { flex: 1 1 auto; min-width: 0; padding: 8px 6px; }
   .horn-toggle, #play-btn, #next-btn { font-size: 12px; letter-spacing: 0; white-space: nowrap; }
   .qcard .row .bar { display: none; }
+}
+
+/* =============================================================== Notch und Home-Balken (viewport-fit=cover) */
+/* Als installierte App reicht die Seite unter Statusleiste und Home-Balken – die Bedienelemente rücken davon weg */
+.table {
+  padding-left: env(safe-area-inset-left, 0px); padding-right: env(safe-area-inset-right, 0px);
+  padding-bottom: max(var(--gap), env(safe-area-inset-bottom, 0px));
+}
+.topbar { top: env(safe-area-inset-top, 0px); }
+@media (max-width: 1000px) { .table { padding-top: env(safe-area-inset-top, 0px); } }
+@media (orientation: landscape) and (max-height: 500px) {
+  .table {
+    padding: max(4px, env(safe-area-inset-top, 0px)) max(10px, env(safe-area-inset-right, 0px))
+      max(6px, env(safe-area-inset-bottom, 0px)) max(10px, env(safe-area-inset-left, 0px));
+  }
+}
+#menu {
+  padding: max(24px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px))
+    max(24px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+}
+.menu-audio { top: calc(14px + env(safe-area-inset-top, 0px)); right: calc(14px + env(safe-area-inset-right, 0px)); }
+.overlay, .quartet-show {
+  padding: max(16px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px))
+    max(16px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+}
+.modal.gallery { height: calc(100dvh - max(16px, env(safe-area-inset-top, 0px)) - max(16px, env(safe-area-inset-bottom, 0px))); }
+
+/* =============================================================== Handy hochkant */
+@media (max-width: 640px) {
+  /* Kopfleiste in einer Zeile: Ton, Musik, Vollbild und Regeln liegen im Spielmenü (☰) */
+  .top-buttons .in-menu { display: none; }
+  .top-buttons { flex-wrap: nowrap; }
+  .top-buttons .btn-small { min-height: 36px; padding: 6px 12px; font-size: 12px; }
+  .topbar { align-items: center; padding-top: 6px; }
+  /* Spielmenü: Schalter über der Frage, ob man gehen will */
+  .game-menu { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; margin-bottom: 18px; }
+  .game-menu .btn-secondary { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+  .game-menu .off { opacity: .5; }
+  /* Menü: die Ton-Knöpfe scrollen mit, statt über Karten und Titel zu liegen */
+  .menu-audio { position: absolute; }
+  #menu { padding-top: max(64px, calc(env(safe-area-inset-top, 0px) + 52px)); }
+  /* Quartett: vier Karten passen nebeneinander, stärker aufgefächert */
+  .q-plaque { --qw: min(96px, (100vw - 110px) / 3.1); padding-left: 12px; padding-right: 12px; }
+  .q-card { margin: 0 calc(var(--qw) * -.11); }
+  .q-title { font-size: 24px; }
+}
+/* Schlachtfeld: Gelände und Duellkarten richten sich nach der Höhe, die zwischen den Leisten bleibt –
+   sonst ragen sie unter die Gegnerleiste. Wird der Text über der Hand länger (Rundenergebnis), schrumpfen sie sanft. --qw-fit ist als Länge registriert, damit 100cqh hier ausgerechnet
+   wird (die Karten sind selbst Container und würden es sonst auf ihre eigene Höhe beziehen) */
+@property --qw-fit { syntax: '<length>'; inherits: true; initial-value: 0px; }
+@media (max-width: 640px) {
+  .battlefield { container-type: size; --qw-max: var(--qw); padding: calc(1.6em + 6px) 4px calc(2em + 6px); }
+  .battlefield > * { --qw-fit: clamp(60px, (100cqh - 16px) / 1.5, var(--qw-max)); --qw: var(--qw-fit); transition: --qw-fit .35s ease; }
+  /* Leisten in einer Zeile: „Karten“ weglassen, lange Namen kürzen */
+  .table { grid-template-columns: minmax(0, 1fr); } /* eine zu breite Leiste darf das Spielfeld nicht verbreitern */
+  .player-bar { flex-wrap: nowrap; gap: 4px; padding: 4px 8px; }
+  .player-bar .avatar { width: 28px; height: 28px; font-size: 15px; }
+  .player-bar .pname { font-size: 14px; }
+  .opp-row { gap: 6px; padding: 0 6px; }
+  .player-bar .total-chip .unit { display: none; }
+  .player-bar .pname { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .player-bar .qslot { width: 22px; height: 22px; }
 }

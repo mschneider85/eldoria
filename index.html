@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#120d09">
   <link rel="manifest" href="manifest.webmanifest">
   <!-- Zum Homescreen hinzufügen auf iPhone/iPad -->
@@ -16,7 +16,7 @@
   <!-- Alle Schriften liegen im Projekt (@font-face in style.css), es wird nichts von fremden Servern geladen -->
   <link rel="preload" href="art/fonts/cinzel-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="art/fonts/alegreya-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="css/style.css?v=200">
+  <link rel="stylesheet" href="css/style.css?v=201">
   <!-- Inhalt erst zeigen, wenn Cinzel/Alegreya geladen sind (kein kurzes Aufblitzen der Ersatzschrift) -->
   <style>html.fonts-loading body > * { visibility: hidden; }</style>
   <script>
@@ -100,11 +100,12 @@
       <header class="topbar">
         <div id="round-info" class="round-info"></div>
         <div class="top-buttons">
-          <button class="btn-small sfx-toggle" data-tip="Soundeffekte an/aus" aria-label="Soundeffekte an/aus">🔊</button>
-          <button class="btn-small music-toggle" data-tip="Musik an/aus" aria-label="Musik an/aus">🎵</button>
-          <button class="btn-small fs-toggle" data-tip="Vollbild an/aus (F)" aria-label="Vollbild an/aus" hidden></button>
+          <!-- auf dem Handy hochkant im Spielmenü (☰), damit die Leiste in eine Zeile passt -->
+          <button class="btn-small sfx-toggle in-menu" data-label="Effekte" data-tip="Soundeffekte an/aus" aria-label="Soundeffekte an/aus">🔊</button>
+          <button class="btn-small music-toggle in-menu" data-label="Musik" data-tip="Musik an/aus" aria-label="Musik an/aus">🎵</button>
+          <button class="btn-small fs-toggle in-menu" data-label="Vollbild" data-tip="Vollbild an/aus (F)" aria-label="Vollbild an/aus" hidden></button>
           <button id="overview-btn" class="btn-small only-narrow">📋 Übersicht</button>
-          <button id="help-btn" class="btn-small">📜 Regeln</button>
+          <button id="help-btn" class="btn-small in-menu">📜 Regeln</button>
           <button id="menu-btn" class="btn-small">☰ Menü</button>
         </div>
       </header>
@@ -150,19 +151,19 @@
     </div>
   </template>
 
-  <script src="js/cards.js?v=200"></script>
-  <script src="js/engine.js?v=200"></script>
-  <script src="js/ai.js?v=200"></script>
-  <script src="js/net.js?v=200"></script>
-  <script src="js/audio.js?v=200"></script>
-  <script src="js/ui.js?v=200"></script>
-  <script src="js/deer.js?v=200"></script>
+  <script src="js/cards.js?v=201"></script>
+  <script src="js/engine.js?v=201"></script>
+  <script src="js/ai.js?v=201"></script>
+  <script src="js/net.js?v=201"></script>
+  <script src="js/audio.js?v=201"></script>
+  <script src="js/ui.js?v=201"></script>
+  <script src="js/deer.js?v=201"></script>
   <script>
     // Offline-Fähigkeit (sw.js). Nicht beim direkten Öffnen der Datei; auf localhost nur mit ?sw, damit beim
     // Entwickeln keine alten Skripte aus dem Cache kommen
     if ('serviceWorker' in navigator && location.protocol !== 'file:'
       && (!/^(localhost|127\.0\.0\.1)$/.test(location.hostname) || /[?&]sw\b/.test(location.search))) {
-      navigator.serviceWorker.register('sw.js?v=200');
+      navigator.serviceWorker.register('sw.js?v=201');
     }
   </script>
 </body>
