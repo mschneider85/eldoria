@@ -270,6 +270,13 @@
       const l = s.players[li];
       const loot = [ids[wi], ...s.pot];
       const lost = CARDS[ids[li]];
+      if (CARDS[ids[wi]].ability === 'plunder' && l.deck.length) {
+        // vor dem Rückzug: sonst läge die zurückgezogene Karte bei leerem Stapel oben und würde gleich geplündert
+        const stolen = l.deck.pop(); // die oberste Karte des Gegners
+        s.known[li] = s.known[li].filter((id) => id !== stolen);
+        loot.push(stolen);
+        result.notes.push(`🏴‍☠️ Plündern: ${w.name} ${verb(w, 'erbeutet', 'erbeutest')} zusätzlich ${CARDS[stolen].name}.`);
+      }
       // Rückzug wirkt nur einmal pro Spiel – sonst könnte der Gegner dieses Volk nie zum Quartett machen
       if (lost.ability === 'retreat' && !s.retreatUsed.includes(lost.id)) {
         s.retreatUsed.push(lost.id);
@@ -277,13 +284,7 @@
         s.known[li].push(lost.id);
         result.notes.push(`↩️ ${lost.name} zieht sich zurück und bleibt bei ${l.name === 'Du' ? 'dir' : l.name} (Rückzug verbraucht).`);
       } else {
-        loot.push(lost.id);
-      }
-      if (CARDS[ids[wi]].ability === 'plunder' && l.deck.length) {
-        const stolen = l.deck.pop(); // die oberste Karte des Gegners
-        s.known[li] = s.known[li].filter((id) => id !== stolen);
-        loot.push(stolen);
-        result.notes.push(`🏴‍☠️ Plündern: ${w.name} ${verb(w, 'erbeutet', 'erbeutest')} zusätzlich ${CARDS[stolen].name}.`);
+        loot.splice(1 + s.pot.length, 0, lost.id); // Reihenfolge wie bisher: eigene Karte, Kriegsbeute, Verlierer, Geplündertes
       }
       result.potTaken = s.pot.length;
       result.loot = loot.length;

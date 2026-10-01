@@ -60,6 +60,7 @@
 
   /* ------------------------------------------------------------ Verbindung */
   function close() {
+    enterRoom.token = null; // ein Beitritt, der noch lädt, läuft danach ins Leere
     const r = room;
     room = peer = roomSend = null;
     if (r) r.leave().catch(() => {});

@@ -31,6 +31,7 @@
     potShown: null,    // angezeigte Kriegsbeute während der Animationen
     choosing: false,   // eigene Karte fliegt gerade aufs Spielfeld
     tossing: false,    // Münzwurf auf einem Wahlfeld läuft noch
+    presenting: false, // Ergebnis wird noch vorgeführt (Quartett-Tafeln) – „Weiter“ wartet
     hoverHold: false,  // Maus liegt auf dem Schlachtfeld oder dem Ergebnis – der Countdown wartet
     stall: null,       // online: so viele Sekunden lässt der Gegner schon auf seinen Zug warten (ab dem Hinweis)
     message: '',
@@ -142,6 +143,8 @@
     wakeRemote();
     clearEffects();
     ui.pendingDraw = s.players.map((pl) => pl.hand.slice());
+    // Reste einer abgebrochenen Partie (laufende Flüge schreiben sonst in die neue)
+    Object.assign(ui, { deckShown: null, potShown: null, choosing: false, hoverHold: false, oppIncoming: new Set() });
     closeAllOverlays();
     $('#menu').classList.add('hidden');
     $('#game').classList.remove('hidden');
@@ -168,7 +171,7 @@
   }
 
   function resetRoundUI() {
-    Object.assign(ui, { chooser: null, selected: null, rallying: false, revealed: false, showResult: false, fly: null, tossing: false, message: '', aiWaiting: false, stall: null });
+    Object.assign(ui, { chooser: null, selected: null, rallying: false, revealed: false, showResult: false, presenting: false, fly: null, tossing: false, message: '', aiWaiting: false, stall: null });
   }
 
   async function beginRound() {
@@ -294,14 +297,15 @@
     const p = ui.chooser;
     if (p === null || !ui.selected || s.phase !== 'cards' || s.choices[p] || ui.choosing || ui.rallying) return;
     const token = ui.token;
-    ui.choosing = ui.selected; // diese Karte ist unterwegs und wird nicht mehr in der Hand gezeigt
-    await flyHandToSlot(p, ui.selected);
+    const id = ui.selected;
+    ui.choosing = id; // diese Karte ist unterwegs und wird nicht mehr in der Hand gezeigt
+    await flyHandToSlot(p, id);
     ui.choosing = false;
     if (token !== ui.token) return;
-    const r = Engine.choose(s, p, ui.selected);
-    if (!r.ok) { toast(r.error); return; }
-    if (online()) Net.send({ t: 'choose', r: s.round, card: ui.selected });
     ui.selected = null;
+    const r = Engine.choose(s, p, id);
+    if (!r.ok) { render(); toast(r.error); return; }
+    if (online()) Net.send({ t: 'choose', r: s.round, card: id });
     if (pvc() && ui.aiWaiting && !(await aiAfterWaiting(token))) return;
     afterChoice();
   }
@@ -326,6 +330,7 @@
     await sleep(800);
     if (token !== ui.token) return;
     ui.showResult = true;
+    ui.presenting = true;
     ui.message = '';
     render();
     const r = s.result;
@@ -339,7 +344,9 @@
         await showQuartet(p, f);
       }
     }
-    if (token === ui.token) autoAdvance(token);
+    if (token !== ui.token) return;
+    ui.presenting = false;
+    autoAdvance(token);
   }
 
   const AUTO_MS = 4000;       // Countdown für „Weiter“
@@ -367,7 +374,7 @@
   }
 
   async function nextStep() {
-    if (!s.result || ui.fly !== null || overlayOpen()) return;
+    if (!s.result || ui.fly !== null || ui.presenting || overlayOpen()) return;
     const token = ui.token;
     ui.fly = true;
     await animateLoot();
@@ -504,6 +511,7 @@
 
   /** Nur die Zahl aktualisieren – der Stapel selbst wird erst am Ende neu aufgebaut (laufende Animationen bleiben). */
   function setDeck(p, n) {
+    if (!ui.deckShown) return; // Flug aus einer abgebrochenen Partie
     ui.deckShown[p] = n;
     const deck = $(`#deck-${p}`);
     const count = deck && deck.querySelector('.count');
@@ -538,7 +546,7 @@
       const opts = { ry0: 0, ry1: 180 * dir, spin: 14 * dir, lift: from.height * 0.28, delay: i * 180 };
       setTimeout(() => Snd.play('flip'), i * 180 + 120);
       flights.push(dest === null
-        ? fly(g, from, from, target, opts).then(() => { g.remove(); Snd.play('place'); setPot(ui.potShown + 1); })
+        ? fly(g, from, from, target, opts).then(() => { g.remove(); Snd.play('place'); if (ui.potShown !== null) setPot(ui.potShown + 1); })
         : flyUnder(g, from, from, dest, opts));
     });
     if (r.winner !== -1) {
@@ -547,7 +555,7 @@
       for (let k = 0; k < r.potTaken; k++) {
         const from = potRect();
         const g = makeGhost('', from);
-        setTimeout(() => setPot(Math.max(0, ui.potShown - 1)), 420 + k * 140);
+        setTimeout(() => { if (ui.potShown !== null) setPot(Math.max(0, ui.potShown - 1)); }, 420 + k * 140);
         flights.push(flyUnder(g, from, from, w, { ry0: 180, ry1: 180, spin: 10, lift: from.height * 0.4, delay: 420 + k * 140, duration: 560 }));
       }
       // Plündern: oberste Karte des Verlierers wandert hinüber
@@ -1331,7 +1339,7 @@
   /* =============================================================== Eingabe */
   function selectCard(id) {
     const p = ui.chooser;
-    if (p === null || s.phase !== 'cards' || s.choices[p] || !s.players[p].hand.includes(id)) return;
+    if (p === null || s.phase !== 'cards' || s.choices[p] || ui.choosing || ui.rallying || !s.players[p].hand.includes(id)) return;
     ui.selected = ui.selected === id ? null : id;
     Snd.play('select');
     // Nur Klassen umschalten statt die Hand neu aufzubauen.
@@ -1381,20 +1389,49 @@
     };
     document.addEventListener('pointermove', tilt, { passive: true });
     // Rechtsklick (oder langes Drücken auf dem Handy) zeigt eine Karte groß.
-    $('#game').addEventListener('contextmenu', (e) => {
-      if (!s) return;
+    const zoomTarget = (target) => {
       // Ausgespähte Karten: auch auf der Rückseite zeigt Rechtsklick die Karte groß
-      const spied = e.target.closest('.spied');
-      const el = spied ? spied.querySelector('[data-zoom]') : e.target.closest('.qcard, .terrain');
-      if (!el) return;
-      e.preventDefault();
+      const spied = target.closest('.spied');
+      return spied ? spied.querySelector('[data-zoom]') : target.closest('.qcard, .terrain');
+    };
+    const zoomEl = (el) => {
       if (el.classList.contains('terrain')) { zoomTerrain(s.terrain.id); return; }
       const id = el.dataset.card || el.dataset.zoom;
       if (id) zoomCard(id);
+    };
+    let pressed = false; // diese Berührung hat schon die Großansicht geöffnet
+    $('#game').addEventListener('contextmenu', (e) => {
+      if (!s) return;
+      const el = zoomTarget(e.target);
+      if (!el) return;
+      e.preventDefault();
+      endPress();
+      if (pressed) return; // schon per langem Drücken geöffnet (Android meldet beides)
+      pressed = true;
+      zoomEl(el);
     });
+    // iOS Safari kennt kein contextmenu beim langen Drücken – dafür ein eigener Zeitgeber
+    let press = null;
+    const endPress = () => { if (press) clearTimeout(press.timer); press = null; };
+    document.addEventListener('pointerdown', () => { pressed = false; }, true);
+    $('#game').addEventListener('pointerdown', (e) => {
+      endPress();
+      if (!s || e.pointerType !== 'touch') return;
+      const el = zoomTarget(e.target);
+      if (!el) return;
+      press = { x: e.clientX, y: e.clientY, timer: setTimeout(() => { press = null; pressed = true; zoomEl(el); }, 500) };
+    });
+    $('#game').addEventListener('pointermove', (e) => {
+      if (press && Math.hypot(e.clientX - press.x, e.clientY - press.y) > 10) endPress();
+    });
+    ['pointerup', 'pointercancel'].forEach((type) => $('#game').addEventListener(type, endPress));
+    // Der Klick am Ende des langen Drückens wählt keine Karte aus und schließt die Großansicht nicht gleich wieder
+    document.addEventListener('click', (e) => {
+      if (pressed) { e.stopPropagation(); e.preventDefault(); pressed = false; }
+    }, true);
     $('#game').addEventListener('dblclick', (e) => {
       const card = e.target.closest('#hand [data-card]');
-      if (card && s && ui.chooser !== null && s.phase === 'cards') { ui.selected = card.dataset.card; confirmChoice(); }
+      if (card && s && ui.chooser !== null && s.phase === 'cards' && !ui.choosing && !ui.rallying) { ui.selected = card.dataset.card; confirmChoice(); }
     });
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
@@ -1719,6 +1756,9 @@
   }
 
   function onNetMessage(m) {
+    if (!m || typeof m !== 'object') return;
+    // Anfang einer Partie nur, wenn keine läuft (Revanche erst nach dem Spielende)
+    if ((m.t === 'hello' || m.t === 'start') && s && s.phase !== 'over') return;
     if (m.t === 'hello') {
       // beim Gastgeber: der Gast ist da – Partie auslosen und starten
       if (!net.host) return;
