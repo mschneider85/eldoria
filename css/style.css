@@ -1625,6 +1625,11 @@ button { white-space: nowrap; }
 .pressing { scale: 1.08; filter: brightness(1.12); transition: scale .35s ease-out, filter .35s ease-out; z-index: 30; }
 @media (prefers-reduced-motion: reduce) { .pressing { scale: 1; } }
 
-/* iPhone-App vom Homescreen: volle Bildschirmhöhe statt der um die Statusleiste zu kurzen Seite (Script in index.html) */
-html.full-h, html.full-h body { height: var(--app-h); }
-html.full-h :is(.screen, .overlay, .quartet-show, .coin-toss, .embers, .intro), html.full-h #menu::before { bottom: auto; height: var(--app-h); }
+/* App vom Homescreen: Dort sind 100 % und dvh/svh um die Statusleiste zu kurz (iPhone 13 mini: 762 statt 812 px),
+   nur lvh ist die volle Höhe. In Safari bleibt dvh – mit lvh lägen die Knöpfe hinter der Leiste. */
+@media (display-mode: standalone), (display-mode: fullscreen) {
+  :root { --vh: 100lvh; }
+  html, body { height: 100lvh; }
+  :is(.screen, .overlay, .quartet-show, .coin-toss, .embers, .intro), #menu::before { bottom: auto; height: 100lvh; }
+  .modal.gallery { height: calc(100lvh - max(16px, env(safe-area-inset-top, 0px)) - max(16px, env(safe-area-inset-bottom, 0px))); }
+}

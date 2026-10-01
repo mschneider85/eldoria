@@ -16,27 +16,7 @@
   <!-- Alle Schriften liegen im Projekt (@font-face in style.css), es wird nichts von fremden Servern geladen -->
   <link rel="preload" href="art/fonts/cinzel-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="art/fonts/alegreya-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="css/style.css?v=205">
-  <!-- iPhone-App vom Homescreen: Die Seite reicht unter die Statusleiste, ist aber um deren Höhe zu kurz –
-       unten bliebe ein leerer Streifen. Dann gilt die volle Bildschirmhöhe (--app-h, s. style.css). -->
-  <script>
-    (function () {
-      if (!navigator.standalone) return;
-      var root = document.documentElement;
-      var fit = function () {
-        var land = window.matchMedia('(orientation: landscape)').matches;
-        var full = land ? Math.min(screen.width, screen.height) : Math.max(screen.width, screen.height);
-        var short = full - window.innerHeight;
-        var on = short > 0 && short < 80; // nur der Streifen der Statusleiste, kein anderer Fall
-        root.classList.toggle('full-h', on);
-        if (on) { root.style.setProperty('--app-h', full + 'px'); root.style.setProperty('--vh', full + 'px'); }
-        else root.style.removeProperty('--vh');
-      };
-      fit();
-      window.addEventListener('resize', fit);
-      window.addEventListener('orientationchange', function () { setTimeout(fit, 300); });
-    })();
-  </script>
+  <link rel="stylesheet" href="css/style.css?v=206">
   <!-- Inhalt erst zeigen, wenn Cinzel/Alegreya geladen sind (kein kurzes Aufblitzen der Ersatzschrift) -->
   <style>html.fonts-loading body > * { visibility: hidden; }</style>
   <script>
@@ -171,19 +151,19 @@
     </div>
   </template>
 
-  <script src="js/cards.js?v=205"></script>
-  <script src="js/engine.js?v=205"></script>
-  <script src="js/ai.js?v=205"></script>
-  <script src="js/net.js?v=205"></script>
-  <script src="js/audio.js?v=205"></script>
-  <script src="js/ui.js?v=205"></script>
-  <script src="js/deer.js?v=205"></script>
+  <script src="js/cards.js?v=206"></script>
+  <script src="js/engine.js?v=206"></script>
+  <script src="js/ai.js?v=206"></script>
+  <script src="js/net.js?v=206"></script>
+  <script src="js/audio.js?v=206"></script>
+  <script src="js/ui.js?v=206"></script>
+  <script src="js/deer.js?v=206"></script>
   <script>
     // Offline-Fähigkeit (sw.js). Nicht beim direkten Öffnen der Datei; auf localhost nur mit ?sw, damit beim
     // Entwickeln keine alten Skripte aus dem Cache kommen
     if ('serviceWorker' in navigator && location.protocol !== 'file:'
       && (!/^(localhost|127\.0\.0\.1)$/.test(location.hostname) || /[?&]sw\b/.test(location.search))) {
-      navigator.serviceWorker.register('sw.js?v=205');
+      navigator.serviceWorker.register('sw.js?v=206');
     }
   </script>
 </body>

@@ -1408,7 +1408,7 @@
       const env = (side) => px(`height:env(safe-area-inset-${side},0px)`);
       const v = document.querySelector('link[rel=stylesheet]').href.split('v=')[1];
       const rows = [
-        ['Version', v], ['standalone', String(!!navigator.standalone)], ['full-h', String(document.documentElement.classList.contains('full-h'))],
+        ['Version', v], ['standalone', String(!!navigator.standalone)], ['display-mode', matchMedia('(display-mode: standalone), (display-mode: fullscreen)').matches ? 'App' : 'Browser'],
         ['screen', `${screen.width}×${screen.height}`], ['innerHeight', innerHeight], ['clientHeight', document.documentElement.clientHeight],
         ['100%', px('height:100%')], ['100vh', px('height:100vh')], ['100svh', px('height:100svh')], ['100lvh', px('height:100lvh')], ['100dvh', px('height:100dvh')],
         ['safe oben/unten', `${env('top')} / ${env('bottom')}`], ['#game', Math.round($('#game').getBoundingClientRect().height)],
