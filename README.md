@@ -28,6 +28,8 @@ von Hand aus.
 
 Beide Geräte rechnen dieselbe Partie mit demselben Startwert (der Gast spiegelverkehrt), übers Netz gehen
 nur die Züge. Beide müssen dieselbe Spielversion geladen haben.
+Lässt der Gegner länger als 30 Sekunden auf seinen Zug warten, zeigt ein Zähler das an; nach zwei Minuten
+kann man die Partie dort direkt verlassen. Gezogen wird nie für ihn.
 
 ## Spielprinzip
 
@@ -44,6 +46,7 @@ nur die Züge. Beide müssen dieselbe Spielversion geladen haben.
   Starke Karten haben eher schwache Fähigkeiten und umgekehrt – die höchste Karte ist also nicht automatisch richtig.
   Beschreibung: Maus über die Karte, Rechtsklick für Großansicht, oder in den Spielregeln.
 - Tastatur: `1`–`3` Karte wählen, `H` Schlachtruf, `Enter` ausspielen/weiter, `Esc` Fenster schließen.
+- Nach dem Duell geht es nach ein paar Sekunden von selbst weiter (Balken im „Weiter“-Knopf); Maus auf dem Schlachtfeld hält ihn an.
 - Rechtsklick (Handy: lange drücken) zeigt eine Karte groß; im Menü gibt es eine Kartengalerie.
 
 ## Aufbau

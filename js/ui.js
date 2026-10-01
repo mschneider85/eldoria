@@ -31,6 +31,8 @@
     potShown: null,    // angezeigte Kriegsbeute während der Animationen
     choosing: false,   // eigene Karte fliegt gerade aufs Spielfeld
     tossing: false,    // Münzwurf auf einem Wahlfeld läuft noch
+    hoverHold: false,  // Maus liegt auf dem Schlachtfeld oder dem Ergebnis – der Countdown wartet
+    stall: null,       // online: so viele Sekunden lässt der Gegner schon auf seinen Zug warten (ab dem Hinweis)
     message: '',
     token: 0,          // bricht laufende Abläufe ab, wenn ein neues Spiel startet
   };
@@ -152,6 +154,7 @@
     closeAllOverlays();
     $('#menu').classList.add('hidden');
     $('#game').classList.remove('hidden');
+    if (online()) watchStall(ui.token);
     beginRound();
   }
 
@@ -174,7 +177,7 @@
   }
 
   function resetRoundUI() {
-    Object.assign(ui, { chooser: null, selected: null, rallying: false, revealed: false, showResult: false, fly: null, tossing: false, message: '', aiWaiting: false });
+    Object.assign(ui, { chooser: null, selected: null, rallying: false, revealed: false, showResult: false, fly: null, tossing: false, message: '', aiWaiting: false, stall: null });
   }
 
   async function beginRound() {
@@ -375,6 +378,31 @@
         Snd.play('quartet');
         await showQuartet(p, f);
       }
+    }
+    if (token === ui.token) autoAdvance(token);
+  }
+
+  const AUTO_MS = 4000;       // Countdown für „Weiter“
+  const AUTO_NOTES_MS = 2500; // länger, wenn Fähigkeiten gewirkt haben – dann gibt es mehr zu lesen
+
+  /**
+   * „Weiter“ von selbst: Ein Balken im Knopf läuft ab. Einblendungen, ein verstecktes Fenster und die
+   * Maus auf Schlachtfeld oder Ergebnis halten ihn an. Nach der letzten Runde bleibt es beim Klick.
+   */
+  async function autoAdvance(token) {
+    if (!s.result || s.phase === 'over') return;
+    const total = AUTO_MS + (s.result.notes.length ? AUTO_NOTES_MS : 0);
+    let left = total;
+    let last = performance.now();
+    for (;;) {
+      await sleep(80);
+      if (token !== ui.token || !ui.showResult || ui.fly !== null) return;
+      const now = performance.now();
+      if (!overlayOpen() && !ui.hoverHold && !document.hidden) left -= now - last;
+      last = now;
+      const btn = $('#next-btn');
+      if (btn) btn.style.setProperty('--auto', Math.max(0, left / total).toFixed(3));
+      if (left <= 0) { nextStep(); return; }
     }
   }
 
@@ -1249,7 +1277,15 @@
   }
 
   function centerHTML() {
-    return `<div class="message">${ui.message}</div>`;
+    return `<div class="message">${ui.message}</div>${stallHTML()}`;
+  }
+
+  /** Online: Der Gegner lässt auf sich warten – Zähler, nach einer Weile mit Ausweg. */
+  function stallHTML() {
+    if (ui.stall === null) return '';
+    const time = `${Math.floor(ui.stall / 60)}:${String(ui.stall % 60).padStart(2, '0')}`;
+    const leave = ui.stall >= STALL_LEAVE_S ? '<button class="btn-small" id="stall-leave">Partie verlassen</button>' : '';
+    return `<div class="stall">⏳ ${oppName()} lässt sich Zeit… <b>${time}</b>${leave}</div>`;
   }
 
   /** Hand plus Titel- und Aktionszeile darunter (Ergebnis, Weiter, Statwahl, Ausspielen). */
@@ -1380,7 +1416,13 @@
       if (e.target.closest('#rally-btn')) { rallyNow(); return; }
       if (e.target.closest('#play-btn')) { confirmChoice(); return; }
       if (e.target.closest('#next-btn')) { nextStep(); return; }
+      if (e.target.closest('#stall-leave')) { confirmLeave(); return; }
     });
+    // Wer mit der Maus auf dem Schlachtfeld oder dem Ergebnis verweilt, liest noch – der Countdown wartet
+    $('#game').addEventListener('pointerover', (e) => {
+      if (e.pointerType === 'mouse') ui.hoverHold = !!e.target.closest('.slot, #terrain-box, #hand-title');
+    });
+    $('#game').addEventListener('pointerleave', () => { ui.hoverHold = false; });
     // Lichtreflex und leichte Neigung folgen der Maus (Handkarten, Galerie, Großansicht, Menü)
     const tilt = (e) => {
       if (reducedMotion) return;
@@ -1436,16 +1478,18 @@
         else if ($('#play-btn') && !$('#play-btn').disabled) confirmChoice();
       }
     });
-    $('#menu-btn').addEventListener('click', () => {
-      openOverlay(`<div class="modal"><h2>Spiel verlassen?</h2><p>Die aktuelle Partie geht verloren.</p>
-        <div class="buttons"><button class="btn-secondary" data-close>Weiterspielen</button><button class="btn-primary" id="leave-btn">Zum Menü</button></div></div>`);
-      $('#leave-btn').addEventListener('click', toMenu);
-    });
+    $('#menu-btn').addEventListener('click', confirmLeave);
     $('#help-btn').addEventListener('click', showRules);
     $('#overview-btn').addEventListener('click', () => {
       openOverlay(`<div class="modal"><h2>Quartett-Übersicht</h2><div class="legend">${legendHTML()}</div><br>
         <div class="overview">${overviewHTML()}</div><div class="buttons"><button class="btn-primary" data-close>Schließen</button></div></div>`);
     });
+  }
+
+  function confirmLeave() {
+    openOverlay(`<div class="modal"><h2>Spiel verlassen?</h2><p>Die aktuelle Partie geht verloren.</p>
+      <div class="buttons"><button class="btn-secondary" data-close>Weiterspielen</button><button class="btn-primary" id="leave-btn">Zum Menü</button></div></div>`);
+    $('#leave-btn').addEventListener('click', toMenu);
   }
 
   /* =============================================================== Overlays & Effekte */
@@ -1769,6 +1813,28 @@
     net.rematch = [false, false];
     net.queue = [];
     launch({ mode: 'online', seed, flip: !net.host, players: [{ name: 'Du' }, { name: net.oppName }] });
+  }
+
+  const STALL_HINT_S = 30;  // ab dann zeigt ein Zähler, dass der Gegner auf sich warten lässt
+  const STALL_LEAVE_S = 120; // ab dann kann man die Partie direkt dort verlassen
+
+  /**
+   * Wartet dieses Gerät auf einen Zug des Gegners (Eigenschaft oder Karte, die eigene ist schon gelegt)?
+   * Gezogen wird nie für ihn – das könnte sich mit seinem echten Zug überkreuzen. Man sieht nur, wie lange es dauert.
+   */
+  async function watchStall(token) {
+    let key = null, since = 0;
+    for (;;) {
+      await sleep(1000);
+      if (token !== ui.token) return;
+      const waiting = !net.queue.some((m) => m.r === s.round)
+        && (s.phase === 'stat' ? s.picker === 1 && !ui.tossing : s.phase === 'cards' && !!s.choices[0] && !s.choices[1]);
+      const k = waiting ? `${s.round}-${s.phase}` : null;
+      if (k !== key) { key = k; since = Date.now(); }
+      const secs = k ? Math.floor((Date.now() - since) / 1000) : 0;
+      const stall = secs >= STALL_HINT_S ? secs : null;
+      if (stall !== ui.stall) { ui.stall = stall; render(); }
+    }
   }
 
   /** Hinweis im Spielende-Fenster (Toasts lägen unter dem Fenster). */

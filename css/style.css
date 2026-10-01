@@ -1519,3 +1519,18 @@ button { white-space: nowrap; }
 .link-btn { background: none; border: 0; padding: 4px; color: var(--muted); font-size: 13px; text-decoration: underline; cursor: pointer; box-shadow: none; }
 .link-btn:hover { color: var(--gold); }
 .net-warn { background: rgba(120, 40, 20, .35); border: 1px solid #a0522d; border-radius: 10px; padding: 10px 14px; font-size: 14px; line-height: 1.45; }
+
+/* =============================================================== Automatisch weiter */
+/* Der Balken unten im „Weiter“-Knopf schrumpft, bis es von selbst weitergeht (--auto: 1 → 0) */
+#next-btn { position: relative; overflow: hidden; }
+#next-btn::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 4px;
+  background: rgba(58, 34, 4, .55); transform-origin: left; transform: scaleX(var(--auto, 0));
+}
+
+/* Online: Der Gegner lässt auf sich warten */
+.center .stall {
+  display: flex; flex-direction: column; align-items: center; gap: 6px; margin-top: 4px;
+  color: var(--muted); font-size: 13px; font-weight: 700; text-align: center;
+}
+.center .stall b { color: var(--ink); font-variant-numeric: tabular-nums; }
