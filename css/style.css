@@ -1657,6 +1657,6 @@ button { white-space: nowrap; }
   /* Fähigkeit klein am unteren Bildrand, damit das Bild sichtbar bleibt */
   .hand .qcard.selected .ability .atext {
     top: auto; bottom: calc(var(--qw) * .76); left: 5%; right: 5%;
-    font-size: calc(var(--qw) * .052); line-height: 1.25; padding: 3px 5px; border-radius: 5px;
+    font-size: calc(var(--qw) * .075); line-height: 1.2; padding: 3px 5px; border-radius: 5px;
   }
 }

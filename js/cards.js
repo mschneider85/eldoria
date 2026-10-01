@@ -71,18 +71,18 @@
    * also als Abzug vom eigenen Wert.
    */
   const ABILITIES = {
-    allies: { name: 'Verbündete', icon: '🤝', text: (c) => `+${c.amount} für jede weitere Karte der ${FACTIONS[c.faction].name} auf deiner Hand.` },
-    retreat: { name: 'Rückzug', icon: '↩️', text: () => 'Verlierst du, kommt diese Karte unter deinen eigenen Stapel, statt erobert zu werden – einmal pro Spiel.' },
+    allies: { name: 'Verbündete', icon: '🤝', text: (c) => `+${c.amount} je weitere Karte der ${FACTIONS[c.faction].name} auf deiner Hand.` },
+    retreat: { name: 'Rückzug', icon: '↩️', text: () => 'Bei Niederlage: Rückzug! 1x pro Spiel.' },
     redirect: { name: 'Umlenken', icon: '🔀', text: (c) => `Das Duell wird mit ${STATS[c.stat].icon} ${STATS[c.stat].name} entschieden.` },
-    weaken: { name: 'Schwächen', icon: '🎯', text: (c) => `Die gegnerische Karte bekommt −${c.amount}.` },
-    plunder: { name: 'Plündern', icon: '🏴‍☠️', text: () => 'Gewinnst du, eroberst du zusätzlich die oberste Karte vom Stapel des Gegners.' },
+    weaken: { name: 'Schwächen', icon: '🎯', text: (c) => `Gegnerische Karte −${c.amount}.` },
+    plunder: { name: 'Plündern', icon: '🏴‍☠️', text: () => 'Bei Sieg: Du eroberst eine zusätzliche Karte des Gegners.' },
     rage: { name: 'Wut', icon: '💢', text: (c) => `+${c.amount}, wenn du die letzte Runde verloren hast.` },
-    spy: { name: 'Spion', icon: '🕵️', text: () => '+10. Danach siehst du eine Handkarte des Gegners, solange sie auf seiner Hand bleibt.' },
-    ambush: { name: 'Hinterhalt', icon: '🗡️', text: () => '+25, wenn die gegnerische Karte einen besseren Grundwert hat (bei „niedrigster gewinnt“ also einen kleineren).' },
-    shift: { name: 'Gestaltwandel', icon: '🌀', text: () => 'Zählt immer mit ihrem besten Wert, egal welche Eigenschaft gilt (bei „niedrigster gewinnt“ mit dem kleinsten).' },
-    runehorn: { name: 'Runenhorn', icon: '📯', text: () => 'Nach dem Duell ist dein 📯 Schlachtruf sofort wieder bereit.' },
-    treason: { name: 'Verrat', icon: '🎭', text: () => 'Dreht das Duell um: Der niedrigere Wert gewinnt.' },
-    mirror: { name: 'Spiegel', icon: '🪞', text: () => 'Übernimmt den Grundwert der gegnerischen Karte +5 – die eigenen Werte zählen nie.' },
+    spy: { name: 'Spion', icon: '🕵️', text: () => '+10. Danach siehst du eine Handkarte des Gegners.' },
+    ambush: { name: 'Hinterhalt', icon: '🗡️', text: () => '+25, wenn die gegnerische Karte einen besseren Grundwert hat.' },
+    shift: { name: 'Gestaltwandel', icon: '🌀', text: () => 'Zählt immer mit ihrem besten Wert.' },
+    runehorn: { name: 'Runenhorn', icon: '📯', text: () => 'Danach ist dein 📯 Schlachtruf sofort wieder bereit.' },
+    treason: { name: 'Verrat', icon: '🎭', text: () => 'Der niedrigere Wert gewinnt.' },
+    mirror: { name: 'Spiegel', icon: '🪞', text: () => 'Zählt mit dem Grundwert der gegnerischen Karte +5.' },
   };
 
   /*

@@ -16,7 +16,7 @@
   <!-- Alle Schriften liegen im Projekt (@font-face in style.css), es wird nichts von fremden Servern geladen -->
   <link rel="preload" href="art/fonts/cinzel-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="art/fonts/alegreya-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="css/style.css?v=210">
+  <link rel="stylesheet" href="css/style.css?v=211">
   <!-- Inhalt erst zeigen, wenn Cinzel/Alegreya geladen sind (kein kurzes Aufblitzen der Ersatzschrift) -->
   <style>html.fonts-loading body > * { visibility: hidden; }</style>
   <script>
@@ -151,19 +151,19 @@
     </div>
   </template>
 
-  <script src="js/cards.js?v=210"></script>
-  <script src="js/engine.js?v=210"></script>
-  <script src="js/ai.js?v=210"></script>
-  <script src="js/net.js?v=210"></script>
-  <script src="js/audio.js?v=210"></script>
-  <script src="js/ui.js?v=210"></script>
-  <script src="js/deer.js?v=210"></script>
+  <script src="js/cards.js?v=211"></script>
+  <script src="js/engine.js?v=211"></script>
+  <script src="js/ai.js?v=211"></script>
+  <script src="js/net.js?v=211"></script>
+  <script src="js/audio.js?v=211"></script>
+  <script src="js/ui.js?v=211"></script>
+  <script src="js/deer.js?v=211"></script>
   <script>
     // Offline-Fähigkeit (sw.js). Nicht beim direkten Öffnen der Datei; auf localhost nur mit ?sw, damit beim
     // Entwickeln keine alten Skripte aus dem Cache kommen
     if ('serviceWorker' in navigator && location.protocol !== 'file:'
       && (!/^(localhost|127\.0\.0\.1)$/.test(location.hostname) || /[?&]sw\b/.test(location.search))) {
-      navigator.serviceWorker.register('sw.js?v=210');
+      navigator.serviceWorker.register('sw.js?v=211');
     }
   </script>
 </body>
