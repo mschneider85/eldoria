@@ -1564,20 +1564,6 @@
   function closeAllOverlays() { overlayStack = []; moodBeforeZoom = null; closeOverlay(); }
   function showRules() {
     openOverlay($('#rules-tpl').innerHTML);
-    const list = $('#overlay .ability-list');
-    if (list) {
-      const byAbility = {};
-      for (const c of Object.values(CARDS)) if (c.ability) (byAbility[c.ability] = byAbility[c.ability] || []).push(c);
-      list.innerHTML = Object.entries(ABILITIES).map(([key, a]) => {
-        const cards = byAbility[key] || [];
-        const generic = {
-          allies: '+10 für jede weitere Karte desselben Volkes auf deiner Hand.',
-          redirect: 'Das Duell wird mit der Eigenschaft entschieden, die auf der Karte steht.',
-          weaken: 'Die gegnerische Karte bekommt einen Abzug (10–20, steht auf der Karte).',
-        }[key];
-        return `<li>${a.icon} <b>${a.name}</b> – ${generic || a.text(cards[0])} <span class="ab-cards">(${cards.map((c) => c.id).join(', ')})</span></li>`;
-      }).join('');
-    }
   }
 
   /* =============================================================== Zoom & Galerie */

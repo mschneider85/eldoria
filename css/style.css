@@ -432,8 +432,6 @@ button:disabled { cursor: var(--cur-default); }
   box-shadow: 0 0 0 1.5px #2a0c04, 0 0 0 3px rgba(255, 190, 160, .45), 0 2px 6px rgba(0, 0, 0, .6);
 }
 .hand-title .notes { color: #ffd76a; font-weight: 700; font-size: .95em; margin-bottom: 2px; }
-.rules-intro { font-size: 14px; margin: 0 0 6px; }
-.ab-cards { color: var(--muted); font-size: 12px; }
 .qcard .stats { flex: 1; display: flex; flex-direction: column; justify-content: space-evenly; padding: 2px 5px 4px; min-height: 0; }
 .qcard .row {
   display: grid; grid-template-columns: calc(var(--qw) * .11) 1fr auto; align-items: center; gap: 4px;
@@ -570,8 +568,11 @@ button:disabled { cursor: var(--cur-default); }
 .modal .overview { text-align: left; }
 .rules { text-align: left; }
 .rules h2, .rules h3 { text-align: center; }
-.rules ul { padding-left: 20px; line-height: 1.5; font-size: 14px; }
 .rules .btn-primary { display: block; margin: 18px auto 0; }
+.rules-goal { font-size: 15px; margin: 0 0 4px; text-align: center; }
+.rules-quick { list-style: none; padding: 0; margin: 0 0 14px; display: grid; gap: 10px; }
+.rules-quick li { display: grid; grid-template-columns: 34px 1fr; gap: 10px; align-items: center; font-size: 15px; line-height: 1.4; }
+.rules-quick li > span { font-size: 24px; text-align: center; }
 .final-score { display: flex; justify-content: center; gap: 30px; margin: 10px 0; }
 .final-score div { display: flex; flex-direction: column; gap: 2px; }
 .final-score b { font-size: 26px; color: #fff2c4; }

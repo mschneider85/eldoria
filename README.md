@@ -45,11 +45,11 @@ kann man die Partie dort direkt verlassen. Gezogen wird nie für ihn.
   an der Kreuzung und im Kriegsrat entscheidet ein Münzwurf, wer die Eigenschaft wählt).
 - Beide wählen **verdeckt** eine Karte; der Sieger erobert beide. Gleichstand → Kriegsbeute für den nächsten Rundensieger.
 - Alle 4 Karten eines Volkes = **Quartett** (wird abgelegt und ist sicher). **3 Quartette gewinnen** (nach 40 Runden zählen Quartette, danach Karten).
-- Extras: 📯 Schlachtruf: vor der Wahl alle Handkarten in den eigenen Stapel mischen und neu ziehen. Lädt sich in 2 Runden wieder auf, in denen man zurückliegt – das hilft bei der Aufholjagd. Die Drachenkönigin (6A) ist die stärkste Karte – aber ohne Sonderregel.
+- Extras: 📯 Schlachtruf: vor der Wahl alle Handkarten in den eigenen Stapel mischen und neu ziehen. Lädt sich in 2 Runden wieder auf, in denen man zurückliegt – das hilft bei der Aufholjagd. Die Drachenkönigin (6A) ist die stärkste Karte – aber mit schwacher Fähigkeit.
 - **Fähigkeiten:** Jede Karte hat eine von 12 Fähigkeiten, die beim Aufdecken wirken – z. B. Umlenken (andere Eigenschaft zählt),
   Verrat (niedrigster Wert gewinnt), Rückzug (Karte geht bei Niederlage nicht verloren), Plündern, Spion, Schwächen.
   Starke Karten haben eher schwache Fähigkeiten und umgekehrt – die höchste Karte ist also nicht automatisch richtig.
-  Beschreibung: Maus über die Karte, Rechtsklick für Großansicht, oder in den Spielregeln.
+  Beschreibung: Maus über die Karte oder Rechtsklick für Großansicht.
 - Tastatur: `1`–`3` Karte wählen, `H` Schlachtruf, `Enter` ausspielen/weiter, `Z` Karte groß zeigen, `Esc` Fenster schließen;
   mit `Tab` lassen sich die Handkarten ansteuern, `Leertaste` wählt.
 - Nach dem Duell geht es nach ein paar Sekunden von selbst weiter (Balken im „Weiter“-Knopf); Maus auf dem Schlachtfeld hält ihn an.

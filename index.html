@@ -10,7 +10,7 @@
   <link rel="preload" href="art/fonts/cinzel-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="art/fonts/alegreya-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-  <link rel="stylesheet" href="css/style.css?v=196">
+  <link rel="stylesheet" href="css/style.css?v=197">
   <!-- Inhalt erst zeigen, wenn Cinzel/Alegreya geladen sind (kein kurzes Aufblitzen der Ersatzschrift) -->
   <style>html.fonts-loading body > * { visibility: hidden; }</style>
   <script>
@@ -129,42 +129,25 @@
   <template id="rules-tpl">
     <div class="modal rules">
       <h2>Spielregeln</h2>
-      <ul>
-        <li><b>32 Karten</b>, 8 Völker mit je 4 Karten (1A–8D). Jede Karte hat vier Eigenschaften: ⚔️ Stärke, 🛡️ Rüstung, ✨ Magie, 💨 Tempo.</li>
-        <li>Jeder bekommt 16 Karten und hält immer <b>3 davon auf der Hand</b>.</li>
-        <li>Jede Runde wird ein <b>Schlachtfeld</b> aufgedeckt. Es bestimmt, welche Eigenschaft zählt – manche geben einem Volk einen Bonus.</li>
-        <li>Beide wählen <b>verdeckt</b> eine Handkarte. Dann wird aufgedeckt: Der höhere Wert gewinnt und <b>erobert beide Karten</b>.</li>
-        <li><b>Nachziehstapel:</b> Nach jeder Runde füllst du deine Hand vom eigenen Stapel wieder auf 3 Karten auf. Eroberte Karten kommen <b>unter</b> den Stapel des Siegers – gezogen wird immer von oben.</li>
-        <li><b>Gleichstand:</b> Beide Karten kommen in die Kriegsbeute. Wer die nächste Runde gewinnt, bekommt sie dazu.</li>
-        <li><b>Tipp:</b> Rechtsklick (am Handy: lange drücken) auf eine Karte zeigt sie groß.</li>
-        <li><b>Tastatur:</b> <kbd>1</kbd>–<kbd>3</kbd> Karte wählen, <kbd>H</kbd> Schlachtruf, <kbd>Enter</kbd> ausspielen / weiter, <kbd>Z</kbd> Karte groß zeigen, <kbd>Esc</kbd> Fenster schließen. Mit <kbd>Tab</kbd> lassen sich die Handkarten ansteuern, <kbd>Leertaste</kbd> wählt.</li>
-        <li><b>Weiter:</b> Nach dem Duell geht es nach ein paar Sekunden von selbst weiter – solange die Maus auf dem Schlachtfeld liegt, wartet der Zähler.</li>
-        <li><b>Quartett:</b> Besitzt du alle 4 Karten eines Volkes, legst du sie automatisch als Quartett ab – sie sind dann sicher.</li>
-      </ul>
-      <h3>Besonderheiten</h3>
-      <ul>
-        <li>☁️ <b>Nebelsumpf:</b> Hier gewinnt der niedrigste Wert.</li>
-        <li>🧭 <b>Kreuzung / Kriegsrat:</b> Eine Münze 🪙 entscheidet, wer die Eigenschaft wählt – jedes Mal neu.</li>
-        <li>📯 <b>Schlachtruf:</b> Keine passende Karte auf der Hand? Vor deiner Wahl mischst du alle Handkarten in deinen Stapel und ziehst neue. Danach lädt er sich wieder auf – aber nur in Runden, in denen du <b>zurückliegst</b> (weniger Karten, ein Quartett zählt wie 4). Nach 2 solchen Runden ist er wieder bereit.</li>
-      </ul>
-      <h3>Fähigkeiten</h3>
-      <p class="rules-intro">Jede Karte hat eine Fähigkeit, die beim Aufdecken wirkt. Die höchste Karte ist also nicht automatisch die beste Wahl!</p>
-      <ul class="ability-list"></ul>
-      <h3>Sieg</h3>
-      <ul>
-        <li>Wer zuerst <b>3 Quartette</b> hat, gewinnt – oder wenn der Gegner keine Karten mehr hat.</li>
-        <li>Nach 40 Runden gewinnt, wer mehr Quartette (danach mehr Karten) besitzt.</li>
-      </ul>
+      <p class="rules-goal"><b>Ziel:</b> Sammle zuerst <b>3 Quartette</b> – je alle 4 Karten eines Volkes.</p>
+      <h3>So wird gespielt</h3>
+      <ol class="rules-quick">
+        <li><span>🗺️</span><div>Das <b>Schlachtfeld</b> bestimmt, was zählt: ⚔️ Stärke, 🛡️ Rüstung, ✨ Magie oder 💨 Tempo.</div></li>
+        <li><span>🃏</span><div>Beide spielen <b>verdeckt</b> eine von 3 Handkarten.</div></li>
+        <li><span>⚔️</span><div>Der <b>höhere Wert</b> erobert beide Karten.</div></li>
+        <li><span>📥</span><div>Beide ziehen auf 3 Karten nach.</div></li>
+        <li><span>🏁</span><div>Das Spiel endet bei <b>3 Quartetten</b>, spätestens nach 40 Runden.</div></li>
+      </ol>
       <button class="btn-primary" data-close>Verstanden</button>
     </div>
   </template>
 
-  <script src="js/cards.js?v=196"></script>
-  <script src="js/engine.js?v=196"></script>
-  <script src="js/ai.js?v=196"></script>
-  <script src="js/net.js?v=196"></script>
-  <script src="js/audio.js?v=196"></script>
-  <script src="js/ui.js?v=196"></script>
-  <script src="js/deer.js?v=196"></script>
+  <script src="js/cards.js?v=197"></script>
+  <script src="js/engine.js?v=197"></script>
+  <script src="js/ai.js?v=197"></script>
+  <script src="js/net.js?v=197"></script>
+  <script src="js/audio.js?v=197"></script>
+  <script src="js/ui.js?v=197"></script>
+  <script src="js/deer.js?v=197"></script>
 </body>
 </html>

@@ -47,7 +47,7 @@
     ['5B', 'Todesritter', '🐴', 86, 84, 50, 46, { ability: 'allies', amount: 15 }],
     ['5C', 'Banshee', '👻', 62, 62, 80, 85, { ability: 'treason' }],
     ['5D', 'Skelettkrieger', '🦴', 58, 55, 25, 62, { ability: 'retreat' }],
-    ['6A', 'Drachenkönigin', '🐉', 98, 94, 95, 82, { ability: 'allies', amount: 10 }], // stärkste Karte, aber ohne Sonderregel
+    ['6A', 'Drachenkönigin', '🐉', 98, 94, 95, 82, { ability: 'allies', amount: 10 }], // stärkste Karte, dafür nur die schwächste Verbündeten-Stufe
     ['6B', 'Rotdrache', '🔥', 85, 70, 70, 55, { ability: 'weaken', amount: 15 }],
     ['6C', 'Frostwyrm', '❄️', 82, 78, 82, 45, { ability: 'retreat' }],
     ['6D', 'Drachenwelpe', '🦎', 8, 5, 12, 15, { ability: 'mirror' }],
@@ -77,10 +77,10 @@
     weaken: { name: 'Schwächen', icon: '🎯', text: (c) => `Die gegnerische Karte bekommt −${c.amount}.` },
     plunder: { name: 'Plündern', icon: '🏴‍☠️', text: () => 'Gewinnst du, eroberst du zusätzlich die oberste Karte vom Stapel des Gegners.' },
     rage: { name: 'Wut', icon: '💢', text: (c) => `+${c.amount}, wenn du die letzte Runde verloren hast.` },
-    spy: { name: 'Spion', icon: '🕵️', text: () => '+10. Beim Aufdecken siehst du eine Handkarte des Gegners, bis er sie ausspielt.' },
+    spy: { name: 'Spion', icon: '🕵️', text: () => '+10. Danach siehst du eine Handkarte des Gegners, solange sie auf seiner Hand bleibt.' },
     ambush: { name: 'Hinterhalt', icon: '🗡️', text: () => '+25, wenn die gegnerische Karte einen besseren Grundwert hat (bei „niedrigster gewinnt“ also einen kleineren).' },
-    shift: { name: 'Gestaltwandel', icon: '🌀', text: () => 'Nutzt immer deinen besten Wert – egal, was zählt (bei „niedrigster gewinnt“ den kleinsten).' },
-    runehorn: { name: 'Runenhorn', icon: '📯', text: () => 'Danach ist dein 📯 Schlachtruf sofort wieder bereit.' },
+    shift: { name: 'Gestaltwandel', icon: '🌀', text: () => 'Zählt immer mit ihrem besten Wert, egal welche Eigenschaft gilt (bei „niedrigster gewinnt“ mit dem kleinsten).' },
+    runehorn: { name: 'Runenhorn', icon: '📯', text: () => 'Nach dem Duell ist dein 📯 Schlachtruf sofort wieder bereit.' },
     treason: { name: 'Verrat', icon: '🎭', text: () => 'Dreht das Duell um: Der niedrigere Wert gewinnt.' },
     mirror: { name: 'Spiegel', icon: '🪞', text: () => 'Übernimmt den Grundwert der gegnerischen Karte +5 – die eigenen Werte zählen nie.' },
   };
