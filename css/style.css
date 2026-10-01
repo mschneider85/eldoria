@@ -4,6 +4,9 @@
   src: url('../art/fonts/cinzel-latin.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
 @font-face { font-family: 'Cinzel'; font-style: normal; font-weight: 400 900; font-display: swap;
   src: url('../art/fonts/cinzel-latin-ext.woff2') format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+/* Emoji-Rückfall nur mit den Emojis des Spiels (tools/emoji-font.py); eine installierte Noto-Schrift geht vor */
+@font-face { font-family: 'Noto Color Emoji'; font-display: swap;
+  src: local('Noto Color Emoji'), url('../art/fonts/noto-emoji-subset.woff2') format('woff2'); }
 @font-face { font-family: 'Alegreya'; font-style: normal; font-weight: 400 900; font-display: swap;
   src: url('../art/fonts/alegreya-latin.woff2') format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
 @font-face { font-family: 'Alegreya'; font-style: normal; font-weight: 400 900; font-display: swap;
@@ -36,7 +39,7 @@
   --p1: #ff5f52;    /* Farbe Spieler 2 / Computer */
   --good: #58e06a;
   --display: 'Cinzel', 'Georgia', 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji', serif;
-  /* System-Emojis zuerst – die Web-Schrift (1,3 MB) wird nur geladen, wenn das System keine hat */
+  /* System-Emojis zuerst – die eigene Emoji-Schrift (rund 90 KB) wird nur geladen, wenn das System keine hat */
   /* Fließtext: Alegreya (Serifen, leicht kalligrafisch) – der Name --sans bleibt aus historischen Gründen */
   --sans: 'Alegreya', 'Georgia', 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji', serif;
 }

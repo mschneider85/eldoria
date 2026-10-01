@@ -71,6 +71,7 @@ kann man die Partie dort direkt verlassen. Gezogen wird nie für ihn.
 | `art/cards`, `art/terrains` | Daraus erzeugte WebP-Bilder (groß + `.thumb` für kleine Darstellungen), die das Spiel lädt: nach Änderungen an einem SVG `tools/build-art.sh` ausführen |
 | `art/cursors/*.svg` | Eigene Mauszeiger (Pfeil, Panzerhandschuh, Lupe, Info) |
 | `tools/texturize.py` | Setzt die Material-Texturen in ein SVG ein (von `build-art.sh` und `render-svg.sh` aufgerufen) |
+| `tools/emoji-font.py` | Baut die Emoji-Ersatzschrift (`art/fonts/noto-emoji-subset.woff2`) nur mit den Emojis des Spiels – nach neuen Emojis ausführen |
 | `tools/render-svg.sh` | Rendert ein SVG per Headless-Chromium als PNG (zum Prüfen von Illustrationen) |
 | `test/simulate.js` | KI-gegen-KI-Partien mit Invarianten-Prüfung: `node test/simulate.js 500` |
 | `test/online.js` | Online-Partien im Gleichschritt: Host und Gast müssen bei jeder Zugreihenfolge gleich rechnen (inkl. Prüfsumme und ungültiger Züge): `node test/online.js 500` |
