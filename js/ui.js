@@ -15,6 +15,9 @@
   };
   const settings = { mode: store.get('mode', 'pvc') === 'online' ? 'online' : 'pvc', difficulty: store.get('difficulty', 'normal') };
   const reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Bewegte Bildeffekte: bei Ruckeln stufenweise weniger (watchFrames) – 0 alle Teilchen, 1 halb so viele, 2 keine
+  let fxAuto = store.get('fx-auto', 0);
+  const fxLevel = () => (reducedMotion ? 2 : fxAuto);
   let s = null;
   let pendingInvite = null; // Einladungslink, der während einer Partie kam – öffnet sich im Menü
   const ui = {
@@ -1045,7 +1048,7 @@
     const rr = (range) => r(range[0], range[1]);
     const el = (cls, vars, dur, delay) => `<i class="${cls}" style="${Object.entries(vars).map(([k, v]) => `--${k}:${v}`).join(';')};animation-duration:${dur}s;animation-delay:${delay}s"></i>`;
     // Auf Handys nur halb so viele Teilchen: Jedes kostet bei jedem Neuzeichnen Rechenzeit (dort ruckelte es im Duell)
-    const share = (small ? 2 : 1) * (phoneFx.matches ? 2 : 1);
+    const share = (small ? 2 : 1) * (phoneFx.matches ? 2 : 1) * (fxLevel() === 1 ? 2 : 1);
     const count = (n) => Array.from({ length: Math.ceil(n / share) });
     const out = fx.map((f) => {
       const c = f.c || FIRE;
@@ -1139,7 +1142,7 @@
     const used = c.ability === 'retreat' && live && s.retreatUsed.includes(id);
     const abText = ab ? `${ab.name}: ${ab.text(c)}${used ? ' (bereits verbraucht)' : ''}` : '';
     const abHTML = ab ? `<div class="ability${used ? ' used' : ''}"><b>${ab.icon} ${ab.name}${used ? ' (verbraucht)' : ''}</b><span class="atext">${ab.text(c)}</span></div>` : '';
-    const fx = reducedMotion ? '' : fxHTML(c.id, opt.thumb);
+    const fx = fxLevel() === 2 ? '' : fxHTML(c.id, opt.thumb);
     return `<div class="qcard${opt.selected ? ' selected' : ''}${opt.exposed ? ' exposed' : ''}" ${opt.attrs || ''} style="--fc:${f.color}">
       ${opt.exposed ? '<span class="exposed-mark" data-tip="Der Gegner kennt diese Karte (Spion)">🕵️</span>' : ''}
       <div class="frame">
@@ -2287,6 +2290,44 @@
     updateAudioButtons();
   }
 
+  /* =============================================================== Kartenanimationen */
+  /** Nach einem Wechsel der Stufe: Effekte sofort entfernen bzw. die Karten neu zeichnen */
+  function applyFx() {
+    if (fxLevel() === 2) document.querySelectorAll('.qcard .fx').forEach((el) => el.remove());
+    if (s) render();
+  }
+  /**
+   * Automatik: misst die Zeit zwischen zwei Bildern, solange Effekte zu sehen sind. Geht in drei
+   * Messfenstern (je 3 s) hintereinander mehr als ein Viertel der Zeit in zu langen Bildern (> 45 ms) auf,
+   * gibt es eine Stufe weniger Effekte. Gleichmäßige 30 Bilder/s (iPhone im Stromsparmodus) zählen nicht,
+   * einzelne lange Hänger (Bilder laden, Partie aufbauen) auch nicht – Ruckeln durch die Effekte ist stetig.
+   */
+  function watchFrames() {
+    let last = 0, settle = 0, total = 0, slow = 0, bad = 0;
+    const visibleFx = () => document.querySelector('.screen:not(.hidden) .fx i, #overlay .fx i');
+    const tick = (t) => {
+      if (fxLevel() === 2) return;
+      requestAnimationFrame(tick);
+      const dt = t - last;
+      last = t;
+      // Hänger und Pausen (Tab im Hintergrund, Gerät gesperrt) und die Zeit kurz danach zählen nicht
+      if (document.hidden || dt > 250 || !visibleFx()) { settle = t + 1000; return; }
+      if (t < settle) return;
+      total += dt;
+      if (dt > 45) slow += dt;
+      if (total < 3000) return;
+      bad = slow / total > .25 ? bad + 1 : 0;
+      total = slow = 0;
+      if (bad < 3) return;
+      bad = 0;
+      settle = t + 3000;
+      store.set('fx-auto', ++fxAuto);
+      applyFx();
+    };
+    settle = performance.now() + 3000; // die ersten Sekunden lädt noch alles
+    requestAnimationFrame(tick);
+  }
+
   /* =============================================================== Vollbild */
   // iPhone-Safari kennt keine Vollbild-API für Seiten – dort bleibt der Knopf versteckt
   function initFullscreen() {
@@ -2371,6 +2412,7 @@
   initMenu();
   initInput();
   initAudio();
+  watchFrames();
   initFullscreen();
   initTooltips();
 })();

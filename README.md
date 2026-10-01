@@ -73,7 +73,7 @@ kann man die Partie dort direkt verlassen. Gezogen wird nie für ihn.
 | `js/vendor/`   | Trystero und QR-Code-Generator (MIT, siehe `LIZENZ.md`), werden erst in der Online-Lobby geladen |
 | `js/ai.js`     | Computergegner: Siegchance × Wert der Beute gegen Verlustrisiko; „Schwer“ zählt Karten und rechnet mit der wahrscheinlichen Gegnerkarte |
 | `js/audio.js`  | Soundeffekte und Hintergrundmusik, live mit der Web-Audio-API erzeugt (keine Audiodateien) |
-| `js/ui.js`     | Menü, Rundenablauf, Animationen; `ART_FX` legt die bewegten Bildeffekte je Karte fest (Glut, Funken, Leuchten, Nebel …) |
+| `js/ui.js`     | Menü, Rundenablauf, Animationen; `ART_FX` legt die bewegten Bildeffekte je Karte fest (Glut, Funken, Leuchten, Nebel …); ruckelt es, schaltet `watchFrames` sie stufenweise ab |
 | `art/src/**/*.svg` | Handgezeichnete SVG-Illustrationen (32 Helden, 14 Schlachtfelder, Kartenrückseite) – die Quellen |
 | `art/src/textures/*.webp` | Graue Strukturkarten (Stein, Metall, Stoff, Holz, Haar, Schuppen …, CC0), die beim Bauen über die Illustrationen gelegt werden. In einem SVG markiert man Flächen mit `data-tx="stone"` am Verlauf oder `filter="url(#tx-metal)"` an Form/Gruppe (Varianten `-soft`, `-fine`) – Details in `tools/texturize.py` |
 | `art/cards`, `art/terrains` | Daraus erzeugte WebP-Bilder (groß + `.thumb` für kleine Darstellungen), die das Spiel lädt: nach Änderungen an einem SVG `tools/build-art.sh` ausführen |
