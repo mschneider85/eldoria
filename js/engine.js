@@ -96,8 +96,6 @@
         if (n) adv[i].push(['Verbündete', c.amount * n]);
       }
       if (c.ability === 'rage' && s.lastWinner === o) adv[i].push(['Wut', c.amount]);
-      if (c.ability === 'ambush' && dir * (base[o] - base[i]) > 0) adv[i].push(['Hinterhalt', 25]);
-      if (c.ability === 'spy') adv[i].push(['Spion', 10]);
       if (cards[o].ability === 'weaken') adv[i].push(['Geschwächt', -cards[o].amount]);
     }
     const values = [0, 1].map((i) => {

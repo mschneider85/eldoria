@@ -1103,7 +1103,7 @@
   }
 
   /**
-   * Boni, die schon vor dem Aufdecken feststehen (Völkerbonus, Verbündete, Wut, Spion).
+   * Boni, die schon vor dem Aufdecken feststehen (Völkerbonus, Verbündete, Wut).
    * Wo der niedrigere Wert gewinnt, sind Boni Abzüge – so wie die Engine sie verrechnet.
    */
   function knownMods(p, id) {
@@ -1117,7 +1117,6 @@
       if (n) out.push(['Verbündete', c.amount * n]);
     }
     if (c.ability === 'rage' && s.lastWinner === 1 - p) out.push(['Wut', c.amount]);
-    if (c.ability === 'spy') out.push(['Spion', 10]);
     return out.map(([label, a]) => ({ label, amount: dir * a }));
   }
 

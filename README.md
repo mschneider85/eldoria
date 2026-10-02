@@ -53,7 +53,7 @@ kann man die Partie dort direkt verlassen. Gezogen wird nie für ihn.
 - Beide wählen **verdeckt** eine Karte; der Sieger erobert beide. Gleichstand → Kriegsbeute für den nächsten Rundensieger.
 - Alle 4 Karten eines Volkes = **Quartett** (wird abgelegt und ist sicher). **3 Quartette gewinnen** (nach 40 Runden zählen Quartette, danach Karten).
 - Extras: 📯 Schlachtruf: vor der Wahl alle Handkarten in den eigenen Stapel mischen und neu ziehen. Lädt sich in 2 Runden wieder auf, in denen man zurückliegt – das hilft bei der Aufholjagd. Die Drachenkönigin (6A) ist die stärkste Karte – aber mit schwacher Fähigkeit.
-- **Fähigkeiten:** Jede Karte hat eine von 12 Fähigkeiten, die beim Aufdecken wirken – z. B. Umlenken (andere Eigenschaft zählt),
+- **Fähigkeiten:** Jede Karte hat eine von 11 Fähigkeiten, die beim Aufdecken wirken – z. B. Umlenken (andere Eigenschaft zählt),
   Verrat (niedrigster Wert gewinnt), Rückzug (Karte geht bei Niederlage nicht verloren), Plündern, Spion, Schwächen.
   Starke Karten haben eher schwache Fähigkeiten und umgekehrt – die höchste Karte ist also nicht automatisch richtig.
   Beschreibung: Maus über die Karte oder Rechtsklick für Großansicht.
