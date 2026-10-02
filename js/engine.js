@@ -341,9 +341,10 @@
       winner = a.quartets.length >= target ? 0 : 1;
       reason = `${target} Quartette gesammelt`;
     } else if (!a.hand.length || !b.hand.length) {
-      winner = !a.hand.length && !b.hand.length ? score(s) : a.hand.length ? 0 : 1;
+      // Wer blank ist, verliert nicht automatisch – etwa wenn das letzte Quartett gerade alle Karten gebunden hat
+      winner = score(s);
       const out = !a.hand.length ? a : b;
-      reason = `${out.name} ${out.you ? 'hast' : 'hat'} keine Karten mehr`;
+      reason = `${out.name} ${out.you ? 'hast' : 'hat'} keine Karten mehr, es zählen die Quartette`;
     } else if (s.round >= s.maxRounds) {
       winner = score(s);
       reason = 'Rundenlimit erreicht';
@@ -356,7 +357,7 @@
     }
   }
 
-  /** Wertung bei Rundenlimit: mehr Quartette, dann mehr Karten. */
+  /** Wertung bei Rundenlimit oder leerer Hand: mehr Quartette, dann mehr Karten. */
   function score(s) {
     const q = s.players.map((pl) => pl.quartets.length);
     if (q[0] !== q[1]) return q[0] > q[1] ? 0 : 1;

@@ -16,7 +16,7 @@
   <!-- Alle Schriften liegen im Projekt (@font-face in style.css), es wird nichts von fremden Servern geladen -->
   <link rel="preload" href="art/fonts/cinzel-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="art/fonts/alegreya-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="css/style.css?v=216">
+  <link rel="stylesheet" href="css/style.css?v=217">
   <!-- Inhalt erst zeigen, wenn Cinzel/Alegreya geladen sind (kein kurzes Aufblitzen der Ersatzschrift) -->
   <style>html.fonts-loading body > * { visibility: hidden; }</style>
   <script>
@@ -151,13 +151,13 @@
     </div>
   </template>
 
-  <script src="js/cards.js?v=216"></script>
-  <script src="js/engine.js?v=216"></script>
-  <script src="js/ai.js?v=216"></script>
-  <script src="js/net.js?v=216"></script>
-  <script src="js/audio.js?v=216"></script>
-  <script src="js/ui.js?v=216"></script>
-  <script src="js/deer.js?v=216"></script>
+  <script src="js/cards.js?v=217"></script>
+  <script src="js/engine.js?v=217"></script>
+  <script src="js/ai.js?v=217"></script>
+  <script src="js/net.js?v=217"></script>
+  <script src="js/audio.js?v=217"></script>
+  <script src="js/ui.js?v=217"></script>
+  <script src="js/deer.js?v=217"></script>
   <script>
     // Kein Zoom: iOS ignoriert user-scalable=no, daher Pinch-Gesten hier abfangen (Doppeltipp verhindert touch-action im CSS)
     ['gesturestart', 'gesturechange'].forEach((t) => document.addEventListener(t, (e) => e.preventDefault(), { passive: false }));
@@ -166,7 +166,7 @@
     // Entwickeln keine alten Skripte aus dem Cache kommen
     if ('serviceWorker' in navigator && location.protocol !== 'file:'
       && (!/^(localhost|127\.0\.0\.1)$/.test(location.hostname) || /[?&]sw\b/.test(location.search))) {
-      navigator.serviceWorker.register('sw.js?v=216');
+      navigator.serviceWorker.register('sw.js?v=217');
     }
   </script>
 </body>

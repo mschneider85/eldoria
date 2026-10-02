@@ -12,6 +12,7 @@
   const LOSS = [0, 1, 1.4, 2.0, 3.0];   // Verlust nach eigener Anzahl dieses Volkes (inkl. der Karte)
   const TUNE = { rallyCost: 0, rallySamples: 12 }; // Schlachtruf: nötiger Vorteil der neuen Hand, Zahl der Probehände (per Test abgestimmt)
   const GAIN = [1.2, 1.7, 2.4, 5.0];    // Gewinn nach eigener Anzahl vor der Eroberung (3 → Quartett!)
+  const FEED = [0, 0.2, 0.6, 2.5];      // Schwer: Zusatzverlust nach Anzahl dieses Volkes beim Gegner (3 → sein Quartett)
 
   /** Mögliche Gegenkarten mit Gewicht: alle bekannten Karten des Gegners, eine per Spion gesehene zählt stärker. */
   function opponentPool(s, p) {
@@ -98,7 +99,9 @@
     const c = CARDS[cardId];
     if (c.ability === 'retreat' && !s.retreatUsed.includes(cardId)) return 0.2;
     const strength = Object.values(c.stats).reduce((a, b) => a + b, 0) / 400;
-    return LOSS[Eng.factionCount(s, p, c.faction)] + strength;
+    // Schwer: Die Karte bringt den Gegner seinem Quartett näher – bei 3 von 4 macht sie es komplett
+    const feeds = s.players[p].difficulty === 'hard' ? FEED[Eng.factionCount(s, 1 - p, c.faction)] : 0;
+    return LOSS[Eng.factionCount(s, p, c.faction)] + strength + feeds;
   }
 
   function expectedValue(s, p, cardId) {
