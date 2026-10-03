@@ -498,6 +498,8 @@ button:disabled { cursor: var(--cur-default); }
 .hand-title { font-size: 13px; font-weight: 700; color: var(--muted); min-height: 18px; }
 .hand { display: flex; gap: clamp(8px, 1.6vw, 20px); justify-content: center; min-height: calc(var(--qw) * 1.5); }
 .hand .qcard { cursor: var(--cur-pointer); transition: transform .15s, box-shadow .15s; }
+/* Jede Handkarte ist eine eigene Ebene: Siegel und Effekte darin liegen nie über einer vergrößerten Nachbarkarte */
+.hand .qcard { isolation: isolate; }
 @media (hover: hover) { .hand .qcard:hover { transform: translateY(-8px); } }
 .hand .qcard:focus-visible { outline: 3px solid #ffd84d; outline-offset: 3px; }
 .hand .qcard.selected { transform: translateY(-14px); box-shadow: 0 0 0 3px #ffd84d, 0 0 26px rgba(255, 216, 77, .8), 0 10px 20px rgba(0, 0, 0, .6); }
