@@ -38,7 +38,7 @@
     presenting: false, // Ergebnis wird noch vorgeführt (Quartett-Tafeln) – „Weiter“ wartet
     duel: null,        // Duell Schritt für Schritt: { steps, k (so viele gezeigt), done, skip }
     hoverHold: false,  // Maus liegt auf dem Schlachtfeld oder dem Ergebnis – der Countdown wartet
-    touchHold: false,  // Finger liegt auf dem Spielfeld (Touch: tippen und halten) – der Countdown wartet ebenso
+    autoOff: false,    // nach dem Duell irgendwo geklickt oder getippt – kein automatisches „Weiter“ in dieser Runde
     stall: null,       // online: so viele Sekunden lässt der Gegner schon auf seinen Zug warten (ab dem Hinweis)
     silent: null,      // online: so viele Sekunden ist die Verbindung schon gestört (nichts kommt an, in eine der Richtungen)
     message: '',
@@ -356,6 +356,7 @@
     ui.presenting = true;
     ui.message = '';
     ui.duel = { steps, k: 0, done: !steps.length, skip: false, after: afterLines(r), afterShown: false };
+    ui.autoOff = false;
     render();
     if (steps.length) {
       await playDuel(token);
@@ -530,7 +531,8 @@
 
   /**
    * „Weiter“ von selbst: Ein Balken im Knopf läuft ab. Einblendungen, ein verstecktes Fenster und die
-   * Maus auf Schlachtfeld oder Ergebnis halten ihn an. Nach der letzten Runde bleibt es beim Klick.
+   * Maus auf Schlachtfeld oder Ergebnis halten ihn an; ein Klick oder Tippen irgendwohin schaltet ihn
+   * für diese Runde ab – wer liest, hat dann Zeit. Nach der letzten Runde bleibt es beim Klick.
    */
   async function autoAdvance(token) {
     if (!s.result || s.phase === 'over') return;
@@ -541,9 +543,10 @@
       await sleep(80);
       if (token !== ui.token || !ui.showResult || ui.fly !== null) return;
       const now = performance.now();
-      if (!overlayOpen() && !ui.hoverHold && !ui.touchHold && !document.hidden) left -= now - last;
-      last = now;
       const btn = $('#next-btn');
+      if (ui.autoOff) { if (btn) btn.style.setProperty('--auto', '0'); return; }
+      if (!overlayOpen() && !ui.hoverHold && !document.hidden) left -= now - last;
+      last = now;
       if (btn) btn.style.setProperty('--auto', Math.max(0, left / total).toFixed(3));
       if (left <= 0) { nextStep(); return; }
     }
@@ -1606,9 +1609,8 @@
       if (e.pointerType === 'mouse') ui.hoverHold = !!e.target.closest('.battlefield, #hand-title');
     });
     $('#game').addEventListener('pointerleave', () => { ui.hoverHold = false; });
-    // Touch: Solange der Finger liegt, wartet der Countdown (Loslassen auch außerhalb des Spielfelds zählt)
-    $('#game').addEventListener('pointerdown', (e) => { if (e.pointerType !== 'mouse') ui.touchHold = true; });
-    ['pointerup', 'pointercancel'].forEach((type) => document.addEventListener(type, () => { ui.touchHold = false; }, true));
+    // Ein Klick oder Tippen irgendwohin (außer auf „Weiter“) schaltet das automatische Weiter für diese Runde ab
+    document.addEventListener('pointerdown', (e) => { if (ui.showResult && !e.target.closest('#next-btn')) ui.autoOff = true; }, true);
     // Lichtreflex und leichte Neigung folgen der Maus (Handkarten, Galerie, Großansicht, Menü)
     const tilt = (e) => {
       if (reducedMotion) return;

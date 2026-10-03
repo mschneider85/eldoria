@@ -59,7 +59,7 @@ kann man die Partie dort direkt verlassen. Gezogen wird nie für ihn.
   Beschreibung: Maus über die Karte oder Rechtsklick für Großansicht.
 - Tastatur: `1`–`3` Karte wählen, `H` Schlachtruf, `Enter` ausspielen/weiter, `Z` Karte groß zeigen, `Esc` Fenster schließen;
   mit `Tab` lassen sich die Handkarten ansteuern, `Leertaste` wählt.
-- Nach dem Duell geht es nach ein paar Sekunden von selbst weiter (Balken im „Weiter“-Knopf); Maus auf dem Schlachtfeld hält ihn an.
+- Nach dem Duell geht es nach ein paar Sekunden von selbst weiter (Balken im „Weiter“-Knopf); Maus auf dem Schlachtfeld hält ihn an, ein Klick oder Tippen irgendwohin schaltet ihn für diese Runde ab.
 - Rechtsklick (Handy: lange drücken) zeigt eine Karte groß; im Menü gibt es eine Kartengalerie.
 
 ## Aufbau
