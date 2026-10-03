@@ -47,7 +47,9 @@
    * choices: [{ card }, { card }] für Spieler 0 und 1.
    * opts.allies(i, card) ersetzt die Zahl der Verbündeten auf der Hand von Spieler i
    * (für die KI, die die gegnerische Hand nicht kennen darf).
-   * Rückgabe: { stat, low, values: [{ base, mods: [{ label, amount }], total }], winner, reason, notes }
+   * Rückgabe: { stat, low, values: [{ raw, via, base, mods: [{ label, amount }], total }], winner, reason, notes,
+   *   start, switchers, traitors } – start: Eigenschaft vor dem Umlenken, raw: Kartenwert darin,
+   *   via: 'shift'/'mirror', wenn die Fähigkeit den Grundwert ersetzt; switchers/traitors: wer umlenkt/verrät (für die Animation).
    * winner: 0/1, -1 = Gleichstand. Die Beträge in mods sind so, wie sie den angezeigten Wert verändern.
    */
   function duel(s, choices, opts = {}) {
@@ -70,10 +72,10 @@
 
     // 2. Gewinnt der höhere oder der niedrigere Wert?
     let low = !!s.terrain.lowWins;
-    const traitors = cards.filter((c) => c.ability === 'treason');
+    const traitors = [0, 1].filter((i) => cards[i].ability === 'treason');
     if (traitors.length % 2) {
       low = !low;
-      notes.push(`🎭 ${traitors[0].name}: Verrat! Jetzt gewinnt der ${low ? 'niedrigere' : 'höhere'} Wert.`);
+      notes.push(`🎭 ${cards[traitors[0]].name}: Verrat! Jetzt gewinnt der ${low ? 'niedrigere' : 'höhere'} Wert.`);
     }
     const dir = low ? -1 : 1;
 
@@ -101,7 +103,8 @@
     const values = [0, 1].map((i) => {
       const mods = adv[i].map(([label, a]) => ({ label, amount: dir * a }));
       const total = Math.max(0, base[i] + mods.reduce((sum, m) => sum + m.amount, 0));
-      return { base: base[i], mods, total };
+      const via = cards[i].ability === 'shift' || cards[i].ability === 'mirror' ? cards[i].ability : null;
+      return { raw: cards[i].stats[s.stat], via, base: base[i], mods, total };
     });
 
     // 5. Sieger
@@ -113,7 +116,7 @@
       winner = (values[0].total > values[1].total) === !low ? 0 : 1;
       reason = low ? 'low' : 'high';
     }
-    return { stat, low, values, winner, reason, notes };
+    return { stat, low, values, winner, reason, notes, start: s.stat, switchers, traitors };
   }
 
   /** Füllt die Hand vom eigenen Stapel auf und gibt die gezogenen Karten zurück. */
@@ -257,6 +260,7 @@
     log(s, `${names[0]} (${d.values[0].total}) gegen ${names[1]} (${d.values[1].total})`);
 
     const result = { ids, values: d.values, stat: d.stat, low: d.low, winner: d.winner, reason: d.reason,
+      start: d.start, switchers: d.switchers, traitors: d.traitors,
       notes: d.notes.slice(), potTaken: 0, loot: 0, quartets: [[], []] };
     if (d.winner === -1) {
       s.pot.push(...(s.flip ? ids.slice().reverse() : ids)); // in Sitzplatz-Reihenfolge, damit Host und Gast gleich stapeln

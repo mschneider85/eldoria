@@ -36,6 +36,7 @@
     choosing: false,   // eigene Karte fliegt gerade aufs Spielfeld
     tossing: false,    // Münzwurf auf einem Wahlfeld läuft noch
     presenting: false, // Ergebnis wird noch vorgeführt (Quartett-Tafeln) – „Weiter“ wartet
+    duel: null,        // Duell Schritt für Schritt: { steps, k (so viele gezeigt), done, skip }
     hoverHold: false,  // Maus liegt auf dem Schlachtfeld oder dem Ergebnis – der Countdown wartet
     stall: null,       // online: so viele Sekunden lässt der Gegner schon auf seinen Zug warten (ab dem Hinweis)
     silent: null,      // online: so viele Sekunden ist die Verbindung schon gestört (nichts kommt an, in eine der Richtungen)
@@ -191,7 +192,7 @@
   }
 
   function resetRoundUI() {
-    Object.assign(ui, { chooser: null, selected: null, rallying: false, revealed: false, showResult: false, presenting: false, fly: null, tossing: false, message: '', aiWaiting: false, stall: null, silent: null });
+    Object.assign(ui, { chooser: null, selected: null, rallying: false, revealed: false, showResult: false, presenting: false, duel: null, fly: null, tossing: false, message: '', aiWaiting: false, stall: null, silent: null });
   }
 
   async function beginRound() {
@@ -346,15 +347,24 @@
     document.querySelectorAll('.slot .flipper').forEach((f) => f.classList.add('revealed'));
     ui.revealed = true;
     Snd.play('reveal');
-    const r0 = s.result;
-    if (r0.notes.length) setTimeout(() => Snd.play('magic'), 500);
+    const r = s.result;
+    const steps = duelSteps(r);
+    // Fähigkeiten, die erst nach dem Duell wirken (Plündern, Rückzug, Spion), klingen schon beim Aufdecken an
+    if (r.notes.length && !steps.some((st) => st.kind === 'ability')) setTimeout(() => Snd.play('magic'), 500);
     await sleep(800);
     if (token !== ui.token) return;
     ui.showResult = true;
     ui.presenting = true;
     ui.message = '';
+    ui.duel = { steps, k: 0, done: !steps.length, skip: false };
     render();
-    const r = s.result;
+    if (steps.length) {
+      await playDuel(token);
+      if (token !== ui.token) return;
+      countRun++;
+      Object.assign(ui.duel, { done: true, k: steps.length });
+      render();
+    }
     if (r.winner === -1) Snd.play('tie');
     else Snd.play(r.winner === 1 ? 'lose' : 'win');
     for (const p of [0, 1]) {
@@ -368,6 +378,131 @@
     if (token !== ui.token) return;
     ui.presenting = false;
     autoAdvance(token);
+  }
+
+  const STEP_FIRST_MS = 900; // so lange steht der Kartenwert allein, bevor die Fähigkeiten dazukommen
+  const STEP_MS = 1000;      // Abstand der folgenden Schritte
+  const COUNT_MS = 420;      // so lange zählt der Wert hoch oder runter
+
+  /**
+   * Das Duell zum Mitverfolgen: Unter den Werten erscheint Schritt für Schritt, was sie verändert –
+   * erst die Regeln (Umlenken, Verrat), dann ersetzte Grundwerte (Gestaltwandel, Spiegel), dann Zu- und Abschläge.
+   * Jeder Schritt: lines[p] = { text, cls } oder null, dazu Eigenschaft, Richtung und Werte danach.
+   * stats[p]: die Eigenschaft, die auf Karte p markiert ist (beim Gestaltwandel ihr bester Wert).
+   */
+  function duelSteps(r) {
+    const cards = r.ids.map((id) => CARDS[id]);
+    const steps = [];
+    let stat = r.start;
+    let stats = [stat, stat];
+    let low = !!s.terrain.lowWins;
+    let vals = r.values.map((v) => v.raw);
+    const add = (kind, lines) => steps.push({ kind, lines, stat, stats: stats.slice(), low, vals: vals.slice() });
+    const line = (text, cls = 'ability') => ({ text, cls });
+    const both = (text) => [line(text), line(text)];
+    const one = (i, text) => (i === 0 ? [line(text), null] : [null, line(text)]);
+
+    if (r.switchers.length === 2) add('ability', both('🔀 Umlenken hebt sich auf'));
+    else if (r.switchers.length === 1 && r.stat !== r.start) {
+      stat = r.stat;
+      // Auch Karten mit Gestaltwandel oder Spiegel springen erst mit um – deren Fähigkeit folgt danach als eigener Schritt
+      stats = [stat, stat];
+      vals = cards.map((c) => c.stats[stat]);
+      add('ability', [0, 1].map((i) => line(`${i === r.switchers[0] ? '🔀 ' : ''}${statLabel(stat)} zählt`)));
+    }
+    if (r.traitors.length === 2) add('ability', both('🎭 Verrat hebt sich auf'));
+    else if (r.traitors.length === 1) {
+      low = r.low;
+      add('ability', one(r.traitors[0], `🎭 Verrat: ${low ? 'Niedriger' : 'Höher'} gewinnt`));
+    }
+    // Gestaltwandel vor dem Spiegel – der Spiegel greift den schon gewandelten Wert auf
+    for (const via of ['shift', 'mirror']) {
+      const who = [0, 1].filter((i) => r.values[i].via === via);
+      if (!who.length) continue;
+      const lines = [null, null];
+      for (const i of who) {
+        vals[i] = r.values[i].base;
+        if (via === 'shift') {
+          // der beste (wo der niedrigere gewinnt: der niedrigste) Wert der Karte – diese Zeile wird markiert
+          stats[i] = STAT_IDS.find((st) => cards[i].stats[st] === r.values[i].base);
+          lines[i] = line(`🌀 ${statLabel(stats[i])} zählt`);
+        } else lines[i] = line(`🪞 Spiegel: Gegner ${low ? '−' : '+'}5`);
+      }
+      add('ability', lines);
+    }
+    const n = Math.max(r.values[0].mods.length, r.values[1].mods.length);
+    for (let j = 0; j < n; j++) {
+      const lines = [0, 1].map((i) => {
+        const m = r.values[i].mods[j];
+        if (!m) return null;
+        vals[i] += m.amount;
+        // grün, wenn es dem Besitzer hilft (wo der niedrigere Wert gewinnt, sind das Abzüge)
+        return line(`${m.amount > 0 ? '+' : '−'}${Math.abs(m.amount)} ${m.label}`, (m.amount > 0) !== r.low ? 'good' : 'bad');
+      });
+      add('mod', lines);
+    }
+    return steps;
+  }
+
+  /** Stand der Duell-Animation: Eigenschaft, je Karte markierte Eigenschaft, Richtung und angezeigte Werte. */
+  function duelView() {
+    const r = s.result;
+    const d = ui.duel;
+    const last = d && d.steps[d.steps.length - 1];
+    if (!d || d.done) return { stat: r.stat, stats: last ? last.stats : [r.stat, r.stat], low: r.low, vals: r.values.map((v) => v.total) };
+    const cur = d.steps[d.k - 1];
+    if (!cur) return { stat: r.start, stats: [r.start, r.start], low: !!s.terrain.lowWins, vals: r.values.map((v) => v.raw) };
+    return { stat: cur.stat, stats: cur.stats, low: cur.low, vals: cur.vals.map((v) => Math.max(0, v)) };
+  }
+
+  /** Wartet ms (ohne die Zeit, in der ein Fenster offen ist); true, wenn übersprungen oder abgebrochen. */
+  async function stepPause(token, ms) {
+    let left = ms;
+    let last = performance.now();
+    while (left > 0) {
+      await sleep(50);
+      if (token !== ui.token || ui.duel.skip) return true;
+      const now = performance.now();
+      if (!overlayOpen()) left -= now - last;
+      last = now;
+    }
+    return false;
+  }
+
+  /** Lässt die Werte vom alten zum neuen Stand zählen (das Element wird jedes Mal neu gesucht – render() ersetzt es). */
+  let countRun = 0; // ein neuer Zählvorgang (oder das Ende des Duells) hält den laufenden an
+  function countValues(from, to) {
+    const run = ++countRun;
+    const t0 = performance.now();
+    const tick = () => {
+      if (run !== countRun) return;
+      const k = reducedMotion ? 1 : Math.min(1, (performance.now() - t0) / COUNT_MS);
+      for (const p of [0, 1]) {
+        const el = $(`#slot-${p} .value .num`);
+        if (!el || from[p] === to[p]) continue;
+        el.textContent = Math.round(from[p] + (to[p] - from[p]) * k);
+        el.classList.toggle('up', k < 1 && to[p] > from[p]);
+        el.classList.toggle('down', k < 1 && to[p] < from[p]);
+      }
+      if (k < 1) requestAnimationFrame(tick);
+    };
+    tick();
+  }
+
+  async function playDuel(token) {
+    const d = ui.duel;
+    for (const step of d.steps) {
+      if (await stepPause(token, d.k ? STEP_MS : STEP_FIRST_MS)) return;
+      const before = duelView();
+      d.k++;
+      render();
+      const after = duelView();
+      countValues(before.vals, after.vals);
+      // Springt die Markierung auf eine andere Eigenschaft (Umlenken, Gestaltwandel), leuchtet die neue Zeile auf
+      for (const p of [0, 1]) if (after.stats[p] !== before.stats[p]) $(`#slot-${p} .row.active`)?.classList.add('flash');
+      Snd.play(step.kind === 'ability' ? 'magic' : 'click');
+    }
+    await stepPause(token, STEP_MS);
   }
 
   const AUTO_MS = 4000;       // Countdown für „Weiter“
@@ -395,6 +530,8 @@
   }
 
   async function nextStep() {
+    // Läuft das Duell noch, springt „Weiter“ erst einmal zum Ergebnis
+    if (ui.duel && !ui.duel.done) { ui.duel.skip = true; return; }
     if (!s.result || ui.fly !== null || ui.presenting || overlayOpen()) return;
     const token = ui.token;
     ui.fly = true;
@@ -1209,12 +1346,17 @@
     const who = `<div class="who">${escapeHTML(pl.name)}</div>`;
     if (s.result) {
       const id = s.result.ids[p];
-      const v = s.result.values[p];
-      const extra = v.mods.map((m) => `${m.amount > 0 ? '+' : '−'}${Math.abs(m.amount)} ${m.label}`).join(' ');
-      const value = ui.showResult ? `<div class="value">${v.total}${extra ? ` <small>(${v.base} ${extra})</small>` : ''}</div>` : '';
+      const view = ui.showResult ? duelView() : null;
+      let value = '';
+      if (view) {
+        const d = ui.duel;
+        const shown = d ? d.steps.slice(0, d.k) : [];
+        const lines = shown.map((st, k) => st.lines[p] && `<li class="${st.lines[p].cls}${!d.done && k === d.k - 1 ? ' new' : ''}">${escapeHTML(st.lines[p].text)}</li>`).filter(Boolean).join('');
+        value = `<div class="value"><b class="num">${view.vals[p]}</b>${lines ? `<ul class="steps">${lines}</ul>` : ''}</div>`;
+      }
       return `${who}<div class="flipper${ui.revealed ? ' revealed' : ''}">
         <div class="face back"><div class="card-back"></div></div>
-        <div class="face front">${cardHTML(id, { attrs: `data-zoom="${id}"`, stat: ui.showResult ? s.result.stat : null })}</div></div>${value}`;
+        <div class="face front">${cardHTML(id, { attrs: `data-zoom="${id}"`, stat: view ? view.stats[p] : null })}</div></div>${value}`;
     }
     if (s.phase === 'cards' && s.choices[p]) {
       // Eine per Spion bekannte Gegnerkarte liegt offen – du hast sie ja schon gesehen
@@ -1235,7 +1377,7 @@
 
   function slotClass(p) {
     const cl = ['slot'];
-    if (ui.showResult && s.result && s.result.winner !== -1) cl.push(s.result.winner === p ? 'win' : 'lose');
+    if (ui.showResult && s.result && s.result.winner !== -1 && (!ui.duel || ui.duel.done)) cl.push(s.result.winner === p ? 'win' : 'lose');
     if (ui.fly) cl.push('emptying'); // die Karten sind gerade als Geister unterwegs
     return cl.join(' ');
   }
@@ -1278,7 +1420,11 @@
     if (ui.showResult) {
       // Frisch gezogene Karten erst nach „Weiter“ zeigen – sie fliegen dann vom Stapel ins Blatt
       const cards = p === null ? '' : s.players[p].hand.filter((id) => !s.result.drawn[p].includes(id)).map((id) => cardHTML(id)).join('');
-      return { title: `<div class="result-line">${resultMessage()}</div>`, cards, locked: true,
+      // Das Ergebnis erscheint erst, wenn das Duell vorgeführt ist
+      const running = ui.duel && !ui.duel.done;
+      // (leere Zeile hält den Platz, damit das Spielfeld nicht springt, wenn das Ergebnis erscheint)
+      const title = `<div class="result-line">${running ? '&nbsp;' : resultMessage()}</div>`;
+      return { title, cards, locked: true,
         actions: `<button class="btn-primary" id="next-btn">${s.phase === 'over' ? 'Ergebnis ▸' : 'Weiter ▸'}</button>` };
     }
     if (p === null) return { title: '', cards: '', actions: '' };
@@ -1418,6 +1564,8 @@
     };
     $('#game').addEventListener('click', (e) => {
       if (!s) return;
+      // Während das Duell Schritt für Schritt abläuft, springt ein Tippen zum Ergebnis (Menü und Übersicht bleiben erreichbar)
+      if (ui.duel && !ui.duel.done && ui.showResult && !e.target.closest('button:not(#next-btn)')) { ui.duel.skip = true; return; }
       const card = e.target.closest('#hand [data-card]');
       // Handkarten wählt man aus; gerade nicht wählbare zeigen sich groß wie alle anderen Karten
       if (card) { if (canSelect(card.dataset.card)) selectCard(card.dataset.card); else zoomEl(card); return; }
