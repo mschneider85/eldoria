@@ -45,14 +45,14 @@
     ['4D', 'Greifenreiter', '🦅', 65, 58, 20, 85, { ability: 'plunder' }],
     ['5A', 'Der Frostlich', '☠️', 55, 50, 85, 42, { ability: 'weaken', amount: 10 }],
     ['5B', 'Todesritter', '🐴', 86, 84, 50, 46, { ability: 'allies', amount: 15 }],
-    ['5C', 'Banshee', '👻', 62, 62, 80, 85, { ability: 'treason' }],
+    ['5C', 'Banshee', '👻', 82, 82, 90, 92, { ability: 'treason' }],
     ['5D', 'Skelettkrieger', '🦴', 58, 55, 25, 62, { ability: 'retreat' }],
     ['6A', 'Drachenkönigin', '🐉', 98, 94, 95, 82, { ability: 'allies', amount: 10 }], // stärkste Karte, dafür nur die schwächste Verbündeten-Stufe
     ['6B', 'Rotdrache', '🔥', 85, 70, 70, 55, { ability: 'weaken', amount: 15 }],
     ['6C', 'Frostwyrm', '❄️', 82, 78, 82, 45, { ability: 'retreat' }],
     ['6D', 'Drachenwelpe', '🦎', 8, 5, 12, 15, { ability: 'mirror' }],
     ['7A', 'Grubenlord', '👿', 95, 80, 55, 20, { ability: 'plunder' }],
-    ['7B', 'Schattenhexe', '🧛‍♀️', 64, 64, 85, 75, { ability: 'treason' }],
+    ['7B', 'Schattenhexe', '🧛‍♀️', 84, 84, 92, 88, { ability: 'treason' }],
     ['7C', 'Höllenbestie', '🐕', 75, 60, 20, 80, { ability: 'rage', amount: 20 }],
     ['7D', 'Wichtel', '👺', 20, 15, 60, 70, { ability: 'weaken', amount: 15 }],
     ['8A', 'Feuerelementar', '🔥', 76, 40, 80, 60, { ability: 'redirect', stat: 'str' }],
@@ -67,8 +67,8 @@
 
   /*
    * Fähigkeiten: wirken beim Aufdecken. text(c) liefert die Kartenbeschreibung.
-   * Wird die niedrigste Karte gesucht (Nebel, Verrat), wirken Boni in die „gute“ Richtung –
-   * also als Abzug vom eigenen Wert.
+   * Sie wirken immer wörtlich: Wird die niedrigste Karte gesucht (Nebel, Verrat), schadet ein Bonus
+   * dem Besitzer, Schwächen hilft dem Gegner und Gestaltwandel nimmt trotzdem den höchsten Wert.
    */
   const ABILITIES = {
     allies: { name: 'Verbündete', icon: '🤝', text: (c) => `+${c.amount} je weitere Karte der ${FACTIONS[c.faction].name} auf deiner Hand.` },
@@ -78,7 +78,7 @@
     plunder: { name: 'Plündern', icon: '🏴‍☠️', text: () => 'Bei Sieg: Du eroberst eine zusätzliche Karte des Gegners.' },
     rage: { name: 'Wut', icon: '💢', text: (c) => `+${c.amount}, wenn du die letzte Runde verloren hast.` },
     spy: { name: 'Spion', icon: '🕵️', text: () => 'Danach siehst du eine Handkarte des Gegners.' },
-    shift: { name: 'Gestaltwandel', icon: '🌀', text: () => 'Zählt immer mit ihrem besten Wert.' },
+    shift: { name: 'Gestaltwandel', icon: '🌀', text: () => 'Zählt immer mit ihrem höchsten Wert.' },
     runehorn: { name: 'Runenhorn', icon: '📯', text: () => 'Danach ist dein 📯 Schlachtruf sofort wieder bereit.' },
     treason: { name: 'Verrat', icon: '🎭', text: () => 'Der niedrigere Wert gewinnt.' },
     mirror: { name: 'Spiegel', icon: '🪞', text: () => 'Zählt mit dem Grundwert der gegnerischen Karte +5.' },

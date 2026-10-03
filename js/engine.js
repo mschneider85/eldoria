@@ -51,6 +51,8 @@
    *   start, switchers, traitors } – start: Eigenschaft vor dem Umlenken, raw: Kartenwert darin,
    *   via: 'shift'/'mirror', wenn die Fähigkeit den Grundwert ersetzt; switchers/traitors: wer umlenkt/verrät (für die Animation).
    * winner: 0/1, -1 = Gleichstand. Die Beträge in mods sind so, wie sie den angezeigten Wert verändern.
+   * Fähigkeiten und Boni wirken immer wörtlich (Wut +20 heißt +20) – auch wo der niedrigere Wert gewinnt,
+   * dann schaden sie eben dem Besitzer.
    */
   function duel(s, choices, opts = {}) {
     const ids = choices.map((c) => c.card);
@@ -77,14 +79,13 @@
       low = !low;
       notes.push(`🎭 ${cards[traitors[0]].name}: Verrat! Jetzt gewinnt der ${low ? 'niedrigere' : 'höhere'} Wert.`);
     }
-    const dir = low ? -1 : 1;
 
     // 3. Grundwerte
-    const best = (c) => (low ? Math.min : Math.max)(...Object.values(c.stats));
+    const best = (c) => Math.max(...Object.values(c.stats));
     const base = cards.map((c) => (c.ability === 'shift' ? best(c) : c.stats[stat]));
-    for (const i of [0, 1]) if (cards[i].ability === 'mirror') base[i] = Math.max(0, base[1 - i] + 5 * dir);
+    for (const i of [0, 1]) if (cards[i].ability === 'mirror') base[i] = base[1 - i] + 5;
 
-    // 4. Vorteile (positiv = gut für den Besitzer)
+    // 4. Zu- und Abschläge auf den eigenen Wert
     const adv = [[], []];
     for (const i of [0, 1]) {
       const c = cards[i];
@@ -101,7 +102,7 @@
       if (cards[o].ability === 'weaken') adv[i].push(['Geschwächt', -cards[o].amount]);
     }
     const values = [0, 1].map((i) => {
-      const mods = adv[i].map(([label, a]) => ({ label, amount: dir * a }));
+      const mods = adv[i].map(([label, amount]) => ({ label, amount }));
       const total = Math.max(0, base[i] + mods.reduce((sum, m) => sum + m.amount, 0));
       const via = cards[i].ability === 'shift' || cards[i].ability === 'mirror' ? cards[i].ability : null;
       return { raw: cards[i].stats[s.stat], via, base: base[i], mods, total };

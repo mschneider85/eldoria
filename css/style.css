@@ -471,7 +471,7 @@ button:disabled { cursor: var(--cur-default); }
 .qcard .row .bar i { display: block; height: 100%; background: linear-gradient(90deg, color-mix(in srgb, var(--fc) 60%, white), var(--fc)); }
 .qcard .row .num { font-weight: 900; font-size: calc(var(--qw) * .085); min-width: 2ch; text-align: right; }
 .qcard .row .bonus { color: #1d8a2c; font-weight: 900; font-size: calc(var(--qw) * .06); margin-left: 2px; cursor: var(--cur-help); }
-.qcard .row .bonus.minus { color: #1d6f8a; } /* Abzug, der dir hilft (niedrigerer Wert gewinnt) */
+.qcard .row .bonus.bad { color: #b3261e; } /* schadet dir (z. B. Zuschlag, wo der niedrigere Wert gewinnt) */
 .qcard .row.active { background: linear-gradient(90deg, #ffe08a, #f2c14e); box-shadow: 0 0 0 1.5px #8a5a10, 0 0 10px rgba(255, 200, 60, .7); }
 .qcard .row.active .lbl { font-weight: 900; }
 .qcard .row.dim { opacity: .5; }

@@ -395,7 +395,7 @@
    * Das Duell zum Mitverfolgen: Unter den Werten erscheint Schritt für Schritt, was sie verändert –
    * erst die Regeln (Umlenken, Verrat), dann ersetzte Grundwerte (Gestaltwandel, Spiegel), dann Zu- und Abschläge.
    * Jeder Schritt: lines[p] = { text, cls } oder null, dazu Eigenschaft, Richtung und Werte danach.
-   * stats[p]: die Eigenschaft, die auf Karte p markiert ist (beim Gestaltwandel ihr bester Wert).
+   * stats[p]: die Eigenschaft, die auf Karte p markiert ist (beim Gestaltwandel ihr höchster Wert).
    */
   function duelSteps(r) {
     const cards = r.ids.map((id) => CARDS[id]);
@@ -430,10 +430,10 @@
       for (const i of who) {
         vals[i] = r.values[i].base;
         if (via === 'shift') {
-          // der beste (wo der niedrigere gewinnt: der niedrigste) Wert der Karte – diese Zeile wird markiert
+          // der höchste Wert der Karte – diese Zeile wird markiert
           stats[i] = STAT_IDS.find((st) => cards[i].stats[st] === r.values[i].base);
           lines[i] = line(`🌀 ${statLabel(stats[i])} zählt`);
-        } else lines[i] = line(`🪞 Spiegel: Gegner ${low ? '−' : '+'}5`);
+        } else lines[i] = line('🪞 Spiegel: Gegner +5');
       }
       add('ability', lines);
     }
@@ -443,7 +443,7 @@
         const m = r.values[i].mods[j];
         if (!m) return null;
         vals[i] += m.amount;
-        // grün, wenn es dem Besitzer hilft (wo der niedrigere Wert gewinnt, sind das Abzüge)
+        // grün, wenn es dem Besitzer hilft (wo der niedrigere Wert gewinnt, schaden Zuschläge)
         return line(`${m.amount > 0 ? '+' : '−'}${Math.abs(m.amount)} ${m.label}`, (m.amount > 0) !== r.low ? 'good' : 'bad');
       });
       add('mod', lines);
@@ -1260,11 +1260,10 @@
 
   /**
    * Boni, die schon vor dem Aufdecken feststehen (Völkerbonus, Verbündete, Wut).
-   * Wo der niedrigere Wert gewinnt, sind Boni Abzüge – so wie die Engine sie verrechnet.
+   * Sie gelten wörtlich, auch wo der niedrigere Wert gewinnt – so wie die Engine sie verrechnet.
    */
   function knownMods(p, id) {
     const c = CARDS[id];
-    const dir = s.terrain.lowWins ? -1 : 1;
     const out = [];
     const terrain = (s.terrain.bonus && s.terrain.bonus[c.faction]) || 0;
     if (terrain) out.push(['Völkerbonus', terrain]);
@@ -1273,7 +1272,7 @@
       if (n) out.push(['Verbündete', c.amount * n]);
     }
     if (c.ability === 'rage' && s.lastWinner === 1 - p) out.push(['Wut', c.amount]);
-    return out.map(([label, a]) => ({ label, amount: dir * a }));
+    return out.map(([label, amount]) => ({ label, amount }));
   }
 
   function cardHTML(id, opt = {}) {
@@ -1287,7 +1286,7 @@
     else if (live && s.terrain && s.terrain.bonus && s.terrain.bonus[c.faction]) mods = [{ label: 'Völkerbonus', amount: s.terrain.bonus[c.faction] }];
     const sum = mods.reduce((a, m) => a + m.amount, 0);
     const bonusHTML = mods.length
-      ? `<span class="bonus${sum < 0 ? ' minus' : ''}" data-tip="${mods.map((m) => `${m.label} ${m.amount > 0 ? '+' : '−'}${Math.abs(m.amount)}`).join(' · ')}">${sum > 0 ? '+' : '−'}${Math.abs(sum)}</span>`
+      ? `<span class="bonus${(sum > 0) === !!s.terrain.lowWins ? ' bad' : ''}" data-tip="${mods.map((m) => `${m.label} ${m.amount > 0 ? '+' : '−'}${Math.abs(m.amount)}`).join(' · ')}">${sum > 0 ? '+' : '−'}${Math.abs(sum)}</span>`
       : '';
     const rows = STAT_IDS.map((st) => {
       const active = stat === st;
