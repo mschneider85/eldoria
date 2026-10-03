@@ -25,10 +25,11 @@
   --tex-wood: url('../art/textures/wood.webp') 0 0 / 260px;
   --side: 290px;                                  /* Breite der Seitenleiste */
   /* Kartenbreite: so groß, wie Höhe (Schlachtfeld + Hand übereinander) und Breite (3 Karten nebeneinander) es erlauben.
-     Die Bedienelemente wachsen ab 190px mit, daher zwei Höhengrenzen: fester Rand bzw. anteilig. */
+     Die Bedienelemente wachsen ab 190px mit, daher zwei Höhengrenzen: fester Rand bzw. anteilig.
+     Neben der Hand brauchen Hinweis und Knöpfe je rund 250px – daher die zweite Breitengrenze. */
   --gap: clamp(10px, 2.2vh, 28px);                /* Abstand zwischen den Bereichen */
   --vh: 100vh;                                    /* sichtbare Höhe; auf dem Handy ohne die Adressleiste (dvh, s. u.) */
-  --qw: clamp(96px, min((var(--vh) - 300px - 4 * var(--gap)) / 3, (var(--vh) - 4 * var(--gap)) / 4.75, (100vw - var(--side) - 180px) / 4.6), 360px);
+  --qw: clamp(96px, min((var(--vh) - 300px - 4 * var(--gap)) / 3, (var(--vh) - 4 * var(--gap)) / 4.75, (100vw - var(--side) - 180px) / 4.6, (100vw - var(--side) - 600px) / 3.2), 360px);
   --gold: #e2b85a;
   --gold-dark: #8a6a2a;
   --ink: #f3e6c8;
@@ -607,7 +608,8 @@ button:disabled { cursor: var(--cur-default); }
 .final-score b { font-size: 26px; color: #fff2c4; }
 
 /* =============================================================== Schmale Bildschirme */
-@media (max-width: 1000px) {
+/* Ohne Seitenleiste schon auf dem Tablet quer – daneben bliebe für Hand und Knöpfe zu wenig Platz */
+@media (max-width: 1200px) {
   :root { --side: 0px; }
   #game { grid-template-columns: 1fr; }
   .sidebar { display: none; }
@@ -676,6 +678,8 @@ button:disabled { cursor: var(--cur-default); }
 /* Rundenanzeige und Knöpfe liegen in den oberen Ecken, neben der Gegnerleiste */
 .topbar { position: absolute; top: 0; left: 0; right: 0; z-index: 3; padding: 10px 14px; pointer-events: none; align-items: flex-start; }
 .topbar > * { pointer-events: auto; }
+/* Die Knöpfe bleiben rechts neben der Gegnerleiste – reicht der Platz nicht, brechen sie in eine zweite Reihe um */
+.top-buttons { flex-wrap: wrap; justify-content: flex-end; max-width: calc((100vw - var(--side) - clamp(400px, var(--qw) * 2.1, 600px)) / 2 - 36px); }
 .player-bar { position: relative; z-index: 2; }
 /* Beide Leisten gleich breit – auch wenn die Krone wechselt oder ein Name länger ist */
 .player-bar { width: clamp(400px, calc(var(--qw) * 2.1), 600px); justify-content: flex-start; }
@@ -802,11 +806,12 @@ button:disabled { cursor: var(--cur-default); }
   .qcard .row .bar { display: none; }
 }
 
-/* Schmal (ohne Seitenleiste): Kopfzeile wieder als eigene Zeile, damit nichts kollidiert */
+/* Schmal: Kopfzeile wieder als eigene Zeile, damit nichts kollidiert */
 @media (max-width: 1000px) {
-  :root { --qw: clamp(92px, min((var(--vh) - 350px - 5 * var(--gap)) / 3, (100vw - 180px) / 4.6), 300px); }
+  :root { --qw: clamp(92px, min((var(--vh) - 350px - 5 * var(--gap)) / 3, (100vw - 180px) / 4.6, (100vw - 600px) / 3.2), 300px); }
   .table { grid-template-rows: auto auto 1fr auto auto; padding-top: 0; }
   .topbar { position: static; padding-bottom: 0; }
+  .top-buttons { max-width: none; }
 }
 
 .btn-small.off { opacity: .45; text-decoration: line-through; }
@@ -913,6 +918,19 @@ button:disabled { cursor: var(--cur-default); }
 .qslot.filled {
   background: radial-gradient(circle at 35% 30%, #fff1b0, #d9a22b 45%, #7a4f0e 100%);
   box-shadow: 0 0 10px rgba(226, 184, 90, .6), inset 0 1px 0 rgba(255, 255, 255, .7);
+}
+
+/* Tablet hochkant: Neben der Hand ist kein Platz für die Knöpfe – Hinweis, Hand und Knöpfe untereinander */
+@media (min-width: 641px) and (max-width: 1200px) and (max-aspect-ratio: 1/1) {
+  :root { --qw: clamp(92px, min((var(--vh) - 430px - 6 * var(--gap)) / 3, (100vw - 180px) / 4.6), 300px); }
+  .table { grid-template-rows: auto auto 1fr auto auto; padding-top: env(safe-area-inset-top, 0px); }
+  .topbar { position: static; padding-bottom: 0; }
+  .top-buttons { max-width: none; }
+  .hand-area { grid-template-columns: 1fr; row-gap: 8px; }
+  .hand-title, .hand, .hand-actions { grid-column: 1; justify-self: center; text-align: center; max-width: none; }
+  .hand-title { grid-row: 1; } .hand { grid-row: 2; padding-top: 4px; } .hand-actions { grid-row: 3; flex-direction: row; min-width: 0; }
+  .hand-title .result-line { text-align: center; }
+  .hand-title { min-height: 2.8em; display: flex; flex-direction: column; justify-content: flex-end; }
 }
 
 /* Handy: kompakte Größen (steht am Ende, damit es die mitwachsenden Werte überschreibt) */
