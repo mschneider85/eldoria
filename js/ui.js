@@ -1602,9 +1602,9 @@
       // Antippen einer freien Stelle hebt die Auswahl wieder auf
       if (ui.selected && !e.target.closest('button')) selectCard(ui.selected);
     });
-    // Wer mit der Maus auf dem Schlachtfeld oder dem Ergebnis verweilt, liest noch – der Countdown wartet
+    // Wer mit der Maus auf dem Schlachtfeld (der ganzen Lederfläche) oder dem Ergebnis verweilt, liest noch – der Countdown wartet
     $('#game').addEventListener('pointerover', (e) => {
-      if (e.pointerType === 'mouse') ui.hoverHold = !!e.target.closest('.slot, #terrain-box, #hand-title');
+      if (e.pointerType === 'mouse') ui.hoverHold = !!e.target.closest('.battlefield, #hand-title');
     });
     $('#game').addEventListener('pointerleave', () => { ui.hoverHold = false; });
     // Touch: Solange der Finger liegt, wartet der Countdown (Loslassen auch außerhalb des Spielfelds zählt)
