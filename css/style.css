@@ -461,7 +461,6 @@ button:disabled { cursor: var(--cur-default); }
   background: radial-gradient(circle at 38% 32%, #c4735d, #6e2a1a 60%, #3a1208);
   box-shadow: 0 0 0 1.5px #2a0c04, 0 0 0 3px rgba(255, 190, 160, .45), 0 2px 6px rgba(0, 0, 0, .6);
 }
-.hand-title .notes { color: #ffd76a; font-weight: 700; font-size: .95em; margin-bottom: 2px; }
 .qcard .stats { flex: 1; display: flex; flex-direction: column; justify-content: space-evenly; padding: 2px 5px 4px; min-height: 0; }
 .qcard .row {
   display: grid; grid-template-columns: calc(var(--qw) * .11) 1fr auto; align-items: center; gap: 4px;
@@ -709,7 +708,6 @@ button:disabled { cursor: var(--cur-default); }
 }
 .hand-actions .stat-choice { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .hand-title .result-line { text-align: right; }
-.hand-title .notes { margin-bottom: 6px; }
 
 /* =============================================================== Kriegsbeute */
 .center { position: relative; }
@@ -941,6 +939,14 @@ button:disabled { cursor: var(--cur-default); }
   .hand-title, .hand, .hand-actions { grid-column: 1; justify-self: center; text-align: center; max-width: none; }
   .hand-title { grid-row: 1; } .hand { grid-row: 2; padding-top: 4px; } .hand-actions { grid-row: 3; flex-direction: row; min-width: 0; }
   .hand-title .result-line { text-align: center; }
+  /* Eigenschaften in einer Reihe – so hoch wie die anderen Knöpfe, damit das Schlachtfeld nicht springt */
+  .hand-actions .stat-choice { grid-template-columns: repeat(4, 1fr); gap: 6px; width: 100%; }
+  .hand-actions .stat-choice button {
+    padding: 10px 2px; font-size: 12px; letter-spacing: 0; white-space: nowrap; min-width: 0;
+    background: var(--tex-wood), linear-gradient(180deg, #4a3220, #34220f 55%, #24170a); /* ohne Nieten – zu schmal dafür */
+  }
+  /* Feste Höhe für zwei Zeilen Ergebnis, damit das Schlachtfeld darüber nicht springt; mehr (selten) ragt nach oben */
+  .hand-title { height: 3.6em; display: flex; flex-direction: column; justify-content: flex-end; }
   /* Schlachtruf und Ausspielen teilen sich die Breite, statt über den Rand zu ragen */
   .hand-actions { width: 100%; }
   .hand-actions > button { flex: 1 1 auto; min-width: 0; padding: 10px 6px; }

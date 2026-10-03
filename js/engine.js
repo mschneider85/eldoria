@@ -277,6 +277,7 @@
         const stolen = l.deck.pop(); // die oberste Karte des Gegners
         s.known[li] = s.known[li].filter((id) => id !== stolen);
         loot.push(stolen);
+        result.stolenId = stolen;
         result.notes.push(`🏴‍☠️ Plündern: ${w.name} ${verb(w, 'erbeutet', 'erbeutest')} zusätzlich ${CARDS[stolen].name}.`);
       }
       // Rückzug wirkt nur einmal pro Spiel – sonst könnte der Gegner dieses Volk nie zum Quartett machen

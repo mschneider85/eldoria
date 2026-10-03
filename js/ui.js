@@ -38,6 +38,7 @@
     presenting: false, // Ergebnis wird noch vorgeführt (Quartett-Tafeln) – „Weiter“ wartet
     duel: null,        // Duell Schritt für Schritt: { steps, k (so viele gezeigt), done, skip }
     hoverHold: false,  // Maus liegt auf dem Schlachtfeld oder dem Ergebnis – der Countdown wartet
+    touchHold: false,  // Finger liegt auf dem Spielfeld (Touch: tippen und halten) – der Countdown wartet ebenso
     stall: null,       // online: so viele Sekunden lässt der Gegner schon auf seinen Zug warten (ab dem Hinweis)
     silent: null,      // online: so viele Sekunden ist die Verbindung schon gestört (nichts kommt an, in eine der Richtungen)
     message: '',
@@ -349,14 +350,12 @@
     Snd.play('reveal');
     const r = s.result;
     const steps = duelSteps(r);
-    // Fähigkeiten, die erst nach dem Duell wirken (Plündern, Rückzug, Spion), klingen schon beim Aufdecken an
-    if (r.notes.length && !steps.some((st) => st.kind === 'ability')) setTimeout(() => Snd.play('magic'), 500);
     await sleep(800);
     if (token !== ui.token) return;
     ui.showResult = true;
     ui.presenting = true;
     ui.message = '';
-    ui.duel = { steps, k: 0, done: !steps.length, skip: false };
+    ui.duel = { steps, k: 0, done: !steps.length, skip: false, after: afterLines(r), afterShown: false };
     render();
     if (steps.length) {
       await playDuel(token);
@@ -367,6 +366,14 @@
     }
     if (r.winner === -1) Snd.play('tie');
     else Snd.play(r.winner === 1 ? 'lose' : 'win');
+    // Was erst nach dem Duell wirkt (Plündern, Rückzug, Spion, Runenhorn), erscheint kurz nach dem Sieg unter der Karte
+    if (ui.duel.after.some(Boolean)) {
+      await sleep(600);
+      if (token !== ui.token) return;
+      ui.duel.afterShown = true;
+      render();
+      Snd.play('magic');
+    }
     for (const p of [0, 1]) {
       for (const f of r.quartets[p]) {
         await sleep(400);
@@ -444,6 +451,19 @@
     return steps;
   }
 
+  /** Fähigkeiten, die nach dem Duell wirken – je Seite eine kurze Zeile unter der Karte (oder null). */
+  function afterLines(r) {
+    const lines = [null, null];
+    const line = (text) => ({ text, cls: 'ability' });
+    if (r.stolen) lines[r.winner] = line('🏴‍☠️ Plündert eine Karte');
+    if (r.retreated) lines[1 - r.winner] = line('↩️ Zieht sich zurück');
+    for (const p of [0, 1]) {
+      if (r.spied[p]) lines[p] = line('🕵️ Späht eine Karte aus');
+      if (CARDS[r.ids[p]].ability === 'runehorn' && r.notes.some((n) => n.startsWith('📯'))) lines[p] = line('📯 Schlachtruf bereit');
+    }
+    return lines;
+  }
+
   /** Stand der Duell-Animation: Eigenschaft, je Karte markierte Eigenschaft, Richtung und angezeigte Werte. */
   function duelView() {
     const r = s.result;
@@ -505,7 +525,7 @@
     await stepPause(token, STEP_MS);
   }
 
-  const AUTO_MS = 4000;       // Countdown für „Weiter“
+  const AUTO_MS = 6000;       // Countdown für „Weiter“
   const AUTO_NOTES_MS = 2500; // länger, wenn Fähigkeiten gewirkt haben – dann gibt es mehr zu lesen
 
   /**
@@ -521,7 +541,7 @@
       await sleep(80);
       if (token !== ui.token || !ui.showResult || ui.fly !== null) return;
       const now = performance.now();
-      if (!overlayOpen() && !ui.hoverHold && !document.hidden) left -= now - last;
+      if (!overlayOpen() && !ui.hoverHold && !ui.touchHold && !document.hidden) left -= now - last;
       last = now;
       const btn = $('#next-btn');
       if (btn) btn.style.setProperty('--auto', Math.max(0, left / total).toFixed(3));
@@ -867,19 +887,18 @@
   function resultMessage() {
     const r = s.result;
     const cards = r.ids.map((id) => CARDS[id]);
-    const notes = r.notes.length ? `<div class="notes">${r.notes.map(escapeHTML).join(' · ')}</div>` : '';
-    if (r.winner === -1) return `${notes}⚖️ Gleichstand – beide Karten wandern in die Kriegsbeute!`;
-    const why = {
-      low: s.terrain.lowWins && !r.notes.some((n) => n.startsWith('🎭')) ? '☁️ Im Nebel gewinnt der niedrigere Wert.' : '',
-    }[r.reason] || '';
+    // Nur der Satz: Fähigkeiten stehen unter den Karten, der Nebel auf dem Schlachtfeld (so bleibt die Zeile kurz und das Spielfeld ruhig)
+    if (r.winner === -1) return '⚖️ Gleichstand – beide Karten wandern in die Kriegsbeute!';
     const who = r.winner === 0 ? 'Du eroberst' : `${oppName()} erobert`;
     const own = r.loot - 1; // die eigene Karte kommt zurück, der Rest ist Beute
     if (own <= 0) {
       const text = r.winner === 0 ? 'Du gewinnst das Duell, erbeutest aber nichts.' : `${oppName()} gewinnt das Duell, erbeutet aber nichts.`;
-      return `${notes}${why ? why + ' ' : ''}<span class="big">${text}</span>`;
+      return `<span class="big">${text}</span>`;
     }
-    const what = own === 1 && r.potTaken === 0 ? cards[1 - r.winner].name : `${own} Karten`;
-    return `${notes}${why ? why + ' ' : ''}<span class="big">${who} ${what}!</span>`;
+    // Eine einzelne eroberte Karte beim Namen nennen – hat sich die gegnerische zurückgezogen, ist es die geplünderte
+    const single = r.retreated ? r.stolenId && CARDS[r.stolenId] : cards[1 - r.winner];
+    const what = own === 1 && r.potTaken === 0 && single ? single.name : `${own} Karten`;
+    return `<span class="big">${who} ${what}!</span>`;
   }
 
   /** Ist gerade eine Einblendung zu sehen (Dialog, Regeln, Übersicht, Quartett-Tafel)? */
@@ -1351,7 +1370,9 @@
       if (view) {
         const d = ui.duel;
         const shown = d ? d.steps.slice(0, d.k) : [];
-        const lines = shown.map((st, k) => st.lines[p] && `<li class="${st.lines[p].cls}${!d.done && k === d.k - 1 ? ' new' : ''}">${escapeHTML(st.lines[p].text)}</li>`).filter(Boolean).join('');
+        const after = d && d.afterShown && d.after[p];
+        const lines = shown.map((st, k) => st.lines[p] && `<li class="${st.lines[p].cls}${!d.done && k === d.k - 1 ? ' new' : ''}">${escapeHTML(st.lines[p].text)}</li>`).filter(Boolean).join('')
+          + (after ? `<li class="${after.cls} new">${escapeHTML(after.text)}</li>` : '');
         value = `<div class="value"><b class="num">${view.vals[p]}</b>${lines ? `<ul class="steps">${lines}</ul>` : ''}</div>`;
       }
       return `${who}<div class="flipper${ui.revealed ? ' revealed' : ''}">
@@ -1419,7 +1440,7 @@
     const p = ui.chooser;
     if (ui.showResult) {
       // Frisch gezogene Karten erst nach „Weiter“ zeigen – sie fliegen dann vom Stapel ins Blatt
-      const cards = p === null ? '' : s.players[p].hand.filter((id) => !s.result.drawn[p].includes(id)).map((id) => cardHTML(id)).join('');
+      const cards = p === null ? '' : s.players[p].hand.filter((id) => !s.result.drawn[p].includes(id)).map((id) => cardHTML(id, { attrs: `data-zoom="${id}"` })).join('');
       // Das Ergebnis erscheint erst, wenn das Duell vorgeführt ist
       const running = ui.duel && !ui.duel.done;
       // (leere Zeile hält den Platz, damit das Spielfeld nicht springt, wenn das Ergebnis erscheint)
@@ -1431,7 +1452,7 @@
     const pl = s.players[p];
     if (s.phase === 'stat' && p === s.picker && !ui.tossing && !isAI(p)) {
       return { title: 'Wähle die Eigenschaft', locked: true,
-        cards: pl.hand.map((id) => cardHTML(id)).join(''),
+        cards: pl.hand.map((id) => cardHTML(id, { attrs: `data-zoom="${id}"` })).join(''), // nicht wählbar, aber groß zu zeigen
         actions: `<div class="stat-choice">${STAT_IDS.map((st) => `<button data-stat="${st}">${statLabel(st)}</button>`).join('')}</div>` };
     }
     const canChoose = s.phase === 'cards' && !s.choices[p];
@@ -1586,6 +1607,9 @@
       if (e.pointerType === 'mouse') ui.hoverHold = !!e.target.closest('.slot, #terrain-box, #hand-title');
     });
     $('#game').addEventListener('pointerleave', () => { ui.hoverHold = false; });
+    // Touch: Solange der Finger liegt, wartet der Countdown (Loslassen auch außerhalb des Spielfelds zählt)
+    $('#game').addEventListener('pointerdown', (e) => { if (e.pointerType !== 'mouse') ui.touchHold = true; });
+    ['pointerup', 'pointercancel'].forEach((type) => document.addEventListener(type, () => { ui.touchHold = false; }, true));
     // Lichtreflex und leichte Neigung folgen der Maus (Handkarten, Galerie, Großansicht, Menü)
     const tilt = (e) => {
       if (reducedMotion) return;
