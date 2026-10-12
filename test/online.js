@@ -1,14 +1,19 @@
 // Online-Partien im Gleichschritt: Host und Gast rechnen dieselbe Partie mit demselben Startwert,
 // der Gast spiegelverkehrt. Die Züge kommen auf beiden Seiten in zufälliger Reihenfolge an –
 // danach müssen beide Spielstände (gespiegelt) exakt übereinstimmen.
+// Gezogen wird zufällig statt mit der KI: Für den Gleichschritt zählt nicht, wie gut die Züge sind, und zufällige
+// Schlachtrufe probieren mehr Reihenfolgen durch – so schaffen tausende Partien nur wenige Sekunden.
 // Aufruf: node test/online.js [anzahl]
 'use strict';
 require('../js/cards.js');
 require('../js/engine.js');
-require('../js/ai.js');
-const { Engine, AI } = globalThis.CG;
+const { Engine, STATS } = globalThis.CG;
 
-const games = Number(process.argv[2] || 300);
+const games = Number(process.argv[2] || 2000);
+const STAT_IDS = Object.keys(STATS);
+const pickOne = (list) => list[Math.floor(Math.random() * list.length)];
+/** Schlachtruf in etwa jeder dritten Runde, in der er möglich ist. */
+const wantsRally = (s, p) => s.players[p].rally && s.players[p].deck.length > 0 && Math.random() < 0.3;
 
 /** Das Wesentliche eines Spielstands aus Sicht des Hosts (beim Gast sind die Spieler vertauscht). */
 function view(s, flip) {
@@ -52,10 +57,8 @@ for (let g = 0; g < games; g++) {
   try {
     while (host.phase !== 'over') {
       if (view(host, false) !== view(guest, true)) { const a = JSON.parse(view(host, false)), b = JSON.parse(view(guest, true)); throw new Error(`Runde ${host.round}: Spielstände weichen ab: ${Object.keys(a).filter((k) => JSON.stringify(a[k]) !== JSON.stringify(b[k])).map((k) => `${k} ${JSON.stringify(a[k])} / ${JSON.stringify(b[k])}`).join("; ")}`); }
-      if (host.phase === 'stat') apply(Engine.chooseStat, host.picker, AI.chooseStat(host, host.picker));
-      // Jeder Sitzplatz entscheidet auf Grundlage des Stands, den er gerade selbst sieht
-      // (beim Gast ist er selbst Spieler 0)
-      const moves = [0, 1].flatMap((p) => (AI.shouldRally(p === 0 ? host : guest, 0) ? [[Engine.rally, p]] : []).concat([['choose', p]]));
+      if (host.phase === 'stat') apply(Engine.chooseStat, host.picker, pickOne(STAT_IDS));
+      const moves = [0, 1].flatMap((p) => (wantsRally(host, p) ? [[Engine.rally, p]] : []).concat([['choose', p]]));
       const pick = [null, null];
       // Reihenfolge pro Seite unterschiedlich mischen, aber die eigenen Züge jedes Spielers bleiben geordnet
       for (const [s, flip] of sides) {

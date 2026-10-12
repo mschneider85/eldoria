@@ -861,6 +861,7 @@
     return `<span class="horn charging" data-tip="Schlachtruf lädt: noch ${wait} Runde${wait === 1 ? '' : 'n'} im Rückstand">📯<span class="pips">${pips}</span></span>`;
   }
 
+  /** Inhalt eines Kartenfelds: die Karte (main) und darunter Wert und Duellschritte (value). */
   function slotHTML(p) {
     const pl = s.players[p];
     const who = `<div class="who">${escapeHTML(pl.name)}</div>`;
@@ -876,19 +877,49 @@
           + (after ? `<li class="${after.cls} new">${escapeHTML(after.text)}</li>` : '');
         value = `<div class="value"><b class="num">${view.vals[p]}</b>${lines ? `<ul class="steps">${lines}</ul>` : ''}</div>`;
       }
-      return `${who}<div class="flipper${ui.revealed ? ' revealed' : ''}">
+      return { main: `${who}<div class="flipper${ui.revealed ? ' revealed' : ''}">
         <div class="face back"><div class="card-back"></div></div>
-        <div class="face front">${cardHTML(id, { attrs: `data-zoom="${id}"`, stat: view ? view.stats[p] : null })}</div></div>${value}`;
+        <div class="face front">${cardHTML(id, { attrs: `data-zoom="${id}"`, stat: view ? view.stats[p] : null })}</div></div>`, value };
     }
     if (s.phase === 'cards' && s.choices[p]) {
       // Eine per Spion bekannte Gegnerkarte liegt offen – du hast sie ja schon gesehen
       const id = s.choices[p].card;
       if (p === 1 && s.spyInfo[0] === id) {
-        return `${who}<div class="spied">${spiedHTML(id)}</div>`;
+        return { main: `${who}<div class="spied">${spiedHTML(id)}</div>`, value: '' };
       }
-      return `${who}<div class="flipper"><div class="face back"><div class="card-back"></div></div></div>`;
+      return { main: `${who}<div class="flipper"><div class="face back"><div class="card-back"></div></div></div>`, value: '' };
     }
-    return `${who}<div class="placeholder"></div>`;
+    return { main: `${who}<div class="placeholder"></div>`, value: '' };
+  }
+
+  /**
+   * Kartenfeld aktualisieren, ohne die Karte bei jedem Duellschritt neu aufzubauen (Bild und Effekte liefen sonst neu an):
+   * Ändern sich nur Wert und Schritte, wird nur die Wertzeile ersetzt; springt die Eigenschaft um, nur die Wertezeilen der Karte.
+   */
+  function setSlot(p, { main, value }) {
+    const el = $(`#slot-${p}`);
+    if (el._main !== main) {
+      const tpl = document.createElement('template');
+      tpl.innerHTML = main;
+      const stats = tpl.content.querySelector('.qcard .stats');
+      const statsHTML = stats ? stats.innerHTML : null;
+      if (stats) stats.innerHTML = '';
+      const shell = tpl.innerHTML;
+      const cur = el.querySelector('.qcard .stats');
+      el._main = main;
+      if (stats && cur && shell === el._shell) {
+        cur.innerHTML = statsHTML;
+      } else {
+        el._shell = shell;
+        el._value = value;
+        el.innerHTML = main + value;
+        return;
+      }
+    }
+    if (el._value === value) return;
+    el._value = value;
+    el.querySelector(':scope > .value')?.remove();
+    if (value) el.insertAdjacentHTML('beforeend', value);
   }
 
   /** Per Spion ausgespähte Karte: verdeckt mit Späher-Siegel, beim Überfahren dreht sie sich um (ohne Tooltip – sie zeigt ja selbst, was sie ist). */
@@ -1019,7 +1050,7 @@
     setHTML('#opp-hand', oppHandHTML());
     for (const p of [0, 1]) {
       $(`#slot-${p}`).className = slotClass(p);
-      setHTML(`#slot-${p}`, slotHTML(p));
+      setSlot(p, slotHTML(p));
       setHTML(`#deck-${p}`, deckHTML(p));
     }
     setHTML('#terrain-box', terrainHTML());

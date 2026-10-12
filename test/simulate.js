@@ -1,13 +1,31 @@
 // KI-gegen-KI-Partien: prüft Invarianten und zeigt Statistiken fürs Balancing.
 // Bricht mit Fehler ab, wenn eine Invariante verletzt ist oder die Spielstärke der Stufen aus dem Rahmen fällt.
-// Aufruf: node test/simulate.js [anzahl]
+// Die drei Vergleiche laufen parallel in eigenen Prozessen. Jeder nimmt einen festen Startwert für Math.random
+// (wird ausgegeben), damit sich eine fehlgeschlagene Serie nachspielen lässt.
+// Aufruf: node test/simulate.js [anzahl] [--seed=N]   (nur eine Serie: --series=0|1|2)
 'use strict';
+const args = process.argv.slice(2);
+const opt = (name) => { const a = args.find((x) => x.startsWith(`--${name}=`)); return a && a.slice(name.length + 3); };
+const seed = opt('seed') !== undefined ? Number(opt('seed')) >>> 0 : (Math.random() * 2 ** 32) >>> 0;
+
+/** mulberry32 – derselbe Startwert ergibt dieselben Partien (auch Engine.newGame zieht seinen Startwert hieraus). */
+function seeded(a) {
+  return () => {
+    a = (a + 0x6d2b79f5) >>> 0;
+    let t = a;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+Math.random = seeded(seed);
+
 require('../js/cards.js');
 require('../js/engine.js');
 require('../js/ai.js');
 const { Engine, AI, CARDS } = globalThis.CG;
 
-const games = Number(process.argv[2] || 400);
+const games = Number(args.find((a) => !a.startsWith('--')) || 400);
 
 function play(diffA, diffB) {
   const s = Engine.newGame({ mode: 'pvc', players: [{ name: 'A', isAI: true, difficulty: diffA }, { name: 'B', isAI: true, difficulty: diffB }] });
@@ -68,6 +86,28 @@ function series({ a: diffA, b: diffB, win, limit }) {
   }
 }
 
-EXPECT.forEach(series);
-if (failed) console.log(`${failed} Erwartung${failed === 1 ? '' : 'en'} verfehlt.`);
-process.exit(failed ? 1 : 0);
+if (opt('series') !== undefined) {
+  // Kindprozess: eine Serie spielen
+  try {
+    series(EXPECT[Number(opt('series'))]);
+  } catch (e) {
+    failed++;
+    console.log(`  ✗ ${e.message}`);
+  }
+  if (failed) console.log(`  Nachspielen: node test/simulate.js ${games} --seed=${seed} --series=${opt('series')}`);
+  process.exit(failed ? 1 : 0);
+} else {
+  // Alle Serien parallel, Ausgabe in fester Reihenfolge; jede bekommt ihren eigenen Startwert
+  const { execFile } = require('child_process');
+  const runs = EXPECT.map((_, i) => new Promise((resolve) => {
+    execFile(process.execPath, [__filename, String(games), `--seed=${(seed + i) >>> 0}`, `--series=${i}`], (err, stdout, stderr) => {
+      resolve({ ok: !err, out: stdout + stderr });
+    });
+  }));
+  Promise.all(runs).then((results) => {
+    for (const r of results) process.stdout.write(r.out);
+    const bad = results.filter((r) => !r.ok).length;
+    if (bad) console.log(`${bad} Serie${bad === 1 ? '' : 'n'} fehlgeschlagen.`);
+    process.exit(bad ? 1 : 0);
+  });
+}

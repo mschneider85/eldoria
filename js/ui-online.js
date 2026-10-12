@@ -86,7 +86,7 @@
       // beim Gastgeber: der Gast ist da – Partie auslosen und starten
       if (!net.host) return;
       // Mitten in der Partie meldet sich der Gast neu an: Er hat die Seite neu geladen, sein Spielstand ist weg
-      if (inGame()) { Net.send({ t: 'bye' }); Net.close(); connectionLost(`${oppName()} hat die Seite neu geladen – die Partie lässt sich nicht fortsetzen.`); return; }
+      if (inGame()) { Net.send({ t: 'bye' }); Net.close(); connectionLost(`${net.oppName || 'Der Gegner'} hat die Seite neu geladen – die Partie lässt sich nicht fortsetzen.`); return; }
       if (UI.s && online()) return; // Revanche läuft über 'again'
       if (m.fp !== fingerprint) { Net.send({ t: 'version' }); versionMismatch(); return; }
       net.oppName = String(m.name || 'Gast').slice(0, 14);

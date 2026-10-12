@@ -38,26 +38,28 @@ self.addEventListener('activate', (e) => {
     .then(() => self.clients.claim()));
 });
 
-/** Netz mit Zeitlimit: Bei schlechtem Empfang lieber gleich die gespeicherte Seite zeigen. */
-function fetchWithTimeout(req, ms) {
-  return new Promise((resolve, reject) => {
-    const timer = setTimeout(() => reject(new Error('timeout')), ms);
-    fetch(req).then((res) => { clearTimeout(timer); resolve(res); }, (err) => { clearTimeout(timer); reject(err); });
-  });
-}
+/** Wartezeit aufs Netz, bevor bei schlechtem Empfang die gespeicherte Seite kommt. */
+const NAV_TIMEOUT_MS = 4000;
 
 self.addEventListener('fetch', (e) => {
   const req = e.request;
   if (req.method !== 'GET' || new URL(req.url).origin !== self.location.origin) return;
 
   if (req.mode === 'navigate') {
-    // Auch Einladungslinks (?room=…) landen hier; offline gibt es dann eben die gespeicherte Startseite
-    e.respondWith(fetchWithTimeout(req, 4000)
-      .then((res) => {
-        if (res.ok) { const copy = res.clone(); caches.open(CACHE).then((c) => c.put('./', copy)); }
-        return res;
-      })
-      .catch(() => caches.match('./')));
+    // Auch Einladungslinks (?room=…) landen hier; offline gibt es dann eben die gespeicherte Startseite.
+    // Kommt die Seite erst nach dem Zeitlimit, wird sie trotzdem noch gespeichert – sonst bliebe ein Handy mit
+    // schlechtem Empfang für immer auf der alten Version (der nächste Start lädt dann die neue).
+    const net = fetch(req).then((res) => {
+      if (!res.ok) return res;
+      const copy = res.clone();
+      return caches.open(CACHE).then((c) => c.put('./', copy)).then(() => res, () => res);
+    });
+    e.waitUntil(net.catch(() => {}));
+    let timer;
+    const timeout = new Promise((resolve) => { timer = setTimeout(resolve, NAV_TIMEOUT_MS); });
+    const cached = () => caches.match('./').then((hit) => hit || net);
+    e.respondWith(Promise.race([net.then((res) => res, () => cached()), timeout.then(cached)])
+      .finally(() => clearTimeout(timer)));
     return;
   }
 

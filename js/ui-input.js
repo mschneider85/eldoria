@@ -47,8 +47,12 @@
       if (e.pointerType === 'mouse') ui.hoverHold = !!e.target.closest('.battlefield, #hand-title');
     });
     $('#game').addEventListener('pointerleave', () => { ui.hoverHold = false; });
-    // Ein Klick oder Tippen irgendwohin (außer auf „Weiter“) schaltet das automatische Weiter für diese Runde ab
-    document.addEventListener('pointerdown', (e) => { if (ui.showResult && !e.target.closest('#next-btn')) ui.autoOff = true; }, true);
+    // Ein Klick oder Tippen irgendwohin (außer auf „Weiter“) schaltet das automatische Weiter für diese Runde ab –
+    // nicht aber das Tippen, das das Duell überspringt oder die Quartett-Tafel wegklickt
+    document.addEventListener('pointerdown', (e) => {
+      if (!ui.showResult || !ui.duel || !ui.duel.done || document.querySelector('.quartet-show')) return;
+      if (!e.target.closest('#next-btn')) ui.autoOff = true;
+    }, true);
     // Lichtreflex und leichte Neigung folgen der Maus (Handkarten, Galerie, Großansicht, Menü)
     const tilt = (e) => {
       if (reducedMotion) return;
@@ -132,6 +136,12 @@
       } else if (e.key.toLowerCase() === 'h' && $('#rally-btn') && !$('#rally-btn').disabled) {
         rallyNow();
       } else if (e.key === 'Enter') {
+        // Ein fokussierter Knopf bekommt sein Enter selbst (der Browser klickt ihn); eine fokussierte Handkarte wird erst gewählt
+        if (e.target.closest('button')) return;
+        if (focused && ui.selected !== focused.dataset.card) {
+          if (canSelect(focused.dataset.card)) selectCard(focused.dataset.card);
+          return;
+        }
         if ($('#next-btn')) nextStep();
         else if ($('#play-btn') && !$('#play-btn').disabled) confirmChoice();
       }
