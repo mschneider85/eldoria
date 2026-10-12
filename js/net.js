@@ -30,10 +30,12 @@
   let roomSend = null;
   let opened = false;
   let code = null; // Raumcode, um nach einem Abriss wieder beizutreten
+  let lastPeer = null; // wer Mitspieler ist oder war – nach einem Abriss darf nur er zurück
   // Verlassen dauert einen Moment – bis dahin gäbe Trystero beim Beitreten denselben (sterbenden) Raum zurück
   let leaving = Promise.resolve();
   // drop: Mitspieler im Raum weg – true zurückgeben, um auf ihn zu warten (statt close)
-  const handlers = { message: () => {}, open: () => {}, close: () => {}, error: () => {}, drop: () => false };
+  const NO_HANDLERS = { message: () => {}, open: () => {}, close: () => {}, error: () => {}, drop: () => false, stranger: () => {} };
+  const handlers = Object.assign({}, NO_HANDLERS);
 
   /* ------------------------------------------------------------ Codes */
   const toB64 = (bytes) => btoa(String.fromCharCode(...bytes)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
@@ -65,10 +67,12 @@
   }
 
   /* ------------------------------------------------------------ Verbindung */
-  function close() {
+  /** Trennen; keep behält Raumcode und Mitspieler (beim Wiederbeitreten nach einem Abriss). */
+  function close(keep) {
     enterRoom.token = null; // ein Beitritt, der noch lädt, läuft danach ins Leere
     const r = room;
-    room = peer = roomSend = code = null;
+    room = peer = roomSend = null;
+    if (!keep) code = lastPeer = null;
     if (r) leaving = r.leave().catch(() => {});
     const was = pc;
     pc = null;
@@ -195,8 +199,8 @@
   }
 
   /** Dem Raum beitreten; 'open' kommt, sobald der Mitspieler da ist. */
-  async function enterRoom(c) {
-    close();
+  async function enterRoom(c, keep) {
+    close(keep);
     const token = {};
     enterRoom.token = token;
     await loadScript(`js/vendor/trystero.js?v=${BUILD}`);
@@ -211,12 +215,19 @@
     room = r;
     code = c;
     const act = r.makeAction('m');
-    act.onMessage = (data, ctx) => { if (room === r && ctx.peerId === peer) handlers.message(data); };
+    // Ein dritter Besucher (oder ein zweiter Tab mit dem Einladungslink) bekommt den Platz nie – auch nicht, während
+    // nach einem Abriss auf die Rückkehr gewartet wird; er darf sich nur melden und bekommt eine Antwort
+    const stranger = (id) => (peer ? id !== peer : !!lastPeer && id !== lastPeer);
+    act.onMessage = (data, ctx) => {
+      if (room !== r) return;
+      if (ctx.peerId === peer) handlers.message(data);
+      else if (stranger(ctx.peerId)) handlers.stranger(data, (m) => act.send(m, { target: ctx.peerId }).catch(() => {}));
+    };
     roomSend = (m) => act.send(m, { target: peer }).catch(() => {});
     r.onPeerJoin = (id) => {
-      // Ein dritter Besucher wird ignoriert; meldet sich der Mitspieler neu an (Abriss nur bei ihm), geht es weiter
-      if (room !== r || (peer && peer !== id)) return;
-      peer = id;
+      // Meldet sich der Mitspieler neu an (Abriss nur bei ihm), geht es weiter
+      if (room !== r || id === peer || stranger(id)) return;
+      peer = lastPeer = id;
       opened = true;
       handlers.open();
     };
@@ -232,9 +243,9 @@
    * Die Handler bleiben; 'open' kommt, sobald der Mitspieler wieder da ist.
    */
   async function rejoin() {
-    if (!room || peer) return;
-    const c = code;
-    try { await enterRoom(c); } catch (e) { /* nächster Versuch folgt */ }
+    // Der Raumcode bleibt auch, wenn ein Versuch scheitert – sonst liefen alle weiteren ins Leere
+    if (peer || !code) return;
+    try { await enterRoom(code, true); } catch (e) { /* nächster Versuch folgt */ }
   }
 
   async function qrSVG(text) {
@@ -266,7 +277,7 @@
    */
   function bye(m) {
     const was = { room, dc, pc };
-    Object.assign(handlers, { message: () => {}, open: () => {}, close: () => {}, error: () => {}, drop: () => false });
+    Object.assign(handlers, NO_HANDLERS);
     const sent = Promise.race([send(m), new Promise((resolve) => setTimeout(resolve, 600))]);
     return sent.then(() => { if (room === was.room && dc === was.dc && pc === was.pc) close(); });
   }

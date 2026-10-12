@@ -22,7 +22,7 @@
    * sums: Prüfsummen nach jedem Duell, [eigene, empfangene] je Runde.
    */
   const net = {
-    host: false, oppName: '', rematch: [false, false], queue: [], wake: null,
+    host: false, oppName: '', oppSid: '', rematch: [false, false], queue: [], wake: null,
     seed: null, out: [], inSeq: 0, sums: {}, held: false, drop: null, gone: null,
     heard: 0, away: false, // wann zuletzt etwas vom Gegner kam; hat er das Spiel gerade im Hintergrund?
     behind: null,          // seit wann seine Lebenszeichen zeigen, dass ihm Züge von mir fehlen
@@ -40,6 +40,15 @@
     return h;
   })();
   const myName = () => ($('#name1').value.trim() || 'Spieler').slice(0, 14);
+  // Kennung dieses Tabs (übersteht ein Neuladen): So erkennt der Gastgeber, ob ein Neuer im Raum sein Gast mit
+  // neu geladener Seite ist (die Partie endet) oder ein Fremder mit dem Einladungslink (der bekommt keinen Platz)
+  const sid = (() => {
+    try {
+      let v = sessionStorage.getItem('eldoria-sid');
+      if (!v) { v = Math.random().toString(36).slice(2, 12); sessionStorage.setItem('eldoria-sid', v); }
+      return v;
+    } catch (e) { return ''; }
+  })();
 
   function wakeRemote() {
     const w = net.wake;
@@ -90,6 +99,7 @@
       if (UI.s && online()) return; // Revanche läuft über 'again'
       if (m.fp !== fingerprint) { Net.send({ t: 'version' }); versionMismatch(); return; }
       net.oppName = String(m.name || 'Gast').slice(0, 14);
+      net.oppSid = String(m.sid || '');
       startOnline();
     } else if (m.t === 'start') {
       if (net.host || inGame()) return; // Anfang einer Partie nur, wenn keine läuft (Revanche erst nach dem Spielende)
@@ -106,6 +116,10 @@
       checkSum(m.r);
     } else if (m.t === 'version') {
       versionMismatch();
+    } else if (m.t === 'full') {
+      if (inGame()) return;
+      Net.close();
+      lobbyError(new Error('In diesem Raum spielen schon zwei. Lass dir einen neuen Einladungslink schicken.'));
     } else if (m.t === 'again') {
       net.rematch[1] = true;
       if (net.host && net.rematch[0]) startOnline();
@@ -165,6 +179,18 @@
       }
     })();
     return true;
+  }
+
+  /** Ein Dritter meldet sich im Raum: Ist es der Gast mit neu geladener Seite, endet die Partie; sonst ist der Raum voll. */
+  function onStranger(m, reply) {
+    if (!m || m.t !== 'hello') return;
+    if (net.host && inGame() && m.sid && m.sid === net.oppSid) {
+      reply({ t: 'bye' });
+      Net.close();
+      connectionLost(`${net.oppName || 'Der Gegner'} hat die Seite neu geladen – die Partie lässt sich nicht fortsetzen.`);
+      return;
+    }
+    reply({ t: 'full' });
   }
 
   /** Der Mitspieler ist nach einem Abriss wieder da. */
@@ -320,7 +346,7 @@
       if (UI.s && online()) { onRejoin(); return; }
       const st = $('#lobby .net-status');
       if (st) { st.classList.remove('error'); st.textContent = 'Verbunden! Die Partie beginnt…'; }
-      if (!net.host) Net.send({ t: 'hello', name: myName(), fp: fingerprint });
+      if (!net.host) Net.send({ t: 'hello', name: myName(), fp: fingerprint, sid });
     });
     Net.on('close', (wasOpen) => {
       if (wasOpen) connectionLost(`Die Verbindung zu ${net.oppName || 'deinem Mitspieler'} ist abgerissen.`);
@@ -328,6 +354,7 @@
     });
     Net.on('error', (text) => lobbyError(new Error(text)));
     Net.on('drop', onDrop);
+    Net.on('stranger', onStranger);
     if (code) { roomJoin(code); return; }
     setLobby(`<p>Lade jemanden zu einer Partie ein – per Link, QR-Code oder Raumcode.</p>
       <div class="buttons"><button class="btn-primary" id="lobby-host">🏰 Spiel eröffnen</button><button class="btn-primary" id="lobby-join">🗝️ Beitreten</button></div>
