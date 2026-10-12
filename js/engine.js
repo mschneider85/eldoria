@@ -72,12 +72,13 @@
       }
     }
 
-    // 2. Gewinnt der höhere oder der niedrigere Wert?
+    // 2. Gewinnt der höhere oder der niedrigere Wert? Verrat heißt immer „der niedrigere“ – auch doppelt
+    // oder im Nebelsumpf, es dreht die Richtung nicht um.
     let low = !!s.terrain.lowWins;
     const traitors = [0, 1].filter((i) => cards[i].ability === 'treason');
-    if (traitors.length % 2) {
-      low = !low;
-      notes.push(`🎭 ${cards[traitors[0]].name}: Verrat! Jetzt gewinnt der ${low ? 'niedrigere' : 'höhere'} Wert.`);
+    if (traitors.length && !low) {
+      low = true;
+      notes.push(`🎭 ${traitors.map((i) => cards[i].name).join(' & ')}: Verrat! Jetzt gewinnt der niedrigere Wert.`);
     }
 
     // 3. Grundwerte

@@ -418,10 +418,11 @@
       vals = cards.map((c) => c.stats[stat]);
       add('ability', [0, 1].map((i) => line(`${i === r.switchers[0] ? '🔀 ' : ''}${statLabel(stat)} zählt`)));
     }
-    if (r.traitors.length === 2) add('ability', both('🎭 Verrat hebt sich auf'));
-    else if (r.traitors.length === 1) {
-      low = r.low;
-      add('ability', one(r.traitors[0], `🎭 Verrat: ${low ? 'Niedriger' : 'Höher'} gewinnt`));
+    if (r.traitors.length) {
+      // Verrat legt fest, dass der niedrigere Wert gewinnt – im Nebelsumpf gilt das ohnehin
+      const text = low ? '🎭 Niedriger gewinnt ohnehin' : '🎭 Verrat: Niedriger gewinnt';
+      low = true;
+      add('ability', r.traitors.length === 2 ? both(text) : one(r.traitors[0], text));
     }
     // Gestaltwandel vor dem Spiegel – der Spiegel greift den schon gewandelten Wert auf
     for (const via of ['shift', 'mirror']) {
