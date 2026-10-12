@@ -18,7 +18,7 @@ const FILES = [
   './',
   'manifest.webmanifest',
   v('css/style.css'),
-  ...['cards', 'engine', 'ai', 'net', 'audio', 'ui', 'deer', 'vendor/trystero', 'vendor/qrcode'].map((n) => v(`js/${n}.js`)),
+  ...['cards', 'engine', 'ai', 'net', 'audio', 'art-fx', 'ui', 'ui-duel', 'ui-input', 'ui-online', 'deer', 'vendor/trystero', 'vendor/qrcode'].map((n) => v(`js/${n}.js`)),
   ...['cinzel-latin', 'cinzel-latin-ext', 'alegreya-latin', 'alegreya-latin-ext', 'noto-emoji-subset'].map((n) => `art/fonts/${n}.woff2`),
   ...['arrow', 'hand', 'help', 'zoom', 'zoom-out'].map((n) => `art/cursors/${n}.svg`),
   ...['fog', 'leather', 'metal', 'paper', 'table', 'wood'].map((n) => `art/textures/${n}.webp`),

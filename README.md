@@ -73,7 +73,11 @@ kann man die Partie dort direkt verlassen. Gezogen wird nie für ihn.
 | `js/vendor/`   | Trystero und QR-Code-Generator (MIT, siehe `LIZENZ.md`), werden erst in der Online-Lobby geladen |
 | `js/ai.js`     | Computergegner: Siegchance × Wert der Beute gegen Verlustrisiko; „Schwer“ zählt Karten und rechnet mit der wahrscheinlichen Gegnerkarte |
 | `js/audio.js`  | Soundeffekte und Hintergrundmusik, live mit der Web-Audio-API erzeugt (keine Audiodateien) |
-| `js/ui.js`     | Menü, Rundenablauf, Animationen; `ART_FX` legt die bewegten Bildeffekte je Karte fest (Glut, Funken, Leuchten, Nebel …); ruckelt es, schaltet `watchFrames` sie stufenweise ab |
+| `js/ui.js`     | Menü, Rundenablauf, Karten, Animationen, Fenster; ruckelt es, schaltet `watchFrames` die Bildeffekte stufenweise ab. Teilt sich mit den folgenden Dateien das Objekt `CG.UI` (dort `UI.s` = aktueller Spielstand) |
+| `js/ui-duel.js` | Duell zum Mitverfolgen: Schritte, hochzählende Werte, automatisches „Weiter“ |
+| `js/ui-input.js` | Maus, Tastatur und Touch im Spiel, Spielmenü |
+| `js/ui-online.js` | Online-Partie: Züge, Prüfsummen, Abrisse, Revanche, Lobby |
+| `js/art-fx.js` | `ART_FX` legt die bewegten Bildeffekte je Karte fest (Glut, Funken, Leuchten, Nebel …) |
 | `art/src/**/*.svg` | Handgezeichnete SVG-Illustrationen (32 Helden, 14 Schlachtfelder, Kartenrückseite) – die Quellen |
 | `art/src/textures/*.webp` | Graue Strukturkarten (Stein, Metall, Stoff, Holz, Haar, Schuppen …, CC0), die beim Bauen über die Illustrationen gelegt werden. In einem SVG markiert man Flächen mit `data-tx="stone"` am Verlauf oder `filter="url(#tx-metal)"` an Form/Gruppe (Varianten `-soft`, `-fine`) – Details in `tools/texturize.py` |
 | `art/cards`, `art/terrains` | Daraus erzeugte WebP-Bilder (groß + `.thumb` für kleine Darstellungen), die das Spiel lädt: nach Änderungen an einem SVG `tools/build-art.sh` ausführen |
@@ -81,6 +85,7 @@ kann man die Partie dort direkt verlassen. Gezogen wird nie für ihn.
 | `tools/texturize.py` | Setzt die Material-Texturen in ein SVG ein (von `build-art.sh` und `render-svg.sh` aufgerufen) |
 | `tools/emoji-font.py` | Baut die Emoji-Ersatzschrift (`art/fonts/noto-emoji-subset.woff2`) nur mit den Emojis des Spiels – nach neuen Emojis ausführen |
 | `tools/render-svg.sh` | Rendert ein SVG per Headless-Chromium als PNG (zum Prüfen von Illustrationen) |
-| `test/simulate.js` | KI-gegen-KI-Partien mit Invarianten-Prüfung: `node test/simulate.js 500` |
+| `test/simulate.js` | KI-gegen-KI-Partien mit Invarianten-Prüfung und Grenzen für die Spielstärke der Stufen (`EXPECT`): `node test/simulate.js 400` |
 | `test/online.js` | Online-Partien im Gleichschritt: Host und Gast müssen bei jeder Zugreihenfolge gleich rechnen (inkl. Prüfsumme und ungültiger Züge): `node test/online.js 500` |
 | `test/balance.js` | Balance-Analyse (Karten, Fähigkeiten, Schlachtruf, Schwierigkeitsstufen): `node test/balance.js 3000` |
+| `package.json`, `.github/workflows/test.yml` | `npm test` startet `simulate.js` und `online.js` (knapp eine Minute, ohne Installation); GitHub führt das bei jedem Push aus |

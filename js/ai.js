@@ -35,7 +35,7 @@
     const h = Math.min(s.players[o].hand.length, cand.length);
     if (!h) return [];
     const mine = Eng.owned(s, p);
-    const allies = alliesEstimate(s, p); // die gegnerische Hand kenne ich nicht
+    const allies = alliesEstimate(s, -1); // er kennt meine Hand nicht, ich seine nicht
     // Wie stark ist jede Gegenkarte in diesem Duell – aus seiner Sicht gegen alles, was ich besitze?
     const strength = (id) => mine.reduce((sum, m) => {
       const r = Eng.duel(s, o === 0 ? [{ card: id }, { card: m }] : [{ card: m }, { card: id }], { allies });
@@ -64,6 +64,7 @@
   /**
    * Erwartete Zahl der Verbündeten: für die eigene Karte aus der echten Hand, für die des Gegners
    * geschätzt – seine Hand ist unbekannt, nur welche Karten er besitzt und wie viele er hält.
+   * p = -1: für beide geschätzt (so sieht der Gegner meine Karten).
    */
   function alliesEstimate(s, p) {
     return (i, c) => {
@@ -76,23 +77,49 @@
     };
   }
 
-  function winChance(s, p, cardId) {
+  /**
+   * Was eine Entscheidung braucht, unabhängig von der eigenen Karte: die möglichen Gegenkarten mit Gewicht.
+   * Einmal pro Zug berechnet – Schwer duelliert dafür jede Gegenkarte gegen alle eigenen Karten.
+   */
+  function context(s, p) {
     const hard = s.players[p].difficulty === 'hard';
-    const pool = hard ? hardPool(s, p) : opponentPool(s, p);
-    if (!pool.length) return 1;
+    return { hard, pool: hard ? hardPool(s, p) : opponentPool(s, p) };
+  }
+
+  /** Erwerb, wenn die Karte oc erobert wird: Quartett-Fortschritt für mich, Rückschlag für den Gegner. */
+  const gainOf = (s, p, oc) => {
+    const f = CARDS[oc].faction;
+    return GAIN[Eng.factionCount(s, p, f)] + 0.3 * Eng.factionCount(s, 1 - p, f);
+  };
+
+  /**
+   * Siegchance der Karte und erwarteter Erwerb im Siegfall. Der Erwerb ist nach denselben Gewichten
+   * gemittelt wie die Siegchance, und zwar über die Gegenkarten, die sie schlägt – erobert wird ja nur die.
+   */
+  function outlook(s, p, cardId, ctx = context(s, p)) {
+    const { pool, hard } = ctx;
+    if (!pool.length) return { pw: 1, gain: 0 };
     const allies = alliesEstimate(s, p);
     let score = 0;
     let total = 0;
+    let gain = 0;
+    let gainAll = 0;
     for (const o of pool) {
       const mine = { card: cardId };
       const theirs = { card: o.id };
       const r = Eng.duel(s, p === 0 ? [mine, theirs] : [theirs, mine], { allies });
-      score += o.w * (r.winner === p ? 1 : r.winner === -1 ? 0.5 : 0);
+      const win = r.winner === p ? 1 : r.winner === -1 ? 0.5 : 0;
+      const g = gainOf(s, p, o.id);
+      score += o.w * win;
       total += o.w;
+      gain += o.w * win * g;
+      gainAll += o.w * g;
     }
     // Schwer rechnet schon mit der wahrscheinlich gespielten Karte; sonst: Der Gegner spielt meist eine gute Karte – Chance abschwächen.
-    return hard ? score / total : Math.pow(score / total, 1.8);
+    return { pw: hard ? score / total : Math.pow(score / total, 1.8), gain: score ? gain / score : gainAll / total };
   }
+
+  const winChance = (s, p, cardId, ctx) => outlook(s, p, cardId, ctx).pw;
 
   /** Wie sehr schmerzt es, diese Karte zu verlieren? Quartett-Fortschritt + Kartenstärke. */
   function lossValue(s, p, cardId) {
@@ -104,17 +131,9 @@
     return LOSS[Eng.factionCount(s, p, c.faction)] + strength + feeds;
   }
 
-  function expectedValue(s, p, cardId) {
-    const opp = 1 - p;
-    const pool = Eng.owned(s, opp);
-    const pw = winChance(s, p, cardId);
+  function expectedValue(s, p, cardId, ctx) {
+    let { pw, gain } = outlook(s, p, cardId, ctx);
     const c = CARDS[cardId];
-    let gain = 0;
-    for (const oc of pool) {
-      const of = CARDS[oc].faction;
-      gain += GAIN[Eng.factionCount(s, p, of)] + 0.3 * Eng.factionCount(s, opp, of);
-    }
-    gain = pool.length ? gain / pool.length : 0;
     if (c.ability === 'plunder') gain *= 1.9;
     gain += s.pot.length * 1.2;
     let extra = 0;
@@ -128,9 +147,10 @@
     if (pl.difficulty === 'easy' && Math.random() < 0.5) {
       return { card: CG.shuffle(pl.hand.slice())[0] };
     }
+    const ctx = context(s, p);
     let best = null;
     for (const card of pl.hand) {
-      const ev = expectedValue(s, p, card);
+      const ev = expectedValue(s, p, card, ctx);
       if (!best || ev > best.ev) best = { card, ev };
     }
     return { card: best.card };
@@ -147,7 +167,7 @@
     return best.stat;
   }
 
-  const bestEV = (s, p) => Math.max(...s.players[p].hand.map((c) => expectedValue(s, p, c)));
+  const bestEV = (s, p, ctx = context(s, p)) => Math.max(...s.players[p].hand.map((c) => expectedValue(s, p, c, ctx)));
 
   /**
    * Schlachtruf ausstoßen? Vergleicht die beste Karte der jetzigen Hand mit der besten Karte
@@ -158,14 +178,16 @@
     if (!pl.rally || !pl.deck.length) return false;
     if (pl.difficulty === 'easy' && Math.random() < 0.5) return Math.random() < 0.2;
     const all = [...pl.hand, ...pl.deck];
+    // Die Gegenkarten hängen nicht davon ab, welche meiner Karten gerade auf der Hand liegen
+    const ctx = context(s, p);
     let sum = 0;
     for (let k = 0; k < TUNE.rallySamples; k++) {
       const mixed = CG.shuffle(all.slice());
       const players = s.players.slice();
       players[p] = Object.assign({}, pl, { hand: mixed.slice(0, pl.hand.length), deck: mixed.slice(pl.hand.length) });
-      sum += bestEV(Object.assign({}, s, { players }), p);
+      sum += bestEV(Object.assign({}, s, { players }), p, ctx);
     }
-    return sum / TUNE.rallySamples - bestEV(s, p) > TUNE.rallyCost;
+    return sum / TUNE.rallySamples - bestEV(s, p, ctx) > TUNE.rallyCost;
   }
 
   CG.AI = { chooseCard, chooseStat, shouldRally, winChance, TUNE };

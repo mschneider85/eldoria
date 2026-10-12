@@ -1,10 +1,13 @@
 /*
- * Oberfläche und Spielablauf-Steuerung (Menü, Runden, Online-Lobby, Animationen).
+ * Oberfläche und Spielablauf-Steuerung (Menü, Runden, Karten, Animationen, Fenster).
+ * Ausgelagert: Kartenbild-Effekte (art-fx.js), Duell (ui-duel.js), Eingaben (ui-input.js), Online (ui-online.js).
  */
 (function () {
   'use strict';
   const { Engine, AI, CARDS, FACTIONS, STATS, STAT_IDS, TERRAINS, ABILITIES } = window.CG;
   const Snd = window.CG.Audio;
+  const Net = window.CG.Net;
+  const ArtFX = window.CG.ArtFX;
 
   const $ = (sel) => document.querySelector(sel);
   const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -109,7 +112,7 @@
       Snd.unlock();
       $('#menu').classList.remove('intro-open');
       setTimeout(() => $('#intro').remove(), 700); // nach dem Ausblenden
-      if (invite) { openLobby(invite); invite = null; }
+      if (invite) { UI.openLobby(invite); invite = null; }
     });
     // Link in einem schon offenen Tab eingefügt: Die Seite lädt dann nicht neu
     window.addEventListener('hashchange', () => {
@@ -125,7 +128,7 @@
       }
       settings.mode = 'online';
       renderMenu();
-      openLobby(code);
+      UI.openLobby(code);
     });
     $('#start-btn').addEventListener('click', startGame);
     $('#rules-btn').addEventListener('click', showRules);
@@ -145,14 +148,14 @@
 
   /* =============================================================== Ablauf */
   function startGame() {
-    if (settings.mode === 'online') { store.set('name', $('#name1').value.trim()); openLobby(); return; }
+    if (settings.mode === 'online') { store.set('name', $('#name1').value.trim()); UI.openLobby(); return; }
     launch({ mode: 'pvc', players: [{ name: 'Du', you: true }, { name: 'Computer', isAI: true, difficulty: settings.difficulty }] });
   }
 
   function launch(opts) {
     s = Engine.newGame(opts);
     ui.token++;
-    wakeRemote();
+    UI.wakeRemote();
     clearEffects();
     ui.pendingDraw = s.players.map((pl) => pl.hand.slice());
     // Reste einer abgebrochenen Partie (laufende Flüge schreiben sonst in die neue)
@@ -160,7 +163,7 @@
     closeAllOverlays();
     $('#menu').classList.add('hidden');
     $('#game').classList.remove('hidden');
-    if (online()) watchStall(ui.token);
+    if (online()) UI.watchStall(ui.token);
     beginRound();
   }
 
@@ -172,7 +175,7 @@
   function toMenu() {
     if (s && online()) Net.bye({ t: 'bye' });
     ui.token++;
-    wakeRemote();
+    UI.wakeRemote();
     clearEffects();
     renderMenuShowcase();
     Snd.setMood('menu');
@@ -188,7 +191,7 @@
       pendingInvite = null;
       settings.mode = 'online';
       renderMenu();
-      openLobby(code);
+      UI.openLobby(code);
     }
   }
 
@@ -232,9 +235,9 @@
       } else if (isRemote(picker)) {
         ui.message = `${oppName()} überlegt…`;
         render();
-        const m = await nextRemote(token, ['stat']);
+        const m = await UI.nextRemote(token, ['stat']);
         if (!m || !(await waitForOverlays(token))) return;
-        if (!Engine.chooseStat(s, picker, m.stat).ok) { outOfSync(); return; }
+        if (!Engine.chooseStat(s, picker, m.stat).ok) { UI.outOfSync(); return; }
         ui.message = `${oppName()} wählt ${statLabel(s.stat)}.`;
         cardPhase();
       } else {
@@ -249,7 +252,7 @@
   function onStatChosen(stat) {
     const picker = s.picker;
     if (!Engine.chooseStat(s, picker, stat).ok) return;
-    if (online()) sendMove({ t: 'stat', r: s.round, stat });
+    if (online()) UI.sendMove({ t: 'stat', r: s.round, stat });
     ui.message = `Du wählst ${statLabel(stat)}.`; // wählen kann hier nur, wer an diesem Gerät sitzt
     cardPhase();
   }
@@ -290,16 +293,16 @@
   /** Online: Schlachtruf und Karte des Gegners kommen übers Netz und werden wie beim Computer gezeigt. */
   async function remotePlays(token) {
     for (;;) {
-      const m = await nextRemote(token, ['rally', 'choose']);
+      const m = await UI.nextRemote(token, ['rally', 'choose']);
       if (!m || !(await waitForOverlays(token))) return;
       if (m.t === 'rally') {
-        if (!(await animateRally(1))) { if (token === ui.token) outOfSync(); return; }
+        if (!(await animateRally(1))) { if (token === ui.token) UI.outOfSync(); return; }
         continue;
       }
-      if (!s.players[1].hand.includes(m.card)) { outOfSync(); return; }
+      if (!s.players[1].hand.includes(m.card)) { UI.outOfSync(); return; }
       await flyOppToSlot(m.card);
       if (token !== ui.token) return;
-      if (!Engine.choose(s, 1, m.card).ok) { outOfSync(); return; }
+      if (!Engine.choose(s, 1, m.card).ok) { UI.outOfSync(); return; }
       afterChoice();
       return;
     }
@@ -327,14 +330,14 @@
     ui.selected = null;
     const r = Engine.choose(s, p, id);
     if (!r.ok) { render(); toast(r.error); return; }
-    if (online()) sendMove({ t: 'choose', r: s.round, card: id });
+    if (online()) UI.sendMove({ t: 'choose', r: s.round, card: id });
     if (pvc() && ui.aiWaiting && !(await aiAfterWaiting(token))) return;
     afterChoice();
   }
 
   function afterChoice() {
     if (s.phase === 'cards') { render(); return; }
-    if (online()) sendSum();
+    if (online()) UI.sendSum();
     reveal();
   }
 
@@ -349,19 +352,19 @@
     ui.revealed = true;
     Snd.play('reveal');
     const r = s.result;
-    const steps = duelSteps(r);
+    const steps = UI.duelSteps(r);
     await sleep(800);
     if (token !== ui.token) return;
     ui.showResult = true;
     ui.presenting = true;
     ui.message = '';
-    ui.duel = { steps, k: 0, done: !steps.length, skip: false, after: afterLines(r), afterShown: false };
+    ui.duel = { steps, k: 0, done: !steps.length, skip: false, after: UI.afterLines(r), afterShown: false };
     ui.autoOff = false;
     render();
     if (steps.length) {
-      await playDuel(token);
+      await UI.playDuel(token);
       if (token !== ui.token) return;
-      countRun++;
+      UI.stopCount();
       Object.assign(ui.duel, { done: true, k: steps.length });
       render();
     }
@@ -385,187 +388,9 @@
     }
     if (token !== ui.token) return;
     ui.presenting = false;
-    autoAdvance(token);
+    UI.autoAdvance(token);
   }
 
-  const STEP_FIRST_MS = 900; // so lange steht der Kartenwert allein, bevor die Fähigkeiten dazukommen
-  const STEP_MS = 1000;      // Abstand der folgenden Schritte
-  const COUNT_MS = 420;      // so lange zählt der Wert hoch oder runter
-
-  /**
-   * Das Duell zum Mitverfolgen: Unter den Werten erscheint Schritt für Schritt, was sie verändert –
-   * erst die Regeln (Umlenken, Verrat), dann ersetzte Grundwerte (Gestaltwandel, Spiegel), dann Zu- und Abschläge.
-   * Jeder Schritt: lines[p] = { text, cls } oder null, dazu Eigenschaft, Richtung und Werte danach.
-   * stats[p]: die Eigenschaft, die auf Karte p markiert ist (beim Gestaltwandel ihr höchster Wert).
-   */
-  function duelSteps(r) {
-    const cards = r.ids.map((id) => CARDS[id]);
-    const steps = [];
-    let stat = r.start;
-    let stats = [stat, stat];
-    let low = !!s.terrain.lowWins;
-    let vals = r.values.map((v) => v.raw);
-    const add = (kind, lines) => steps.push({ kind, lines, stat, stats: stats.slice(), low, vals: vals.slice() });
-    const line = (text, cls = 'ability') => ({ text, cls });
-    const both = (text) => [line(text), line(text)];
-    const one = (i, text) => (i === 0 ? [line(text), null] : [null, line(text)]);
-
-    if (r.switchers.length === 2) add('ability', both('🔀 Umlenken hebt sich auf'));
-    else if (r.switchers.length === 1 && r.stat !== r.start) {
-      stat = r.stat;
-      // Auch Karten mit Gestaltwandel oder Spiegel springen erst mit um – deren Fähigkeit folgt danach als eigener Schritt
-      stats = [stat, stat];
-      vals = cards.map((c) => c.stats[stat]);
-      add('ability', [0, 1].map((i) => line(`${i === r.switchers[0] ? '🔀 ' : ''}${statLabel(stat)} zählt`)));
-    }
-    if (r.traitors.length) {
-      // Verrat legt fest, dass der niedrigere Wert gewinnt – im Nebelsumpf gilt das ohnehin
-      const text = low ? '🎭 Niedriger gewinnt ohnehin' : '🎭 Verrat: Niedriger gewinnt';
-      low = true;
-      add('ability', r.traitors.length === 2 ? both(text) : one(r.traitors[0], text));
-    }
-    // Gestaltwandel vor dem Spiegel – der Spiegel greift den schon gewandelten Wert auf
-    for (const via of ['shift', 'mirror']) {
-      const who = [0, 1].filter((i) => r.values[i].via === via);
-      if (!who.length) continue;
-      const lines = [null, null];
-      for (const i of who) {
-        vals[i] = r.values[i].base;
-        if (via === 'shift') {
-          // der höchste Wert der Karte – diese Zeile wird markiert
-          stats[i] = STAT_IDS.find((st) => cards[i].stats[st] === r.values[i].base);
-          lines[i] = line(`🌀 ${statLabel(stats[i])} zählt`);
-        } else lines[i] = line('🪞 Spiegel: Gegner +5');
-      }
-      add('ability', lines);
-    }
-    const n = Math.max(r.values[0].mods.length, r.values[1].mods.length);
-    for (let j = 0; j < n; j++) {
-      const lines = [0, 1].map((i) => {
-        const m = r.values[i].mods[j];
-        if (!m) return null;
-        vals[i] += m.amount;
-        // grün, wenn es dem Besitzer hilft (wo der niedrigere Wert gewinnt, schaden Zuschläge)
-        return line(`${m.amount > 0 ? '+' : '−'}${Math.abs(m.amount)} ${m.label}`, (m.amount > 0) !== r.low ? 'good' : 'bad');
-      });
-      add('mod', lines);
-    }
-    return steps;
-  }
-
-  /** Fähigkeiten, die nach dem Duell wirken – je Seite eine kurze Zeile unter der Karte (oder null). */
-  function afterLines(r) {
-    const lines = [null, null];
-    const line = (text) => ({ text, cls: 'ability' });
-    if (r.stolen) lines[r.winner] = line('🏴‍☠️ Plündert eine Karte');
-    if (r.retreated) lines[1 - r.winner] = line('↩️ Zieht sich zurück');
-    for (const p of [0, 1]) {
-      if (r.spied[p]) lines[p] = line('🕵️ Späht eine Karte aus');
-      if (CARDS[r.ids[p]].ability === 'runehorn' && r.notes.some((n) => n.startsWith('📯'))) lines[p] = line('📯 Schlachtruf bereit');
-    }
-    return lines;
-  }
-
-  /** Stand der Duell-Animation: Eigenschaft, je Karte markierte Eigenschaft, Richtung und angezeigte Werte. */
-  function duelView() {
-    const r = s.result;
-    const d = ui.duel;
-    const last = d && d.steps[d.steps.length - 1];
-    if (!d || d.done) return { stat: r.stat, stats: last ? last.stats : [r.stat, r.stat], low: r.low, vals: r.values.map((v) => v.total) };
-    const cur = d.steps[d.k - 1];
-    if (!cur) return { stat: r.start, stats: [r.start, r.start], low: !!s.terrain.lowWins, vals: r.values.map((v) => v.raw) };
-    return { stat: cur.stat, stats: cur.stats, low: cur.low, vals: cur.vals.map((v) => Math.max(0, v)) };
-  }
-
-  /** Wartet ms (ohne die Zeit, in der ein Fenster offen ist); true, wenn übersprungen oder abgebrochen. */
-  async function stepPause(token, ms) {
-    let left = ms;
-    let last = performance.now();
-    while (left > 0) {
-      await sleep(50);
-      if (token !== ui.token || ui.duel.skip) return true;
-      const now = performance.now();
-      if (!overlayOpen()) left -= now - last;
-      last = now;
-    }
-    return false;
-  }
-
-  /** Lässt die Werte vom alten zum neuen Stand zählen (das Element wird jedes Mal neu gesucht – render() ersetzt es). */
-  let countRun = 0; // ein neuer Zählvorgang (oder das Ende des Duells) hält den laufenden an
-  function countValues(from, to) {
-    const run = ++countRun;
-    const t0 = performance.now();
-    const tick = () => {
-      if (run !== countRun) return;
-      const k = reducedMotion ? 1 : Math.min(1, (performance.now() - t0) / COUNT_MS);
-      for (const p of [0, 1]) {
-        const el = $(`#slot-${p} .value .num`);
-        if (!el || from[p] === to[p]) continue;
-        el.textContent = Math.round(from[p] + (to[p] - from[p]) * k);
-        el.classList.toggle('up', k < 1 && to[p] > from[p]);
-        el.classList.toggle('down', k < 1 && to[p] < from[p]);
-      }
-      if (k < 1) requestAnimationFrame(tick);
-    };
-    tick();
-  }
-
-  async function playDuel(token) {
-    const d = ui.duel;
-    for (const step of d.steps) {
-      if (await stepPause(token, d.k ? STEP_MS : STEP_FIRST_MS)) return;
-      const before = duelView();
-      d.k++;
-      render();
-      const after = duelView();
-      countValues(before.vals, after.vals);
-      // Springt die Markierung auf eine andere Eigenschaft (Umlenken, Gestaltwandel), leuchtet die neue Zeile auf
-      for (const p of [0, 1]) if (after.stats[p] !== before.stats[p]) $(`#slot-${p} .row.active`)?.classList.add('flash');
-      Snd.play(step.kind === 'ability' ? 'magic' : 'click');
-    }
-    await stepPause(token, STEP_MS);
-  }
-
-  const AUTO_MS = 6000;       // Countdown für „Weiter“
-  const AUTO_NOTES_MS = 2500; // länger, wenn Fähigkeiten gewirkt haben – dann gibt es mehr zu lesen
-
-  /**
-   * „Weiter“ von selbst: Ein Balken im Knopf läuft ab. Einblendungen, ein verstecktes Fenster und die
-   * Maus auf Schlachtfeld oder Ergebnis halten ihn an; ein Klick oder Tippen irgendwohin schaltet ihn
-   * für diese Runde ab – wer liest, hat dann Zeit. Nach der letzten Runde bleibt es beim Klick.
-   */
-  async function autoAdvance(token) {
-    if (!s.result || s.phase === 'over') return;
-    const total = AUTO_MS + (s.result.notes.length ? AUTO_NOTES_MS : 0);
-    let left = total;
-    let last = performance.now();
-    for (;;) {
-      await sleep(80);
-      if (token !== ui.token || !ui.showResult || ui.fly !== null) return;
-      const now = performance.now();
-      const btn = $('#next-btn');
-      if (ui.autoOff) { if (btn) btn.style.setProperty('--auto', '0'); return; }
-      if (!overlayOpen() && !ui.hoverHold && !document.hidden) left -= now - last;
-      last = now;
-      if (btn) btn.style.setProperty('--auto', Math.max(0, left / total).toFixed(3));
-      if (left <= 0) { nextStep(); return; }
-    }
-  }
-
-  async function nextStep() {
-    // Läuft das Duell noch, springt „Weiter“ erst einmal zum Ergebnis
-    if (ui.duel && !ui.duel.done) { ui.duel.skip = true; return; }
-    if (!s.result || ui.fly !== null || ui.presenting || overlayOpen()) return;
-    const token = ui.token;
-    ui.fly = true;
-    await animateLoot();
-    if (token !== ui.token) return;
-    if (s.phase === 'over') { ui.deckShown = null; ui.deckBefore = s.players.map((pl) => pl.deck.length); render(); showGameOver(); return; }
-    ui.pendingDraw = s.result.drawn.map((d) => d.slice());
-    Engine.nextRound(s);
-    beginRound();
-  }
 
   /* =============================================================== Stapel-Animationen */
   /*
@@ -818,7 +643,7 @@
     }));
     if (token !== ui.token) return false;
     const r = Engine.rally(s, p);
-    if (r.ok && open && online()) sendMove({ t: 'rally', r: s.round });
+    if (r.ok && open && online()) UI.sendMove({ t: 'rally', r: s.round });
     bumpDeck(p);
     await sleep(250);
     if (open) ui.rallying = false;
@@ -929,333 +754,6 @@
   function statLabel(stat) { return `${STATS[stat].icon} ${STATS[stat].name}`; }
   function escapeHTML(t) { return String(t).replace(/[&<>"]/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch])); }
 
-  /**
-   * Bewegte Effekte über den Kartenbildern. Koordinaten in % des Bildes (4:3), Größen und
-   * Wege in % der Bildbreite bzw. -höhe – so sitzen sie auf jeder Kartengröße.
-   *  glow    – Lichtfleck (x, y, Radius r): flicker (Feuer), pulse (ruhiges Atmen),
-   *            strike (Aufblitzen im Takt `every`), flash (Blitz, alle `every` Sekunden)
-   *  rise    – Teilchen steigen aus einem Bereich auf (Glut, Seelen, Blasen: shape 'bubble');
-   *            dx/dy geben die Flugbahn vor, damit geht auch ein seitlicher Strom (Frostatem)
-   *  drift   – schwebende, glimmende Lichter (Glühwürmchen, Staub, Magie)
-   *  fall    – Schnee oder Regen (shape 'rain') über das ganze Bild
-   *  twinkle – kurzes sternförmiges Funkeln (Klingen, Edelsteine, Sterne)
-   *  sparks  – Funkenregen von einem Punkt im Takt `every` (Richtung angle ± spread)
-   *  mist    – ziehender Nebel in einem Band (y, h)
-   *  streaks – Windschlieren, die durchs Bild ziehen
-   */
-  const FIRE = '255,140,40', GOLD = '255,210,110', ICE = '160,220,255', ARCANE = '110,200,255',
-    FEL = '120,255,80', VIOLET = '200,110,255', MOON = '225,240,255', WISP = '140,255,220',
-    DUST = '255,225,170', WHITE = '255,255,255';
-  const STRIKE = 2.6; // Sekunden zwischen zwei Hammerschlägen des Runenschmieds
-  const ART_FX = {
-    '1A': [
-      { type: 'glow', x: 85, y: 64, r: 9, c: FIRE, anim: 'flicker' },
-      { type: 'rise', x: 83.5, w: 3, y: 61, n: 5, s: [.5, 1], dy: [-22, -12], dur: [2, 3.5] },
-      { type: 'drift', x: 8, y: 8, w: 22, h: 55, n: 10, c: DUST, s: [.4, .9] },
-      { type: 'twinkle', x: 66, y: 5, w: 4, h: 12, n: 2, c: WHITE },
-      { type: 'twinkle', x: 47, y: 2, w: 6, h: 6, n: 1, c: GOLD },
-    ],
-    '1B': [
-      { type: 'glow', x: 28.6, y: 64, r: 11, c: GOLD, anim: 'pulse' },
-      { type: 'glow', x: 91.6, y: 52, r: 3.5, c: FIRE, anim: 'flicker' },
-      { type: 'twinkle', x: 0, y: 0, w: 100, h: 28, n: 6, c: WHITE, s: [1.5, 2.8] },
-      { type: 'twinkle', x: 60, y: 38, w: 16, h: 30, n: 2, c: WHITE },
-      { type: 'drift', x: 0, y: 30, w: 100, h: 50, n: 8, c: DUST, s: [.4, .8] },
-    ],
-    '1C': [
-      { type: 'glow', x: 50, y: 55, r: 13, c: ARCANE, anim: 'pulse' },
-      { type: 'glow', x: 57, y: 12, r: 6, c: MOON, anim: 'pulse', delay: -1.5 },
-      { type: 'glow', x: 9.6, y: 47, r: 3.5, c: FIRE, anim: 'flicker' },
-      { type: 'glow', x: 27, y: 32.5, r: 3.5, c: FIRE, anim: 'flicker', delay: -.7 },
-      { type: 'glow', x: 89, y: 31, r: 3.5, c: FIRE, anim: 'flicker', delay: -1.2 },
-      { type: 'glow', x: 75, y: 64.5, r: 3.5, c: FIRE, anim: 'flicker', delay: -.4 },
-      { type: 'rise', x: 44, w: 12, y: 56, n: 10, c: ARCANE, s: [.6, 1.3], dx: [-6, 6], dy: [-40, -20] },
-      { type: 'drift', x: 25, y: 15, w: 50, h: 60, n: 8, c: ARCANE },
-    ],
-    '1D': [
-      { type: 'glow', x: 13.6, y: 55, r: 15, c: GOLD, anim: 'pulse' },
-      { type: 'glow', x: 90, y: 44.5, r: 3, c: FIRE, anim: 'flicker' },
-      { type: 'twinkle', x: 11, y: 32, w: 3, h: 5, n: 1, c: WHITE, s: [3, 4.5] },
-      { type: 'drift', x: 0, y: 50, w: 100, h: 35, n: 10, c: '255,220,150', s: [.4, .9] },
-    ],
-    '2A': [
-      { type: 'glow', x: 5, y: 72, r: 15, c: FIRE, anim: 'flicker' },
-      { type: 'glow', x: 92, y: 76, r: 15, c: FIRE, anim: 'flicker', delay: -.9 },
-      { type: 'glow', x: 45, y: 28, r: 2.5, c: '255,190,60', anim: 'pulse' },
-      { type: 'glow', x: 56, y: 28, r: 2.5, c: '255,190,60', anim: 'pulse' },
-      { type: 'rise', x: 0, w: 12, y: 80, n: 8 },
-      { type: 'rise', x: 84, w: 16, y: 82, n: 8 },
-      { type: 'rise', x: 10, w: 80, y: 98, n: 5, dy: [-70, -45], dur: [5, 8] },
-    ],
-    '2B': [
-      { type: 'drift', x: 0, y: 20, w: 100, h: 70, n: 14, c: '255,190,130', s: [.4, 1] },
-      { type: 'twinkle', x: 81, y: 4, w: 7, h: 9, n: 1, c: WHITE, s: [3, 4.5] },
-      { type: 'mist', y: 78, h: 22, c: '210,120,70' },
-    ],
-    '2C': [
-      { type: 'glow', x: 76, y: 18, r: 11, c: '190,220,255', anim: 'pulse' },
-      { type: 'glow', x: 76, y: 18, r: 20, c: '170,200,255', anim: 'flash', every: 5 },
-      { type: 'glow', x: 50, y: 40, r: 70, c: '120,150,255', anim: 'flash', every: 5 },
-      { type: 'glow', x: 23, y: 14, r: 2.5, c: ARCANE, anim: 'pulse' },
-      { type: 'glow', x: 27, y: 14, r: 2.5, c: ARCANE, anim: 'pulse' },
-      { type: 'glow', x: 44, y: 38, r: 2.5, c: ARCANE, anim: 'pulse', delay: -1 },
-      { type: 'glow', x: 51.6, y: 38, r: 2.5, c: ARCANE, anim: 'pulse', delay: -1 },
-      { type: 'drift', x: 64, y: 6, w: 24, h: 26, n: 8, c: ARCANE, a: 3 },
-      { type: 'fall', shape: 'rain', n: 22, c: '180,200,255' },
-    ],
-    '2D': [
-      { type: 'glow', x: 48, y: 50.7, r: 3, c: '255,210,60', anim: 'pulse' },
-      { type: 'glow', x: 57.6, y: 50.7, r: 3, c: '255,210,60', anim: 'pulse' },
-      { type: 'glow', x: 87.6, y: 56.5, r: 11, c: '255,160,90', anim: 'pulse', delay: -1.4 },
-      { type: 'rise', x: 10, w: 80, y: 94, n: 10, c: '220,150,100', s: [.6, 1.4], dx: [-10, 10], dy: [-18, -8], dur: [2.5, 4.5] },
-      { type: 'mist', y: 80, h: 20, c: '210,120,70' },
-    ],
-    '3A': [
-      { type: 'glow', x: 44, y: 23, r: 24, c: MOON, anim: 'pulse' },
-      { type: 'glow', x: 70, y: 38, r: 8, c: WISP, anim: 'pulse', delay: -1.2 },
-      { type: 'twinkle', x: 35, y: 8, w: 4, h: 6, n: 1, c: WHITE, s: [3, 4] },
-      { type: 'drift', x: 0, y: 10, w: 100, h: 80, n: 14, c: WISP },
-    ],
-    '3B': [
-      { type: 'glow', x: 79.6, y: 11, r: 10, c: MOON, anim: 'pulse' },
-      { type: 'glow', x: 13.6, y: 79, r: 5, c: VIOLET, anim: 'pulse', delay: -.8 },
-      { type: 'glow', x: 85.6, y: 80, r: 5, c: VIOLET, anim: 'pulse', delay: -2 },
-      { type: 'glow', x: 74.6, y: 47, r: 4, c: WISP, anim: 'pulse', delay: -1.4 },
-      { type: 'drift', x: 0, y: 20, w: 100, h: 70, n: 12, c: WISP },
-      { type: 'mist', y: 78, h: 22, c: '120,220,200' },
-    ],
-    '3C': [
-      { type: 'glow', x: 25, y: 59, r: 9, c: '120,255,160', anim: 'pulse' },
-      { type: 'glow', x: 47, y: 22, r: 2, c: WISP, anim: 'pulse', delay: -1 },
-      { type: 'glow', x: 52, y: 22, r: 2, c: WISP, anim: 'pulse', delay: -1 },
-      { type: 'rise', x: 20, w: 65, y: 92, n: 14, c: '120,255,160', s: [.6, 1.3], dy: [-40, -20], dur: [4, 7] },
-      { type: 'drift', x: 10, y: 10, w: 80, h: 50, n: 6, c: '120,255,160' },
-    ],
-    '3D': [
-      { type: 'drift', x: 0, y: 10, w: 100, h: 80, n: 16, c: '220,255,120' },
-      { type: 'twinkle', x: 79.6, y: 34.5, w: 4, h: 4, n: 1, c: WHITE, s: [3, 4] },
-      { type: 'mist', y: 80, h: 20, c: '170,220,210' },
-    ],
-    '4A': [
-      { type: 'glow', x: 17, y: 52, r: 9, c: FIRE, anim: 'flicker' },
-      { type: 'glow', x: 82, y: 52, r: 9, c: FIRE, anim: 'flicker', delay: -.8 },
-      { type: 'glow', x: 80, y: 37.6, r: 7, c: ARCANE, anim: 'pulse' },
-      { type: 'glow', x: 50, y: 3, r: 3, c: ARCANE, anim: 'pulse', delay: -1.7 },
-      { type: 'rise', x: 14, w: 6, y: 50, n: 6, s: [.5, 1.1], dy: [-30, -15], dur: [2, 3.5] },
-      { type: 'rise', x: 79, w: 6, y: 50, n: 6, s: [.5, 1.1], dy: [-30, -15], dur: [2, 3.5] },
-      { type: 'twinkle', x: 48, y: 26, w: 4, h: 4, n: 1, c: '255,120,120', s: [2.5, 3.5] },
-    ],
-    '4B': [
-      { type: 'glow', x: 14, y: 58, r: 30, c: FIRE, anim: 'flicker' },
-      { type: 'glow', x: 68, y: 13, r: 13, c: ARCANE, anim: 'strike', every: STRIKE },
-      { type: 'glow', x: 67.5, y: 76, r: 8, c: ARCANE, anim: 'pulse' },
-      { type: 'glow', x: 64, y: 66, r: 11, c: '120,210,255', anim: 'pulse', delay: -1.3 },
-      { type: 'glow', x: 70, y: 61, r: 16, c: '255,200,90', anim: 'strike', every: STRIKE },
-      { type: 'rise', x: 3, w: 24, y: 67, n: 16 },
-      { type: 'sparks', x: 69, y: 61, n: 18, every: STRIKE },
-    ],
-    '4C': [
-      { type: 'glow', x: 78, y: 40.5, r: 13, c: '255,200,90', anim: 'strike', every: 3.2 },
-      { type: 'sparks', x: 78, y: 40.5, n: 12, every: 3.2, angle: -20, spread: 55, speed: [8, 18], g: [2, 6] },
-      { type: 'twinkle', x: 41, y: 28, w: 7, h: 4, n: 1, c: WHITE, s: [2.5, 3.5] },
-      { type: 'fall', n: 24, c: WHITE },
-    ],
-    '4D': [
-      { type: 'glow', x: 45.6, y: 10, r: 13, c: '190,220,255', anim: 'flash', every: 4 },
-      { type: 'glow', x: 84.6, y: 30, r: 2, c: GOLD, anim: 'pulse' },
-      { type: 'mist', y: 72, h: 28, c: WHITE },
-      { type: 'streaks', n: 8, y: 10, h: 70, c: WHITE },
-    ],
-    '5A': [
-      { type: 'glow', x: 46.8, y: 36.3, r: 3, c: ICE, anim: 'pulse' },
-      { type: 'glow', x: 53.2, y: 36.3, r: 3, c: ICE, anim: 'pulse' },
-      { type: 'glow', x: 27, y: 15, r: 6, c: ICE, anim: 'pulse', delay: -1 },
-      { type: 'glow', x: 78, y: 36, r: 11, c: ICE, anim: 'pulse', delay: -2 },
-      { type: 'fall', n: 18, c: '200,230,255' },
-      { type: 'mist', y: 80, h: 20, c: '170,200,255' },
-    ],
-    '5B': [
-      { type: 'glow', x: 41.6, y: 19, r: 14, c: '200,255,140', anim: 'pulse' },
-      { type: 'glow', x: 51.6, y: 21.6, r: 2, c: ARCANE, anim: 'pulse', delay: -1 },
-      { type: 'glow', x: 56.6, y: 21.6, r: 2, c: ARCANE, anim: 'pulse', delay: -1 },
-      { type: 'glow', x: 28.6, y: 39, r: 2.5, c: ARCANE, anim: 'pulse', delay: -2 },
-      { type: 'glow', x: 77.6, y: 9.6, r: 7, c: '90,170,255', anim: 'pulse', delay: -.5 },
-      { type: 'rise', x: 10, w: 80, y: 90, n: 10, c: '150,255,140', s: [.6, 1.3], dx: [-6, 6], dy: [-35, -15], dur: [4, 7] },
-      { type: 'mist', y: 78, h: 22, c: '120,220,120' },
-    ],
-    '5C': [
-      { type: 'glow', x: 50, y: 46, r: 30, c: '190,255,245', anim: 'pulse' },
-      { type: 'glow', x: 47, y: 32, r: 2.5, c: '220,255,255', anim: 'pulse', delay: -1 },
-      { type: 'glow', x: 53, y: 32, r: 2.5, c: '220,255,255', anim: 'pulse', delay: -1 },
-      { type: 'drift', x: 10, y: 10, w: 80, h: 70, n: 10, c: '190,255,245' },
-      { type: 'mist', y: 75, h: 25, c: '170,230,220' },
-    ],
-    '5D': [
-      { type: 'glow', x: 17, y: 45, r: 4, c: FEL, anim: 'flicker' },
-      { type: 'glow', x: 21, y: 50.7, r: 4, c: FEL, anim: 'flicker', delay: -.6 },
-      { type: 'glow', x: 78.6, y: 43.7, r: 4, c: FEL, anim: 'flicker', delay: -1.1 },
-      { type: 'glow', x: 83.6, y: 51, r: 4, c: FEL, anim: 'flicker', delay: -.3 },
-      { type: 'glow', x: 47, y: 29, r: 3, c: FEL, anim: 'pulse' },
-      { type: 'glow', x: 53, y: 29, r: 3, c: FEL, anim: 'pulse' },
-      { type: 'rise', x: 16, w: 6, y: 47, n: 4, c: FEL, s: [.4, .9], dy: [-20, -10], dur: [2, 3.5] },
-      { type: 'rise', x: 77, w: 8, y: 46, n: 4, c: FEL, s: [.4, .9], dy: [-20, -10], dur: [2, 3.5] },
-    ],
-    '6A': [
-      { type: 'glow', x: 45, y: 15, r: 22, c: GOLD, anim: 'pulse' },
-      { type: 'drift', x: 0, y: 0, w: 100, h: 70, n: 14, c: GOLD },
-      { type: 'mist', y: 62, h: 30, c: '255,220,200' },
-    ],
-    '6B': [
-      { type: 'glow', x: 15.6, y: 60, r: 26, c: FIRE, anim: 'flicker' },
-      { type: 'glow', x: 29.6, y: 36.3, r: 7, c: '255,220,120', anim: 'flicker', delay: -.5 },
-      { type: 'glow', x: 55, y: 90, r: 30, c: FIRE, anim: 'flicker', delay: -1.1 },
-      { type: 'rise', x: 0, w: 30, y: 80, n: 10 },
-      { type: 'rise', x: 30, w: 70, y: 95, n: 8, dy: [-60, -35], dur: [4, 7] },
-    ],
-    '6C': [
-      { type: 'glow', x: 86, y: 13, r: 6, c: MOON, anim: 'pulse' },
-      { type: 'rise', x: 73, w: 2, y: 26, h: 4, n: 10, c: ICE, s: [.8, 1.8], dx: [16, 28], dy: [-4, 12], dur: [1.6, 2.6] },
-      { type: 'fall', n: 26, c: WHITE },
-      { type: 'mist', y: 0, h: 30, c: '120,255,200' },
-    ],
-    '6D': [
-      { type: 'twinkle', x: 10, y: 70, w: 85, h: 25, n: 10, c: '255,240,180' },
-      { type: 'twinkle', x: 43, y: 34, w: 13, h: 4, n: 1, c: WHITE, s: [2, 3] },
-      { type: 'drift', x: 35, y: 0, w: 22, h: 60, n: 10, c: DUST, s: [.4, .9] },
-      { type: 'glow', x: 78.6, y: 67, r: 3, c: '255,90,90', anim: 'pulse' },
-    ],
-    '7A': [
-      { type: 'glow', x: 23, y: 65, r: 12, c: FEL, anim: 'flicker' },
-      { type: 'glow', x: 76, y: 65, r: 12, c: FEL, anim: 'flicker', delay: -.9 },
-      { type: 'glow', x: 47, y: 24, r: 3, c: FEL, anim: 'pulse' },
-      { type: 'glow', x: 53, y: 24, r: 3, c: FEL, anim: 'pulse' },
-      { type: 'glow', x: 50, y: 93, r: 40, c: FIRE, anim: 'flicker', delay: -.4 },
-      { type: 'rise', x: 17, w: 12, y: 65, n: 8, c: FEL, dy: [-35, -20] },
-      { type: 'rise', x: 70, w: 12, y: 65, n: 8, c: FEL, dy: [-35, -20] },
-      { type: 'rise', x: 0, w: 100, y: 92, n: 8 },
-    ],
-    '7B': [
-      { type: 'glow', x: 50, y: 56, r: 12, c: VIOLET, anim: 'pulse' },
-      { type: 'glow', x: 47.6, y: 27, r: 2.5, c: VIOLET, anim: 'pulse', delay: -1 },
-      { type: 'glow', x: 52.6, y: 27, r: 2.5, c: VIOLET, anim: 'pulse', delay: -1 },
-      { type: 'glow', x: 21.6, y: 32, r: 4, c: VIOLET, anim: 'pulse', delay: -1.8 },
-      { type: 'glow', x: 77.6, y: 44, r: 4, c: VIOLET, anim: 'pulse', delay: -.6 },
-      { type: 'rise', x: 45, w: 10, y: 56, n: 6, c: VIOLET, s: [.6, 1.2], dx: [-8, 8], dy: [-35, -18] },
-      { type: 'drift', x: 25, y: 30, w: 50, h: 50, n: 10, c: VIOLET },
-      { type: 'mist', y: 80, h: 20, c: '140,80,200' },
-    ],
-    '7C': [
-      { type: 'glow', x: 26, y: 79, r: 7, c: FEL, anim: 'flicker' },
-      { type: 'glow', x: 43, y: 80, r: 7, c: FEL, anim: 'flicker', delay: -.5 },
-      { type: 'glow', x: 62, y: 80, r: 7, c: FEL, anim: 'flicker', delay: -1.2 },
-      { type: 'glow', x: 76, y: 80.5, r: 7, c: FEL, anim: 'flicker', delay: -.8 },
-      { type: 'glow', x: 93, y: 23, r: 6, c: FEL, anim: 'flicker', delay: -.3 },
-      { type: 'glow', x: 28, y: 29, r: 3, c: FEL, anim: 'pulse' },
-      { type: 'rise', x: 20, w: 62, y: 80, n: 14, c: FEL, dy: [-22, -10], dur: [2, 3.5] },
-      { type: 'rise', x: 91, w: 4, y: 22, n: 4, c: FEL, s: [.5, 1], dy: [-18, -8], dur: [1.8, 3] },
-    ],
-    '7D': [
-      { type: 'glow', x: 35.6, y: 30, r: 10, c: FEL, anim: 'flicker' },
-      { type: 'glow', x: 49, y: 28.5, r: 2, c: '255,220,90', anim: 'pulse' },
-      { type: 'glow', x: 54.6, y: 28.5, r: 2, c: '255,220,90', anim: 'pulse' },
-      { type: 'glow', x: 12.6, y: 47, r: 5, c: FEL, anim: 'pulse', delay: -1 },
-      { type: 'glow', x: 90.6, y: 38, r: 5, c: FEL, anim: 'pulse', delay: -2.2 },
-      { type: 'rise', x: 32, w: 8, y: 28, n: 8, c: FEL, dy: [-25, -12], dur: [1.8, 3] },
-      { type: 'rise', x: 0, w: 100, y: 90, n: 8 },
-    ],
-    '8A': [
-      { type: 'glow', x: 50, y: 50, r: 50, c: FIRE, anim: 'flicker' },
-      { type: 'glow', x: 76, y: 20, r: 10, c: FIRE, anim: 'flicker', delay: -.6 },
-      { type: 'glow', x: 50, y: 47, r: 10, c: '255,230,150', anim: 'pulse' },
-      { type: 'glow', x: 47.8, y: 25.6, r: 2.5, c: '255,255,200', anim: 'pulse', delay: -1 },
-      { type: 'glow', x: 53.8, y: 25.6, r: 2.5, c: '255,255,200', anim: 'pulse', delay: -1 },
-      { type: 'rise', x: 15, w: 70, y: 85, n: 18, dy: [-60, -30] },
-    ],
-    '8B': [
-      { type: 'glow', x: 50.6, y: 47, r: 9, c: '255,190,80', anim: 'pulse' },
-      { type: 'glow', x: 48, y: 25.6, r: 2.5, c: '255,190,80', anim: 'pulse', delay: -1 },
-      { type: 'glow', x: 53.2, y: 25.6, r: 2.5, c: '255,190,80', anim: 'pulse', delay: -1 },
-      { type: 'drift', x: 0, y: 20, w: 100, h: 70, n: 10, c: '255,210,160', s: [.4, .9] },
-    ],
-    '8C': [
-      { type: 'glow', x: 15, y: 45, r: 16, c: '200,170,255', anim: 'flash', every: 4.4 },
-      { type: 'glow', x: 85, y: 45, r: 16, c: '200,170,255', anim: 'flash', every: 5.3 },
-      { type: 'glow', x: 47, y: 22, r: 3, c: '220,230,255', anim: 'pulse' },
-      { type: 'glow', x: 54, y: 22, r: 3, c: '220,230,255', anim: 'pulse' },
-      { type: 'fall', shape: 'rain', n: 30, c: '200,200,255' },
-      { type: 'streaks', n: 8, y: 25, h: 60, c: '230,220,255' },
-    ],
-    '8D': [
-      { type: 'glow', x: 15.6, y: 14.4, r: 9, c: MOON, anim: 'pulse' },
-      { type: 'glow', x: 47.6, y: 22, r: 2.5, c: '220,255,255', anim: 'pulse', delay: -1 },
-      { type: 'glow', x: 53, y: 22, r: 2.5, c: '220,255,255', anim: 'pulse', delay: -1 },
-      { type: 'twinkle', x: 32, y: 4, w: 4, h: 4, n: 1, c: WHITE, s: [3, 4] },
-      { type: 'twinkle', x: 10, y: 75, w: 80, h: 20, n: 8, c: '200,240,255' },
-      { type: 'rise', shape: 'bubble', x: 55, w: 22, y: 70, h: 15, n: 12, c: '160,230,255', s: [.8, 1.8], dx: [-4, 4], dy: [-35, -15], dur: [3, 6] },
-    ],
-  };
-
-  /** Feste Pseudo-Zufallsfolge je Karte: gleiche Karte, gleiches Bild bei jedem Neuzeichnen */
-  function rng(seed) {
-    let h = [...seed].reduce((a, ch) => Math.imul(a ^ ch.charCodeAt(0), 2654435761), 1779033703);
-    return () => { h = Math.imul(h ^ (h >>> 15), 2246822507); h = Math.imul(h ^ (h >>> 13), 3266489909); return ((h ^= h >>> 16) >>> 0) / 4294967296; };
-  }
-
-  /** Effektebene für ein Kartenbild; kleine Darstellungen (Galerie, Menü) bekommen weniger Teilchen */
-  const phoneFx = window.matchMedia('(max-width: 760px), (max-height: 520px)');
-  function fxHTML(id, small) {
-    const fx = ART_FX[id];
-    if (!fx) return '';
-    const rnd = rng(id);
-    const r = (a, b) => (a + rnd() * (b - a)).toFixed(2);
-    const rr = (range) => r(range[0], range[1]);
-    const el = (cls, vars, dur, delay) => `<i class="${cls}" style="${Object.entries(vars).map(([k, v]) => `--${k}:${v}`).join(';')};animation-duration:${dur}s;animation-delay:${delay}s"></i>`;
-    // Auf Handys nur halb so viele Teilchen: Jedes kostet bei jedem Neuzeichnen Rechenzeit (dort ruckelte es im Duell)
-    const share = (small ? 2 : 1) * (phoneFx.matches ? 2 : 1) * (fxLevel() === 1 ? 2 : 1);
-    const count = (n) => Array.from({ length: Math.ceil(n / share) });
-    const out = fx.map((f) => {
-      const c = f.c || FIRE;
-      switch (f.type) {
-        case 'glow': {
-          const dur = f.every || { flicker: 1.9, pulse: 3.4 }[f.anim];
-          return el(`fx-glow ${f.anim}`, { x: f.x, y: f.y, r: f.r, c }, dur, f.delay || 0);
-        }
-        case 'rise': return count(f.n).map(() => {
-          const d = rr(f.dur || [3.2, 6]);
-          return el(`fx-rise${f.shape ? ` ${f.shape}` : ''}`, { x: r(f.x, f.x + f.w), y: r(f.y, f.y + (f.h || 0)), s: rr(f.s || [.8, 1.7]), c, dx: rr(f.dx || [-5, 8]), dy: rr(f.dy || [-38, -24]) }, d, -r(0, d));
-        }).join('');
-        case 'drift': return count(f.n).map(() => {
-          const d = r(5, 9), a = f.a || 4;
-          return el('fx-drift', { x: r(f.x, f.x + f.w), y: r(f.y, f.y + f.h), s: rr(f.s || [.6, 1.4]), c, ax: r(-a, a), ay: r(-a, a), bx: r(-a, a), by: r(-a, a) }, d, -r(0, d * 2));
-        }).join('');
-        case 'fall': return count(f.n).map(() => {
-          const rain = f.shape === 'rain';
-          const d = rain ? r(.7, 1.2) : r(6, 11);
-          return el(`fx-fall${rain ? ' rain' : ''}`, { x: r(0, 100), s: rain ? r(.15, .25) : r(.4, 1.1), c, dx: rain ? r(-3, -1) : r(-8, 8) }, d, -r(0, d));
-        }).join('');
-        case 'twinkle': return count(f.n).map(() => {
-          const d = r(3, 6);
-          return el('fx-twinkle', { x: r(f.x, f.x + f.w), y: r(f.y, f.y + f.h), s: rr(f.s || [1.5, 3]), c }, d, -r(0, d));
-        }).join('');
-        case 'mist': return Array.from({ length: 3 }, () => {
-          const d = r(14, 24);
-          return el('fx-mist', { x: r(0, 70), y: r(f.y, f.y + f.h * .5), w: r(45, 75), h: f.h, c, dx: r(-18, 18) }, d, -r(0, d * 2));
-        }).join('');
-        case 'streaks': return count(f.n).map(() => {
-          const d = r(2.5, 5);
-          return el('fx-streak', { y: r(f.y, f.y + f.h), w: r(6, 16), c }, d, -r(0, d));
-        }).join('');
-        case 'sparks': return count(f.n).map(() => {
-          // Funken fliegen in Richtung angle ± spread und fallen dann
-          const a = ((f.angle ?? -90) + (rnd() * 2 - 1) * (f.spread ?? 75)) * Math.PI / 180;
-          const v = rr(f.speed || [8, 24]);
-          return el('fx-spark', { x: f.x, y: f.y, s: r(.9, 1.6), a: `${(a * 180 / Math.PI).toFixed(0)}deg`, dx: (Math.cos(a) * v).toFixed(2), dy: (Math.sin(a) * v * .7).toFixed(2), g: rr(f.g || [8, 16]) }, f.every, r(0, .12));
-        }).join('');
-      }
-      return '';
-    });
-    return `<div class="fx" aria-hidden="true">${out.join('')}</div>`;
-  }
 
   /** Illustration mit Emoji als Rückfall, falls die Bilddatei fehlt. */
   function artImg(src, emoji) {
@@ -1303,7 +801,7 @@
     const used = c.ability === 'retreat' && live && s.retreatUsed.includes(id);
     const abText = ab ? `${ab.name}: ${ab.text(c)}${used ? ' (bereits verbraucht)' : ''}` : '';
     const abHTML = ab ? `<div class="ability${used ? ' used' : ''}"><b>${ab.icon} ${ab.name}${used ? ' (verbraucht)' : ''}</b><span class="atext">${ab.text(c)}</span></div>` : '';
-    const fx = fxLevel() === 2 ? '' : fxHTML(c.id, opt.thumb);
+    const fx = fxLevel() === 2 ? '' : ArtFX.html(c.id, opt.thumb, fxLevel());
     return `<div class="qcard${opt.selected ? ' selected' : ''}${opt.exposed ? ' exposed' : ''}" ${opt.attrs || ''} style="--fc:${f.color}">
       ${opt.exposed ? '<span class="exposed-mark" data-tip="Der Gegner kennt diese Karte (Spion)">🕵️</span>' : ''}
       <div class="frame">
@@ -1368,7 +866,7 @@
     const who = `<div class="who">${escapeHTML(pl.name)}</div>`;
     if (s.result) {
       const id = s.result.ids[p];
-      const view = ui.showResult ? duelView() : null;
+      const view = ui.showResult ? UI.duelView() : null;
       let value = '';
       if (view) {
         const d = ui.duel;
@@ -1421,9 +919,9 @@
 
   /** Online: Der Gegner lässt auf sich warten – Zähler, nach einer Weile mit Ausweg. */
   function stallHTML() {
-    if (net.drop && s && online()) {
-      const secs = Math.floor((Date.now() - net.drop.since) / 1000);
-      return `<div class="stall">🔌 Verbindung zu ${oppName()} unterbrochen – warte… <b aria-hidden="true">${Math.max(0, DROP_WAIT_S - secs)} s</b>
+    if (UI.net.drop && s && online()) {
+      const secs = Math.floor((Date.now() - UI.net.drop.since) / 1000);
+      return `<div class="stall">🔌 Verbindung zu ${oppName()} unterbrochen – warte… <b aria-hidden="true">${Math.max(0, UI.DROP_WAIT_S - secs)} s</b>
         <button class="btn-small" id="stall-leave">Partie verlassen</button></div>`;
     }
     const leaveBtn = '<button class="btn-small" id="stall-leave">Partie verlassen</button>';
@@ -1433,9 +931,9 @@
     }
     if (ui.stall === null) return '';
     const time = `${Math.floor(ui.stall / 60)}:${String(ui.stall % 60).padStart(2, '0')}`;
-    const leave = ui.stall >= STALL_LEAVE_S ? leaveBtn : '';
-    const why = net.away ? 'hat das Spiel gerade im Hintergrund…' : 'lässt sich Zeit…';
-    return `<div class="stall">${net.away ? '💤' : '⏳'} ${oppName()} ${why} <b aria-hidden="true">${time}</b>${leave}</div>`;
+    const leave = ui.stall >= UI.STALL_LEAVE_S ? leaveBtn : '';
+    const why = UI.net.away ? 'hat das Spiel gerade im Hintergrund…' : 'lässt sich Zeit…';
+    return `<div class="stall">${UI.net.away ? '💤' : '⏳'} ${oppName()} ${why} <b aria-hidden="true">${time}</b>${leave}</div>`;
   }
 
   /** Hand plus Titel- und Aktionszeile darunter (Ergebnis, Weiter, Statwahl, Ausspielen). */
@@ -1571,165 +1069,6 @@
     await animateRally(p);
     // Der Konter hat gegriffen: Der Computer weiß nichts mehr über deine Hand und legt jetzt
     if (token === ui.token && pvc() && ui.aiWaiting && !s.spyInfo[1] && (await aiAfterWaiting(token))) afterChoice();
-  }
-
-  function initInput() {
-    const zoomTarget = (target) => {
-      // Ausgespähte Karten: auch auf der Rückseite zeigt sich die Karte groß
-      const spied = target.closest('.spied');
-      return spied ? spied.querySelector('[data-zoom]') : target.closest('.qcard, .terrain');
-    };
-    const zoomEl = (el) => {
-      if (el.classList.contains('terrain')) { zoomTerrain(s.terrain.id); return; }
-      // Lange gedrückte Handkarte ist nach dem Schließen der Großansicht ausgewählt und kann gleich ausgespielt werden
-      if (el.dataset.card) selectCard(el.dataset.card, true);
-      const id = el.dataset.card || el.dataset.zoom;
-      if (id) zoomCard(id);
-    };
-    $('#game').addEventListener('click', (e) => {
-      if (!s) return;
-      // Während das Duell Schritt für Schritt abläuft, springt ein Tippen zum Ergebnis (Menü und Übersicht bleiben erreichbar)
-      if (ui.duel && !ui.duel.done && ui.showResult && !e.target.closest('button:not(#next-btn)')) { ui.duel.skip = true; return; }
-      const card = e.target.closest('#hand [data-card]');
-      // Handkarten wählt man aus; gerade nicht wählbare zeigen sich groß wie alle anderen Karten
-      if (card) { if (canSelect(card.dataset.card)) selectCard(card.dataset.card); else zoomEl(card); return; }
-      const statBtn = e.target.closest('[data-stat]');
-      if (statBtn) { onStatChosen(statBtn.dataset.stat); return; }
-      if (e.target.closest('#rally-btn')) { rallyNow(); return; }
-      if (e.target.closest('#play-btn')) { confirmChoice(); return; }
-      if (e.target.closest('#next-btn')) { nextStep(); return; }
-      if (e.target.closest('#stall-leave')) { confirmLeave(); return; }
-      // Antippen einer Karte auf dem Schlachtfeld (Gelände, Duellkarten, ausgespähte Karten) zeigt sie groß
-      const zoom = zoomTarget(e.target);
-      if (zoom) { zoomEl(zoom); return; }
-      // Antippen einer freien Stelle hebt die Auswahl wieder auf
-      if (ui.selected && !e.target.closest('button')) selectCard(ui.selected);
-    });
-    // Wer mit der Maus auf dem Schlachtfeld (der ganzen Lederfläche) oder dem Ergebnis verweilt, liest noch – der Countdown wartet
-    $('#game').addEventListener('pointerover', (e) => {
-      if (e.pointerType === 'mouse') ui.hoverHold = !!e.target.closest('.battlefield, #hand-title');
-    });
-    $('#game').addEventListener('pointerleave', () => { ui.hoverHold = false; });
-    // Ein Klick oder Tippen irgendwohin (außer auf „Weiter“) schaltet das automatische Weiter für diese Runde ab
-    document.addEventListener('pointerdown', (e) => { if (ui.showResult && !e.target.closest('#next-btn')) ui.autoOff = true; }, true);
-    // Lichtreflex und leichte Neigung folgen der Maus (Handkarten, Galerie, Großansicht, Menü)
-    const tilt = (e) => {
-      if (reducedMotion) return;
-      const card = e.target.closest('#hand .qcard, .zoom .qcard, .gallery-grid .qcard, .menu-cards .qcard');
-      if (!card) return;
-      const r = card.getBoundingClientRect();
-      const x = (e.clientX - r.left) / r.width;
-      const y = (e.clientY - r.top) / r.height;
-      card.style.setProperty('--mx', `${Math.round(x * 100)}%`);
-      card.style.setProperty('--my', `${Math.round(y * 100)}%`);
-      card.style.setProperty('--ry', `${((x - 0.5) * 12).toFixed(1)}deg`);
-      card.style.setProperty('--rx', `${((0.5 - y) * 10).toFixed(1)}deg`);
-    };
-    document.addEventListener('pointermove', tilt, { passive: true });
-    // Rechtsklick (oder langes Drücken auf dem Handy) zeigt eine Karte groß.
-    let pressed = false; // diese Berührung hat schon die Großansicht geöffnet
-    $('#game').addEventListener('contextmenu', (e) => {
-      if (!s) return;
-      const el = zoomTarget(e.target);
-      if (!el) return;
-      e.preventDefault();
-      endPress();
-      if (pressed) return; // schon per langem Drücken geöffnet (Android meldet beides)
-      pressed = true;
-      zoomEl(el);
-    });
-    // iOS Safari kennt kein contextmenu beim langen Drücken – dafür ein eigener Zeitgeber
-    // Beim Drücken wächst die Karte sichtbar an, bis sich die Großansicht öffnet
-    let press = null;
-    const endPress = () => {
-      if (!press) return;
-      clearTimeout(press.timer);
-      press.shown.classList.remove('pressing');
-      press = null;
-    };
-    document.addEventListener('pointerdown', (e) => { pressed = false; ui.lastPointer = e.pointerType; }, true);
-    $('#game').addEventListener('pointerdown', (e) => {
-      endPress();
-      if (!s || e.pointerType !== 'touch') return;
-      const el = zoomTarget(e.target);
-      if (!el) return;
-      const shown = el.closest('.spied') || el;
-      shown.classList.add('pressing');
-      press = { x: e.clientX, y: e.clientY, shown, timer: setTimeout(() => { endPress(); pressed = true; store.set('zoom-tip', true); zoomEl(el); }, 350) };
-    });
-    $('#game').addEventListener('pointermove', (e) => {
-      if (press && Math.hypot(e.clientX - press.x, e.clientY - press.y) > 10) endPress();
-    });
-    ['pointerup', 'pointercancel'].forEach((type) => $('#game').addEventListener(type, endPress));
-    // Der Klick am Ende des langen Drückens wählt keine Karte aus und schließt die Großansicht nicht gleich wieder
-    document.addEventListener('click', (e) => {
-      if (pressed) { e.stopPropagation(); e.preventDefault(); pressed = false; }
-    }, true);
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        const q = document.querySelector('.quartet-show');
-        if (q) { q.click(); return; }
-        // Spielende, Lobby und Verbindungsabbruch nicht per Esc überspringen
-        if (!$('#overlay').classList.contains('hidden') && !$('#go-again') && !$('#lobby') && !$('#lost-ok')) closeOverlay();
-        return;
-      }
-      const pager = document.querySelector('#overlay .gallery-pager');
-      if (pager && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')) {
-        const b = pager.querySelector(e.key === 'ArrowLeft' ? '.prev' : '.next');
-        if (!b.disabled) b.click();
-        return;
-      }
-      if (!s || overlayOpen() || e.target.closest('input, textarea, [contenteditable]')) return;
-      if (e.ctrlKey || e.metaKey || e.altKey) return; // Strg+1 (Tab wechseln) usw. gehören dem Browser
-      const focused = e.target.closest && e.target.closest('#hand [data-card]');
-      if (e.key === ' ' && focused) {
-        e.preventDefault();
-        selectCard(focused.dataset.card);
-      } else if (e.key.toLowerCase() === 'z') {
-        // Großansicht: gewählte oder fokussierte Karte, sonst das Schlachtfeld
-        const id = ui.selected || (focused && focused.dataset.card);
-        if (id) zoomCard(id); else if (s.terrain) zoomTerrain(s.terrain.id);
-      } else if (['1', '2', '3'].includes(e.key)) {
-        const el = document.querySelector(`#hand [data-key="${e.key}"]`);
-        if (el) selectCard(el.dataset.card);
-      } else if (e.key.toLowerCase() === 'h' && $('#rally-btn') && !$('#rally-btn').disabled) {
-        rallyNow();
-      } else if (e.key === 'Enter') {
-        if ($('#next-btn')) nextStep();
-        else if ($('#play-btn') && !$('#play-btn').disabled) confirmChoice();
-      }
-    });
-    $('#menu-btn').addEventListener('click', confirmLeave);
-    $('#help-btn').addEventListener('click', showRules);
-    $('#overview-btn').addEventListener('click', () => {
-      openOverlay(`<div class="modal"><h2>Quartett-Übersicht</h2><div class="legend">${legendHTML()}</div><br>
-        <div class="overview">${overviewHTML()}</div><div class="buttons"><button class="btn-primary" data-close>Schließen</button></div></div>`);
-    });
-  }
-
-  function confirmLeave() {
-    // Handy hochkant: Ton, Musik, Vollbild und Regeln stehen nicht in der Kopfleiste, sondern hier
-    const inMenu = [...document.querySelectorAll('.top-buttons .in-menu')].filter((b) => !b.hidden);
-    const moved = inMenu.length && getComputedStyle(inMenu[0]).display === 'none';
-    // Beschriftung wie das Original, bei den Symbolknöpfen ergänzt um ihren Namen
-    const label = (b) => `${b.innerHTML}${b.dataset.label ? ` ${b.dataset.label}` : ''}`;
-    const head = moved ? `<h2>Menü</h2><div class="game-menu">${inMenu.map((b, i) =>
-      `<button class="btn-secondary${b.classList.contains('off') ? ' off' : ''}" data-proxy="${i}">${label(b)}</button>`).join('')}</div>
-      <p>Zurück zum Hauptmenü? Die aktuelle Partie geht dabei verloren.</p>`
-      : '<h2>Spiel verlassen?</h2><p>Die aktuelle Partie geht verloren.</p>';
-    openOverlay(`<div class="modal">${head}
-      <div class="buttons"><button class="btn-secondary" data-close>Weiterspielen</button><button class="btn-primary" id="leave-btn">Zum Menü</button></div></div>`);
-    $('#leave-btn').addEventListener('click', toMenu);
-    document.querySelectorAll('#overlay [data-proxy]').forEach((b) => {
-      const orig = inMenu[+b.dataset.proxy];
-      const sync = () => { b.innerHTML = label(orig); b.classList.toggle('off', orig.classList.contains('off')); };
-      b.addEventListener('click', (e) => {
-        e.stopPropagation(); // kein zweites Klick-Geräusch – das Original klickt selbst
-        orig.click();
-        sync();
-        setTimeout(sync, 200); // das Vollbild-Symbol wechselt erst nach dem Umschalten
-      });
-    });
   }
 
   /* =============================================================== Overlays & Effekte */
@@ -1988,453 +1327,14 @@
       <div class="final-score">${score}</div>
       <div class="buttons"><button class="btn-secondary" id="go-menu">Hauptmenü</button><button class="btn-primary" id="go-again">Revanche</button></div></div>`);
     $('#go-menu').addEventListener('click', toMenu);
-    $('#go-again').addEventListener('click', () => (online() ? askRematch() : startGame()));
+    $('#go-again').addEventListener('click', () => (online() ? UI.askRematch() : startGame()));
     if (online()) {
       // Was der Gegner schon gesagt hat, während das letzte Ergebnis noch zu sehen war
-      if (net.gone) goneNote();
-      else if (net.rematch[1]) rematchNote(`${net.oppName} möchte eine Revanche!`);
+      if (UI.net.gone) UI.goneNote();
+      else if (UI.net.rematch[1]) UI.rematchNote(`${UI.net.oppName} möchte eine Revanche!`);
     }
   }
 
-  /* =============================================================== Online (Gleichschritt) */
-  /*
-   * Beide Geräte rechnen dieselbe Partie: Der Gastgeber lost einen Startwert aus, der Gast spielt
-   * spiegelverkehrt (Engine-Option flip) und sitzt so bei sich ebenfalls unten. Übers Netz gehen nur
-   * die Züge (Eigenschaft, Schlachtruf, Karte) mit ihrer Rundennummer; kommt ein Zug zu früh an,
-   * wartet er in der Schlange, bis das Gerät so weit ist.
-   */
-  const Net = window.CG.Net;
-  /*
-   * Online-Zustand. Züge (stat/choose/rally) tragen eine laufende Nummer: Nach einem Verbindungsabriss
-   * schickt jede Seite alle Züge nach der zuletzt empfangenen Nummer noch einmal (out), doppelte fallen weg (inSeq).
-   * sums: Prüfsummen nach jedem Duell, [eigene, empfangene] je Runde.
-   */
-  const net = {
-    host: false, oppName: '', rematch: [false, false], queue: [], wake: null,
-    seed: null, out: [], inSeq: 0, sums: {}, held: false, drop: null, gone: null,
-    heard: 0, away: false, // wann zuletzt etwas vom Gegner kam; hat er das Spiel gerade im Hintergrund?
-    behind: null,          // seit wann seine Lebenszeichen zeigen, dass ihm Züge von mir fehlen
-  };
-  const PING_MS = 4000;     // Lebenszeichen während der Partie (mit der Zahl der empfangenen Züge)
-  const SILENT_MS = 15000;  // so lange nichts gehört: Verbindung gestört (statt „lässt sich Zeit“)
-  const MOVES = ['stat', 'choose', 'rally'];
-  const QUEUE_MAX = 16;
-  const DROP_WAIT_S = 60; // so lange wird nach einem Abriss auf den Mitspieler gewartet
-  // Beide Geräte brauchen dieselben Karten, Regeln und Spielversion – sonst laufen die Partien auseinander
-  const fingerprint = (() => {
-    const str = JSON.stringify([Net.BUILD, CARDS, TERRAINS, Engine.HAND_SIZE, Engine.RALLY_RECHARGE]);
-    let h = 0;
-    for (let i = 0; i < str.length; i++) h = (Math.imul(h, 31) + str.charCodeAt(i)) | 0;
-    return h;
-  })();
-  const myName = () => ($('#name1').value.trim() || 'Spieler').slice(0, 14);
-
-  function wakeRemote() {
-    const w = net.wake;
-    net.wake = null;
-    if (w) w();
-  }
-
-  /** Nächster Zug des Gegners in dieser Runde (einer der Typen). null, wenn die Partie inzwischen vorbei ist. */
-  async function nextRemote(token, types) {
-    net.held = false;
-    for (;;) {
-      if (token !== ui.token) return null;
-      net.queue = net.queue.filter((m) => m.r >= s.round);
-      const i = net.queue.findIndex((m) => m.r === s.round && types.includes(m.t));
-      // held: Der Zug ist da und wartet nur noch auf ein offenes Fenster – der Gegner lässt sich nicht Zeit
-      if (i >= 0) { net.held = true; return net.queue.splice(i, 1)[0]; }
-      await new Promise((resolve) => { net.wake = resolve; });
-    }
-  }
-
-  /** Eigener Zug an den Gegner – nummeriert und gemerkt, um ihn nach einem Abriss erneut zu schicken. */
-  function sendMove(m) {
-    m.seq = net.out.length + 1;
-    net.out.push(m);
-    Net.send(m);
-  }
-
-  const inGame = () => !!s && online() && s.phase !== 'over';
-
-  function onNetMessage(m) {
-    if (!m || typeof m !== 'object' || typeof m.t !== 'string') return;
-    net.heard = Date.now();
-    if (m.t === 'ping' || m.t === 'away' || m.t === 'back') {
-      if (m.t !== 'ping') net.away = m.t === 'away';
-      // Fehlen dem Gegner Züge (unterwegs verloren), gleich noch einmal schicken – sonst warten beide aufeinander
-      if (!s || !online() || !Number.isInteger(m.seq)) return;
-      const missing = net.out.filter((x) => x.seq > m.seq);
-      missing.forEach((x) => Net.send(x));
-      // Bleibt das so, kommen meine Nachrichten bei ihm nicht an – dann liegt es an der Verbindung, nicht an ihm
-      net.behind = missing.length ? net.behind || Date.now() : null;
-      return;
-    }
-    if (m.t === 'hello') {
-      // beim Gastgeber: der Gast ist da – Partie auslosen und starten
-      if (!net.host) return;
-      // Mitten in der Partie meldet sich der Gast neu an: Er hat die Seite neu geladen, sein Spielstand ist weg
-      if (inGame()) { Net.send({ t: 'bye' }); Net.close(); connectionLost(`${oppName()} hat die Seite neu geladen – die Partie lässt sich nicht fortsetzen.`); return; }
-      if (s && online()) return; // Revanche läuft über 'again'
-      if (m.fp !== fingerprint) { Net.send({ t: 'version' }); versionMismatch(); return; }
-      net.oppName = String(m.name || 'Gast').slice(0, 14);
-      startOnline();
-    } else if (m.t === 'start') {
-      if (net.host || inGame()) return; // Anfang einer Partie nur, wenn keine läuft (Revanche erst nach dem Spielende)
-      net.oppName = String(m.name || 'Gastgeber').slice(0, 14);
-      launchOnline(Number(m.seed) >>> 0);
-    } else if (m.t === 'resume') {
-      // Nach einem Abriss wieder da: alles noch einmal schicken, was der Gegner nicht bekommen hat
-      if (!s || !online() || m.seed !== net.seed) { Net.send({ t: 'bye' }); Net.close(); connectionLost('Die Partie ließ sich nach dem Verbindungsabriss nicht fortsetzen.'); return; }
-      const seen = Number.isInteger(m.seq) ? m.seq : 0;
-      net.out.filter((x) => x.seq > seen).forEach((x) => Net.send(x));
-    } else if (m.t === 'sum') {
-      if (!s || !online() || !Number.isInteger(m.r) || m.r < s.round - 1 || m.r > s.round + 1) return;
-      (net.sums[m.r] = net.sums[m.r] || [null, null])[1] = m.h;
-      checkSum(m.r);
-    } else if (m.t === 'version') {
-      versionMismatch();
-    } else if (m.t === 'again') {
-      net.rematch[1] = true;
-      if (net.host && net.rematch[0]) startOnline();
-      else rematchNote(`${net.oppName} möchte eine Revanche!`);
-    } else if (m.t === 'bye') {
-      Net.close();
-      connectionLost(`${net.oppName || 'Der Gegner'} hat das Spiel verlassen.`);
-    } else if (MOVES.includes(m.t)) {
-      if (!s || !online() || !Number.isInteger(m.r) || !Number.isInteger(m.seq)) return;
-      // Der Reihe nach: Doppelte (nach einem Abriss erneut geschickt) fallen weg, Lücken füllt das erneute Schicken
-      if (m.seq !== net.inSeq + 1) return;
-      // Der Gegner ist höchstens eine Runde voraus (er braucht für die nächste ja meinen Zug)
-      if (m.r < s.round || m.r > s.round + 1 || net.queue.length >= QUEUE_MAX) { outOfSync(); return; }
-      net.inSeq = m.seq;
-      net.queue.push(m);
-      wakeRemote();
-    }
-  }
-
-  /** Nach jedem Duell: eigene Prüfsumme schicken und mit der des Gegners vergleichen. */
-  function sendSum() {
-    const h = Engine.digest(s);
-    (net.sums[s.round] = net.sums[s.round] || [null, null])[0] = h;
-    Net.send({ t: 'sum', r: s.round, h });
-    checkSum(s.round);
-  }
-
-  function checkSum(r) {
-    const [mine, theirs] = net.sums[r] || [];
-    if (mine == null || theirs == null) return;
-    delete net.sums[r];
-    if (mine !== theirs) outOfSync();
-  }
-
-  /**
-   * Verbindung mitten in der Partie abgerissen (Raum): eine Weile warten und den Raum ab und zu neu betreten,
-   * damit beide sich wiederfinden. Gelingt es, holt 'resume' die verpassten Züge nach.
-   */
-  function onDrop() {
-    if (!inGame()) return false;
-    const token = ui.token;
-    const drop = (net.drop = { since: Date.now() });
-    render();
-    (async () => {
-      for (let tries = 0; ; ) {
-        await sleep(1000);
-        if (token !== ui.token || net.drop !== drop) return;
-        const secs = Math.floor((Date.now() - drop.since) / 1000);
-        if (secs >= DROP_WAIT_S) {
-          Net.close();
-          connectionLost(`Die Verbindung zu ${net.oppName || 'deinem Mitspieler'} ist abgerissen und kam nicht wieder zustande.`);
-          return;
-        }
-        // Gastgeber und Gast versetzt, damit sie sich nicht ständig verpassen
-        if (secs >= (net.host ? 6 : 12) + tries * 15) { tries++; Net.rejoin(); }
-        render();
-      }
-    })();
-    return true;
-  }
-
-  /** Der Mitspieler ist nach einem Abriss wieder da. */
-  // Dem Gegner sagen, wenn das Spiel hier im Hintergrund liegt – dann wartet er nicht ratlos
-  document.addEventListener('visibilitychange', () => {
-    if (s && online() && s.phase !== 'over') Net.send({ t: document.hidden ? 'away' : 'back', seq: net.inSeq });
-  });
-
-  function onRejoin() {
-    net.drop = null;
-    Net.send({ t: 'resume', seed: net.seed, seq: net.inSeq });
-    render();
-  }
-
-  /** Gastgeber: neuen Startwert auslosen, dem Gast schicken und selbst loslegen. */
-  function startOnline() {
-    const seed = Math.floor(Math.random() * 2 ** 32);
-    Net.send({ t: 'start', seed, name: myName() });
-    launchOnline(seed);
-  }
-
-  function launchOnline(seed) {
-    Object.assign(net, { rematch: [false, false], queue: [], seed, out: [], inSeq: 0, sums: {}, held: false, drop: null, gone: null, heard: Date.now(), away: false, behind: null });
-    launch({ mode: 'online', seed, flip: !net.host, players: [{ name: 'Du', you: true }, { name: net.oppName }] });
-  }
-
-  const STALL_HINT_S = 30;  // ab dann zeigt ein Zähler, dass der Gegner auf sich warten lässt
-  const STALL_LEAVE_S = 120; // ab dann kann man die Partie direkt dort verlassen
-
-  /**
-   * Wartet dieses Gerät auf einen Zug des Gegners (Eigenschaft oder Karte, die eigene ist schon gelegt)?
-   * Gezogen wird nie für ihn – das könnte sich mit seinem echten Zug überkreuzen. Man sieht nur, wie lange es dauert.
-   */
-  async function watchStall(token) {
-    let key = null, since = 0, pinged = 0;
-    for (;;) {
-      await sleep(1000);
-      if (token !== ui.token) return;
-      if (s.phase !== 'over' && Date.now() - pinged >= PING_MS) {
-        pinged = Date.now();
-        Net.send({ t: 'ping', seq: net.inSeq });
-      }
-      // Kommt gar nichts mehr an, liegt es an der Verbindung – nicht am Gegner
-      const now = Date.now();
-      const deaf = now - net.heard > SILENT_MS;                      // von ihm kommt nichts an
-      const mute = net.behind !== null && now - net.behind > SILENT_MS; // von mir kommt bei ihm nichts an
-      const brokenSince = deaf ? net.heard : mute ? net.behind : null;
-      const silent = !net.drop && !(deaf && net.away) && s.phase !== 'over' && brokenSince !== null ? Math.floor((now - brokenSince) / 1000) : null;
-      if (silent !== ui.silent) { ui.silent = silent; render(); }
-      const waiting = !net.held && !net.drop && !net.queue.some((m) => m.r === s.round)
-        && (s.phase === 'stat' ? s.picker === 1 && !ui.tossing : s.phase === 'cards' && !!s.choices[0] && !s.choices[1]);
-      const k = waiting ? `${s.round}-${s.phase}` : null;
-      if (k !== key) { key = k; since = Date.now(); }
-      const secs = k ? Math.floor((Date.now() - since) / 1000) : 0;
-      const stall = secs >= STALL_HINT_S ? secs : null;
-      if (stall !== ui.stall) { ui.stall = stall; render(); }
-    }
-  }
-
-  /** Hinweis im Spielende-Fenster (Toasts lägen unter dem Fenster). */
-  function rematchNote(text) {
-    const modal = $('#go-again') && $('#go-again').closest('.modal');
-    if (!modal) return;
-    let el = modal.querySelector('.net-status');
-    if (!el) { el = document.createElement('p'); el.className = 'net-status'; modal.querySelector('.buttons').before(el); }
-    el.textContent = text;
-  }
-
-  function goneNote() {
-    const b = $('#go-again');
-    if (!b || !net.gone) return;
-    b.disabled = true;
-    b.textContent = 'Revanche';
-    rematchNote(`🔌 ${net.gone}`);
-  }
-
-  function askRematch() {
-    net.rematch[0] = true;
-    const b = $('#go-again');
-    if (b) { b.disabled = true; b.textContent = 'Warte auf Mitspieler…'; }
-    rematchNote(`${net.oppName} muss auch auf „Revanche“ tippen.`);
-    Net.send({ t: 'again' });
-    if (net.host && net.rematch[1]) startOnline();
-  }
-
-  function connectionLost(text) {
-    if (!(s && online()) && !$('#lobby')) return;
-    // Nach dem Spielende bleibt das Ergebnis stehen – nur keine Revanche mehr
-    if (s && online() && s.phase === 'over') {
-      net.gone = text;
-      goneNote();
-      return;
-    }
-    ui.token++;
-    wakeRemote();
-    closeAllOverlays();
-    openOverlay(`<div class="modal"><div class="big-emoji">🔌</div><h2>Verbindung getrennt</h2><p>${escapeHTML(text)}</p>
-      <div class="buttons"><button class="btn-primary" id="lost-ok">Zum Menü</button></div></div>`);
-    $('#lost-ok').addEventListener('click', () => { closeAllOverlays(); if (s) toMenu(); });
-  }
-
-  function versionMismatch() {
-    Net.close();
-    connectionLost('Ihr habt unterschiedliche Spielversionen. Ladet beide die Seite neu und versucht es noch einmal.');
-  }
-
-  /** Sollte nie passieren: Die beiden Geräte sind sich über den Spielstand nicht mehr einig. */
-  function outOfSync() {
-    Net.bye({ t: 'bye' });
-    connectionLost('Die Spielstände der beiden Geräte passen nicht mehr zusammen – die Partie wurde abgebrochen.');
-  }
-
-  /* ---------------------------------------------------------------- Lobby */
-  function lobbyHTML(body) {
-    return `<div class="modal lobby" id="lobby"><div class="big-emoji">👥</div><h2>Online spielen</h2>${body}
-      <div class="buttons"><button class="btn-secondary" id="lobby-cancel">Abbrechen</button></div></div>`;
-  }
-
-  function setLobby(body) {
-    closeAllOverlays();
-    openOverlay(lobbyHTML(body));
-    $('#lobby-cancel').addEventListener('click', () => { Net.close(); closeAllOverlays(); });
-  }
-
-  function codeBox(id, code) {
-    const share = navigator.share ? `<button class="btn-small" data-share="${id}">📤 Teilen</button>` : '';
-    return `<textarea class="net-code" id="${id}" readonly rows="4">${code}</textarea>
-      <div class="net-actions"><button class="btn-small" data-copy="${id}">📋 Kopieren</button>${share}</div>`;
-  }
-
-  function bindCodeButtons() {
-    document.querySelectorAll('#lobby [data-copy]').forEach((b) => b.addEventListener('click', async () => {
-      const el = $(`#${b.dataset.copy}`);
-      try { await navigator.clipboard.writeText(el.value); } catch (e) { el.select(); document.execCommand('copy'); }
-      b.textContent = '✔ Kopiert';
-      setTimeout(() => { b.textContent = '📋 Kopieren'; }, 1800);
-    }));
-    document.querySelectorAll('#lobby [data-share]').forEach((b) => b.addEventListener('click', () => {
-      navigator.share({ title: 'Eldoria', text: $(`#${b.dataset.share}`).value }).catch(() => {});
-    }));
-  }
-
-  function lobbyError(e) {
-    const el = $('#lobby .net-status');
-    if (el) { el.textContent = `⚠️ ${e.message || e}`; el.classList.add('error'); }
-  }
-
-  /** Lobby öffnen; mit Raumcode (aus einem Einladungslink) direkt beim Beitreten. */
-  function openLobby(code) {
-    Net.close();
-    Net.on('message', onNetMessage);
-    Net.on('open', () => {
-      if (s && online()) { onRejoin(); return; }
-      const st = $('#lobby .net-status');
-      if (st) { st.classList.remove('error'); st.textContent = 'Verbunden! Die Partie beginnt…'; }
-      if (!net.host) Net.send({ t: 'hello', name: myName(), fp: fingerprint });
-    });
-    Net.on('close', (wasOpen) => {
-      if (wasOpen) connectionLost(`Die Verbindung zu ${net.oppName || 'deinem Mitspieler'} ist abgerissen.`);
-      else lobbyError(new Error('Die Verbindung kam nicht zustande. Seid ihr beide online? In manchen Mobilfunknetzen klappt es nicht – dann hilft ein WLAN.'));
-    });
-    Net.on('error', (text) => lobbyError(new Error(text)));
-    Net.on('drop', onDrop);
-    if (code) { roomJoin(code); return; }
-    setLobby(`<p>Lade jemanden zu einer Partie ein – per Link, QR-Code oder Raumcode.</p>
-      <div class="buttons"><button class="btn-primary" id="lobby-host">🏰 Spiel eröffnen</button><button class="btn-primary" id="lobby-join">🗝️ Beitreten</button></div>
-      <p class="net-alt"><button class="link-btn" id="lobby-manual">Klappt nicht? Ohne Vermittlung verbinden</button></p>`);
-    $('#lobby-host').addEventListener('click', roomHost);
-    $('#lobby-join').addEventListener('click', () => roomJoin(null));
-    $('#lobby-manual').addEventListener('click', manualLobby);
-  }
-
-  /** Gastgeber: Raum eröffnen und Link, QR-Code und Raumcode zeigen. */
-  async function roomHost() {
-    net.host = true;
-    const code = Net.newCode();
-    const url = Net.link(code);
-    setLobby('<p class="net-status">Raum wird eröffnet…</p>');
-    let qr;
-    try {
-      // Auf localhost gibt es keinen QR-Code: Kein anderes Gerät könnte die Adresse öffnen
-      [qr] = await Promise.all([Net.linkUsable() ? Net.qrSVG(url) : null, Net.enterRoom(code)]);
-    } catch (e) { lobbyError(e); return; }
-    if (!$('#lobby')) return;
-    const share = navigator.share ? '<button class="btn-primary" id="share-link">📤 Link teilen</button>' : '';
-    const intro = qr
-      ? '<p class="net-step">Schick deinem Mitspieler den Link – oder lass ihn den QR-Code mit der Handykamera scannen.</p>'
-      : `<p class="net-warn">⚠️ Das Spiel läuft gerade unter <b>${escapeHTML(location.host || 'einer lokalen Datei')}</b> – diese Adresse
-        kann kein anderes Gerät öffnen, deshalb gibt es keinen QR-Code. Zum Spielen mit anderen Geräten muss das Spiel
-        über HTTPS erreichbar sein (z. B. GitHub Pages). Auf diesem Rechner klappt der Raumcode in einem zweiten Browserfenster.</p>`;
-    setLobby(`${intro}
-      <div class="net-invite">${qr ? `<div class="net-qr">${qr}</div>` : ''}
-        <div class="net-room"><span class="net-label">Raumcode</span><b class="net-roomcode">${Net.prettyCode(code)}</b>
-          <div class="net-actions">${share}<button class="btn-small" id="copy-link">📋 Link kopieren</button></div></div></div>
-      <p class="net-status">⏳ Warte auf Mitspieler…</p>`);
-    if (share) $('#share-link').addEventListener('click', () => navigator.share({ title: 'Eldoria', text: 'Spielst du eine Runde Eldoria mit mir?', url }).catch(() => {}));
-    $('#copy-link').addEventListener('click', async (e) => {
-      const b = e.currentTarget;
-      try { await navigator.clipboard.writeText(url); b.textContent = '✔ Kopiert'; } catch (err) { b.textContent = url; }
-      setTimeout(() => { b.textContent = '📋 Link kopieren'; }, 1800);
-    });
-  }
-
-  /** Gast: Raumcode (vorausgefüllt aus dem Link) und Name, dann beitreten. */
-  function roomJoin(code) {
-    net.host = false;
-    setLobby(`<div class="net-form">
-        <label>Raumcode <input id="room-code" maxlength="9" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="ABC-DEF" value="${code ? Net.prettyCode(code) : ''}"></label>
-        <label>Dein Name <input id="join-name" maxlength="14" value="${escapeHTML(myName())}"></label>
-      </div>
-      <div class="net-actions center"><button class="btn-primary" id="join-room">Beitreten</button></div>
-      <p class="net-status"></p>`);
-    const input = code ? $('#join-name') : $('#room-code');
-    input.focus();
-    input.select();
-    const go = async () => {
-      const c = Net.cleanCode($('#room-code').value);
-      if (!c) { lobbyError(new Error('Der Raumcode hat 6 Zeichen, z. B. K7M‑Q2P.')); return; }
-      $('#name1').value = $('#join-name').value.trim().slice(0, 14) || 'Spieler';
-      store.set('name', $('#name1').value);
-      const st = $('#lobby .net-status');
-      st.classList.remove('error');
-      st.textContent = '🔎 Suche das Spiel…';
-      $('#join-room').disabled = true;
-      try { await Net.enterRoom(c); } catch (e) { lobbyError(e); $('#join-room').disabled = false; return; }
-      setTimeout(() => {
-        const s2 = $('#lobby .net-status');
-        if (s2 && !Net.connected && !s2.classList.contains('error')) {
-          s2.textContent = '🔎 Noch nicht gefunden – ist der Raum beim Gastgeber noch offen? Es wird weiter gesucht…';
-        }
-      }, 20000);
-    };
-    $('#join-room').addEventListener('click', go);
-    $('#lobby').addEventListener('keydown', (e) => { if (e.key === 'Enter' && !$('#join-room').disabled) go(); });
-  }
-
-  /** Notlösung ohne Vermittlung: zwei lange Codes von Hand austauschen. */
-  function manualLobby() {
-    setLobby(`<p>Ganz ohne Vermittlung: Ihr tauscht zwei lange Codes selbst aus, z. B. per Messenger.</p>
-      <div class="buttons"><button class="btn-primary" id="manual-host">🏰 Spiel eröffnen</button><button class="btn-primary" id="manual-join">🗝️ Einladung annehmen</button></div>`);
-    $('#manual-host').addEventListener('click', lobbyHost);
-    $('#manual-join').addEventListener('click', lobbyJoin);
-  }
-
-  async function lobbyHost() {
-    net.host = true;
-    setLobby('<p class="net-status">Einladung wird vorbereitet…</p>');
-    let code;
-    try { code = await Net.host(); } catch (e) { lobbyError(e); return; }
-    if (!$('#lobby')) return;
-    setLobby(`<p class="net-step"><b>1.</b> Schick diesen Einladungscode deinem Mitspieler:</p>${codeBox('offer-code', code)}
-      <p class="net-step"><b>2.</b> Füge hier seinen Antwortcode ein:</p>
-      <textarea class="net-code" id="answer-code" rows="3" placeholder="ELDORIA1-…"></textarea>
-      <div class="net-actions"><button class="btn-primary" id="answer-btn">Verbinden</button></div>
-      <p class="net-status"></p>`);
-    bindCodeButtons();
-    $('#answer-btn').addEventListener('click', async () => {
-      const st = $('#lobby .net-status');
-      st.classList.remove('error');
-      st.textContent = 'Verbinde…';
-      try { await Net.accept($('#answer-code').value); } catch (e) { lobbyError(e); }
-    });
-  }
-
-  function lobbyJoin() {
-    net.host = false;
-    setLobby(`<p class="net-step"><b>1.</b> Füge den Einladungscode des Gastgebers ein:</p>
-      <textarea class="net-code" id="offer-code" rows="4" placeholder="ELDORIA1-…"></textarea>
-      <div class="net-actions"><button class="btn-primary" id="join-btn">Weiter</button></div>
-      <p class="net-status"></p>`);
-    $('#join-btn').addEventListener('click', async () => {
-      const st = $('#lobby .net-status');
-      st.classList.remove('error');
-      st.textContent = 'Antwort wird vorbereitet…';
-      let code;
-      try { code = await Net.join($('#offer-code').value); } catch (e) { lobbyError(e); return; }
-      if (!$('#lobby')) return;
-      setLobby(`<p class="net-step"><b>2.</b> Schick diesen Antwortcode zurück an den Gastgeber:</p>${codeBox('answer-code', code)}
-        <p class="net-status">Warte, bis der Gastgeber deinen Code eingibt…</p>`);
-      bindCodeButtons();
-    });
-  }
 
   /* =============================================================== Ton */
   function updateAudioButtons() {
@@ -2587,10 +1487,24 @@
   window.CG.state = () => s;
   window.CG.previewQuartet = (p = 0, f = 3) => s && showQuartet(p, f);
 
-  initMenu();
-  initInput();
-  initAudio();
-  watchFrames();
-  initFullscreen();
-  initTooltips();
+  /*
+   * Gemeinsam mit den übrigen Teilen der Oberfläche (ui-duel.js, ui-input.js, ui-online.js), die nach dieser
+   * Datei laden und ihre Funktionen hier eintragen. s wechselt mit jeder Partie, deshalb als Getter.
+   */
+  const UI = (window.CG.UI = {
+    get s() { return s; },
+    $, animateLoot, beginRound, canSelect, center, closeAllOverlays, closeOverlay, confirmChoice, escapeHTML,
+    launch, legendHTML, onStatChosen, online, openOverlay, oppName, overlayOpen, overviewHTML, rallyNow,
+    reducedMotion, render, selectCard, showGameOver, showRules, sleep, statLabel, store, toMenu, ui, zoomCard,
+    zoomTerrain,
+    /** Startet die Oberfläche, wenn alle Teile geladen sind (index.html). */
+    start() {
+      initMenu();
+      UI.initInput();
+      initAudio();
+      watchFrames();
+      initFullscreen();
+      initTooltips();
+    },
+  });
 })();

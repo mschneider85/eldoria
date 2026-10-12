@@ -1,0 +1,9 @@
+{
+  "name": "eldoria",
+  "private": true,
+  "description": "Fantasy-Quartett im Browser – package.json nur für die Tests, das Spiel braucht keine Installation",
+  "scripts": {
+    "test": "node test/simulate.js && node test/online.js 200",
+    "balance": "node test/balance.js"
+  }
+}
